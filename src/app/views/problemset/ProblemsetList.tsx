@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Container, Dimmer, Divider, Grid, Header, Icon, Input, Loader, Modal, Pagination, Segment, Table } from "semantic-ui-react";
+import { Button, Checkbox, Dimmer, Divider, Grid, Header, Icon, Input, Label, Loader, Modal, Pagination, Segment, Table } from "semantic-ui-react";
 import { ButtonClickEvent } from "../../common/types";
 import { useDocumentTitle } from "../../common/Utils";
 import problemsetClient from "./client/ProblemsetClient";
 import { ProblemsetListItem } from "./client/types";
+import { useSelector } from "react-redux";
+import { StateType } from "../../states/Manager";
+import { DateTime } from "luxon";
 
-
+function timeStampToString(seconds: number): string {
+    return DateTime.fromSeconds(seconds).toJSDate().toLocaleString();
+}
 
 const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
     useDocumentTitle("习题集列表");
@@ -20,6 +25,9 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(-1);
     const [pageCount, setPageCount] = useState(0);
+    const [showFavOnly, setShowFavOnly] = useState(false);
+    const privileged = useSelector((s: StateType) => s.userState.userData.shouldDisplayFullProblemsetListByDefault);
+    useEffect(() => { if (privileged) setShowFavOnly(false); }, [privileged]);
     const createProblemset = async (evt: ButtonClickEvent) => {
         try {
             setLoading(true);
@@ -37,10 +45,10 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
 
         }
     };
-    const loadPage = async (page: number) => {
+    const loadPage = async (page: number, showFavOnly: boolean) => {
         try {
             setLoading(true);
-            const data = await problemsetClient.getProblemSetList(page);
+            const data = await problemsetClient.getProblemSetList(page, showFavOnly);
             setData(data.data);
             setPage(page);
             setPageCount(data.pageCount);
@@ -51,9 +59,16 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
     };
     useEffect(() => {
         if (!loaded) {
-            loadPage(parseInt(params.page || "1"));
+            loadPage(parseInt(params.page || "1"), showFavOnly);
         }
-    }, [loaded, params.page]);
+    }, [loaded, params.page, showFavOnly]);
+    const toggleFav = useCallback(() => {
+        if (loaded) {
+            setShowFavOnly(!showFavOnly);
+            loadPage(page, !showFavOnly);
+        }
+    }, [loaded, showFavOnly, page])
+
     return <div>
         <Header as="h1">
             习题集
@@ -67,11 +82,15 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
         </Segment>}
         {loaded && <Segment stacked>
             {loading && <Dimmer active><Loader></Loader></Dimmer>}
-            <Container textAlign="right">
-                <Button as="div" color="green" onClick={createProblemset}>
-                    创建
-                </Button>
-            </Container>
+            <Grid columns="1">
+                <Grid.Column>
+                    <Checkbox checked={showFavOnly} onChange={toggleFav} toggle label="仅显示收藏习题集"></Checkbox>
+                </Grid.Column>
+                {!showFavOnly && <Grid.Column> <Button as="div" color="green" onClick={createProblemset}>
+                    创建习题集
+                </Button></Grid.Column>}
+            </Grid>
+
             <Divider></Divider>
             <Table basic="very">
                 <Table.Header>
@@ -80,7 +99,7 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
                         <Table.HeaderCell textAlign="center">权限</Table.HeaderCell>
                         <Table.HeaderCell textAlign="center">题目数量</Table.HeaderCell>
                         <Table.HeaderCell textAlign="center">创建者</Table.HeaderCell>
-                        <Table.HeaderCell textAlign="center">创建时间</Table.HeaderCell>
+                        <Table.HeaderCell textAlign="center">创建时间/截止时间</Table.HeaderCell>
 
                     </Table.Row>
                 </Table.Header>
@@ -92,6 +111,7 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
                                 setCurrentID(x.id);
                                 setShowModal(true);
                             } : undefined} href={(x.accessible || !x.private) ? `/problemset/show/${x.id}` : undefined}>#{x.id}. {x.name}</a>
+                            {x.timeLimit !== 0 && <Label>限时 {(x.timeLimit / 60).toFixed(1)} 分钟</Label>}
                         </Table.Cell>
                         <Table.Cell textAlign="center"
                             positive={x.accessible || x.private === 0}
@@ -108,7 +128,14 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
                             <a href={`/profile/${x.owner.uid}`}>{x.owner.username}</a>
                         </Table.Cell>
                         <Table.Cell textAlign="center">
-                            {x.createTime}
+                            {x.timeLimit === 0 ? <>{timeStampToString(x.createTime)}</> : <Grid columns={1}>
+                                <Grid.Column style={{ paddingBottom: 0 }}>
+                                    {timeStampToString(x.createTime)}
+                                </Grid.Column>
+                                <Grid.Column style={{ paddingTop: 0 }}>
+                                    <Label>{timeStampToString(x.createTime + x.timeLimit)}</Label>
+                                </Grid.Column>
+                            </Grid>}
                         </Table.Cell>
                     </Table.Row>)}
                 </Table.Body>
@@ -118,7 +145,7 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Pagination
                         totalPages={pageCount}
                         activePage={page}
-                        onPageChange={(e, d) => loadPage(d.activePage as number)}
+                        onPageChange={(e, d) => loadPage(d.activePage as number, showFavOnly)}
                     ></Pagination>
                 </Grid.Column>
             </Grid>

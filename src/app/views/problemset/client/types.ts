@@ -7,7 +7,8 @@ interface ProblemsetListItem {
     problemCount: number;
     private: 0 | 1;
     accessible: boolean;
-    createTime: string;
+    createTime: number;
+    timeLimit: number;
 };
 interface ForeignProblemEntry {
     name: string;
@@ -42,10 +43,11 @@ interface ProblemsetPublicInfo {
             submissionID: -1 | number;
         }
     }[];
-    createTime: string;
+    createTime: number;
     description: string;
     managable: boolean;
     foreignProblems: ForeignProblemEntry[];
+    timeLimit: number;
 };
 export type {
     ProblemsetListItem,

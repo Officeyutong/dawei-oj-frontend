@@ -26,7 +26,7 @@ const ProblemtodoList: React.FC<React.PropsWithChildren<{}>> = () => {
             })();
         }
     }, [loaded]);
-    useDocumentTitle("待做题目列表");
+    useDocumentTitle("收藏题目列表");
     const remove = async (id: number, evt: ButtonClickEvent) => {
         const target = evt.currentTarget;
         try {
@@ -40,7 +40,7 @@ const ProblemtodoList: React.FC<React.PropsWithChildren<{}>> = () => {
     };
     return <>
         <Header as="h1">
-            待做题目列表
+            收藏题目
         </Header>
         {!loaded && loading && <div style={{ height: "400px" }}>
             <Dimmer active>

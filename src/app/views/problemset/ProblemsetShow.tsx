@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Button, Dimmer, Grid, Header, Loader, Segment, Table } from "semantic-ui-react";
+import { Button, Dimmer, Grid, Header, Loader, Progress, Segment, Table } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { Markdown } from "../../common/Markdown";
 import { useDocumentTitle } from "../../common/Utils";
-import { showConfirm, showSuccessModal } from "../../dialogs/Dialog";
+import { showConfirm } from "../../dialogs/Dialog";
 import JudgeStatusLabel from "../utils/JudgeStatusLabel";
 import UserLink from "../utils/UserLink";
 import problemsetClient from "./client/ProblemsetClient";
 import { ProblemsetPublicInfo } from "./client/types";
-
+import { DateTime } from "luxon";
+function timeStampToString(seconds: number): string {
+    return DateTime.fromSeconds(seconds).toJSDate().toLocaleString();
+}
 const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
     const { id } = useParams<{ id: string }>();
     const [loaded, setLoaded] = useState(false);
@@ -34,6 +37,8 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
             } catch { } finally { }
         });
     };
+    const timeDiff = DateTime.now().toSeconds() - (data?.createTime || 0);
+    const progress = ((data?.timeLimit || 1) >= timeDiff) ? Math.ceil(timeDiff / (data?.timeLimit || 1) * 100) : 100;
     return <div>
         <Header as="h1">
             {data?.name || ""}
@@ -46,6 +51,30 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
             </div></Segment>}
         {loaded && data !== null && <Grid columns="2">
             <Grid.Column width="11">
+                {data.timeLimit !== 0 && <>
+                    <Header as="h3">时间限制</Header>
+                    <Segment stacked>
+                        <Table basic="very">
+                            <Table.Body>
+                                <Table.Row>
+                                    <Table.Cell>开始时间</Table.Cell>
+                                    <Table.Cell>{timeStampToString(data.createTime)}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>结束时间</Table.Cell>
+                                    <Table.Cell>{timeStampToString(data.createTime + data.timeLimit)}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell colSpan="2">
+                                        <Progress percent={progress} success={progress === 100} active={progress >= 1 && progress < 100} >
+                                            {progress >= 100 ? "已完成" : "正在进行"}
+                                        </Progress>
+                                    </Table.Cell>
+                                </Table.Row>
+                            </Table.Body>
+                        </Table>
+                    </Segment>
+                </>}
                 {data.description !== "" && <div>
                     <Header as="h3">
                         简介
@@ -126,9 +155,6 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
                             </Table.Row>
                         </Table.Body>
                     </Table>
-                    <Button color="green" onClick={() => showSuccessModal("解锁成功")}>
-                        解锁权限
-                    </Button>
                     {data.managable && <>
                         <Button color="green" as={Link} to={`${PUBLIC_URL}/problemset/edit/${data.id}`}>编辑</Button>
                         <Button color="red" onClick={remove}>删除</Button>

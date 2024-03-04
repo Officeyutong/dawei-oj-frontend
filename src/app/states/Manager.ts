@@ -22,6 +22,7 @@ export interface UserStateType {
         usePhoneAuth: boolean;
         canUseImageStore: boolean;
         displayRepoInFooter: boolean;
+        shouldDisplayFullProblemsetListByDefault: boolean;
     }
 }
 
@@ -54,7 +55,8 @@ const defaultState: StateType = {
             gravatarURL: "",//gravatar前缀,
             usePhoneAuth: false,
             canUseImageStore: false,
-            displayRepoInFooter: false
+            displayRepoInFooter: false,
+            shouldDisplayFullProblemsetListByDefault: false
         }
     },
     generalClient: null,
