@@ -23,6 +23,12 @@ export interface UserStateType {
         canUseImageStore: boolean;
         displayRepoInFooter: boolean;
         shouldDisplayFullProblemsetListByDefault: boolean;
+        currentActiveTimedProblemset: null | {
+            id: number;
+            name: string;
+            startTime: number;
+            timeLimit: number;
+        };
     }
 }
 
@@ -56,7 +62,8 @@ const defaultState: StateType = {
             usePhoneAuth: false,
             canUseImageStore: false,
             displayRepoInFooter: false,
-            shouldDisplayFullProblemsetListByDefault: false
+            shouldDisplayFullProblemsetListByDefault: false,
+            currentActiveTimedProblemset: null
         }
     },
     generalClient: null,

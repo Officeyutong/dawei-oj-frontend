@@ -3,16 +3,14 @@ import { Link, useParams } from "react-router-dom";
 import { Button, Dimmer, Grid, Header, Loader, Progress, Segment, Table } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { Markdown } from "../../common/Markdown";
-import { useDocumentTitle } from "../../common/Utils";
+import { timeStampToString, useDocumentTitle } from "../../common/Utils";
 import { showConfirm } from "../../dialogs/Dialog";
 import JudgeStatusLabel from "../utils/JudgeStatusLabel";
 import UserLink from "../utils/UserLink";
 import problemsetClient from "./client/ProblemsetClient";
 import { ProblemsetPublicInfo } from "./client/types";
 import { DateTime } from "luxon";
-function timeStampToString(seconds: number): string {
-    return DateTime.fromSeconds(seconds).toJSDate().toLocaleString();
-}
+
 const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
     const { id } = useParams<{ id: string }>();
     const [loaded, setLoaded] = useState(false);
@@ -67,7 +65,7 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                 <Table.Row>
                                     <Table.Cell colSpan="2">
                                         <Progress percent={progress} success={progress === 100} active={progress >= 1 && progress < 100} >
-                                            {progress >= 100 ? "已完成" : "正在进行"}
+                                            {progress >= 100 ? "已完成" : `正在进行 - ${progress}%`}
                                         </Progress>
                                     </Table.Cell>
                                 </Table.Row>
@@ -143,7 +141,7 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell>创建时间</Table.Cell>
-                                <Table.Cell>{data.createTime}</Table.Cell>
+                                <Table.Cell>{timeStampToString(data.createTime)}</Table.Cell>
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell>所有者</Table.Cell>

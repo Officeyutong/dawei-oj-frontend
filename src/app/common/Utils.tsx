@@ -64,6 +64,9 @@ export function secondsToString(totSecond: number): string {
 export function toLocalTime(seconds: number): string {
     return DateTime.fromSeconds(seconds).toJSDate().toLocaleString();
 }
+export function timeStampToString(seconds: number): string {
+    return DateTime.fromSeconds(seconds).toJSDate().toLocaleString();
+}
 export {
     useDocumentTitle,
     useInputValue,
