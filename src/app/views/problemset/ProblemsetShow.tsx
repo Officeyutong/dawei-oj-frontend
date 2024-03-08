@@ -35,7 +35,15 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
             } catch { } finally { }
         });
     };
-    const timeDiff = DateTime.now().toSeconds() - (data?.createTime || 0);
+    const [currentTime, setCurrentTime] = useState<DateTime>(DateTime.now());
+    useEffect(() => {
+        const token = setInterval(() => {
+            setCurrentTime(DateTime.now());
+        }, 1000)
+        return () => clearInterval(token);
+    });
+
+    const timeDiff = currentTime.toSeconds() - (data?.createTime || 0);
     const progress = ((data?.timeLimit || 1) >= timeDiff) ? Math.ceil(timeDiff / (data?.timeLimit || 1) * 100) : 100;
     return <div>
         <Header as="h1">

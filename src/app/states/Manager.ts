@@ -26,7 +26,7 @@ export interface UserStateType {
         currentActiveTimedProblemset: null | {
             id: number;
             name: string;
-            startTime: number;
+            createTime: number;
             timeLimit: number;
         };
     }
