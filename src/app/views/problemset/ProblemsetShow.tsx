@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Button, Dimmer, Grid, Header, Loader, Progress, Segment, Table } from "semantic-ui-react";
+import { Button, Dimmer, Grid, Header, Loader, Message, MessageHeader, Progress, Segment, Table } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { Markdown } from "../../common/Markdown";
 import { timeStampToString, useDocumentTitle } from "../../common/Utils";
@@ -159,8 +159,17 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                 <Table.Cell>权限</Table.Cell>
                                 <Table.Cell>{data.private ? "私有" : "公开"}</Table.Cell>
                             </Table.Row>
+
                         </Table.Body>
                     </Table>
+                    {data.couldRetriveProblemPermissions && <Message positive>
+                        <MessageHeader>此习题集的所有者拥有管理所有习题集的权限</MessageHeader>
+                        <p>如果您有权限使用该习题集，那么您就会自动获取使用该习题集下题目的权限</p>
+                    </Message>}
+                    {!data.couldRetriveProblemPermissions && <Message warning>
+                        <MessageHeader>此习题集的所有者没有管理习题集的权限</MessageHeader>
+                        <p>您无法通过使用本习题集获取习题集下题目的使用权限</p>
+                    </Message>}
                     {data.managable && <>
                         <Button color="green" as={Link} to={`${PUBLIC_URL}/problemset/edit/${data.id}`}>编辑</Button>
                         <Button color="red" onClick={remove}>删除</Button>
