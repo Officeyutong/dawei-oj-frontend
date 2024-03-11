@@ -70,7 +70,8 @@ const ProblemEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 submissionVisible: data.submissionVisible,
                 subtasks: data.subtasks,
                 title: data.title,
-                using_file_io: data.using_file_io
+                using_file_io: data.using_file_io,
+                allowManualGrading: data.allowManualGrading
             }, submitAnswer);
             showSuccessModal("保存成功!");
         } catch { } finally {
@@ -150,6 +151,7 @@ const ProblemEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                                     spj_filename={data.spj_filename}
                                     subtasks={data.subtasks}
                                     using_file_io={data.using_file_io}
+                                    allowManualGrading={data.allowManualGrading}
                                     submitAnswer={submitAnswer}
                                     onUpdateSubmitAnswer={setSubmitAnswer}
                                     onUpdate={onProblemDataUpdate}

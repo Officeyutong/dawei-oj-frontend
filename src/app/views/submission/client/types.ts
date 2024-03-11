@@ -56,6 +56,11 @@ interface SubmissionInfo {
         username: string;
     }
     virtualContestID: number;
+    enableManualGrading: boolean;
+    lastManualGradingTime: number | null;
+    lastManualGradingUser: null | {
+        uid: number; username: string;
+    }
 };
 
 interface SubmissionFilter {
@@ -109,12 +114,19 @@ interface SubmissionListEntry {
     total_score: number;
 };
 
+interface SubmissionManualGradingResult {
+    submission_id: number;
+    score: number | { [x: string]: SubtaskJudgeResult };
+    message: string;
+}
+
 export type {
     SubmissionInfo,
     SubmissionFilter,
     TestcaseJudgeResult,
     SubtaskJudgeResult,
-    SubmissionListEntry
+    SubmissionListEntry,
+    SubmissionManualGradingResult
 };
 
 export {

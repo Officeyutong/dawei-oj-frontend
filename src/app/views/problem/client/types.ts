@@ -79,6 +79,7 @@ interface ProblemInfo extends ProblemStatement {
     provides: string[];
 
     lastUsedParameters: number[];
+    allowManualGrading: boolean;
 };
 interface ProblemUpdateInfo extends ProblemStatement {
     extra_parameter: ExtraParameterEntry[];
@@ -93,6 +94,7 @@ interface ProblemUpdateInfo extends ProblemStatement {
     invite_code: string;
     submissionVisible: boolean;
     newProblemID: number;
+    allowManualGrading: boolean;
 };
 
 interface ProblemEditReceiveInfo extends ProblemInfo {

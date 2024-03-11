@@ -4,8 +4,8 @@ import AnsiUp from "ansi_up";
 import hljs from 'highlight.js';
 import submissionClient from "../client/SubmissionClient";
 import { SubmissionInfo } from "../client/types";
-import { Button, Dimmer, Divider, Header, Loader, Segment, Table } from "semantic-ui-react";
-import { useDocumentTitle, usePreferredMemoryUnit } from "../../../common/Utils";
+import { Button, Dimmer, Divider, Header, Loader, Message, Segment, Table } from "semantic-ui-react";
+import { timeStampToString, useDocumentTitle, usePreferredMemoryUnit } from "../../../common/Utils";
 import "./Submission.css"
 import { PUBLIC_URL } from "../../../App";
 import UserLink from "../../utils/UserLink";
@@ -127,6 +127,7 @@ const ShowSubmission = () => {
         };
     }, []);
     const isContestSubmit = data?.contest.isContest || false;
+    const isManualGrading = data?.lastManualGradingTime !== null;
     return <>
         {stage === Stage.LOADING && <>
             <div style={{ height: "400px" }}>
@@ -139,6 +140,9 @@ const ShowSubmission = () => {
                 {data.virtualContestID !== -1 && <div style={{ color: "red", fontSize: "large" }}>
                     此提交为虚拟比赛中的提交
                 </div>}
+                {isManualGrading && <Message positive>
+                    <p>此评测的结果为人工评测所产生</p>
+                </Message>}
                 <Header as="h3">详情</Header>
                 <Table className="submission-info-table" basic="very" celled style={{ maxWidth: "700px" }}>
                     <Table.Body>
@@ -198,16 +202,16 @@ const ShowSubmission = () => {
                                     {data.time_cost} ms
                                 </Table.Cell>
                             </Table.Row>}
-                            <Table.Row>
+                            {data.memory_cost !== -1 && <Table.Row>
                                 <Table.Cell>
                                     内存占用
                                 </Table.Cell>
                                 <Table.Cell>
                                     <MemoryCostLabel memoryCost={data.memory_cost}></MemoryCostLabel>
                                 </Table.Cell>
-                            </Table.Row>
+                            </Table.Row>}
                         </>}
-                        <Table.Row>
+                        {!isManualGrading && <><Table.Row>
                             <Table.Cell>
                                 编译参数
                             </Table.Cell>
@@ -215,14 +219,14 @@ const ShowSubmission = () => {
                                 {data.extra_compile_parameter}
                             </Table.Cell>
                         </Table.Row>
-                        <Table.Row>
-                            <Table.Cell>
-                                评测机
-                            </Table.Cell>
-                            <Table.Cell>
-                                {data.judger}
-                            </Table.Cell>
-                        </Table.Row>
+                            <Table.Row>
+                                <Table.Cell>
+                                    评测机
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {data.judger}
+                                </Table.Cell>
+                            </Table.Row></>}
                         <Table.Row>
                             <Table.Cell>
                                 编程语言
@@ -231,7 +235,7 @@ const ShowSubmission = () => {
                                 {data.language_name}
                             </Table.Cell>
                         </Table.Row>
-                        <Table.Row>
+                        {!isManualGrading && <Table.Row>
                             <Table.Cell>
                                 内存显示单位
                             </Table.Cell>
@@ -251,12 +255,26 @@ const ShowSubmission = () => {
                                     </Button>
                                 </Button.Group>
                             </Table.Cell>
-                        </Table.Row>
+                        </Table.Row>}
+                        {isManualGrading && <>
+                            <Table.Row>
+                                <Table.Cell>人工评测时间</Table.Cell>
+                                <Table.Cell>{timeStampToString(data.lastManualGradingTime!)}</Table.Cell>
+                            </Table.Row>
+                            <Table.Row>
+                                <Table.Cell>人工评测用户</Table.Cell>
+                                <Table.Cell><UserLink data={data.lastManualGradingUser!} ></UserLink></Table.Cell>
+                            </Table.Row>
+                        </>}
                     </Table.Body>
                 </Table>
                 {data.managable && !data.isRemoteSubmission && <Button color="red" onClick={rejudge}>
                     重测</Button>}
+                {data.enableManualGrading && <Button color="green" as={Link} to={`${PUBLIC_URL}/submission/manual_grade/${data.id}`}>
+                    人工评分
+                </Button>}
                 <Divider></Divider>
+
                 {data.message !== "" && <>
                     <Header as="h3">
                         编译/附加信息
@@ -313,8 +331,8 @@ const ShowSubmission = () => {
                                 <Table.Cell><a href={`/api/download_file/${data.problem.rawID}/${testcase.output}`}>{testcase.output}</a></Table.Cell>
                                 <Table.Cell><ScoreLabel fullScore={testcase.full_score} score={testcase.score}></ScoreLabel></Table.Cell>
                                 <Table.Cell><JudgeStatusLabel status={testcase.status}></JudgeStatusLabel></Table.Cell>
-                                <Table.Cell>{testcase.time_cost} ms</Table.Cell>
-                                <Table.Cell><MemoryCostLabel memoryCost={testcase.memory_cost}></MemoryCostLabel></Table.Cell>
+                                <Table.Cell>{testcase.time_cost !== -1 && <>{testcase.time_cost} ms</>}</Table.Cell>
+                                <Table.Cell>{testcase.memory_cost !== -1 && <MemoryCostLabel memoryCost={testcase.memory_cost}></MemoryCostLabel>}</Table.Cell>
                                 <Table.Cell>{testcase.message}</Table.Cell>
                             </Table.Row>)}
                         </Table.Body>}

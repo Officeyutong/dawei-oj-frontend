@@ -15,7 +15,8 @@ type DataEntryProps = Pick<ProblemEditReceiveInfo,
     "subtasks" |
     "using_file_io" |
     "files" |
-    "problem_type"
+    "problem_type" |
+    "allowManualGrading"
 > & {
     submitAnswer: boolean;
 };
@@ -30,7 +31,7 @@ interface ProblemDataProps extends DataEntryProps {
 
 const ProblemJudgeTab: React.FC<React.PropsWithChildren<ProblemDataProps>> = (data) => {
     const update = useCallback((localData: Partial<DataEntryProps>) => {
-        const { extra_parameter, files, input_file_name, output_file_name, problem_type, spj_filename, submitAnswer, subtasks, using_file_io } = {
+        const { extra_parameter, files, input_file_name, output_file_name, problem_type, spj_filename, submitAnswer, subtasks, using_file_io, allowManualGrading } = {
             extra_parameter: data.extra_parameter,
             files: data.files,
             input_file_name: data.input_file_name,
@@ -40,10 +41,11 @@ const ProblemJudgeTab: React.FC<React.PropsWithChildren<ProblemDataProps>> = (da
             submitAnswer: data.submitAnswer,
             subtasks: data.subtasks,
             using_file_io: data.using_file_io,
+            allowManualGrading: data.allowManualGrading,
             ...localData
         };
         data.onUpdate({
-            extra_parameter, files, input_file_name, output_file_name, problem_type, spj_filename, submitAnswer, subtasks, using_file_io
+            extra_parameter, files, input_file_name, output_file_name, problem_type, spj_filename, submitAnswer, subtasks, using_file_io, allowManualGrading
         });
     }, [data]);
     const [loading, setLoading] = useState(false);
@@ -101,6 +103,9 @@ const ProblemJudgeTab: React.FC<React.PropsWithChildren<ProblemDataProps>> = (da
                 </Form.Group>
                 <Form.Field>
                     <Checkbox label="使用文件IO" toggle checked={data.using_file_io} onChange={() => update({ ...data, using_file_io: !data.using_file_io })}></Checkbox>
+                </Form.Field>
+                <Form.Field>
+                    <Checkbox label="允许人工评测" toggle checked={data.allowManualGrading} onChange={() => update({ ...data, allowManualGrading: !data.allowManualGrading })}></Checkbox>
                 </Form.Field>
                 <Form.Field>
                     <label>题目类型</label>

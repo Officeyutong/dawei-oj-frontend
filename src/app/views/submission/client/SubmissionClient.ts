@@ -1,6 +1,6 @@
 import QueryString from "qs";
 import GeneralClient from "../../../common/GeneralClient";
-import { SubmissionFilter, SubmissionInfo, SubmissionListEntry } from "./types";
+import { SubmissionFilter, SubmissionInfo, SubmissionListEntry, SubmissionManualGradingResult } from "./types";
 
 class SubmissionClient extends GeneralClient {
     async rejudge(submission_id: number) {
@@ -18,6 +18,9 @@ class SubmissionClient extends GeneralClient {
         })).data;
 
         return resp;
+    }
+    async updateManualGradeResult(data: SubmissionManualGradingResult): Promise<void> {
+        return (await this.client!.post("/api/submission/update_manual_grading", data)).data;
     }
 };
 
