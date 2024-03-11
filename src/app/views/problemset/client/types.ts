@@ -50,6 +50,7 @@ interface ProblemsetPublicInfo {
     foreignProblems: ForeignProblemEntry[];
     timeLimit: number;
     couldRetriveProblemPermissions: boolean;
+    favorited: boolean;
 };
 export type {
     ProblemsetListItem,

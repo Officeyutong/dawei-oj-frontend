@@ -15,6 +15,8 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
     const { id } = useParams<{ id: string }>();
     const [loaded, setLoaded] = useState(false);
     const [data, setData] = useState<ProblemsetPublicInfo | null>(null);
+    const [togglingFavorite, setTogglingFavorite] = useState(false);
+
     useDocumentTitle(`${data?.name || "加载中..."} - 习题集`);
     useEffect(() => {
         if (!loaded) {
@@ -27,6 +29,15 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
             })();
         }
     }, [id, loaded]);
+    const handleToggleFavorite = async () => {
+        try {
+            setTogglingFavorite(true);
+            const { newValue } = await problemsetClient.toggleProblemsetFavorited(data!.id);
+            setData({ ...data!, favorited: newValue });
+        } catch { } finally {
+            setTogglingFavorite(false);
+        }
+    }
     const remove = () => {
         showConfirm("您确认要删除此习题集吗?", async () => {
             try {
@@ -45,6 +56,7 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
 
     const timeDiff = currentTime.toSeconds() - (data?.createTime || 0);
     const progress = ((data?.timeLimit || 1) >= timeDiff) ? Math.ceil(timeDiff / (data?.timeLimit || 1) * 100) : 100;
+    const favorited = data?.favorited || false;
     return <div>
         <Header as="h1">
             {data?.name || ""}
@@ -170,6 +182,9 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
                         <MessageHeader>此习题集的所有者没有管理习题集的权限</MessageHeader>
                         <p>您无法通过使用本习题集获取习题集下题目的使用权限</p>
                     </Message>}
+                    <Button color={favorited ? "red" : "green"} onClick={handleToggleFavorite} loading={togglingFavorite}>
+                        {favorited ? "取消收藏" : "收藏"}
+                    </Button>
                     {data.managable && <>
                         <Button color="green" as={Link} to={`${PUBLIC_URL}/problemset/edit/${data.id}`}>编辑</Button>
                         <Button color="red" onClick={remove}>删除</Button>

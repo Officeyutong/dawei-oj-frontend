@@ -25,9 +25,10 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(-1);
     const [pageCount, setPageCount] = useState(0);
-    const [showFavOnly, setShowFavOnly] = useState(false);
+    const [showFavOnly, setShowFavOnly] = useState(true);
     const privileged = useSelector((s: StateType) => s.userState.userData.shouldDisplayFullProblemsetListByDefault);
-    useEffect(() => { if (privileged) setShowFavOnly(false); }, [privileged]);
+    const ifLogin = useSelector((s: StateType) => s.userState.login);
+    useEffect(() => { if (privileged || !ifLogin) setShowFavOnly(false); }, [privileged, ifLogin]);
     const createProblemset = async (evt: ButtonClickEvent) => {
         try {
             setLoading(true);
@@ -83,12 +84,13 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
         {loaded && <Segment stacked>
             {loading && <Dimmer active><Loader></Loader></Dimmer>}
             <Grid columns="1">
-                <Grid.Column>
+                {ifLogin && <><Grid.Column>
                     <Checkbox checked={showFavOnly} onChange={toggleFav} toggle label="仅显示收藏习题集"></Checkbox>
                 </Grid.Column>
-                {!showFavOnly && <Grid.Column> <Button as="div" color="green" onClick={createProblemset}>
-                    创建习题集
-                </Button></Grid.Column>}
+                    {!showFavOnly && <Grid.Column> <Button as="div" color="green" onClick={createProblemset}>
+                        创建习题集
+                    </Button></Grid.Column>}
+                </>}
             </Grid>
 
             <Divider></Divider>

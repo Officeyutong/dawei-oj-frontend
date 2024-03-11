@@ -28,7 +28,9 @@ class ProblemsetClient extends GeneralClient {
     async getProblemsetFrontendInfo(id: number): Promise<ProblemsetPublicInfo> {
         return (await this.client!.post("/api/problemset/get_public", { id: id })).data;
     }
-
+    async toggleProblemsetFavorited(id: number): Promise<{ newValue: boolean }> {
+        return (await this.client!.post("/api/problemset/toggle_favorite", { problemset_id: id })).data;
+    }
 };
 
 const problemsetClient = new ProblemsetClient();
