@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button, Checkbox, Dimmer, Divider, Form, Header, Icon, Input, Loader, Segment, Table, TextArea } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { ButtonClickEvent } from "../../common/types";
-import { useDocumentTitle } from "../../common/Utils";
+import { timeStampToString, useDocumentTitle } from "../../common/Utils";
 import { showSuccessModal } from "../../dialogs/Dialog";
 import UserLink from "../utils/UserLink";
 import BatchAddDialog from "./BatchAddDialog";
@@ -41,7 +41,8 @@ const ProblemsetEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 name: data.name,
                 private: data.private,
                 problems: data.problems,
-                showRanklist: data.showRanklist
+                showRanklist: data.showRanklist,
+                timeLimit: data.timeLimit
             });
             showSuccessModal("保存完成");
         } catch { } finally {
@@ -76,6 +77,15 @@ const ProblemsetEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Form.Field>
                         <label>邀请码</label>
                         <Input value={data.invitationCode} onChange={(_, d) => setData({ ...data, invitationCode: d.value })} disabled={!data.private}></Input>
+                    </Form.Field>
+                    <Divider></Divider>
+                    <Form.Field>
+                        <label>创建时间</label>
+                        {timeStampToString(data.createTime)}
+                    </Form.Field>
+                    <Form.Field>
+                        <label>时间限制(秒，填写为0表示不限时间)</label>
+                        <Input type="number" value={data.timeLimit} onChange={(e, d) => setData({ ...data, timeLimit: parseInt(d.value) })}></Input>
                     </Form.Field>
                     <Divider></Divider>
                     <Form.Field>

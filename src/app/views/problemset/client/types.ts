@@ -23,10 +23,11 @@ interface ProblemsetUpdateInfo {
     problems: number[];
     description: string;
     foreignProblems: ForeignProblemEntry[];
+    timeLimit: number;
 };
 interface ProblemsetEditInfo extends ProblemsetUpdateInfo {
     owner: ProblemsetUser;
-    createTime: string;
+    createTime: number;
 };
 interface ProblemsetPublicInfo {
     owner: ProblemsetUser;
