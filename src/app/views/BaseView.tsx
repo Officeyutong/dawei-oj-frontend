@@ -97,7 +97,6 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
             排名
         </Menu.Item>
         {userState.login && <>
-
             <Popup
                 position="right center"
                 pinned
@@ -131,6 +130,10 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                     <Menu.Item as={Link} to={`${PUBLIC_URL}/preliminary/list`}>
                         <Icon name="clipboard outline"></Icon>
                         笔试题库
+                    </Menu.Item>
+                    <Menu.Item as={Link} to={`${PUBLIC_URL}/userproblemfilter/list`}>
+                        <Icon name="tasks"></Icon>
+                        题目筛选
                     </Menu.Item>
                 </Menu>
 

@@ -29,6 +29,7 @@ import CardRouter from "./views/card/Router";
 import { useBaseViewDisplay } from "./states/StateUtils";
 import PreliminaryRouter from "./views/preliminary/Router";
 import WikiRouter from "./views/wiki/Router";
+import UserProblemFilterRouter from "./views/userproblemfilter/Router";
 
 const SubRoutes = () => {
     const [displayBaseView,] = useBaseViewDisplay();
@@ -85,12 +86,16 @@ const SubRoutes = () => {
         <Route path={`${match.path}/wiki`}>
             <WikiRouter></WikiRouter>
         </Route>
+        <Route path={`${match.path}/userproblemfilter`}>
+            <UserProblemFilterRouter></UserProblemFilterRouter>
+        </Route>
         <Route path={`${match.path}/error`}>
             <ErrorAndSuccess error={true}></ErrorAndSuccess>
         </Route>
         <Route path={`${match.path}/success`}>
             <ErrorAndSuccess error={false}></ErrorAndSuccess>
         </Route>
+       
     </>
     return displayBaseView ? <BaseView>{routers}</BaseView> : routers;
 };

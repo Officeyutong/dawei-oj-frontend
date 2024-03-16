@@ -57,8 +57,10 @@ const ProblemFilter: React.FC<React.PropsWithChildren<ProblemFilterProps>> = ({
                 {usedTags.map((x, u) => <ProblemTagLabel
                     data={tagsMapping.get(x)!}
                     onClick={() => setUsedTags(c => c.filter(y => y !== x))}
+                    key={x}
                 ></ProblemTagLabel>)}
             </div>
+            <Divider></Divider>
             <Button color="red" size="tiny" onClick={apply}>
                 执行搜索
             </Button>

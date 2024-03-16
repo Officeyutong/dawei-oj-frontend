@@ -74,7 +74,7 @@ const ProblemtodoBox: React.FC<React.PropsWithChildren<{}>> = () => {
             <Loader></Loader>
         </Dimmer>}
         <Header as="h3">
-            我的待做题目
+            我的题目收藏
         </Header>
         <a href="/problemtodo/list" target="_blank" rel="noreferrer">管理</a>
         <Divider></Divider>
