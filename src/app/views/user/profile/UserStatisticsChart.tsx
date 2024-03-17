@@ -5,6 +5,7 @@ import { DateTime } from "luxon";
 import userClient from "../client/UserClient";
 import { ProblemTagEntry } from "../../../common/types";
 import problemClient from "../../problem/client/ProblemClient";
+  
 
 const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
     const [loading, setLoading] = useState(false);
