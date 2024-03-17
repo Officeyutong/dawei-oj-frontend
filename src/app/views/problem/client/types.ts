@@ -80,6 +80,7 @@ interface ProblemInfo extends ProblemStatement {
 
     lastUsedParameters: number[];
     allowManualGrading: boolean;
+    difficulty: number;
 };
 interface ProblemUpdateInfo extends ProblemStatement {
     extra_parameter: ExtraParameterEntry[];
@@ -95,6 +96,7 @@ interface ProblemUpdateInfo extends ProblemStatement {
     submissionVisible: boolean;
     newProblemID: number;
     allowManualGrading: boolean;
+    difficulty: number;
 };
 
 interface ProblemEditReceiveInfo extends ProblemInfo {

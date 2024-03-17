@@ -50,10 +50,21 @@ interface GlobalRanklistItem {
     description: string;
 };
 
+interface UserStatisticEntry {
+    date: number;
+    newProblemsPassed: number;
+    triedProblem: number;
+    submissionCount: number;
+    acceptedSubmission: number;
+    problemDifficultyDist: { [k: string]: number };
+    problemTagDist: { [k: string]: number };
+}
+
 export type {
     UserProfileResponse,
     UserProfileUpdateRequest,
     FolloweeItem,
     FollowerItem,
-    GlobalRanklistItem
+    GlobalRanklistItem,
+    UserStatisticEntry
 };

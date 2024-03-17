@@ -9,6 +9,7 @@ import AcceptedProblemsTab from "./AcceptedProblemsTab";
 import DescriptionTab from "./DescriptionTab";
 import GeneralFollowingTab from "./GeneralFollowingTab";
 import JoinedTeamsTab from "./JoinedTeamsTab";
+import UserStatisticsChart from "./UserStatisticsChart";
 
 const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
     const uid = parseInt(useParams<{ uid: string }>().uid);
@@ -123,6 +124,7 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
                     { menuItem: "通过题目", pane: <Tab.Pane key={4}><AcceptedProblemsTab data={data.ac_problems}></AcceptedProblemsTab></Tab.Pane> },
 
                 ]}></Tab>
+                <UserStatisticsChart uid={uid}></UserStatisticsChart>
             </Grid.Column>
         </Grid>}
     </div>;

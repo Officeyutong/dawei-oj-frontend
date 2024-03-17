@@ -13,6 +13,7 @@ import CodeInput from "./CodeInput";
 import FileDownloadArea from "./FileDownloadArea";
 import ProblemDiscussionBlock from "./ProblemDiscussionBlock";
 import ProblemStatementView from "./ProblemStatementView";
+import DifficultyLabel from "../utils/DifficultyLabel";
 
 const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch<{ problemID: string }>();
@@ -190,6 +191,10 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                                             <Table.Row>
                                                 <Table.Cell>题目标签</Table.Cell>
                                                 <Table.Cell>{data.tags.map((x, i) => <ProblemTagLabel key={i} data={x}></ProblemTagLabel>)}</Table.Cell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.Cell>难度等级</Table.Cell>
+                                                <Table.Cell><DifficultyLabel difficulty={data.difficulty}></DifficultyLabel></Table.Cell>
                                             </Table.Row>
                                         </Table.Body>
                                     </Table>

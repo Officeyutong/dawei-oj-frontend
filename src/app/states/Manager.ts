@@ -29,6 +29,8 @@ export interface UserStateType {
             createTime: number;
             timeLimit: number;
         };
+        minProblemDifficulty: number;
+        maxProblemDifficulty: number;
     }
 }
 
@@ -63,7 +65,9 @@ const defaultState: StateType = {
             canUseImageStore: false,
             displayRepoInFooter: false,
             shouldDisplayFullProblemsetListByDefault: false,
-            currentActiveTimedProblemset: null
+            currentActiveTimedProblemset: null,
+            maxProblemDifficulty: 0,
+            minProblemDifficulty: 0
         }
     },
     generalClient: null,
