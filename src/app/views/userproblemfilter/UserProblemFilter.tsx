@@ -10,6 +10,7 @@ import ProblemFilter from "../problem/list/ProblemFilter";
 import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../../App";
 import ProblemTagLabel from "../utils/ProblemTagLabel";
+import CreateProblemSetModal from "./CreateProblemSetModal";
 
 const UserProblemFilter: React.FC<{}> = () => {
     const [filter, setFilter] = useState<ProblemSearchFilter>({});
@@ -22,6 +23,7 @@ const UserProblemFilter: React.FC<{}> = () => {
     const tagMapping = useMemo(() => new Map(allTags.map(x => ([x.id, x]))), [allTags]);
     const [tagsLoaded, setTagsLoaded] = useState(false);
     const [selectedProblem, setSelectedProblem] = useState<UsableProblemEntry[]>([]);
+    const [showProblemSetCreateModal, setShowProblemSetCreateModal] = useState(false);
     const isSelected = useCallback((id: number) => {
         return selectedProblem.find(x => x.id === id) !== undefined;
     }, [selectedProblem]);
@@ -52,12 +54,16 @@ const UserProblemFilter: React.FC<{}> = () => {
             } finally { setLoading(false); }
         })();
     }, [filter, page]);
-
     return <div>
         <Header as="h1">
             用户题目筛选
         </Header>
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
+        {showProblemSetCreateModal && <CreateProblemSetModal
+            closeCallback={() => setShowProblemSetCreateModal(false)}
+            problems={selectedProblem}
+            tagMapping={tagMapping}
+        ></CreateProblemSetModal>}
         <Segment stacked>
             <Grid columns={2} relaxed='very' divided>
                 <Grid.Column width={8}>
@@ -116,6 +122,7 @@ const UserProblemFilter: React.FC<{}> = () => {
 
                 <Grid.Column width={8}>
                     <Header as="h3">候选题目</Header>
+                    <Button size="small" onClick={() => setShowProblemSetCreateModal(true)} color="green">创建习题集</Button>
                     <Table basic="very">
                         <Table.Header>
                             <Table.Row>
