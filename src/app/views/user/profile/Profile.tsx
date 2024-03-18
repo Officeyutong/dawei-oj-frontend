@@ -101,16 +101,7 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
                         </Table>}
                     </div>
                 </Segment>
-                {/* <Header block attached="top" as="h4">
-                    通过题目
-                </Header>
-                <Segment attached="bottom" style={{ maxHeight: "500px", overflowY: "scroll" }}>
-                    {data.ac_problems.length === 0 ? <div>这个人很懒，还没做过题</div> : <Grid style={{ marginRight: "5px" }} columns="6">
-                        {data.ac_problems.map((x, i) => <Grid.Column key={i}>
-                            <span>[<a href={`/show_problem/${x}`}>{x}</a>]</span>
-                        </Grid.Column>)}
-                    </Grid>}
-                </Segment> */}
+             
             </Grid.Column>
             <Grid.Column width="11">
                 <Header as="h1">

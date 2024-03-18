@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@antv/g2plot": "^2.4.31",
     "@opd/g2plot-react": "^2.13.2",
     "@plq/use-persisted-state": "^1.1.2",
     "@react-hook/resize-observer": "^1.2.4",
@@ -22,7 +23,6 @@
     "qs": "^6.10.1",
     "react": "^17.0.1",
     "react-ace": "^9.4.1",
-    "react-datepicker": "^6.4.0",
     "react-datetime": "^3.0.4",
     "react-dom": "^17.0.1",
     "react-google-recaptcha": "^2.1.0",
