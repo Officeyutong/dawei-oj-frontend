@@ -67,6 +67,9 @@ export function toLocalTime(seconds: number): string {
 export function timeStampToString(seconds: number): string {
     return DateTime.fromSeconds(seconds).toJSDate().toLocaleString();
 }
+export function timestampToYMD(ts: number) {
+    return DateTime.fromSeconds(ts).toFormat("L-dd");
+}
 export {
     useDocumentTitle,
     useInputValue,

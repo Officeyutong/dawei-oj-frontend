@@ -7,6 +7,8 @@ interface GeneralInfo {
     todayCESubmissionCount: number;
     todaySubmissionCount: number;
     userCount: number;
+    todayAcceptedSubmission: number;
+    todayAccessedUsers: number;
 };
 
 type SettingPreview = { key: string; value: number | boolean | string; description: string }[];
@@ -50,6 +52,13 @@ interface HomepageSwiperEntry {
 };
 type HomepageSwiperList = HomepageSwiperEntry[];
 
+interface SubmissionStatisticsEntry {
+    acceptedSubmission: number;
+    submission: number;
+    submittedUser: number;
+    date: number;
+};
+
 export type {
     AdminBasicInfo,
     GeneralInfo,
@@ -62,5 +71,6 @@ export type {
     FeedList,
     FeedListResponse,
     HomepageSwiperEntry,
-    HomepageSwiperList
+    HomepageSwiperList,
+    SubmissionStatisticsEntry
 };

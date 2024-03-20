@@ -10,15 +10,13 @@ import { Annotation } from "@antv/g2plot";
 import DatetimePickler from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import 'moment/locale/zh-cn';
+import { timestampToYMD } from "../../../common/Utils";
 /*
 提交：
 面积图：累计提交数，累计通过提交数
 折线图：提交数，通过提交数
 */
 
-function timestampToYMD(ts: number) {
-    return DateTime.fromSeconds(ts).toFormat("L-dd");
-}
 
 const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
     const [loading, setLoading] = useState(false);

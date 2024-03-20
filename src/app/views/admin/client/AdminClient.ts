@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { AdminBasicInfo, FeedListResponse, HomepageSwiperList, PermissionGroupList, RatedContestList } from "./types";
+import { AdminBasicInfo, FeedListResponse, HomepageSwiperList, PermissionGroupList, RatedContestList, SubmissionStatisticsEntry } from "./types";
 
 class AdminClient extends GeneralClient {
     async getAdminBasicInfo(): Promise<AdminBasicInfo> {
@@ -38,6 +38,9 @@ class AdminClient extends GeneralClient {
     }
     async updateHomepageSwiper(data: HomepageSwiperList) {
         await this.client!.post("/api/misc/homepage_swiper/update", { data: data });
+    }
+    async getSubmissionStatistics(startTime: number, endTime: number): Promise<SubmissionStatisticsEntry[]> {
+        return (await this.client!.post("/api/admin/get_submission_statistics", { start_time: startTime, end_time: endTime })).data;
     }
 };
 

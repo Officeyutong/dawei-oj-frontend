@@ -30,15 +30,15 @@ const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
         <div>
             <Header as="h1">后台管理</Header>
             <Tab renderActiveOnly={false} panes={[
-                { menuItem: "概览", pane: <Tab.Pane key={0}><GeneralView data={basicData!}></GeneralView></Tab.Pane> },
-                { menuItem: "Rating管理", pane: <Tab.Pane key={1}><RatingManagement></RatingManagement></Tab.Pane> },
-                { menuItem: "设置预览", pane: <Tab.Pane key={2}><ConfigPreviewTab data={basicData!.settings}></ConfigPreviewTab></Tab.Pane> },
-                { menuItem: "权限组设定", pane: <Tab.Pane key={3}><PermissionGroupTab></PermissionGroupTab></Tab.Pane> },
-                { menuItem: "全局推送", pane: <Tab.Pane key={4}><FeedManagement></FeedManagement></Tab.Pane> },
-                { menuItem: "主页轮播管理", pane: <Tab.Pane key={5}><HomepageSwiperManagement></HomepageSwiperManagement></Tab.Pane> },
-                { menuItem: "权限包管理", pane: <Tab.Pane key={-1}><PermissionPackList></PermissionPackList></Tab.Pane> },
-                { menuItem: "用户管理", pane: <Tab.Pane key={6}><UserManagement></UserManagement></Tab.Pane> },
-                { menuItem: "杂项", pane: <Tab.Pane key={7}><MiscManagement></MiscManagement></Tab.Pane> },
+                { menuItem: "统计", pane: <Tab.Pane key={1}><GeneralView data={basicData!}></GeneralView></Tab.Pane> },
+                { menuItem: "Rating管理", pane: <Tab.Pane key={2}><RatingManagement></RatingManagement></Tab.Pane> },
+                { menuItem: "设置预览", pane: <Tab.Pane key={3}><ConfigPreviewTab data={basicData!.settings}></ConfigPreviewTab></Tab.Pane> },
+                { menuItem: "权限组设定", pane: <Tab.Pane key={4}><PermissionGroupTab></PermissionGroupTab></Tab.Pane> },
+                { menuItem: "全局推送", pane: <Tab.Pane key={5}><FeedManagement></FeedManagement></Tab.Pane> },
+                { menuItem: "主页轮播管理", pane: <Tab.Pane key={6}><HomepageSwiperManagement></HomepageSwiperManagement></Tab.Pane> },
+                { menuItem: "权限包管理", pane: <Tab.Pane key={7}><PermissionPackList></PermissionPackList></Tab.Pane> },
+                { menuItem: "用户管理", pane: <Tab.Pane key={8}><UserManagement></UserManagement></Tab.Pane> },
+                { menuItem: "杂项", pane: <Tab.Pane key={9}><MiscManagement></MiscManagement></Tab.Pane> },
             ]}></Tab>
         </div>
     </> : <>
