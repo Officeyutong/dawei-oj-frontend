@@ -223,7 +223,7 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                                 ></TeamFile>
                                             },
                                             (data.canManage ? {
-                                                menuItem: "管理",
+                                                menuItem: "管理与统计",
                                                 render: () => <TeamManage
                                                     team={data.id}
                                                     reloadCallback={() => setLoaded(false)}

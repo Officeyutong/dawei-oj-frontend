@@ -24,7 +24,7 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
     const [tags, setTags] = useState<Map<string, number>>(new Map());
     const [difficulty, setDifficulty] = useState<Map<number, number>>(new Map());
 
-    const [endTime, setEndTime] = useState<luxon.DateTime>(DateTime.now().minus({ days: 1 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }));
+    const [endTime, setEndTime] = useState<luxon.DateTime>(DateTime.now().minus({ days: 0 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }));
     const [duration, setDuration] = useState<number>(14);
     const [loaded, setLoaded] = useState(false);
     const [allTags, setAllTags] = useState<ProblemTagEntry[]>([]);

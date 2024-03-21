@@ -11,7 +11,7 @@ import "react-datetime/css/react-datetime.css";
 import 'moment/locale/zh-cn';
 
 const GeneralView: React.FC<React.PropsWithChildren<{ data: GeneralInfo }>> = ({ data: simpleStatisticsData }) => {
-    const [endTime, setEndTime] = useState<DateTime>(DateTime.now().minus({ days: 1 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }));
+    const [endTime, setEndTime] = useState<DateTime>(DateTime.now().minus({ days: 0 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }));
     const [duration, setDuration] = useState<number>(14);
     const [loading, setLoading] = useState(false);
     const [subData, setSubData] = useState<SubmissionStatisticsEntry[]>([]);
@@ -43,7 +43,7 @@ const GeneralView: React.FC<React.PropsWithChildren<{ data: GeneralInfo }>> = ({
         } catch { } finally { setLoading(false); }
     });
     useEffect(() => {
-        if (!loaded) refreshData();
+        if (!loaded && !loading) refreshData();
     });
     const stackSubmissionStatistics: { date: string; value: number; type: string }[] = useMemo(() => {
         const result = [];

@@ -1,6 +1,7 @@
 import QueryString from "qs";
 import GeneralClient from "../../../common/GeneralClient";
-import { TeamDetail, TeamFileEntry, TeamListEntry, TeamRawData, TeamThingsAddedResponse, TeamUpdateInfo } from "./types";
+import { TeamDetail, TeamFileEntry, TeamListEntry, TeamRawData, TeamStatisticEntry, TeamThingsAddedResponse, TeamUpdateInfo } from "./types";
+import { DateTime } from "luxon";
 
 class TeamClient extends GeneralClient {
 
@@ -46,6 +47,9 @@ class TeamClient extends GeneralClient {
             onUploadProgress: prorgressHandler,
             params: { teamID }
         });
+    }
+    async getTeamStatistics(teamID: number, startTime: DateTime, endTime: DateTime): Promise<TeamStatisticEntry[]> {
+        return (await this.client!.post("/api/team/get_team_statistics", { team_id: teamID, start_time: startTime.toSeconds(), end_time: endTime.toSeconds() })).data;
     }
 };
 

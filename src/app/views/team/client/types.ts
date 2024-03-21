@@ -62,11 +62,20 @@ interface TeamFileEntry {
     uploader: GeneralUserEntry;
 };
 
+interface TeamStatisticEntry {
+    date: number;
+    passedProblemCount: number;
+    passedProblemTag: { [k: string]: number };
+    submissionCount: number;
+    acceptedSubmissionCount: number;
+};
+
 export type {
     TeamListEntry,
     TeamDetail,
     TeamRawData,
     TeamUpdateInfo,
     TeamThingsAddedResponse,
-    TeamFileEntry
+    TeamFileEntry,
+    TeamStatisticEntry
 };
