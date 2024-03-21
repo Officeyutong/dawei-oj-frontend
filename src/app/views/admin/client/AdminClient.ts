@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { AdminBasicInfo, FeedListResponse, HomepageSwiperList, PermissionGroupList, RatedContestList, SubmissionStatisticsEntry } from "./types";
+import { AdminBasicInfo, FeedListResponse, HomepageSwiperList, PermissionGroupList, ProblemBatchUploadResponseEntry, RatedContestList, SubmissionStatisticsEntry } from "./types";
 
 class AdminClient extends GeneralClient {
     async getAdminBasicInfo(): Promise<AdminBasicInfo> {
@@ -41,6 +41,14 @@ class AdminClient extends GeneralClient {
     }
     async getSubmissionStatistics(startTime: number, endTime: number): Promise<SubmissionStatisticsEntry[]> {
         return (await this.client!.post("/api/admin/get_submission_statistics", { start_time: startTime, end_time: endTime })).data;
+    }
+    async doBatchProblemUpload(files: FormData, prorgressHandler: (evt: ProgressEvent) => void): Promise<ProblemBatchUploadResponseEntry[]> {
+        const resp: { code: number; message?: string; data?: ProblemBatchUploadResponseEntry[] } = (await this.unwrapClient!.post(`/api/admin/batch_upload_problem`, files, { headers: { 'Content-Type': 'multipart/form-data' }, onUploadProgress: prorgressHandler })).data;
+        if (resp.code !== 0) {
+            throw new Error(`错误: ${resp.message}`);
+        }
+        return resp.data!;
+
     }
 };
 

@@ -59,6 +59,13 @@ interface SubmissionStatisticsEntry {
     date: number;
 };
 
+interface ProblemBatchUploadResponseEntry {
+    id: number;
+    title: number;
+    files: number;
+    testcases: number;
+}
+
 export type {
     AdminBasicInfo,
     GeneralInfo,
@@ -72,5 +79,6 @@ export type {
     FeedListResponse,
     HomepageSwiperEntry,
     HomepageSwiperList,
-    SubmissionStatisticsEntry
+    SubmissionStatisticsEntry,
+    ProblemBatchUploadResponseEntry
 };
