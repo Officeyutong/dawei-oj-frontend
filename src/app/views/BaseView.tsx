@@ -180,7 +180,7 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                 {userState.userData.displayRepoInFooter ? <>
                     {userState.userData.appName} powered by <a href="https://github.com/Officeyutong/HelloJudge2">HelloJudge2</a>
                 </> : <>
-                    {userState.userData.appName} by <a href="https://github.com/Officeyutong">MikuNotFoundException</a>
+                    {userState.userData.appName} by DavidOI
                 </>
                 }
 
