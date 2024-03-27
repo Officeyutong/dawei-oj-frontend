@@ -31,6 +31,8 @@ export interface UserStateType {
         };
         minProblemDifficulty: number;
         maxProblemDifficulty: number;
+        hasProblemManagePermission: boolean;
+        hasProblemTagManagePermission: boolean;
     }
 }
 
@@ -67,7 +69,9 @@ const defaultState: StateType = {
             shouldDisplayFullProblemsetListByDefault: false,
             currentActiveTimedProblemset: null,
             maxProblemDifficulty: 0,
-            minProblemDifficulty: 0
+            minProblemDifficulty: 0,
+            hasProblemManagePermission: false,
+            hasProblemTagManagePermission: false
         }
     },
     generalClient: null,

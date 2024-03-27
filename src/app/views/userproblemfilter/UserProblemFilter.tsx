@@ -11,9 +11,10 @@ import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../../App";
 import ProblemTagLabel from "../utils/ProblemTagLabel";
 import CreateProblemSetModal from "./CreateProblemSetModal";
+import DifficultyLabel from "../utils/DifficultyLabel";
 
 const UserProblemFilter: React.FC<{}> = () => {
-    const [filter, setFilter] = useState<ProblemSearchFilter>({});
+    const [filter, setFilter] = useState<ProblemSearchFilter>({ sortingMethod: "id" });
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
@@ -46,7 +47,7 @@ const UserProblemFilter: React.FC<{}> = () => {
         (async () => {
             try {
                 setLoading(true);
-                const resp = await userProblemFilterClient.getUsableProblems(page, filter.tag || [], filter.searchKeyword);
+                const resp = await userProblemFilterClient.getUsableProblems(page, filter.tag || [], filter.sortingMethod || "id", filter.minDifficulty, filter.maxDifficulty, filter.searchKeyword);
                 setData(resp.data);
                 setPageCount(resp.pageCount);
                 console.log(resp);
@@ -72,6 +73,8 @@ const UserProblemFilter: React.FC<{}> = () => {
                         allTags={allTags}
                         filter={filter}
                         update={setFilter}
+                        showDifficultyFilter={true}
+                        showSortingMethod={true}
                     ></ProblemFilter>
                     <Divider></Divider>
                     <Table basic="very">
@@ -83,6 +86,7 @@ const UserProblemFilter: React.FC<{}> = () => {
                                 <Table.HeaderCell>
                                     题目
                                 </Table.HeaderCell>
+                                <Table.HeaderCell>难度</Table.HeaderCell>
                                 <Table.HeaderCell>操作</Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
@@ -100,6 +104,7 @@ const UserProblemFilter: React.FC<{}> = () => {
                                         ></ProblemTagLabel>)}
                                     </div>
                                 </Table.Cell>
+                                <Table.Cell><DifficultyLabel difficulty={x.difficulty}></DifficultyLabel></Table.Cell>
                                 <Table.Cell>
                                     {isSelected(x.id) ? <Button color="red" onClick={() => removeSelected(x.id)}>移除</Button> : <Button animated color="green" onClick={() => joinSelected(x)}>
                                         <ButtonContent hidden><Icon name='arrow right' /></ButtonContent>

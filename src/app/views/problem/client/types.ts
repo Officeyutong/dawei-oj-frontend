@@ -105,7 +105,10 @@ interface ProblemEditReceiveInfo extends ProblemInfo {
 
 interface ProblemSearchFilter {
     searchKeyword?: string;
-    tag?: string[]
+    tag?: string[];
+    minDifficulty?: number;
+    maxDifficulty?: number;
+    sortingMethod?: "diffAsc" | "diffDesc" | "id"
 }
 interface ProblemListEntry {
     id: number;

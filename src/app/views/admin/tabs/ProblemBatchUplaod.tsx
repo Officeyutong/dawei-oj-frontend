@@ -69,7 +69,8 @@ const ProblemBatchUpload = () => {
                                 <Table.HeaderCell>J</Table.HeaderCell>
                                 <Table.HeaderCell>K</Table.HeaderCell>
                                 <Table.HeaderCell>L</Table.HeaderCell>
-
+                                <Table.HeaderCell>M</Table.HeaderCell>
+                                <Table.HeaderCell>N</Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
@@ -82,7 +83,9 @@ const ProblemBatchUpload = () => {
                                 <Table.Cell>[题目的正文]</Table.Cell>
                                 <Table.Cell>[题目的输入格式]</Table.Cell>
                                 <Table.Cell>[题目的输出格式]</Table.Cell>
+                                <Table.Cell>[题目的提示]</Table.Cell>
                                 <Table.Cell>[题目的难度]</Table.Cell>
+                                <Table.Cell><Label>以英文逗号分隔的题目标签</Label></Table.Cell>
                                 <Table.Cell><Label>_example</Label></Table.Cell>
                                 <Table.Cell>[第一个样例的输入内容]</Table.Cell>
                                 <Table.Cell>[第一个样例的输出内容]</Table.Cell>

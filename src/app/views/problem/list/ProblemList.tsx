@@ -13,6 +13,8 @@ import qs from "qs";
 import ProblemTagLabel from "../../utils/ProblemTagLabel";
 import ProblemFilter from "./ProblemFilter";
 import { showErrorModal } from "../../../dialogs/Dialog";
+import { useSelector } from "react-redux";
+import { StateType } from "../../../states/Manager";
 const ProblemFilterSchema: Schema = {
     id: "ProblemFilter",
     type: "object",
@@ -63,6 +65,7 @@ const ProblemList: React.FC<React.PropsWithChildren<{}>> = () => {
     const [allTags, setAllTags] = useState<ProblemTagEntry[]>([]);
     const [tagsLoaded, setTagsLoaded] = useState(false);
     const tagMapping = useMemo(() => new Map(allTags.map(x => ([x.id, x]))), [allTags]);
+    const userState = useSelector((s: StateType) => s.userState.userData);
     useDocumentTitle("题目列表");
     useEffect(() => {
         if (!tagsLoaded) {
@@ -107,15 +110,15 @@ const ProblemList: React.FC<React.PropsWithChildren<{}>> = () => {
         <Segment stacked>
             {loading && <Dimmer active> <Loader></Loader></Dimmer>}
             <Container textAlign="right">
-                <Button as={Link} color="green" icon to={`${PUBLIC_URL}/tags/edit`} >
+                {userState.hasProblemTagManagePermission && <Button as={Link} color="green" icon to={`${PUBLIC_URL}/tags/edit`} >
                     <Icon name="plus"></Icon>题目标签编辑
-                </Button>
-                <Button as={Link} color="blue" icon to={`${PUBLIC_URL}/import_from_syzoj`}>
+                </Button>}
+                {userState.hasProblemManagePermission && <Button as={Link} color="blue" icon to={`${PUBLIC_URL}/import_from_syzoj`}>
                     <Icon name="plus"></Icon> 从SYZOJ导入题目
-                </Button>
-                <Button onClick={createProblem} icon color="green">
+                </Button>}
+                {userState.hasProblemManagePermission && <Button onClick={createProblem} icon color="green">
                     <Icon name="plus"></Icon> 创建题目
-                </Button>
+                </Button>}
             </Container>
             <ProblemFilter
                 allTags={allTags}
@@ -124,6 +127,8 @@ const ProblemList: React.FC<React.PropsWithChildren<{}>> = () => {
                     history.push(`${PUBLIC_URL}/problems/1?${encodeFilter(f)}`);
                     setFilter(f);
                 }}
+                showDifficultyFilter={false}
+                showSortingMethod={false}
             ></ProblemFilter>
             <Divider></Divider>
             <Table basic="very">
