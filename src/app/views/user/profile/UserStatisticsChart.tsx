@@ -11,6 +11,8 @@ import DatetimePickler from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import 'moment/locale/zh-cn';
 import { timestampToYMD } from "../../../common/Utils";
+import { useSelector } from "react-redux";
+import { StateType } from "../../../states/Manager";
 /*
 提交：
 面积图：累计提交数，累计通过提交数
@@ -167,6 +169,29 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
         }
         return result;
     }, [data]);
+    const { minProblemDifficulty, maxProblemDifficulty } = useSelector((s: StateType) => s.userState.userData);
+    const stackProblemDifficultyStatistics: { date: string; value: number; type: string }[] = useMemo(() => {
+        const result = [];
+        for (const item of data) {
+            const dateStr = timestampToYMD(item.date);
+            for (let i = minProblemDifficulty; i <= maxProblemDifficulty; i++) {
+                if (item.problemDifficultyDist[String(i)] !== undefined) {
+                    result.push({
+                        date: dateStr,
+                        value: item.problemDifficultyDist[String(i)],
+                        type: `难度 ${i}`
+                    })
+                } else {
+                    result.push({
+                        date: dateStr,
+                        value: 0,
+                        type: `难度 ${i}`
+                    })
+                }
+            }
+        }
+        return result;
+    }, [data, maxProblemDifficulty, minProblemDifficulty]);
     return <>
         <Header as="h3">统计数据</Header>
 
@@ -236,6 +261,16 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
                         slider={{}}
                         smooth
                     ></LineChart>
+                </Grid.Column>
+                <Grid.Column>
+                    <Header as="h4">按天分布的通过题目难度统计</Header>
+                    <ColumnChart
+                        data={stackProblemDifficultyStatistics}
+                        xField="date"
+                        yField="value"
+                        seriesField="type"
+                        slider={{}}
+                    ></ColumnChart>
                 </Grid.Column>
                 <Grid.Column>
                     <Header as="h4">日期设置</Header>
