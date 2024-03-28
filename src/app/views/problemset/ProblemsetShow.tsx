@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Button, Dimmer, Grid, Header, Loader, Message, MessageHeader, Progress, Segment, Table } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { Markdown } from "../../common/Markdown";
@@ -10,13 +10,16 @@ import UserLink from "../utils/UserLink";
 import problemsetClient from "./client/ProblemsetClient";
 import { ProblemsetPublicInfo } from "./client/types";
 import { DateTime } from "luxon";
+import QueryString from "qs";
 
 const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
     const { id } = useParams<{ id: string }>();
     const [loaded, setLoaded] = useState(false);
     const [data, setData] = useState<ProblemsetPublicInfo | null>(null);
     const [togglingFavorite, setTogglingFavorite] = useState(false);
-
+    const location = useLocation();
+    const parsed: { source_team?: string } = QueryString.parse(location.search.slice(1));
+    const sourceTeamID = parsed.source_team === undefined ? undefined : parseInt(parsed.source_team);
     useDocumentTitle(`${data?.name || "加载中..."} - 习题集`);
     useEffect(() => {
         if (!loaded) {
@@ -116,7 +119,7 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
                             <Table.Body>
                                 {data.problems.map((x, i) => <Table.Row key={i}>
                                     <Table.Cell>
-                                        <a target="_blank" rel="noreferrer" href={`/show_problem/${x.id}`}>{x.id} - {x.title}</a>
+                                        <a target="_blank" rel="noreferrer" href={`/show_problem/${x.id}` + (sourceTeamID !== undefined ? `?source_team=${sourceTeamID}` : "")}>{x.id} - {x.title}</a>
                                     </Table.Cell>
                                     <Table.Cell>
                                         <a target="_blank" rel="noreferrer" href={x.userResult.submissionID === -1 ? undefined : `/show_submission/${x.userResult.submissionID}`}>

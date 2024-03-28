@@ -19,6 +19,7 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
     const authcode = useInputValue();
     const password1 = useInputValue();
     const password2 = useInputValue();
+    const realName = useInputValue();
     const [errorMessage, setErrorMessage] = useState("");
     const cancelError = () => setErrorMessage("");
     const [sended, setSended] = useState(false);
@@ -34,13 +35,13 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
             setErrorMessage("请输入验证码");
             return;
         }
-        if (username.value === "" || password1.value === "" || email.value === "") {
-            setErrorMessage("请输入用户名或密码或邮箱");
+        if (username.value === "" || password1.value === "" || email.value === "" || realName.value === "") {
+            setErrorMessage("请输入用户名或密码或邮箱或者实名");
             return;
         }
         try {
             setLoading(true);
-            await userClient.doPhoneRegister(username.value, md5(password1.value + salt), email.value, phone.value, authcode.value);
+            await userClient.doPhoneRegister(username.value, md5(password1.value + salt), email.value, phone.value, authcode.value, realName.value);
             showSuccessPopup("注册完成，将要跳转");
             setTimeout(() => window.location.href = ("/"), 500);
         } catch {
@@ -72,6 +73,10 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                     <label>邮箱</label>
                     <Input {...email} onClick={cancelError}></Input>
                 </Form.Field>
+                <Form.Field>
+                    <label>实名</label>
+                    <Input {...realName} onChange={cancelError}></Input>
+                </Form.Field>
                 <Form.Group>
                     <Form.Field>
                         <label>手机号</label>
@@ -93,12 +98,11 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                     </Form.Field>
                 </Form.Group>
                 <Message>
-                    <Message.Header>警告</Message.Header>
+                    <Message.Header>注意</Message.Header>
                     <Message.Content>
-                        <p>1. 手机号为区分不同用户的唯一依据。后期分配题目权限的认定依据也为用户的手机号</p>
-                        <p>2. 用户名、手机号、电子邮箱在注册后均无法更改</p>
-                        <p>3. 注册后可以在个人信息页面更改密码，或者在登录页面找回密码</p>
-                        <p>4. 本页所有项目均为必填</p>
+                        <p>1. 手机号为区分不同用户的唯一依据，也是关联小鹅通学习数据的依据。</p>
+                        <p>2. 用户名、手机号、实名在注册后无法更改。如有特殊情况请联系管理员。</p>
+                        <p>3. 注册后可以在个人信息页面更改密码，或者在登录页面找回密码。</p>
                     </Message.Content>
                 </Message>
                 <Message error>
@@ -114,7 +118,6 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                 mustNotUse={true}
                 onClose={() => { setShowingModal(false); setSended(true) }}
                 phone={phone.value}
-
             ></SendSMSCodeDialog></Modal.Content>
         </Modal>
     </div>;

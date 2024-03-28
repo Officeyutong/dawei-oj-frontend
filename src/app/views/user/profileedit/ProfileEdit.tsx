@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Checkbox, Dimmer, Divider, Form, Grid, Header, Input, Loader, Segment } from "semantic-ui-react";
 import { useCurrentUid, useDocumentTitle, useInputValue, usePasswordSalt } from "../../../common/Utils";
-import { UserProfileResponse } from "../client/types";
+import { UserProfileResponseEditing } from "../client/types";
 import userClient from "../client/UserClient";
 import AceEditor from "react-ace";
 import { useAceTheme } from "../../../states/StateUtils";
@@ -12,7 +12,7 @@ import { showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
 import md5 from "md5";
 const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
     const uid = parseInt(useParams<{ uid: string }>().uid);
-    const [data, setData] = useState<UserProfileResponse | null>(null);
+    const [data, setData] = useState<UserProfileResponseEditing | null>(null);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
     const pwd1 = useInputValue();
@@ -25,7 +25,7 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
             (async () => {
                 try {
                     setLoading(true);
-                    const resp = await userClient.getUserProfile(uid);
+                    const resp = await userClient.getUserProfile(uid, true);
                     setData(resp);
                     setLoaded(true);
                 } catch { } finally { setLoading(false); }
@@ -96,6 +96,10 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Form.Field>
                         <label>头像</label>
                         请前往<a href="https://en.gravatar.com/">https://en.gravatar.com/</a>进行更改.
+                    </Form.Field>
+                    <Form.Field>
+                        <label>实名</label>
+                        {data.real_name || "<未填写实名，请联系管理员>"}
                     </Form.Field>
                     <Form.Field>
                         <label>手机号验证</label>

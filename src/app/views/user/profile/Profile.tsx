@@ -25,7 +25,7 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
             if (!loaded) {
                 try {
                     setLoading(true);
-                    let resp = await userClient.getUserProfile(uid);
+                    let resp = await userClient.getUserProfile(uid, false);
                     setLoaded(true);
                     setData(resp);
                 } catch { } finally { setLoading(false); }
@@ -101,7 +101,7 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
                         </Table>}
                     </div>
                 </Segment>
-             
+
             </Grid.Column>
             <Grid.Column width="11">
                 <Header as="h1">

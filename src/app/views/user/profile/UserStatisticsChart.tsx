@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Dimmer, Form, Grid, Header, Loader, Segment } from "semantic-ui-react";
 import { UserStatisticEntry } from "../client/types";
 import { DateTime } from "luxon";
@@ -32,6 +32,7 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
     const [allTags, setAllTags] = useState<ProblemTagEntry[]>([]);
     const [tagsLoaded, setTagsLoaded] = useState(false);
     const tagMapping = useMemo(() => new Map(allTags.map(x => ([x.id, x]))), [allTags]);
+    const loadingRef = useRef<boolean>(false);
     const difficultyEntries = useMemo(() => {
         const result: { value: number; type: string; diffculty: number; }[] = [];
         result.sort((x, y) => {
@@ -82,6 +83,7 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
     const refreshData = async () => {
         try {
             setLoading(true);
+            loadingRef.current = true;
             const serverSended = new Map<number, UserStatisticEntry>();
             for (const item of await userClient.getUserStatisticsEntry(uid, (endTime.minus({ days: duration })).toSeconds(), endTime.toSeconds())) {
                 serverSended.set(item.date, item);
@@ -121,10 +123,11 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
             setLoaded(true);
         } catch { } finally {
             setLoading(false);
+            loadingRef.current = false;
         }
     };
     useEffect(() => {
-        if (!loaded) {
+        if (!loaded && !loadingRef.current) {
             refreshData();
         }
     });

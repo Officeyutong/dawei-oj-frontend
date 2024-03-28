@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useRouteMatch } from "react-router-dom";
+import { useLocation, useRouteMatch } from "react-router-dom";
 import { Button, Dimmer, Grid, Header, Icon, Loader, Modal, Rail, Ref, Segment, Sticky, Table } from "semantic-ui-react";
 import { useCurrentUid, useDocumentTitle, useInputValue } from "../../common/Utils";
 import { showConfirm } from "../../dialogs/Dialog";
@@ -14,6 +14,7 @@ import FileDownloadArea from "./FileDownloadArea";
 import ProblemDiscussionBlock from "./ProblemDiscussionBlock";
 import ProblemStatementView from "./ProblemStatementView";
 import DifficultyLabel from "../utils/DifficultyLabel";
+import QueryString from "qs";
 
 const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch<{ problemID: string }>();
@@ -27,6 +28,9 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
     const baseUid = useCurrentUid();
     const [inTodoList, setInTodoList] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const location = useLocation();
+    const parsed: { source_team?: string } = QueryString.parse(location.search.slice(1));
+    const sourceTeamID = parsed.source_team === undefined ? undefined : parseInt(parsed.source_team);
     useEffect(() => {
         if (!loaded) {
             (async () => {
@@ -91,7 +95,7 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
         const doNext = async () => {
             try {
                 setSubmitting(true);
-                const id = await problemClient.submit(data!.id, code, language, params, -1);
+                const id = await problemClient.submit(data!.id, code, language, params, -1, undefined, sourceTeamID);
                 window.open(`/show_submission/${id}`);
             } catch { } finally {
                 setSubmitting(false);

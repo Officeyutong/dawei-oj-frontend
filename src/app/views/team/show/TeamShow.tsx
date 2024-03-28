@@ -17,7 +17,7 @@ import GeneralTeamStuff from "./GeneralTeamStuff";
 import TeamMembers from "./TeamMembers";
 import { DateTime } from "luxon";
 import { showConfirm, showErrorModal } from "../../../dialogs/Dialog";
-import TeamManage from "./TeamManage";
+import TeamManage from "./TeamManageAndStatistics";
 import TeamFile from "./TeamFile";
 
 const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
@@ -183,7 +183,7 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                                     addCallback={text => addStuff(text, "problem")}
                                                     isTeamAdmin={isTeamAdmin}
                                                     data={data.team_problems}
-                                                    lineMapper={(line) => [<Link to={`${PUBLIC_URL}/show_problem/${line.id}`}>#{line.id}. {(line as TeamDetail["team_problems"][0]).title}</Link>]}
+                                                    lineMapper={(line) => [<Link to={`${PUBLIC_URL}/show_problem/${line.id}?source_team=${data.id}`}>#{line.id}. {(line as TeamDetail["team_problems"][0]).title}</Link>]}
                                                 ></GeneralTeamStuff>
                                             },
                                             {
@@ -196,8 +196,7 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                                     title={["ID", "比赛", "开始时间"]}
                                                     lineMapper={(line) => {
                                                         const currLine = line as TeamDetail["team_contests"][0];
-
-                                                        return [<Link to={`${PUBLIC_URL}/contest/${currLine.id}`}>{currLine.id}</Link>, <Link to={`${PUBLIC_URL}/contest/${currLine.id}`}>{currLine.name}</Link>, <span>{DateTime.fromSeconds(currLine.start_time).toJSDate().toLocaleString()}</span>]
+                                                        return [<Link to={`${PUBLIC_URL}/contest/${currLine.id}?source_team=${data.id}`}>{currLine.id}</Link>, <Link to={`${PUBLIC_URL}/contest/${currLine.id}?source_team=${data.id}`}>{currLine.name}</Link>, <span>{DateTime.fromSeconds(currLine.start_time).toJSDate().toLocaleString()}</span>]
                                                     }}
                                                 ></GeneralTeamStuff>
                                             },
@@ -211,7 +210,7 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                                     title={["ID", "名称"]}
                                                     lineMapper={(line) => {
                                                         const currLine = line as TeamDetail["team_problemsets"][0];
-                                                        return [<Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}`}>#{currLine.id}</Link>, <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}`}> {currLine.name}</Link>]
+                                                        return [<Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}>#{currLine.id}</Link>, <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}> {currLine.name}</Link>]
                                                     }}
                                                 ></GeneralTeamStuff>
                                             },

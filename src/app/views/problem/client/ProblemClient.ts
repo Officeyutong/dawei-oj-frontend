@@ -43,14 +43,15 @@ class ProblemClient extends GeneralClient {
     async rejudgeAll(problem_id: number) {
         await (await this.client!.post("/api/problem/rejudge_all", { problem_id: problem_id })).data;
     }
-    async submit(problemId: number | string, code: string, language: string, usedParameters: number[], contestId: number = -1, virtualID: number | undefined = undefined): Promise<number> {
+    async submit(problemId: number | string, code: string, language: string, usedParameters: number[], contestId: number = -1, virtualID: number | undefined = undefined, relatedTeam: number | undefined): Promise<number> {
         const resp = (await this.unwrapClient!.post("/api/submit", qs.stringify({
             problem_id: problemId,
             code: code,
             language: language,
             contest_id: contestId,
             usedParameters: JSON.stringify(usedParameters),
-            virtualID: virtualID
+            virtualID: virtualID,
+            relatedTeam
         }))).data as { code: number; submission_id: number; message?: string };
         if (resp.code !== 0) {
             console.log(resp);

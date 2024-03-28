@@ -40,7 +40,6 @@ function parseFilter(text: string): ProblemSearchFilter {
         filter = {};
     }
     {
-
         const ret = validate(filter, ProblemFilterSchema);
         if (!ret.valid) filter = {};
     }

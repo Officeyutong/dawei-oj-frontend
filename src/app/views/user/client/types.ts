@@ -13,16 +13,18 @@ interface UserProfileResponse {
     permissions: string[];
     phone_verified: boolean;
     following: boolean;
-    phone_number?: string;
     ac_problems: number[];
     joined_teams: { id: number; name: string }[];
     group_name: string;
-    group_permissions: string[];
     managable: boolean; //是否有user.manage权限
     canSetAdmin: boolean; //是否有permission.manage权限
-
 };
+interface UserProfileResponseEditing extends UserProfileResponse {
+    phone_number: string | undefined;
+    real_name: string | undefined;
+    group_permissions: string[];
 
+}
 interface UserProfileUpdateRequest {
     banned: number;
     username: string;
@@ -66,5 +68,6 @@ export type {
     FolloweeItem,
     FollowerItem,
     GlobalRanklistItem,
-    UserStatisticEntry
+    UserStatisticEntry,
+    UserProfileResponseEditing
 };

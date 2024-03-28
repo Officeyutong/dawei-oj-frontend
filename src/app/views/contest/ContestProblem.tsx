@@ -53,7 +53,8 @@ const ContestProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                     language,
                     parameters,
                     numberContestID,
-                    virtualID === -1 ? undefined : virtualID
+                    virtualID === -1 ? undefined : virtualID,
+                    undefined
                 );
                 window.location.href = `/show_submission/${subid}`;
             } catch { } finally {

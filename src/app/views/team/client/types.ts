@@ -70,6 +70,14 @@ interface TeamStatisticEntry {
     acceptedSubmissionCount: number;
 };
 
+interface TeamMemberLookupEntry {
+    uid: number;
+    username: string;
+    email: string;
+    realName: null | string;
+    phoneNumber: null | string;
+};
+
 export type {
     TeamListEntry,
     TeamDetail,
@@ -77,5 +85,6 @@ export type {
     TeamUpdateInfo,
     TeamThingsAddedResponse,
     TeamFileEntry,
-    TeamStatisticEntry
+    TeamStatisticEntry,
+    TeamMemberLookupEntry
 };

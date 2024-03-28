@@ -16,6 +16,7 @@ const EmailRegister = () => {
     const email = useInputValue();
     const password1 = useInputValue();
     const password2 = useInputValue();
+    const realName = useInputValue();
     const [loading, setLoading] = useState(false);
     const salt = useSelector((s: StateType) => s.userState.userData.salt);
     const phoneAuth = useSelector((s: StateType) => s.userState.userData.usePhoneAuth);
@@ -23,7 +24,7 @@ const EmailRegister = () => {
         window.location.href = "/phone/register";
     }
     const doRegister = async () => {
-        if (username.value === "" || email.value === "" || password1.value === "" || password2.value === "") {
+        if (username.value === "" || email.value === "" || password1.value === "" || password2.value === "" || realName.value === "") {
             showErrorModal("请输入完整的信息");
             return;
         }
@@ -33,7 +34,7 @@ const EmailRegister = () => {
         }
         try {
             setLoading(true);
-            await userClient.doEmailRegister(username.value, md5(password1.value + salt), email.value);
+            await userClient.doEmailRegister(username.value, md5(password1.value + salt), email.value, realName.value);
             showSuccessPopup("注册成功，即将跳转");
             setTimeout(() => window.location.href = ("/"), 500);
         } catch (e) {
@@ -55,6 +56,10 @@ const EmailRegister = () => {
                     <label>邮箱</label>
                     <Input {...email} ></Input>
                 </Form.Field>
+                <Form.Field>
+                    <label>实名</label>
+                    <Input {...realName}></Input>
+                </Form.Field>
                 <Form.Group>
                     <Form.Field>
                         <label>密码</label>
@@ -68,7 +73,8 @@ const EmailRegister = () => {
                 <Message>
                     <Message.Header>警告</Message.Header>
                     <Message.Content>
-                        <p>用户名和邮箱在注册后无法更改</p>
+                        <p>用户名和实名在注册后无法更改</p>
+                        <p>实名不会对普通用户公开</p>
                     </Message.Content>
                 </Message>
                 <Form.Button color="green" onClick={doRegister}>注册</Form.Button>

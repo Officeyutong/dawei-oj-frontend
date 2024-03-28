@@ -1,6 +1,6 @@
 import qs from "qs";
 import GeneralClient from "../../../common/GeneralClient";
-import { FolloweeItem, FollowerItem, GlobalRanklistItem, UserProfileResponse, UserProfileUpdateRequest, UserStatisticEntry } from "./types";
+import { FolloweeItem, FollowerItem, GlobalRanklistItem, UserProfileResponse, UserProfileResponseEditing, UserProfileUpdateRequest, UserStatisticEntry } from "./types";
 
 class UserClient extends GeneralClient {
     async doLogin(identifier: string, password: string) {
@@ -9,11 +9,11 @@ class UserClient extends GeneralClient {
     async doRequireResetPassword(identifier: string) {
         await this.client!.post("/api/require_reset_password", qs.stringify({ identifier: identifier }));
     }
-    async doEmailRegister(username: string, password: string, email: string) {
-        await this.client!.post("/api/register", qs.stringify({ username: username, password: password, email: email }));
+    async doEmailRegister(username: string, password: string, email: string, realName: string) {
+        await this.client!.post("/api/register", qs.stringify({ username: username, password: password, email: email, real_name: realName }));
     }
-    async doPhoneRegister(username: string, password: string, email: string, phone: string, authcode: string) {
-        await this.client!.post("/api/phoneuser/register", { username: username, password: password, email: email, phone: phone, authcode: authcode });
+    async doPhoneRegister(username: string, password: string, email: string, phone: string, authcode: string, realName: string) {
+        await this.client!.post("/api/phoneuser/register", { username: username, password: password, email: email, phone: phone, authcode: authcode, real_name: realName });
     }
     async doEmailResetPassword(identifier: string, passwordHash: string, reset_token: string) {
         await this.client!.post("/api/reset_password", qs.stringify({ identifier: identifier, password: passwordHash, reset_token: reset_token }));
@@ -27,9 +27,12 @@ class UserClient extends GeneralClient {
     async checkPhoneUsing(phone: string): Promise<{ using: boolean }> {
         return (await this.client!.post("/api/phoneuser/check_phone", { phone: phone })).data;
     }
-    async getUserProfile(uid: number): Promise<UserProfileResponse> {
-        return (await this.client!.post("/api/get_user_profile", qs.stringify({ uid: uid }))).data;
+    async getUserProfile(uid: number, editing: true): Promise<UserProfileResponseEditing>;
+    async getUserProfile(uid: number, editing: false): Promise<UserProfileResponse>;
+    async getUserProfile(uid: number, editing: boolean): Promise<UserProfileResponse> {
+        return (await this.client!.post("/api/get_user_profile", { uid, editing })).data;
     }
+    
     async toggleAdminMode() {
         await this.client!.post("/api/user/toggle_admin_mode");
     }
