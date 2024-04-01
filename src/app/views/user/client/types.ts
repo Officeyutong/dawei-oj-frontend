@@ -23,6 +23,12 @@ interface UserProfileResponseEditing extends UserProfileResponse {
     phone_number: string | undefined;
     real_name: string | undefined;
     group_permissions: string[];
+    grantedTeams: {
+        id: number;
+        name: string;
+        granted_time: number;
+        granter: { uid: number; username: string; }
+    }[]
 
 }
 interface UserProfileUpdateRequest {

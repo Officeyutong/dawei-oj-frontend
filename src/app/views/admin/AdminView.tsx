@@ -14,6 +14,7 @@ import PermissionGroupTab from "./tabs/PermissionGroupTab";
 import RatingManagement from "./tabs/RatingManagement";
 import UserManagement from "./tabs/UserManagement";
 import ProblemBatchUpload from "./tabs/ProblemBatchUplaod";
+import UserBatchManagement from "./tabs/UserBatchManagement";
 
 const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
     useDocumentTitle("后台管理");
@@ -40,7 +41,8 @@ const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
                 { menuItem: "权限包管理", pane: <Tab.Pane key={7}><PermissionPackList></PermissionPackList></Tab.Pane> },
                 { menuItem: "用户管理", pane: <Tab.Pane key={8}><UserManagement></UserManagement></Tab.Pane> },
                 { menuItem: "题目批量上传", pane: <Tab.Pane key={9}><ProblemBatchUpload></ProblemBatchUpload></Tab.Pane> },
-                { menuItem: "杂项", pane: <Tab.Pane key={10}><MiscManagement></MiscManagement></Tab.Pane> },
+                { menuItem: "用户批量管理", pane: <Tab.Pane key={10}><UserBatchManagement></UserBatchManagement></Tab.Pane> },
+                { menuItem: "杂项", pane: <Tab.Pane key={11}><MiscManagement></MiscManagement></Tab.Pane> },
             ]}></Tab>
         </div>
     </> : <>

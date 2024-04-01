@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Button, Checkbox, Dimmer, Divider, Form, Grid, Header, Input, Loader, Segment } from "semantic-ui-react";
-import { useCurrentUid, useDocumentTitle, useInputValue, usePasswordSalt } from "../../../common/Utils";
+import { Link, useParams } from "react-router-dom";
+import { Button, Checkbox, Dimmer, Divider, Form, Grid, Header, Input, Loader, Segment, Table } from "semantic-ui-react";
+import { timeStampToString, useCurrentUid, useDocumentTitle, useInputValue, usePasswordSalt } from "../../../common/Utils";
 import { UserProfileResponseEditing } from "../client/types";
 import userClient from "../client/UserClient";
 import AceEditor from "react-ace";
@@ -10,6 +10,8 @@ import { v4 as uuidv4 } from "uuid";
 import ShowAllPermissions from "./ShowAllPermissions";
 import { showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
 import md5 from "md5";
+import { PUBLIC_URL } from "../../../App";
+import UserLink from "../../utils/UserLink";
 const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
     const uid = parseInt(useParams<{ uid: string }>().uid);
     const [data, setData] = useState<UserProfileResponseEditing | null>(null);
@@ -108,6 +110,29 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Form.Field>
                         <label>权限包领取</label>
                         {data.phone_verified ? <div> <a href="/permissionpack/user_packs" target="_blank">请前往此处进行操作</a></div> : <div style={{ fontSize: "large" }}>请先验证手机号后再尝试领取权限包！</div>}
+                    </Form.Field>
+                    <Form.Field>
+                        <label>已授权团队</label>
+                        <div style={{ overflowY: "scroll" }}>
+                            <Table>
+                                <Table.Header>
+                                    <Table.Row>
+                                        <Table.HeaderCell>团队</Table.HeaderCell>
+                                        <Table.HeaderCell>授权者</Table.HeaderCell>
+                                        <Table.HeaderCell>授权时间</Table.HeaderCell>
+                                    </Table.Row>
+                                </Table.Header>
+                                <Table.Body>
+                                    {data.grantedTeams.map(t => <Table.Row key={t.id}>
+                                        <Table.Cell>
+                                            <Link to={`${PUBLIC_URL}/team/${t.id}`}>{t.name}</Link>
+                                        </Table.Cell>
+                                        <Table.Cell><UserLink data={t.granter}></UserLink></Table.Cell>
+                                        <Table.Cell>{timeStampToString(t.granted_time)}</Table.Cell>
+                                    </Table.Row>)}
+                                </Table.Body>
+                            </Table>
+                        </div>
                     </Form.Field>
                     <Divider></Divider>
                     <Form.Field>

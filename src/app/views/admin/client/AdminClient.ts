@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { AdminBasicInfo, FeedListResponse, HomepageSwiperList, PermissionGroupList, ProblemBatchUploadResponseEntry, RatedContestList, SubmissionStatisticsEntry } from "./types";
+import { AdminBasicInfo, AllUserListEntry, BatchQueryGrantedTeamsResponse, FeedListResponse, HomepageSwiperList, PermissionGroupList, ProblemBatchUploadResponseEntry, RatedContestList, SubmissionStatisticsEntry, TeamGrantOperation } from "./types";
 
 class AdminClient extends GeneralClient {
     async getAdminBasicInfo(): Promise<AdminBasicInfo> {
@@ -48,7 +48,18 @@ class AdminClient extends GeneralClient {
             throw new Error(`错误: ${resp.message}`);
         }
         return resp.data!;
-
+    }
+    async getAllUsers(teamGrantFilter: undefined | number): Promise<AllUserListEntry[]> {
+        return (await this.client!.post("/api/admin/get_all_users", { team_grant_filter: teamGrantFilter })).data;
+    }
+    async getAllTeams(): Promise<{ id: number; name: string }[]> {
+        return (await this.client!.post("/api/admin/get_all_teams")).data;
+    }
+    async grantTeamPermissions(users: number[], operation: TeamGrantOperation, team_id: number | undefined): Promise<void> {
+        await this.client!.post("/api/admin/grant_team_permissions", { users, operation, team_id });
+    }
+    async batchQueryGrantedTeams(users: number[]): Promise<BatchQueryGrantedTeamsResponse> {
+        return (await this.client!.post("/api/admin/batch_query_granted_teams", { users })).data;
     }
 };
 

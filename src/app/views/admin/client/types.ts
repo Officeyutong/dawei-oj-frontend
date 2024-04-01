@@ -66,6 +66,19 @@ interface ProblemBatchUploadResponseEntry {
     testcases: number;
 }
 
+interface AllUserListEntry {
+    uid: number;
+    username: string;
+    email: string;
+    phoneNumber: string | null;
+    realName: string | null;
+};
+
+interface BatchQueryGrantedTeamsResponse {
+    [uid: string]: { teamID: number; teamName: string }[]
+}
+
+type TeamGrantOperation = "cancel" | "cancel_all" | "grant";
 export type {
     AdminBasicInfo,
     GeneralInfo,
@@ -80,5 +93,8 @@ export type {
     HomepageSwiperEntry,
     HomepageSwiperList,
     SubmissionStatisticsEntry,
-    ProblemBatchUploadResponseEntry
+    ProblemBatchUploadResponseEntry,
+    AllUserListEntry,
+    TeamGrantOperation,
+    BatchQueryGrantedTeamsResponse
 };
