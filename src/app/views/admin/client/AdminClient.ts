@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { AdminBasicInfo, AllUserListEntry, BatchQueryGrantedTeamsResponse, FeedListResponse, HomepageSwiperList, PermissionGroupList, ProblemBatchUploadResponseEntry, RatedContestList, SubmissionStatisticsEntry, TeamGrantOperation } from "./types";
+import { AdminBasicInfo, AllUserListEntry, BatchCreateUserEntry, BatchQueryGrantedTeamsResponse, FeedListResponse, HomepageSwiperList, PermissionGroupList, ProblemBatchUploadResponseEntry, RatedContestList, SubmissionStatisticsEntry, TeamGrantOperation } from "./types";
 
 class AdminClient extends GeneralClient {
     async getAdminBasicInfo(): Promise<AdminBasicInfo> {
@@ -60,6 +60,9 @@ class AdminClient extends GeneralClient {
     }
     async batchQueryGrantedTeams(users: number[]): Promise<BatchQueryGrantedTeamsResponse> {
         return (await this.client!.post("/api/admin/batch_query_granted_teams", { users })).data;
+    }
+    async batchCreateUser(users: BatchCreateUserEntry[]): Promise<void> {
+        await this.client!.post("/api/admin/batch_create_user", { users });
     }
 };
 

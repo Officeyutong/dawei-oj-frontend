@@ -4,17 +4,17 @@ import { useDocumentTitle } from "../../common/Utils";
 import PermissionPackList from "../permissionpack/PermissionPackList";
 import { adminClient } from "./client/AdminClient";
 import { AdminBasicInfo } from "./client/types";
-import ConfigPreviewTab from "./tabs/ConfigPreviewTab";
+// import ConfigPreviewTab from "./tabs/ConfigPreviewTab";
 import FeedManagement from "./tabs/FeedManagement";
 import GeneralView from "./tabs/GeneralTab";
 import HomepageSwiperManagement from "./tabs/HomepageSwiperManagement";
 import MiscManagement from "./tabs/MiscManagement";
 import PermissionGroupTab from "./tabs/PermissionGroupTab";
-// import PermissionPackTab from "./tabs/PermissionPackTab";
 import RatingManagement from "./tabs/RatingManagement";
 import UserManagement from "./tabs/UserManagement";
 import ProblemBatchUpload from "./tabs/ProblemBatchUplaod";
-import UserBatchManagement from "./tabs/UserBatchManagement";
+import UserBatchManagement from "./tabs/TeamGrant";
+import BatchCreateUsers from "./tabs/BatchCreateUsers";
 
 const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
     useDocumentTitle("后台管理");
@@ -34,15 +34,16 @@ const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
             <Tab renderActiveOnly={false} panes={[
                 { menuItem: "统计", pane: <Tab.Pane key={1}><GeneralView data={basicData!}></GeneralView></Tab.Pane> },
                 { menuItem: "Rating管理", pane: <Tab.Pane key={2}><RatingManagement></RatingManagement></Tab.Pane> },
-                { menuItem: "设置预览", pane: <Tab.Pane key={3}><ConfigPreviewTab data={basicData!.settings}></ConfigPreviewTab></Tab.Pane> },
+                // { menuItem: "设置预览", pane: <Tab.Pane key={3}><ConfigPreviewTab data={basicData!.settings}></ConfigPreviewTab></Tab.Pane> },
                 { menuItem: "权限组设定", pane: <Tab.Pane key={4}><PermissionGroupTab></PermissionGroupTab></Tab.Pane> },
                 { menuItem: "全局推送", pane: <Tab.Pane key={5}><FeedManagement></FeedManagement></Tab.Pane> },
                 { menuItem: "主页轮播管理", pane: <Tab.Pane key={6}><HomepageSwiperManagement></HomepageSwiperManagement></Tab.Pane> },
                 { menuItem: "权限包管理", pane: <Tab.Pane key={7}><PermissionPackList></PermissionPackList></Tab.Pane> },
                 { menuItem: "用户管理", pane: <Tab.Pane key={8}><UserManagement></UserManagement></Tab.Pane> },
                 { menuItem: "题目批量上传", pane: <Tab.Pane key={9}><ProblemBatchUpload></ProblemBatchUpload></Tab.Pane> },
-                { menuItem: "用户批量管理", pane: <Tab.Pane key={10}><UserBatchManagement></UserBatchManagement></Tab.Pane> },
-                { menuItem: "杂项", pane: <Tab.Pane key={11}><MiscManagement></MiscManagement></Tab.Pane> },
+                { menuItem: "团队批量授权", pane: <Tab.Pane key={10}><UserBatchManagement></UserBatchManagement></Tab.Pane> },
+                { menuItem: "批量创建用户", pane: <Tab.Pane key={11}><BatchCreateUsers></BatchCreateUsers></Tab.Pane> },
+                { menuItem: "杂项", pane: <Tab.Pane key={12}><MiscManagement></MiscManagement></Tab.Pane> },
             ]}></Tab>
         </div>
     </> : <>

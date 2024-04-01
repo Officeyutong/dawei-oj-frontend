@@ -78,6 +78,14 @@ interface BatchQueryGrantedTeamsResponse {
     [uid: string]: { teamID: number; teamName: string }[]
 }
 
+interface BatchCreateUserEntry {
+    username: string;
+    password: string;
+    email: string;
+    phone_number?: string;
+    real_name?: string;
+};
+
 type TeamGrantOperation = "cancel" | "cancel_all" | "grant";
 export type {
     AdminBasicInfo,
@@ -96,5 +104,6 @@ export type {
     ProblemBatchUploadResponseEntry,
     AllUserListEntry,
     TeamGrantOperation,
-    BatchQueryGrantedTeamsResponse
+    BatchQueryGrantedTeamsResponse,
+    BatchCreateUserEntry
 };
