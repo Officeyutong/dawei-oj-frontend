@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import AnsiUp from "ansi_up";
-import hljs from 'highlight.js';
 import submissionClient from "../client/SubmissionClient";
 import { SubmissionInfo } from "../client/types";
 import { Button, Dimmer, Divider, Header, Loader, Message, Segment, Table } from "semantic-ui-react";
@@ -12,12 +11,12 @@ import UserLink from "../../utils/UserLink";
 import JudgeStatusLabel from "../../utils/JudgeStatusLabel";
 import ScoreLabel from "../../utils/ScoreLabel";
 import MemoryCostLabel from "../../utils/MemoryCostLabel";
-import { SubtaskEntry } from "../../problem/client/types";
-import "highlight.js/styles/default.css"
-import * as clipboard from "clipboardy";
 import { io as socketIO, Socket } from "socket.io-client";
 import { showErrorModal } from "../../../dialogs/Dialog";
 import { ButtonClickEvent } from "../../../common/types";
+import SubtaskResultAndCodeView from "./SubtaskResultAndCodeView";
+import WrittenProblemResultView from "./WrittenProblemResultView";
+import { WrittenTestAnswer } from "../../problem/client/types";
 const ansiUp = new AnsiUp();
 
 enum Stage {
@@ -34,23 +33,15 @@ const ShowSubmission = () => {
     const submissionID = parseInt(params.submission);
     const [stage, setStage] = useState<Stage>(Stage.PRELOAD);
     const [data, setData] = useState<null | SubmissionInfo>(null);
-    const [expandedTasks, setExpandedTasks] = useState<string[]>([]);
-    const expandedTasksSet = useMemo(() => new Set(expandedTasks), [expandedTasks]);
+
     const [unit, setUnit] = usePreferredMemoryUnit("kilobyte");
     const [trackerStarted, setTrackerStarted] = useState(false);
     const trackerCountRef = useRef<number>(0);
     const ansiTranslated = useMemo(() => ansiUp.ansi_to_html(data?.message || ""), [data?.message]);
-    const problemSubtasks = useMemo(() => data === null ? new Map<string, SubtaskEntry>() : new Map(data.problem.subtasks.map(x => [x.name, x])), [data]);
+
     const socketRef = useRef<Socket | null>(null);
     const trackerTokenRef = useRef<NodeJS.Timeout | null>(null);
-    const renderedCode = useMemo(() => {
-        if (data === null) return "";
-        if (data.code.length <= 25 * 1024) {
-            return hljs.highlight(data.code, { language: data.hljs_mode, ignoreIllegals: true }).value;
-        } else {
-            return data.code;
-        }
-    }, [data]);
+    const [defaultExpandedTasks, setDefaultExpandedTasks] = useState<string[]>([]);
     useEffect(() => {
         if (unit !== "byte" && unit !== "kilobyte" && unit !== "gigabyte" && unit !== "millionbyte") {
             setUnit("kilobyte");
@@ -63,7 +54,7 @@ const ShowSubmission = () => {
                 setStage(Stage.LOADING);
                 try {
                     const resp = await submissionClient.getSubmissionInfo(submissionID);
-                    setExpandedTasks(Object.entries(resp.judge_result).filter(([s, v]) => v.testcases.length <= 25).map(([s, v]) => s));
+                    setDefaultExpandedTasks(Object.entries(resp.judge_result).filter(([s, v]) => v.testcases.length <= 25).map(([s, v]) => s));
                     setData(resp);
                     setStage(Stage.LOADED);
                 } catch {
@@ -128,6 +119,18 @@ const ShowSubmission = () => {
     }, []);
     const isContestSubmit = data?.contest.isContest || false;
     const isManualGrading = data?.lastManualGradingTime !== null;
+    const isWrittenTest = data?.problem.problemType === "written_test";
+    const parsedUserWrittenSubmission = useMemo(() => {
+        if (data?.problem.problemType === "written_test") {
+            try {
+                const ret = JSON.parse(data.code);
+                return ret as WrittenTestAnswer[];
+            } catch {
+                return [];
+            }
+        }
+        return [];
+    }, [data]);
     return <>
         {stage === Stage.LOADING && <>
             <div style={{ height: "400px" }}>
@@ -185,7 +188,7 @@ const ShowSubmission = () => {
                                 <JudgeStatusLabel status={data.status}></JudgeStatusLabel>
                             </Table.Cell>
                         </Table.Row>
-                        {data.status !== "invisible" && <>
+                        {data.status !== "invisible"  && <>
                             <Table.Row>
                                 <Table.Cell>
                                     得分/总分
@@ -211,7 +214,7 @@ const ShowSubmission = () => {
                                 </Table.Cell>
                             </Table.Row>}
                         </>}
-                        {!isManualGrading && <><Table.Row>
+                        {!isManualGrading && !isWrittenTest && <><Table.Row>
                             <Table.Cell>
                                 编译参数
                             </Table.Cell>
@@ -227,15 +230,15 @@ const ShowSubmission = () => {
                                     {data.judger}
                                 </Table.Cell>
                             </Table.Row></>}
-                        <Table.Row>
+                        {!isWrittenTest && <Table.Row>
                             <Table.Cell>
                                 编程语言
                             </Table.Cell>
                             <Table.Cell>
                                 {data.language_name}
                             </Table.Cell>
-                        </Table.Row>
-                        {!isManualGrading && <Table.Row>
+                        </Table.Row>}
+                        {!isManualGrading && !isWrittenTest && <Table.Row>
                             <Table.Cell>
                                 内存显示单位
                             </Table.Cell>
@@ -268,7 +271,7 @@ const ShowSubmission = () => {
                         </>}
                     </Table.Body>
                 </Table>
-                {data.managable && !data.isRemoteSubmission && <Button color="red" onClick={rejudge}>
+                {data.managable && !data.isRemoteSubmission && !isWrittenTest && <Button color="red" onClick={rejudge}>
                     重测</Button>}
                 {data.enableManualGrading && <Button color="green" as={Link} to={`${PUBLIC_URL}/submission/manual_grade/${data.id}`}>
                     人工评分
@@ -283,84 +286,15 @@ const ShowSubmission = () => {
                         <span className="raw-span" dangerouslySetInnerHTML={{ __html: ansiTranslated }}></span>
                     </Segment>
                 </>}
-                {Object.keys(data.judge_result).length !== 0 && <Header as="h3">
-                    子任务得分
-                </Header>}
-                {Object.entries(data.judge_result).map(([name, item]) => <div key={name}>
-                    <Divider></Divider>
-                    <Header as="h3">
-                        {name}
-                    </Header>
-                    <Table basic="very" celled>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>得分/总分</Table.HeaderCell>
-                                <Table.HeaderCell>状态</Table.HeaderCell>
-                                <Table.HeaderCell>操作</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            <Table.Row>
-                                <Table.Cell>
-                                    {problemSubtasks.has(name) ? <ScoreLabel fullScore={problemSubtasks.get(name)!.score} score={item.score}></ScoreLabel> : <span style={{ fontWeight: "bold" }}>{item.score}</span>}
-                                </Table.Cell>
-                                <Table.Cell>
-                                    <JudgeStatusLabel status={item.status}></JudgeStatusLabel>
-                                </Table.Cell>
-                                <Table.Cell>
-                                    {expandedTasksSet.has(name) ? <Button size="small" color="red" onClick={() => setExpandedTasks(c => c.filter(t => t !== name))} >折叠</Button> : <Button size="small" color="green" onClick={() => setExpandedTasks([...expandedTasks, name])}>展开</Button>}
-                                </Table.Cell>
-                            </Table.Row>
-                        </Table.Body>
-                    </Table>
-                    <Table style={{ maxWidth: "900px" }}>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>输入文件</Table.HeaderCell>
-                                <Table.HeaderCell>输出文件</Table.HeaderCell>
-                                <Table.HeaderCell>分数</Table.HeaderCell>
-                                <Table.HeaderCell>状态</Table.HeaderCell>
-                                <Table.HeaderCell>时间占用</Table.HeaderCell>
-                                <Table.HeaderCell>空间占用</Table.HeaderCell>
-                                <Table.HeaderCell>附加信息</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        {(expandedTasksSet.has(name)) && <Table.Body>
-                            {item.testcases.map((testcase, i) => <Table.Row key={i}>
-                                <Table.Cell><a href={`/api/download_file/${data.problem.rawID}/${testcase.input}`}>{testcase.input}</a></Table.Cell>
-                                <Table.Cell><a href={`/api/download_file/${data.problem.rawID}/${testcase.output}`}>{testcase.output}</a></Table.Cell>
-                                <Table.Cell><ScoreLabel fullScore={testcase.full_score} score={testcase.score}></ScoreLabel></Table.Cell>
-                                <Table.Cell><JudgeStatusLabel status={testcase.status}></JudgeStatusLabel></Table.Cell>
-                                <Table.Cell>{testcase.time_cost !== -1 && <>{testcase.time_cost} ms</>}</Table.Cell>
-                                <Table.Cell>{testcase.memory_cost !== -1 && <MemoryCostLabel memoryCost={testcase.memory_cost}></MemoryCostLabel>}</Table.Cell>
-                                <Table.Cell>{testcase.message}</Table.Cell>
-                            </Table.Row>)}
-                        </Table.Body>}
-                    </Table>
-                </div>)}
-                <Header as="h3">
-                    代码
-                </Header>
-                <Table basic="very" celled>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell>编程语言</Table.HeaderCell>
-                            <Table.HeaderCell>代码长度</Table.HeaderCell>
-                            <Table.HeaderCell>操作</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        <Table.Row>
-                            <Table.Cell>{data.language_name}</Table.Cell>
-                            <Table.Cell>{Math.ceil(data.code.length / 1024)} KB</Table.Cell>
-                            <Table.Cell> <Button size="tiny" color="green" onClick={() => clipboard.write(data.code)}>复制代码</Button></Table.Cell>
-                        </Table.Row>
-                    </Table.Body>
-                </Table>
-                <Segment style={{ overflowX: "scroll" }}>
-                    <pre style={{ marginTop: 0 }} className="code-block" dangerouslySetInnerHTML={{ __html: renderedCode }}>
-                    </pre>
-                </Segment>
+                {isWrittenTest ? <WrittenProblemResultView
+                    problemStmt={data.problem.writtenTestData}
+                    subtaskResult={data.judge_result}
+                    userCode={parsedUserWrittenSubmission}
+                    problemSubtasks={data.problem.subtasks}
+                ></WrittenProblemResultView> : <SubtaskResultAndCodeView
+                    data={data}
+                    defaultExpandedTasks={defaultExpandedTasks}
+                ></SubtaskResultAndCodeView>}
             </Segment>
         </>}
     </>;

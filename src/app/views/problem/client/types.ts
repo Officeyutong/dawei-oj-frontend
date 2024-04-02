@@ -41,7 +41,7 @@ interface ProblemStatement extends ProblemEditStatement {
     subtasks: SubtaskEntry[];
 };
 
-type ProblemType = "traditional" | "remote_judge" | "submit_answer";
+type ProblemType = "traditional" | "remote_judge" | "submit_answer" | "written_test";
 
 interface ProblemInfo extends ProblemStatement {
     managable: boolean;
@@ -81,6 +81,7 @@ interface ProblemInfo extends ProblemStatement {
     lastUsedParameters: number[];
     allowManualGrading: boolean;
     difficulty: number;
+    writtenTestStatement: WrittenTestQuestion<false>[];
 };
 interface ProblemUpdateInfo extends ProblemStatement {
     extra_parameter: ExtraParameterEntry[];
@@ -97,12 +98,14 @@ interface ProblemUpdateInfo extends ProblemStatement {
     newProblemID: number;
     allowManualGrading: boolean;
     difficulty: number;
+    problem_type: ProblemType;
+    writtenTestStatement: WrittenTestQuestion<true>[];
 };
 
-interface ProblemEditReceiveInfo extends ProblemInfo {
+interface ProblemEditReceiveInfo extends Omit<ProblemInfo, "writtenTestStatement"> {
     invite_code: string; //编辑模式时存在
+    writtenTestStatement: WrittenTestQuestion<true>[]
 }
-
 interface ProblemSearchFilter {
     searchKeyword?: string;
     tag?: string[];
@@ -125,6 +128,23 @@ const ScoringMethodMapping: { [K in SubtaskEntry["method"]]: string } = {
     sum: "取和(分数相加)"
 };
 
+interface ChoiceQuestion {
+    type: "choice";
+    statement: string;
+    single: boolean;
+    choices: string[];
+}
+interface FillBlankQuestion {
+    type: "fill_blank";
+    statement: string;
+}
+
+type WrittenTestQuestion<withAnswer> = (ChoiceQuestion & (withAnswer extends true ? { answer: string[] } : {})) | (FillBlankQuestion & (withAnswer extends true ? { answer: string } : {}));
+
+type WrittenTestAnswer = string | string[];
+
+type WrittenTestStatement = Pick<ProblemStatement, "background" | "content" | "title">;
+
 export type {
     ProblemFileEntry,
     ProblemInfo,
@@ -138,7 +158,12 @@ export type {
     ProblemEditReceiveInfo,
     SubtaskEntry,
     SubtaskScoringMethod,
-    ProblemType
+    ProblemType,
+    ChoiceQuestion,
+    FillBlankQuestion,
+    WrittenTestQuestion,
+    WrittenTestAnswer,
+    WrittenTestStatement
 }
 
 export {

@@ -74,3 +74,4 @@ const ProblemStatementView: React.FC<React.PropsWithChildren<{
 
 
 export default ProblemStatementView;
+export { ProblemMetaBlock };

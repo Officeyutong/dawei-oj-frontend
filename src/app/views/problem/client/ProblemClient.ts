@@ -25,8 +25,9 @@ class ProblemClient extends GeneralClient {
     async updateProblemInfo(
         id: number,
         data: ProblemUpdateInfo,
-        submitAnswer: boolean) {
-        await this.client!.post("/api/update_problem", qs.stringify({ id: id, data: JSON.stringify(data), submitAnswer: submitAnswer ? "true" : "false" }));
+        // submitAnswer: boolean
+    ) {
+        await this.client!.post("/api/update_problem", qs.stringify({ id: id, data: JSON.stringify(data) }));
     }
     async uploadProblemFile(id: number, files: FormData, prorgressHandler: (evt: ProgressEvent) => void): Promise<{ file_list: ProblemFileEntry[]; message?: string }> {
         return (await this.unwrapClient!.post(`/api/upload_file/${id}`, files, { headers: { 'Content-Type': 'multipart/form-data' }, onUploadProgress: prorgressHandler })).data;

@@ -16,14 +16,12 @@ type DataEntryProps = Pick<ProblemEditReceiveInfo,
     "using_file_io" |
     "files" |
     "problem_type" |
-    "allowManualGrading"
-> & {
-    submitAnswer: boolean;
-};
+    "allowManualGrading" |
+    "problem_type"
+>;
 
 interface ProblemDataProps extends DataEntryProps {
     id: number;
-    onUpdateSubmitAnswer: (v: boolean) => void;
     onUpdate: (data: DataEntryProps) => void;
 };
 
@@ -31,21 +29,20 @@ interface ProblemDataProps extends DataEntryProps {
 
 const ProblemJudgeTab: React.FC<React.PropsWithChildren<ProblemDataProps>> = (data) => {
     const update = useCallback((localData: Partial<DataEntryProps>) => {
-        const { extra_parameter, files, input_file_name, output_file_name, problem_type, spj_filename, submitAnswer, subtasks, using_file_io, allowManualGrading } = {
+        const { extra_parameter, files, input_file_name, output_file_name, problem_type, spj_filename, subtasks, using_file_io, allowManualGrading } = {
             extra_parameter: data.extra_parameter,
             files: data.files,
             input_file_name: data.input_file_name,
             output_file_name: data.output_file_name,
             problem_type: data.problem_type,
             spj_filename: data.spj_filename,
-            submitAnswer: data.submitAnswer,
             subtasks: data.subtasks,
             using_file_io: data.using_file_io,
             allowManualGrading: data.allowManualGrading,
             ...localData
         };
         data.onUpdate({
-            extra_parameter, files, input_file_name, output_file_name, problem_type, spj_filename, submitAnswer, subtasks, using_file_io, allowManualGrading
+            extra_parameter, files, input_file_name, output_file_name, problem_type, spj_filename, subtasks, using_file_io, allowManualGrading
         });
     }, [data]);
     const [loading, setLoading] = useState(false);
@@ -110,8 +107,10 @@ const ProblemJudgeTab: React.FC<React.PropsWithChildren<ProblemDataProps>> = (da
                 <Form.Field>
                     <label>题目类型</label>
                     <Button.Group>
-                        <Button onClick={() => data.onUpdateSubmitAnswer(false)} active={!data.submitAnswer} disabled={data.problem_type === "remote_judge"}>传统题</Button>
-                        <Button onClick={() => data.onUpdateSubmitAnswer(true)} active={data.submitAnswer} disabled={data.problem_type === "remote_judge"}>提交答案题</Button>
+                        <Button onClick={() => update({ problem_type: "traditional" })} active={data.problem_type === "traditional"} disabled={data.problem_type === "remote_judge"}>传统题</Button>
+                        <Button onClick={() => update({ problem_type: "submit_answer" })} active={data.problem_type === "submit_answer"} disabled={data.problem_type === "remote_judge"}>提交答案题</Button>
+                        <Button onClick={() => update({ problem_type: "written_test" })} active={data.problem_type === "written_test"} disabled={data.problem_type === "remote_judge"}>笔试题目</Button>
+
                         <Button active={data.problem_type === "remote_judge"} disabled>远程评测题目</Button>
                     </Button.Group>
                 </Form.Field>
@@ -123,7 +122,7 @@ const ProblemJudgeTab: React.FC<React.PropsWithChildren<ProblemDataProps>> = (da
                         <p>SPJ已支持testlib，<a href="https://github.com/Officeyutong/HelloJudge2-Judger/blob/master/docker/testlib.h">点此下载</a>所使用的修改过的testlib.h</p>
                     </Message.Content>
                 </Message>
-                {data.submitAnswer && <Message info>
+                {data.problem_type === "submit_answer" && <Message info>
                     <Message.Header>
                         提交答案题提示
                     </Message.Header>

@@ -18,7 +18,6 @@ const ProblemEdit: React.FC<React.PropsWithChildren<{}>> = () => {
     const numberID = parseInt(problemID);
     const [loaded, setLoaded] = useState(false);
     const [data, setData] = useState<ProblemEditReceiveInfo | null>(null);
-    const [submitAnswer, setSubmitAnswer] = useState(false);
     const [saving, setSaving] = useState(false);
     const savingRef = useRef<boolean>(false);
     useEffect(() => {
@@ -36,7 +35,6 @@ const ProblemEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                         else return 1;
                     });
                     setLoaded(true);
-                    setSubmitAnswer(resp.problem_type === "submit_answer");
                     setData(resp);
                 } catch { } finally { }
             })();
@@ -72,8 +70,10 @@ const ProblemEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 title: data.title,
                 using_file_io: data.using_file_io,
                 allowManualGrading: data.allowManualGrading,
-                difficulty: data.difficulty
-            }, submitAnswer);
+                difficulty: data.difficulty,
+                problem_type: data.problem_type,
+                writtenTestStatement: data.writtenTestStatement
+            });
             showSuccessModal("保存成功!");
         } catch { } finally {
             setSaving(false);
@@ -153,8 +153,6 @@ const ProblemEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                                     subtasks={data.subtasks}
                                     using_file_io={data.using_file_io}
                                     allowManualGrading={data.allowManualGrading}
-                                    submitAnswer={submitAnswer}
-                                    onUpdateSubmitAnswer={setSubmitAnswer}
                                     onUpdate={onProblemDataUpdate}
                                 ></ProblemJudgeTab>
                             </Suspense>

@@ -15,6 +15,7 @@ import ProblemDiscussionBlock from "./ProblemDiscussionBlock";
 import ProblemStatementView from "./ProblemStatementView";
 import DifficultyLabel from "../utils/DifficultyLabel";
 import QueryString from "qs";
+import WrittenTestStatementAndSubmit from "./WrittenTestStatementAndSubmit";
 
 const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch<{ problemID: string }>();
@@ -126,17 +127,15 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                 <Ref innerRef={contextRef}>
                     <div>
                         <div>
-                            <ProblemStatementView
+                            {data.problem_type === "written_test" ? <WrittenTestStatementAndSubmit
+                                content={data.writtenTestStatement}
+                                statement={data}
+                                defaultContent={[]}
+                                handleSubmit={code => handleSubmit(code, data.languages[0].id, [])}
+                            ></WrittenTestStatementAndSubmit> : <ProblemStatementView
                                 data={data}
-                            ></ProblemStatementView>
-                            {data.problem_type !== "submit_answer" ? <CodeInput
-                                defaultCode={data.last_code}
-                                defaultLanguage={data.last_lang === "" ? data.languages[0].id : data.last_lang}
-                                languages={data.languages}
-                                usedParameters={data.lastUsedParameters}
-                                parameters={data.extra_parameter}
-                                handleSubmit={handleSubmit}
-                            ></CodeInput> : <div>
+                            ></ProblemStatementView>}
+                            {data.problem_type === "submit_answer" && <div>
                                 <Grid centered columns="3">
                                     <Grid.Column>
                                         <Button as="a" target="_blank" rel="noreferrer" href={`/submit_answer/${data.id}`} icon color="green" labelPosition="left" >
@@ -146,6 +145,15 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                                     </Grid.Column>
                                 </Grid>
                             </div>}
+                            {(data.problem_type === "traditional" || data.problem_type === "remote_judge") && <CodeInput
+                                defaultCode={data.last_code}
+                                defaultLanguage={data.last_lang === "" ? data.languages[0].id : data.last_lang}
+                                languages={data.languages}
+                                usedParameters={data.lastUsedParameters}
+                                parameters={data.extra_parameter}
+                                handleSubmit={handleSubmit}
+                            ></CodeInput>}
+
                         </div>
                         <Rail position="right">
                             <Sticky context={contextRef}>
@@ -202,7 +210,7 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                                             </Table.Row>
                                         </Table.Body>
                                     </Table>
-                                    <span>{managable && <a target="_blank" rel="noreferrer" href={`/problem_edit/${data.id}`}>编辑</a>}  </span>
+                                    <span>{managable && <a target="_blank" rel="noreferrer" href={data.problem_type !== "written_test" ? `/problem_edit/${data.id}` : `/problem/edit/written_test/${data.id}`}>编辑</a>}  </span>
                                     {// eslint-disable-next-line jsx-a11y/anchor-is-valid
                                         <span>{managable && <a style={{ cursor: "pointer" }} onClick={removeProblem}>删除</a>}  </span>}
                                     <span><a href={`/submissions/1?filter=uid%3D${baseUid}%2Cproblem%3D${data.id}`} target="_blank" rel="noreferrer">我的提交</a>  </span>

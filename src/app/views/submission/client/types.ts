@@ -1,6 +1,6 @@
 import { Schema } from "jsonschema";
 import { SubmissionStatus } from "../../../common/types";
-import { ProblemInfo } from "../../problem/client/types";
+import { ProblemInfo, ProblemType, WrittenTestQuestion } from "../../problem/client/types";
 
 interface TestcaseJudgeResult {
     input: string;
@@ -50,6 +50,8 @@ interface SubmissionInfo {
         rawID: number;
         score: number;
         subtasks: ProblemInfo["subtasks"];
+        problemType: ProblemType;
+        writtenTestData: WrittenTestQuestion<false>[];
     };
     user: {
         uid: number;

@@ -58,6 +58,7 @@ const SubmissionManualGrade = () => {
                         }
 
                     }
+                    console.log(subtaskRet);
                     setSubtaskScore(subtaskRet);
                     setNewExtraMessage(resp.message);
                     setData(resp);

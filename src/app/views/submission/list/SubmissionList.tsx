@@ -116,10 +116,12 @@ const SubmissionList: React.FC<React.PropsWithChildren<{}>> = () => {
                             {x.submit_time}
                         </Table.Cell>
                         <Table.Cell>
-                            {x.time_cost} ms
+                            {x.time_cost !== -1 && <div>{x.time_cost} ms</div>}
                         </Table.Cell>
                         <Table.Cell>
-                            <MemoryCostLabel memoryCost={x.memory_cost}></MemoryCostLabel>
+                            <div>
+                                {x.memory_cost !== -1 && <MemoryCostLabel memoryCost={x.memory_cost}></MemoryCostLabel>}
+                            </div>
                         </Table.Cell>
                         <Table.Cell textAlign="center">
                             <Link to={`${PUBLIC_URL}/show_submission/${x.id}`}>
