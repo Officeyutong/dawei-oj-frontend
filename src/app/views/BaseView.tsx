@@ -28,7 +28,7 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const logout = () => {
         axiosObj.post("/api/logout").then(() => window.location.reload());
     };
-    const phoneAuth = useSelector((s: StateType) => s.userState.userData.usePhoneAuth);
+    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering } = useSelector((s: StateType) => s.userState.userData);
     const profileMaker = useProfileImageMaker();
     const [width, setWidth] = useState(document.documentElement.clientWidth);
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -135,6 +135,10 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                         <Icon name="tasks"></Icon>
                         题目筛选
                     </Menu.Item>
+                    <Menu.Item as={Link} to={`${PUBLIC_URL}/monitoreduser/list`}>
+                        <Icon name="bell"></Icon>
+                        被监管用户
+                    </Menu.Item>
                 </Menu>
 
             </Popup>
@@ -148,9 +152,16 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
             <Menu.Item as={Link} to={`${PUBLIC_URL}/login`}>
                 请登录...
             </Menu.Item>
-            <Menu.Item onClick={() => window.location.href = phoneAuth ? "/phone/register" : "/register"}>
-                或者注册...
-            </Menu.Item>
+            {requireAuthWhenRegistering ? <>
+                {enableEmailAuth && <Menu.Item as={Link} to={"/register"}>
+                    邮箱注册...
+                </Menu.Item>}
+                {enablePhoneAuth && <Menu.Item as={Link} to={"/phone/register"}>
+                    手机号注册...
+                </Menu.Item>}
+            </> : <Menu.Item onClick={() => window.location.href = "/register"}>
+                注册...
+            </Menu.Item>}
 
         </>}
         {userState.userData.backend_managable && <Menu.Item as={Link} to={`${PUBLIC_URL}/admin`}>

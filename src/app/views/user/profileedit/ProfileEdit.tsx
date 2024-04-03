@@ -44,7 +44,7 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
         }
         try {
             setLoading(true);
-            await userClient.updateProfile(uid, {
+            const { code, message } = await userClient.updateProfile(uid, {
                 banned: data!.banned,
                 changePassword: changed,
                 description: data!.description,
@@ -54,7 +54,8 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 permissions: data!.permissions,
                 username: data!.username
             });
-            showSuccessModal("更新完成!");
+            if (code === 0) showSuccessModal(message);
+            else showErrorModal(message);
         } catch { } finally {
             setLoading(false);
         }
@@ -79,7 +80,7 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                         <label>用户名</label>
                         <Input value={data.username} onChange={(_, d) => setData({ ...data, username: d.value })}></Input>
                     </Form.Field>
-                    <Form.Field disabled>
+                    <Form.Field>
                         <label>电子邮箱</label>
                         <Input value={data.email} onChange={(_, d) => setData({ ...data, email: d.value })}></Input>
                     </Form.Field>

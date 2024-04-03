@@ -6,10 +6,12 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Dimmer, Form, Header, Input, Loader, Message, Segment } from "semantic-ui-react";
 import { useDocumentTitle, useInputValue } from "../../common/Utils";
-import { showErrorModal } from "../../dialogs/Dialog";
+import { showErrorModal, showSuccessModal } from "../../dialogs/Dialog";
 import { showSuccessPopup } from "../../dialogs/Utils";
 import { StateType } from "../../states/Manager";
 import userClient from "./client/UserClient";
+import { PUBLIC_URL } from "../../App";
+import { Link } from "react-router-dom";
 
 const EmailRegister = () => {
     const username = useInputValue();
@@ -19,10 +21,7 @@ const EmailRegister = () => {
     const realName = useInputValue();
     const [loading, setLoading] = useState(false);
     const salt = useSelector((s: StateType) => s.userState.userData.salt);
-    const phoneAuth = useSelector((s: StateType) => s.userState.userData.usePhoneAuth);
-    if (phoneAuth) {
-        window.location.href = "/phone/register";
-    }
+    const enablePhoneAuth = useSelector((s: StateType) => s.userState.userData.enablePhoneAuth);
     const doRegister = async () => {
         if (username.value === "" || email.value === "" || password1.value === "" || password2.value === "" || realName.value === "") {
             showErrorModal("请输入完整的信息");
@@ -34,9 +33,16 @@ const EmailRegister = () => {
         }
         try {
             setLoading(true);
-            await userClient.doEmailRegister(username.value, md5(password1.value + salt), email.value, realName.value);
-            showSuccessPopup("注册成功，即将跳转");
-            setTimeout(() => window.location.href = ("/"), 500);
+            const { code, message } = await userClient.doEmailRegister(username.value, md5(password1.value + salt), email.value, realName.value);
+            if (code === 2) {
+                showSuccessModal(message)
+            } else if (code === 0) {
+                showSuccessPopup("注册成功，即将跳转");
+                setTimeout(() => window.location.href = ("/"), 500);
+            } else {
+                showErrorModal(String(message));
+            }
+
         } catch (e) {
         } finally { setLoading(false); }
     };
@@ -78,6 +84,7 @@ const EmailRegister = () => {
                     </Message.Content>
                 </Message>
                 <Form.Button color="green" onClick={doRegister}>注册</Form.Button>
+                {enablePhoneAuth && <Link to={`${PUBLIC_URL}/phone/register`}>手机号注册</Link>}
             </Form>
         </Segment>
     </div>;

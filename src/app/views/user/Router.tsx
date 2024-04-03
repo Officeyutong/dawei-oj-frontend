@@ -4,8 +4,8 @@ import { useRouteMatch } from "react-router";
 import { Route } from "react-router-dom";
 import GeneralDimmedLoader from "../utils/GeneralDimmedLoader";
 const EmailRegister = lazy(() => import("./EmailRegister"))
-const EmailRegisterAuth = lazy(() => import("./EmailRegisterAuth"))
-const EmailResetPasswordView = lazy(() => import("./EmailResetPassword"))
+const EmailRegisterAuth = lazy(() => import("./EmailAuth"))
+// const EmailResetPasswordView = lazy(() => import("./EmailResetPassword"))
 const ForgetUsername = lazy(() => import("./ForgetUsername"))
 const GlobalRanklist = lazy(() => import("./GlobalRanklist"))
 const LoginView = lazy(() => import("./LoginView"))
@@ -37,12 +37,12 @@ const UserRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                 <PhoneResetPassword></PhoneResetPassword>
             </Suspense>
         </Route>
-        <Route exact path={`${match.path}/reset_password/:token`} >
+        {/* <Route exact path={`${match.path}/reset_password/:token`} >
             <Suspense fallback={<GeneralDimmedLoader />}>
                 <EmailResetPasswordView></EmailResetPasswordView>
             </Suspense>
-        </Route>
-        <Route exact path={`${match.path}/auth_email/:token`} >
+        </Route> */}
+        <Route exact path={`${match.path}/auth_email/`} >
             <Suspense fallback={<GeneralDimmedLoader />}>
                 <EmailRegisterAuth></EmailRegisterAuth>
             </Suspense>

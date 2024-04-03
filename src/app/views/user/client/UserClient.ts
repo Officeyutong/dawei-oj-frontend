@@ -7,19 +7,22 @@ class UserClient extends GeneralClient {
         await this.client!.post("/api/login", qs.stringify({ identifier: identifier, password: (password) }));
     }
     async doRequireResetPassword(identifier: string) {
-        await this.client!.post("/api/require_reset_password", qs.stringify({ identifier: identifier }));
+        await this.client!.post("/api/require_reset_password", { identifier });
     }
-    async doEmailRegister(username: string, password: string, email: string, realName: string) {
-        await this.client!.post("/api/register", qs.stringify({ username: username, password: password, email: email, real_name: realName }));
+    async doEmailRegister(username: string, password: string, email: string, realName: string): Promise<{ code: number; message: string }> {
+        return (await this.unwrapClient!.post("/api/register", qs.stringify({ username: username, password: password, email: email, real_name: realName }))).data;
     }
     async doPhoneRegister(username: string, password: string, email: string, phone: string, authcode: string, realName: string) {
         await this.client!.post("/api/phoneuser/register", { username: username, password: password, email: email, phone: phone, authcode: authcode, real_name: realName });
     }
-    async doEmailResetPassword(identifier: string, passwordHash: string, reset_token: string) {
-        await this.client!.post("/api/reset_password", qs.stringify({ identifier: identifier, password: passwordHash, reset_token: reset_token }));
+    async doEmailResetPassword(passwordHash: string, code: string) {
+        await this.client!.post("/api/reset_password", { password: passwordHash, code });
     }
-    async doEmailAuth(username: string, token: string) {
-        await this.client!.post("/api/auth_email", qs.stringify({ username: username, token: token }));
+    async doEmailAuth(code: string) {
+        await this.client!.post("/api/auth_email", { code });
+    }
+    async doChangeEmailConfirm(code: string) {
+        await this.client!.post("/api/change_email", { code });
     }
     async doPhoneResetPassword(phone: string, passwordHash: string, authcode: string) {
         await this.client!.post("/api/phoneuser/reset_password", { phone: phone, password: passwordHash, authcode: authcode });
@@ -32,7 +35,7 @@ class UserClient extends GeneralClient {
     async getUserProfile(uid: number, editing: boolean): Promise<UserProfileResponse> {
         return (await this.client!.post("/api/get_user_profile", { uid, editing })).data;
     }
-    
+
     async toggleAdminMode() {
         await this.client!.post("/api/user/toggle_admin_mode");
     }
@@ -45,11 +48,11 @@ class UserClient extends GeneralClient {
     async getFollowerList(target: number, page: number): Promise<{ data: FollowerItem[]; pageCount: number }> {
         return (await this.unwrapClient!.post("/api/user/get_follower_list", { target: target, page: page })).data;
     }
-    async updateProfile(uid: number, data: UserProfileUpdateRequest) {
-        await this.client!.post("/api/update_profile", qs.stringify({
+    async updateProfile(uid: number, data: UserProfileUpdateRequest): Promise<{ code: number; message: string }> {
+        return (await this.unwrapClient!.post("/api/update_profile", qs.stringify({
             uid: uid,
             data: JSON.stringify(data)
-        }));
+        }))).data;
     }
     async getAllPermissions(uid: number): Promise<string[]> {
         return (await this.client!.post("/api/permission/get_all_permissions", { uid: uid })).data;

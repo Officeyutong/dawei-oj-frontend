@@ -17,9 +17,12 @@ export interface UserStateType {
         judgeStatus: { [key: string]: { icon: SemanticICONS; text: string; color: SemanticCOLORS } };
         appName: string;
         usePolling: boolean;
-        registerURL: string;
+        // registerURL: string;
         gravatarURL: string;
-        usePhoneAuth: boolean;
+        // usePhoneAuth: boolean;
+        enablePhoneAuth: boolean;
+        enableEmailAuth: boolean;
+        requireAuthWhenRegistering: boolean;
         canUseImageStore: boolean;
         displayRepoInFooter: boolean;
         shouldDisplayFullProblemsetListByDefault: boolean;
@@ -61,9 +64,12 @@ const defaultState: StateType = {
             judgeStatus: {},
             appName: "",//应用名
             usePolling: true,//使用轮询
-            registerURL: "",//注册页面URL
+            // registerURL: "",//注册页面URL
             gravatarURL: "",//gravatar前缀,
-            usePhoneAuth: false,
+            // usePhoneAuth: false,
+            enablePhoneAuth: false,
+            enableEmailAuth: false,
+            requireAuthWhenRegistering: false,
             canUseImageStore: false,
             displayRepoInFooter: false,
             shouldDisplayFullProblemsetListByDefault: false,

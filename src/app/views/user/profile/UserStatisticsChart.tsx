@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Dimmer, Form, Grid, Header, Loader, Segment } from "semantic-ui-react";
 import { UserStatisticEntry } from "../client/types";
 import { DateTime } from "luxon";
@@ -80,7 +80,7 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
             })
         }
     }, [tagsLoaded]);
-    const refreshData = async () => {
+    const refreshData = useCallback(async () => {
         try {
             setLoading(true);
             loadingRef.current = true;
@@ -125,12 +125,12 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
             setLoading(false);
             loadingRef.current = false;
         }
-    };
+    }, [duration, endTime, uid]);
     useEffect(() => {
-        if (!loaded && !loadingRef.current) {
+        if (!loaded && !loadingRef.current && tagsLoaded) {
             refreshData();
         }
-    });
+    }, [tagsLoaded, loaded, refreshData]);
     const stackSubmissionStatistics: { date: string; value: number; type: string }[] = useMemo(() => {
         const result = [];
         for (const item of submissionStatistics) {
