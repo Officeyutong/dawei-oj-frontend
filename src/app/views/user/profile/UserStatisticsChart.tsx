@@ -100,7 +100,8 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
                         problemTagDist: {},
                         date: now,
                         triedProblem: 0,
-                        submissionCount: 0
+                        submissionCount: 0,
+                        stayTime: 0
                     })
                 } else {
                     result.push(curr);
@@ -154,6 +155,19 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
         style: { textAlign: 'center', fontSize: 14, fill: 'rgba(0,0,0,0.85)' },
         offsetY: -10,
     }));
+    const stayTimeStatistics: { date: string; value: number; type: string }[] = useMemo(() => {
+        const result = [];
+        for (const item of data) {
+            const nowDate = timestampToYMD(item.date);
+            result.push({
+                date: nowDate,
+                value: item.stayTime,
+                type: "看课时长(秒)"
+            });
+
+        }
+        return result;
+    }, [data]);
     const stackProblemStatistics: { date: string; value: number; type: string }[] = useMemo(() => {
         const result = [];
         for (const item of data) {
@@ -274,6 +288,17 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
                         seriesField="type"
                         slider={{}}
                     ></ColumnChart>
+                </Grid.Column>
+                <Grid.Column>
+                    <Header as="h4">看课时长统计</Header>
+                    <LineChart
+                        data={stayTimeStatistics}
+                        xField="date"
+                        yField="value"
+                        seriesField="type"
+                        slider={{}}
+                        smooth
+                    ></LineChart>
                 </Grid.Column>
                 <Grid.Column>
                     <Header as="h4">日期设置</Header>

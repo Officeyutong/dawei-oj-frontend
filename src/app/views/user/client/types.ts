@@ -66,6 +66,7 @@ interface UserStatisticEntry {
     acceptedSubmission: number;
     problemDifficultyDist: { [k: string]: number };
     problemTagDist: { [k: string]: number };
+    stayTime: number;
 }
 
 export type {
