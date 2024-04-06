@@ -35,6 +35,7 @@ interface ProblemEditStatement {
     output_format: string;
     hint: string;
     example: ExampleEntry[];
+    difficulty: number;
 };
 interface ProblemStatement extends ProblemEditStatement {
     id: number;

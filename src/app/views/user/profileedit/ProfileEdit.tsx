@@ -108,10 +108,15 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                         <label>手机号验证</label>
                         {data.phone_verified ? <div>您的手机号码 {data.phone_number} 已经经过验证</div> : <div style={{ fontSize: "large" }}>请前往<a href="/phoneauth">此处</a>验证手机号</div>}
                     </Form.Field>
-                    <Form.Field>
+                    {/* <Form.Field>
                         <label>权限包领取</label>
                         {data.phone_verified ? <div> <a href="/permissionpack/user_packs" target="_blank">请前往此处进行操作</a></div> : <div style={{ fontSize: "large" }}>请先验证手机号后再尝试领取权限包！</div>}
                     </Form.Field>
+                     */}
+                     <Form.Field>
+                        <label>积分</label>
+                        {data.credit}
+                     </Form.Field>
                     <Form.Field>
                         <label>已授权团队</label>
                         <div style={{ overflowY: "scroll" }}>

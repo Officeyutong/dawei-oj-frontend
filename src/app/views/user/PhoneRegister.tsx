@@ -75,7 +75,7 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                 </Form.Field>
                 <Form.Field>
                     <label>实名</label>
-                    <Input {...realName} onChange={cancelError}></Input>
+                    <Input {...realName} onClick={cancelError}></Input>
                 </Form.Field>
                 <Form.Group>
                     <Form.Field>

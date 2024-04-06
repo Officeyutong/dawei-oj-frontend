@@ -29,7 +29,7 @@ interface UserProfileResponseEditing extends UserProfileResponse {
         granted_time: number;
         granter: { uid: number; username: string; }
     }[]
-
+    credit: number;
 }
 interface UserProfileUpdateRequest {
     banned: number;

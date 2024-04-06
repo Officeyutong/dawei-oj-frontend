@@ -23,7 +23,8 @@ const StatementEditTab: React.FC<React.PropsWithChildren<StatementEditProps>> = 
         hint: props.hint,
         input_format: props.input_format,
         output_format: props.output_format,
-        title: props.title
+        title: props.title,
+        difficulty: props.difficulty
     };
     const update = (idata: ProblemEditStatement) => {
         onUpdate({
@@ -33,7 +34,8 @@ const StatementEditTab: React.FC<React.PropsWithChildren<StatementEditProps>> = 
             hint: idata.hint,
             input_format: idata.input_format,
             output_format: idata.output_format,
-            title: idata.title
+            title: idata.title,
+            difficulty: idata.difficulty
         });
     };
     return <div style={{ width: "100%" }}>
@@ -47,6 +49,10 @@ const StatementEditTab: React.FC<React.PropsWithChildren<StatementEditProps>> = 
                     <Form.Field>
                         <label>题目名</label>
                         <Input value={data.title} onChange={(e, d) => update({ ...data, title: d.value })}></Input>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>题目难度</label>
+                        <Input value={data.difficulty} type="number" onChange={(e, d) => update({ ...data, difficulty: parseInt(d.value) })}></Input>
                     </Form.Field>
                     <Form.Field>
                         <label>题目背景</label>
