@@ -153,10 +153,10 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                 请登录...
             </Menu.Item>
             {requireAuthWhenRegistering ? <>
-                {enableEmailAuth && <Menu.Item as={Link} to={"/register"}>
+                {enableEmailAuth && <Menu.Item as={Link} to={`${PUBLIC_URL}/register`}>
                     邮箱注册...
                 </Menu.Item>}
-                {enablePhoneAuth && <Menu.Item as={Link} to={"/phone/register"}>
+                {enablePhoneAuth && <Menu.Item as={Link} to={`${PUBLIC_URL}/phone/register`}>
                     手机号注册...
                 </Menu.Item>}
             </> : <Menu.Item onClick={() => window.location.href = "/register"}>
