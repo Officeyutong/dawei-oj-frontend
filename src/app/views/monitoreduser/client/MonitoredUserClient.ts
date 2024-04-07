@@ -14,6 +14,13 @@ class MonitoredUserClient extends GeneralClient {
     async removeMonitoredUser(childUid: number) {
         await this.client!.post("/api/monitoreduser/delete", { child_uid: childUid });
     }
+    async requestAddByPhone(phonenumber: string) {
+        await this.client!.post("/api/monitoreduser/request_add_by_phone", { phonenumber });
+    }
+    async confirmAddByPhone(phonenumber: string, code: string) {
+        await this.client!.post("/api/monitoreduser/confirm_add_by_phone", { phonenumber, code });
+    }
+
 }
 const monitoredUserClient = new MonitoredUserClient();
 export default monitoredUserClient;
