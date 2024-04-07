@@ -55,6 +55,9 @@ const LoginView: React.FC<React.PropsWithChildren<{}>> = () => {
             {loading && <Dimmer active>
                 <Loader>加载中</Loader></Dimmer>}
             <Form>
+                {enablePhoneAuth && <Form.Field>
+                    <Link to={`${PUBLIC_URL}/phone/login`}>使用短信验证码登录</Link>
+                </Form.Field>}
                 <Form.Field>
                     <label>用户名或邮箱</label>
                     <Input value={username} onChange={(_, d) => setUsername(d.value)}></Input>

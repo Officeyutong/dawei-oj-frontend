@@ -26,6 +26,9 @@ interface ProblemTagEntry {
 };
 type ButtonClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 type KeyDownEvent = React.KeyboardEvent<HTMLInputElement>;
+
+type PhoneNumberUsingState = "any" | "must_use" | "must_not_use";
+
 export type {
     SubmissionStatus,
     GeneralUserEntry,
@@ -35,5 +38,6 @@ export type {
     ProblemTagEntry,
     ButtonClickEvent,
     KeyDownEvent,
-    SimpleGeneralUserEntry
+    SimpleGeneralUserEntry,
+    PhoneNumberUsingState
 };

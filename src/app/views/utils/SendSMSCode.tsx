@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from "react-google-recaptcha";
 import { Button, Dimmer, Grid, Loader, Message, Segment } from 'semantic-ui-react';
 import utilClient from './client/UtilClient';
+import { PhoneNumberUsingState } from '../../common/types';
 (window as typeof window & { recaptchaOptions: any }).recaptchaOptions = {
     useRecaptchaNet: true,
 };
@@ -17,7 +18,7 @@ enum States {
     CODE_SENDED = 8, //验证码已发送
     CODE_ERROR = 9,//验证码发送错误
 };
-const SendSMSCodeDialog: React.FC<React.PropsWithChildren<{ phone: string; mustNotUse: boolean; onClose: () => void }>> = ({ phone, mustNotUse, onClose }) => {
+const SendSMSCodeDialog: React.FC<React.PropsWithChildren<{ phone: string; phoneUsingState: PhoneNumberUsingState; onClose: () => void }>> = ({ phone, phoneUsingState, onClose }) => {
     const [siteKey, setSiteKey] = useState("");
     const [state, setState] = useState<States>(States.UNLOADED);
     const [token, setToken] = useState<string | null>(null);
@@ -45,7 +46,7 @@ const SendSMSCodeDialog: React.FC<React.PropsWithChildren<{ phone: string; mustN
     const sendCode = async () => {
         setSended(true);
         setState(States.CODE_SENDING);
-        let resp = await utilClient.sendSMSCode(phone, token, mustNotUse);
+        let resp = await utilClient.sendSMSCode(phone, token, phoneUsingState);
         setMessage(resp.message);
         if (resp.code === -1) setState(States.CODE_ERROR);
         else setState(States.CODE_SENDED);

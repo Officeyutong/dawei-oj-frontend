@@ -14,6 +14,7 @@ const PhoneResetPassword = lazy(() => import("./PhoneResetPassword"))
 const Profile = lazy(() => import("./profile/Profile"))
 const ProfileEdit = lazy(() => import("./profileedit/ProfileEdit"))
 const PhoneAuth = lazy(() => import("./PhoneAuth"));
+const PhoneLogin = lazy(() => import("./PhoneLogin"));
 const UserRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
     return <>
@@ -35,6 +36,11 @@ const UserRouter: React.FC<React.PropsWithChildren<{}>> = () => {
         <Route exact path={`${match.path}/phone/reset_password`} >
             <Suspense fallback={<GeneralDimmedLoader />}>
                 <PhoneResetPassword></PhoneResetPassword>
+            </Suspense>
+        </Route>
+        <Route exact path={`${match.path}/phone/login`}>
+            <Suspense fallback={<GeneralDimmedLoader></GeneralDimmedLoader>}>
+                <PhoneLogin></PhoneLogin>
             </Suspense>
         </Route>
         {/* <Route exact path={`${match.path}/reset_password/:token`} >

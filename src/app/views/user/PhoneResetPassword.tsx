@@ -75,7 +75,8 @@ const PhoneResetPassword: React.FC<React.PropsWithChildren<{}>> = () => {
         <Modal open={modalShowing}>
             <Modal.Content>
                 <SendSMSCodeDialog
-                    mustNotUse={false}
+                    // mustNotUse={false}
+                    phoneUsingState="must_use"
                     onClose={() => { setModalShowing(false); setCodeSended(true); }}
                     phone={phone.value}
                 ></SendSMSCodeDialog>

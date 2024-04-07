@@ -115,7 +115,8 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
         </Segment>
         <Modal open={showingModal}>
             <Modal.Content><SendSMSCodeDialog
-                mustNotUse={true}
+                // mustNotUse={true}
+                phoneUsingState="must_not_use"
                 onClose={() => { setShowingModal(false); setSended(true) }}
                 phone={phone.value}
             ></SendSMSCodeDialog></Modal.Content>

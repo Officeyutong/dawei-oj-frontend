@@ -74,6 +74,9 @@ class UserClient extends GeneralClient {
     async getUserStatisticsEntry(uid: number, startTime: number, endTime: number): Promise<UserStatisticEntry[]> {
         return (await this.client!.post("/api/user/get_user_statistics", { uid, start_time: startTime, end_time: endTime })).data;
     }
+    async loginBySmsCode(phone: string, code: string) {
+        await this.client!.post("/api/phoneuser/login", { phone, code });
+    }
 };
 
 const userClient = new UserClient();
