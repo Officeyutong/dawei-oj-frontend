@@ -30,7 +30,7 @@ const BatchCreateUsers = () => {
                     <Table.HeaderCell>用户名</Table.HeaderCell>
                     <Table.HeaderCell>电子邮箱</Table.HeaderCell>
                     <Table.HeaderCell>手机号码</Table.HeaderCell>
-                    <Table.HeaderCell>实名</Table.HeaderCell>
+                    <Table.HeaderCell>姓名</Table.HeaderCell>
                     <Table.HeaderCell>操作</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>

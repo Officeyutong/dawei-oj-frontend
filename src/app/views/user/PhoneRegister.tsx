@@ -36,7 +36,7 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
             return;
         }
         if (username.value === "" || password1.value === "" || email.value === "" || realName.value === "") {
-            setErrorMessage("请输入用户名或密码或邮箱或者实名");
+            setErrorMessage("请输入用户名或密码或邮箱或者姓名");
             return;
         }
         try {
@@ -74,7 +74,7 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Input {...email} onClick={cancelError}></Input>
                 </Form.Field>
                 <Form.Field>
-                    <label>实名</label>
+                    <label>姓名</label>
                     <Input {...realName} onClick={cancelError}></Input>
                 </Form.Field>
                 <Form.Group>
@@ -101,7 +101,7 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Message.Header>注意</Message.Header>
                     <Message.Content>
                         <p>1. 手机号为区分不同用户的唯一依据，也是关联小鹅通学习数据的依据。</p>
-                        <p>2. 用户名、手机号、实名在注册后无法更改。如有特殊情况请联系管理员。</p>
+                        <p>2. 用户名、手机号、姓名在注册后无法更改。如有特殊情况请联系管理员。</p>
                         <p>3. 注册后可以在个人信息页面更改密码，或者在登录页面找回密码。</p>
                     </Message.Content>
                 </Message>

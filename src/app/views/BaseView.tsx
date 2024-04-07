@@ -137,7 +137,7 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                     </Menu.Item>
                     <Menu.Item as={Link} to={`${PUBLIC_URL}/monitoreduser/list`}>
                         <Icon name="bell"></Icon>
-                        被监管用户
+                        绑定用户
                     </Menu.Item>
                 </Menu>
 

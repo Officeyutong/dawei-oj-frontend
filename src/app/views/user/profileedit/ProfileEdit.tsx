@@ -101,8 +101,8 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                         请前往<a href="https://en.gravatar.com/">https://en.gravatar.com/</a>进行更改.
                     </Form.Field>
                     <Form.Field>
-                        <label>实名</label>
-                        {data.real_name || "<未填写实名，请联系管理员>"}
+                        <label>姓名</label>
+                        {data.real_name || "<未填写姓名，请联系管理员>"}
                     </Form.Field>
                     <Form.Field>
                         <label>手机号验证</label>

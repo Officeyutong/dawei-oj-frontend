@@ -33,10 +33,6 @@ const ImportUserFromExcel: React.FC<ImportUserFromExcelProps> = ({ onClose, onUp
             return;
         }
 
-        // if (usernameColumn === undefined && emailColumn === undefined && realNameColumn === undefined && phoneColumn === undefined) {
-        //     showErrorModal("请使用用户名列、邮箱列、实名列、手机号列中至少一个");
-        //     return;
-        // }
         try {
             setLoading(true);
             const file = files[0];
@@ -101,7 +97,7 @@ const ImportUserFromExcel: React.FC<ImportUserFromExcelProps> = ({ onClose, onUp
                         }} actionPosition="left"></Input>
                     </Form.Field>
                     <Form.Field>
-                        <label>实名列</label>
+                        <label>姓名列</label>
                         <Input value={realNameColumn || ""} onChange={(_, d) => setRealNameColumn(parseInt(d.value))} action={{
                             size: "tiny",
                             content: "清除",

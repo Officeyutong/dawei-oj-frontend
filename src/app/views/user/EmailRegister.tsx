@@ -63,7 +63,7 @@ const EmailRegister = () => {
                     <Input {...email} ></Input>
                 </Form.Field>
                 <Form.Field>
-                    <label>实名</label>
+                    <label>姓名</label>
                     <Input {...realName}></Input>
                 </Form.Field>
                 <Form.Group>
@@ -79,8 +79,8 @@ const EmailRegister = () => {
                 <Message>
                     <Message.Header>警告</Message.Header>
                     <Message.Content>
-                        <p>用户名和实名在注册后无法更改</p>
-                        <p>实名不会对普通用户公开</p>
+                        <p>用户名和姓名在注册后无法更改</p>
+                        <p>姓名不会对普通用户公开</p>
                     </Message.Content>
                 </Message>
                 <Form.Button color="green" onClick={doRegister}>注册</Form.Button>

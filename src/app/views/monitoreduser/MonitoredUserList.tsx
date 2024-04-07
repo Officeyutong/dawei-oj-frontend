@@ -14,7 +14,7 @@ const MonitoredUserList: React.FC<{}> = () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [viewingUid, setViewingUid] = useState<null | number>(null);
 
-    useDocumentTitle("被监视用户列表");
+    useDocumentTitle("绑定用户列表");
     const refreshList = async () => {
         try {
             setLoading(true);
@@ -36,7 +36,7 @@ const MonitoredUserList: React.FC<{}> = () => {
         if (!loaded) refreshList();
     }, [loaded]);
     return <div>
-        <Header as="h1">被监视用户列表</Header>
+        <Header as="h1">绑定用户列表</Header>
         <Segment stacked>
             <Message info>
                 <Message.Header>提示</Message.Header>
@@ -57,7 +57,7 @@ const MonitoredUserList: React.FC<{}> = () => {
                     <Table.Row>
                         <Table.HeaderCell>用户ID</Table.HeaderCell>
                         <Table.HeaderCell>用户名</Table.HeaderCell>
-                        <Table.HeaderCell>实名</Table.HeaderCell>
+                        <Table.HeaderCell>姓名</Table.HeaderCell>
                         <Table.HeaderCell>最后访问时间</Table.HeaderCell>
                         <Table.HeaderCell>操作</Table.HeaderCell>
                     </Table.Row>

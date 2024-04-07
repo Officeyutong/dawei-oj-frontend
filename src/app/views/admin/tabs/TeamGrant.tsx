@@ -75,7 +75,7 @@ const UserBatchManagement = () => {
                             <Table.HeaderCell>用户名</Table.HeaderCell>
                             <Table.HeaderCell>电子邮箱</Table.HeaderCell>
                             <Table.HeaderCell>手机号</Table.HeaderCell>
-                            <Table.HeaderCell>实名</Table.HeaderCell>
+                            <Table.HeaderCell>姓名</Table.HeaderCell>
                             <Table.HeaderCell>操作</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
@@ -101,7 +101,7 @@ const UserBatchManagement = () => {
                             <Table.HeaderCell>用户ID</Table.HeaderCell>
                             <Table.HeaderCell>用户名</Table.HeaderCell>
                             <Table.HeaderCell>手机号</Table.HeaderCell>
-                            <Table.HeaderCell>实名</Table.HeaderCell>
+                            <Table.HeaderCell>姓名</Table.HeaderCell>
                             <Table.HeaderCell></Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>

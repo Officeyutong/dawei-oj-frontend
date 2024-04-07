@@ -42,7 +42,7 @@ const TeamMemberLookupModal: React.FC<TeamMemberLookupProps> = ({ teamID, onClos
                             <Table.HeaderCell>用户名</Table.HeaderCell>
                             <Table.HeaderCell>邮箱</Table.HeaderCell>
                             <Table.HeaderCell>手机号</Table.HeaderCell>
-                            <Table.HeaderCell>实名</Table.HeaderCell>
+                            <Table.HeaderCell>姓名</Table.HeaderCell>
                             <Table.HeaderCell>操作</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>

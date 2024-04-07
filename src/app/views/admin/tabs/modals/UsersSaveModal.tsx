@@ -37,7 +37,7 @@ const UsersSaveModal: React.FC<UsersSaveModalProps> = ({ onClose, data }) => {
         const workbook = XLSX.utils.book_new();
         const sheetData: string[][] = [];
         sheetData.push([
-            "用户名", "电子邮箱", "密码", "实名", "手机号"
+            "用户名", "电子邮箱", "密码", "姓名", "手机号"
         ]);
         for (const item of data) {
             sheetData.push([
