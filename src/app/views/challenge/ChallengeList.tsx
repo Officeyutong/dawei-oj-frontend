@@ -26,22 +26,21 @@ const ChallengeList: React.FC<React.PropsWithChildren<{}>> = () => {
         }
     }, [loaded]);
     const createChallenge = async (evt: ButtonClickEvent) => {
-
+        try {
+            setLoading(true);
+            await challengeClient.createChallenge();
+            setLoaded(false);
+        } catch { } finally { setLoading(false); }
     };
     return <>
         <Header as="h1">
             挑战列表
         </Header>
-        {loading && <>
-            <Segment stacked>
-                <div style={{ height: "400px" }}></div>
-                <Dimmer active>
-                    <Loader>加载中...</Loader>
-                </Dimmer>
-            </Segment>
-        </>}
         {loaded && <>
             <Segment stacked>
+                {loading && <Dimmer active>
+                    <Loader>加载中...</Loader>
+                </Dimmer>}
                 {managable && <>
                     <Header as="h3">
                         管理
