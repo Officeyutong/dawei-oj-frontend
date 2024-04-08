@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Route, BrowserRouter, useRouteMatch, Switch } from "react-router-dom";
+import { Route, BrowserRouter, useRouteMatch } from "react-router-dom";
 
 import BaseView from "./views/BaseView";
 import AdminView from "./views/admin/AdminView";
@@ -34,6 +34,7 @@ import MonitoredUserRouter from "./views/monitoreduser/Router";
 import HomePageNew from "./views/homepage/new/HomePageNew";
 import { PUBLIC_URL } from "./App";
 import { Container } from "semantic-ui-react";
+import BaseViewNew from "./views/BaseViewNew";
 
 const SubRoutes = () => {
     const [displayBaseView,] = useBaseViewDisplay();
@@ -48,6 +49,9 @@ const SubRoutes = () => {
         <OnlineIDERouter></OnlineIDERouter>
         <DiscussionRouter></DiscussionRouter>
         <MiscRouter></MiscRouter>
+        <Route exact path={`${match.path}/`}>
+            <HomePageNew></HomePageNew>
+        </Route>
         <Route exact path={`${match.path}/admin`}>
             <AdminView></AdminView>
         </Route>
@@ -104,20 +108,26 @@ const SubRoutes = () => {
         </Route>
 
     </>
-    return <Container style={{ marginTop: "70px", marginBottom: "70px" }}>
-        {displayBaseView ? <BaseView>{routers}</BaseView> : routers}
-    </Container>;
+    const innerWithContainer = <Container style={{ marginTop: "50px", marginBottom: "70px", width: "65%" }}>
+        {routers}
+    </Container>
+    return (() => {
+        if (displayBaseView === "new") return <BaseViewNew>{innerWithContainer}</BaseViewNew>
+        else if (displayBaseView === "old") return <BaseView>{innerWithContainer}</BaseView>;
+        else return innerWithContainer;
+    })();
 };
 const MyRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const clientLoaded = useSelector((s: StateType) => s.generalClient !== null && s.unwrapClient !== null && s.unwrapExtraClient !== null);
     return <BrowserRouter>
         {clientLoaded && <Route path={`${PUBLIC_URL}`}>
-            <Switch>
+            {/* <Switch>
                 <Route exact path={`${PUBLIC_URL}/`}>
                     <HomePageNew></HomePageNew>
                 </Route>
-                <SubRoutes></SubRoutes>
-            </Switch>
+               
+            </Switch> */}
+            <SubRoutes></SubRoutes>
         </Route>}
     </BrowserRouter>;
 }

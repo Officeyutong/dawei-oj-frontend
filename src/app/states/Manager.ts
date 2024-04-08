@@ -40,6 +40,8 @@ export interface UserStateType {
     }
 }
 
+type BaseViewDisplayType = "none" | "old" | "new";
+
 export interface StateType {
     userState: UserStateType;
     generalClient: AxiosInstance | null;
@@ -48,7 +50,7 @@ export interface StateType {
     userConfig: {
         aceTheme: string;
     };
-    displayBaseView: boolean;
+    displayBaseView: BaseViewDisplayType;
 };
 
 const defaultState: StateType = {
@@ -88,7 +90,7 @@ const defaultState: StateType = {
     userConfig: {
         aceTheme: "github"
     },
-    displayBaseView: true
+    displayBaseView: "new"
 };
 
 export interface SimpleAction extends Action<string> {
@@ -136,7 +138,7 @@ export function makeClientUpdateAction(generalClient: AxiosInstance | null, unwr
         })
     } as SimpleAction;
 }
-export function makeDisplayBaseViewUpdateAction(display: boolean) {
+export function makeDisplayBaseViewUpdateAction(display: BaseViewDisplayType) {
     return {
         type: "BASEVIEW_DISPLAY_UPDATE",
         modify: (state: StateType) => ({
@@ -156,3 +158,4 @@ const myReducer = (state = defaultState, action: SimpleAction) => {
 const store = createStore(myReducer);
 
 export { store };
+export type { BaseViewDisplayType };

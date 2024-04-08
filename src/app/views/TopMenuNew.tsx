@@ -1,17 +1,17 @@
 import { Col, Menu, Row, Typography } from "antd";
 import { Link } from "react-router-dom";
-import { PUBLIC_URL } from "../../../App";
+import { PUBLIC_URL } from "../App";
 import { BarChartOutlined, BarsOutlined, BookOutlined, CalculatorOutlined, CloudOutlined, CodeOutlined, ContainerOutlined, DashboardOutlined, DatabaseOutlined, FileImageOutlined, GroupOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MergeOutlined, PlusOutlined, ProjectOutlined, TeamOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { StateType } from "../../../states/Manager";
-import userClient from "../../user/client/UserClient";
-const HomePageTopMenuNew = () => {
+import { StateType } from "../states/Manager";
+import userClient from "./user/client/UserClient";
+const TopMenuNew = () => {
     const alreadyLogin = useSelector((s: StateType) => s.userState.login);
-    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, canUseImageStore, backend_managable, username, uid } = useSelector((s: StateType) => s.userState.userData);
+    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, canUseImageStore, backend_managable, username, uid, siteName } = useSelector((s: StateType) => s.userState.userData);
     return <Row>
         <Col span={3} offset={2} style={{ backgroundColor: "white", alignContent: "center", textAlign: "center" }}>
             {/* <img src={logo} alt="logo"></img> */}
-            <Typography.Title level={4}>DavidOI 大卫信奥</Typography.Title></Col>
+            <Typography.Title level={4}>{siteName}</Typography.Title></Col>
         <Col span={12}>
             <Menu
                 mode="horizontal"
@@ -94,4 +94,4 @@ const HomePageTopMenuNew = () => {
         </Col>
     </Row>;
 };
-export default HomePageTopMenuNew;
+export default TopMenuNew;

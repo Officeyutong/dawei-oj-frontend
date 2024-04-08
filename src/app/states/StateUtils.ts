@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { makeDisplayBaseViewUpdateAction, StateType, store } from "./Manager";
+import { BaseViewDisplayType, makeDisplayBaseViewUpdateAction, StateType, store } from "./Manager";
 import * as ace from 'ace-builds/src-noconflict/ace';
 import { useCallback } from "react";
 ace.config.set('basePath', '/assets/ui/');
@@ -25,8 +25,8 @@ export function useAceThemeTuple(): [string, string] {
     const theme = useAceTheme();
     return [theme, `ace-builds/src-noconflict/theme-${theme}`];
 }
-export function useBaseViewDisplay(): [boolean, (b: boolean) => void] {
+export function useBaseViewDisplay(): [BaseViewDisplayType, (b: BaseViewDisplayType) => void] {
     const val = useSelector((s: StateType) => s.displayBaseView);
-    const callback = useCallback((b: boolean) => store.dispatch(makeDisplayBaseViewUpdateAction(b)), []);
+    const callback = useCallback((b: BaseViewDisplayType) => store.dispatch(makeDisplayBaseViewUpdateAction(b)), []);
     return [val, callback]
 };

@@ -13,15 +13,15 @@ const ProblemCard: React.FC<React.PropsWithChildren<{}>> = () => {
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<null | ProblemCardResponse>(null);
-    const [, setDisplayBaseView] = useBaseViewDisplay();
+    const [old, setDisplayBaseView] = useBaseViewDisplay();
     useEffect(() => {
-        setDisplayBaseView(false);
+        setDisplayBaseView("none");
         const rawVal = document.body.style.overflowX;
         const color = document.body.style.backgroundColor;
         document.body.style.backgroundColor = "white"
         document.body.style.overflowX = "hidden";
         return () => {
-            setDisplayBaseView(true);
+            setDisplayBaseView(old);
             document.body.style.overflowX = rawVal;
             document.body.style.backgroundColor = color;
         }

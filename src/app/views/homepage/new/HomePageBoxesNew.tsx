@@ -50,7 +50,7 @@ const ProblemTodoBoxNew = () => {
                         return <Link to={`${PUBLIC_URL}/show_submission/${submission.id}`}>{inner}</Link>
                     }
                 }
-            ] as TableProps<ProblemtodoEntry>['columns']} dataSource={problemTodo}></Table>
+            ] as TableProps<ProblemtodoEntry>['columns']} dataSource={problemTodo.map(t => ({ ...t, key: t.id }))}></Table>
         </Spin>
     </div>;
 }
@@ -85,7 +85,7 @@ const RecentCountdowns: React.FC<{ countdowns: HomePageData["dayCountdowns"] }> 
 const ToolBoxNew: React.FC<{ toolbox: HomePageData["toolbox"] }> = ({ toolbox }) => <div style={BLOCK_CSS}>
     <Typography.Title level={4}><PaperClipOutlined /> 工具链接</Typography.Title>
     <Flex wrap="wrap" justify="space-evenly" align="center">
-        {toolbox.map((item) => <Button type="link" href={item.url} target="_blank">{item.name}</Button>)}
+        {toolbox.map((item) => <Button key={item.name} type="link" href={item.url} target="_blank">{item.name}</Button>)}
     </Flex>
 </div>;
 
