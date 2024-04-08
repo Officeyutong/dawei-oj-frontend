@@ -1,4 +1,4 @@
-import { GeneralUserEntry } from "../../../common/types";
+import { GeneralUserEntry, SubmissionStatus } from "../../../common/types";
 
 interface TeamListEntry {
     name: string;
@@ -78,6 +78,15 @@ interface TeamMemberLookupEntry {
     phoneNumber: null | string;
 };
 
+interface TeamProblemsetRanklistResponse {
+    problems: { id: number; title: string }[];
+    ranklist: {
+        user: { uid: number; username: string; realName: null | string };
+        totalScore: number;
+        problems: { score: number; submission: { id: null | number; status: SubmissionStatus } }[]
+    }[]
+}
+
 export type {
     TeamListEntry,
     TeamDetail,
@@ -86,5 +95,6 @@ export type {
     TeamThingsAddedResponse,
     TeamFileEntry,
     TeamStatisticEntry,
-    TeamMemberLookupEntry
+    TeamMemberLookupEntry,
+    TeamProblemsetRanklistResponse
 };

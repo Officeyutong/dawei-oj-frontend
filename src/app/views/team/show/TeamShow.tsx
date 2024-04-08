@@ -19,6 +19,7 @@ import { DateTime } from "luxon";
 import { showConfirm, showErrorModal } from "../../../dialogs/Dialog";
 import TeamManage from "./TeamManageAndStatistics";
 import TeamFile from "./TeamFile";
+import InTeamProblemsetRanklist from "./InTeamProblemsetRanklist";
 
 const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
     const { team } = useParams<{ team: string }>();
@@ -36,6 +37,7 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
     const hasManagePermission = isTeamAdmin || (data?.canManage || false);
     const alreadyLogin = useSelector((s: StateType) => s.userState.login);
     const [working, setWorking] = useState(false);
+    const [selectedProblemsetId, setSelectedProblemsetId] = useState<null | number>(null);
     const sortedTeamContests = useMemo(() => {
         const result = [...(data?.team_contests || [])];
         result.sort((x, y) => y.start_time - x.start_time)
@@ -132,6 +134,11 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
         });
     };
     return <>
+        {selectedProblemsetId !== null && <InTeamProblemsetRanklist
+            onClose={() => setSelectedProblemsetId(null)}
+            problemsetID={selectedProblemsetId}
+            teamID={data!.id}
+        ></InTeamProblemsetRanklist>}
         {showInviteCodeInput && <InviteCodeInputModal
             {...inviteCode}
             title="请输入此团队的邀请码"
@@ -207,10 +214,14 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                                     addCallback={text => addStuff(text, "problemset")}
                                                     isTeamAdmin={isTeamAdmin}
                                                     data={data.team_problemsets}
-                                                    title={["ID", "名称"]}
+                                                    title={["ID", "名称", "操作"]}
                                                     lineMapper={(line) => {
                                                         const currLine = line as TeamDetail["team_problemsets"][0];
-                                                        return [<Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}>#{currLine.id}</Link>, <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}> {currLine.name}</Link>]
+                                                        return [
+                                                            <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}>#{currLine.id}</Link>,
+                                                            <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}> {currLine.name}</Link>,
+                                                            <Button size="small" color="blue" onClick={() => setSelectedProblemsetId(line.id)}>查看排行榜</Button>
+                                                        ]
                                                     }}
                                                 ></GeneralTeamStuff>
                                             },

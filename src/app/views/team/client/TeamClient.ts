@@ -1,6 +1,6 @@
 import QueryString from "qs";
 import GeneralClient from "../../../common/GeneralClient";
-import { TeamDetail, TeamFileEntry, TeamListEntry, TeamMemberLookupEntry, TeamRawData, TeamStatisticEntry, TeamThingsAddedResponse, TeamUpdateInfo } from "./types";
+import { TeamDetail, TeamFileEntry, TeamListEntry, TeamMemberLookupEntry, TeamProblemsetRanklistResponse, TeamRawData, TeamStatisticEntry, TeamThingsAddedResponse, TeamUpdateInfo } from "./types";
 import { DateTime } from "luxon";
 
 class TeamClient extends GeneralClient {
@@ -53,7 +53,9 @@ class TeamClient extends GeneralClient {
     }
     async lookupTeamMembers(teamID: number, keyword: string): Promise<TeamMemberLookupEntry[]> {
         return (await this.client!.post("/api/team/lookup_user_by_keyword", { team_id: teamID, keyword: keyword })).data;
-
+    }
+    async getInTeamProblemsetRanklist(teamID: number, problemsetID: number): Promise<TeamProblemsetRanklistResponse> {
+        return (await this.client!.post("/api/team/get_in_team_problemset_ranklist", { team_id: teamID, problemset_id: problemsetID })).data;
     }
 };
 
