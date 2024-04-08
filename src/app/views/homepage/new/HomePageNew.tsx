@@ -32,11 +32,6 @@ const HomePageNew = () => {
     const [homePageData, setHomePageData] = useState<HomePageData | null>(null);
     const [feed, setFeed] = useState<FeedStreamEntry[]>([]);
 
-    // useEffect(() => {
-    //     const oldColor = document.body.style.backgroundColor;
-    //     document.body.style.backgroundColor = "#f8fafc";
-    //     return () => { document.body.style.backgroundColor = oldColor };
-    // });
     useEffect(() => {
         if (!loaded) {
             (async () => {
@@ -56,10 +51,10 @@ const HomePageNew = () => {
         <Col span={16}>
             <Spin spinning={loading}>
                 <div style={BLOCK_CSS}>
-                    <Typography.Title level={4}><FormOutlined></FormOutlined> 最新动态</Typography.Title>
+                    <Typography.Title level={4}><FormOutlined></FormOutlined>最新动态</Typography.Title>
                     <Row>
                         <Col span={12}>
-                            <Carousel autoplay>
+                            <Carousel autoplay dots>
                                 {swipers.map((item, idx) => <a key={idx} href={item.link_url} target="_blank" rel="noreferrer">
                                     <img alt={item.image_url} src={item.image_url} ></img>
                                 </a>)}
