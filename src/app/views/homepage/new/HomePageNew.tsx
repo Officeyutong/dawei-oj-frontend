@@ -69,11 +69,11 @@ const HomePageNew = () => {
                                         <img alt={item.image_url} src={item.image_url} ></img>
                                     </a>)}
                                 </Carousel>
-                                <div style={{ overflowY: "scroll", maxHeight: "300px" }}>
+                                <div style={{ overflowY: "scroll", maxHeight: alreadyLogin ? "300px" : "500px" }}>
                                     <FeedArea withProfileImage={true} data={feed.filter(t => t.top)}></FeedArea>
                                 </div>
                             </Col>
-                            <Col span={12} style={{ overflowY: "scroll", maxHeight: "400px" }}>
+                            <Col span={12} style={{ overflowY: "scroll", maxHeight: alreadyLogin ? "400px" : "600px" }}>
                                 <div>
                                     <FeedArea withProfileImage={true} data={feed.filter(t => !t.top)}></FeedArea>
                                 </div>
@@ -81,7 +81,7 @@ const HomePageNew = () => {
                         </Row>
                     </div>
                 </Spin>
-                <ProblemTodoBoxNew></ProblemTodoBoxNew>
+                {alreadyLogin && <ProblemTodoBoxNew></ProblemTodoBoxNew>}
             </Col>
             <Col span={6}>
                 <ProblemSearchBoxNew></ProblemSearchBoxNew>
