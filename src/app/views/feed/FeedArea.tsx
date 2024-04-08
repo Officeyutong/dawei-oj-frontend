@@ -4,16 +4,16 @@ import { converter } from "../../common/Markdown";
 import { useProfileImageMaker } from "../../common/Utils";
 import { FeedStreamEntry } from "./client/types";
 
-const FeedArea: React.FC<React.PropsWithChildren<{ data: FeedStreamEntry[] }>> = ({ data }) => {
+const FeedArea: React.FC<React.PropsWithChildren<{ data: FeedStreamEntry[]; withProfileImage: boolean; showTopLabel?: boolean; }>> = ({ data, withProfileImage, showTopLabel }) => {
     const makeImageURL = useProfileImageMaker();
     return <Feed>
         {data.map((x, i) => <Feed.Event key={i}>
-            <Feed.Label>
+            {withProfileImage && <Feed.Label>
                 <img src={makeImageURL(x.email)} alt=""></img>
-            </Feed.Label>
+            </Feed.Label>}
             <Feed.Content>
                 <Feed.Summary>
-                    <a href={`/profile/${x.uid}`} target="_blank" rel="noreferrer">{x.username}</a>发送了动态{x.top && <Label size="tiny" color="red">置顶</Label>}<Feed.Date>{x.time} - ID: {x.id}</Feed.Date>
+                    <a href={`/profile/${x.uid}`} target="_blank" rel="noreferrer">{x.username}</a>发送了动态{showTopLabel && x.top && <Label size="tiny" color="red">置顶</Label>}<Feed.Date>{x.time} - ID: {x.id}</Feed.Date>
                 </Feed.Summary>
                 <Feed.Extra>
                     <div dangerouslySetInnerHTML={{ __html: converter.makeHtml(x.content) }}></div>

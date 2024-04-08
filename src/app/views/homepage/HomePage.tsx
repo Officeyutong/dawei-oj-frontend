@@ -53,7 +53,7 @@ const HomePage: React.FC<React.PropsWithChildren<{}>> = () => {
                         </Dimmer>}
                         <HomepageSwiper data={swipers}></HomepageSwiper>
                         <Divider></Divider>
-                        <FeedArea data={feed}></FeedArea>
+                        <FeedArea withProfileImage showTopLabel data={feed}></FeedArea>
                         {homePageData !== null && homePageData.showRanklist && <>
                             <Divider></Divider>
                             <HomepageRanklistArea></HomepageRanklistArea>

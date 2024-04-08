@@ -20,7 +20,7 @@ const BroadcastBox: React.FC<React.PropsWithChildren<{}>> = () => {
             (async () => {
                 try {
                     setLoading(true);
-                    setData(await (await discussionClient.getDiscussions("broadcast", 1, 5)).data);
+                    setData( (await discussionClient.getDiscussions("broadcast", 1, 5)).data);
                     setLoaded(true);
                 } catch (e) { } finally {
                     setLoading(false);

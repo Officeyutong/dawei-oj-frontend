@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { show, showErrorModal } from "./dialogs/Dialog";
-import Router from "./Router";
+import MyRouter from "./Router";
 // import { store } from './states/Manager';
 import { Provider } from 'react-redux';
 import { makeClientUpdateAction, makeUserStateUpdateAction, store } from "./states/Manager";
 import 'semantic-ui-css/semantic.min.css'
-import { Container } from "semantic-ui-react";
 import { APIError } from "./Exception";
 import "katex/dist/katex.min.css";
 import "./App.css";
@@ -82,19 +81,19 @@ axios.post("/api/query_login_state").then(resp => {
     store.dispatch(makeUserStateUpdateAction(result.result, result));
 });
 const App: React.FC<React.PropsWithChildren<{}>> = () => {
-    const [displayBaseView, setDisplayBaseView] = useState(store.getState().displayBaseView);
-    useEffect(() => {
-        const unsubscribe = store.subscribe(() => setDisplayBaseView(store.getState().displayBaseView));
-        return unsubscribe;
-    }, []);
-    const inner = <>
-        <Provider store={store} >
-            <Router></Router>
-        </Provider>
-    </>
-    return displayBaseView ? <Container style={{ marginTop: "70px", marginBottom: "70px" }}>
-        {inner}
-    </Container> : inner;
+    // const [displayBaseView, setDisplayBaseView] = useState(store.getState().displayBaseView);
+    // useEffect(() => {
+    //     const unsubscribe = store.subscribe(() => setDisplayBaseView(store.getState().displayBaseView));
+    //     return unsubscribe;
+    // }, []);
+    // const inner = <>
+    // </>
+    // return displayBaseView ? <Container style={{ marginTop: "70px", marginBottom: "70px" }}>
+    //     {inner}
+    // </Container> : inner;
+    return <Provider store={store} >
+        <MyRouter></MyRouter>
+    </Provider>;
 
 };
 

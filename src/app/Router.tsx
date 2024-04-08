@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Route, BrowserRouter as Router, useRouteMatch } from "react-router-dom";
+import { Route, BrowserRouter, useRouteMatch, Switch } from "react-router-dom";
 
 import BaseView from "./views/BaseView";
 import AdminView from "./views/admin/AdminView";
@@ -31,6 +31,9 @@ import PreliminaryRouter from "./views/preliminary/Router";
 import WikiRouter from "./views/wiki/Router";
 import UserProblemFilterRouter from "./views/userproblemfilter/Router";
 import MonitoredUserRouter from "./views/monitoreduser/Router";
+import HomePageNew from "./views/homepage/new/HomePageNew";
+import { PUBLIC_URL } from "./App";
+import { Container } from "semantic-ui-react";
 
 const SubRoutes = () => {
     const [displayBaseView,] = useBaseViewDisplay();
@@ -48,7 +51,7 @@ const SubRoutes = () => {
         <Route exact path={`${match.path}/admin`}>
             <AdminView></AdminView>
         </Route>
-        <Route exact path={`${match.path}/`}>
+        <Route exact path={`${match.path}/home-old`}>
             <HomePage></HomePage>
         </Route>
         <Route path={`${match.path}/problemsolution`}>
@@ -101,14 +104,21 @@ const SubRoutes = () => {
         </Route>
 
     </>
-    return displayBaseView ? <BaseView>{routers}</BaseView> : routers;
+    return <Container style={{ marginTop: "70px", marginBottom: "70px" }}>
+        {displayBaseView ? <BaseView>{routers}</BaseView> : routers}
+    </Container>;
 };
 const MyRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const clientLoaded = useSelector((s: StateType) => s.generalClient !== null && s.unwrapClient !== null && s.unwrapExtraClient !== null);
-    return <Router>
-        {clientLoaded && <Route path="/rs">
-            <SubRoutes></SubRoutes>
+    return <BrowserRouter>
+        {clientLoaded && <Route path={`${PUBLIC_URL}`}>
+            <Switch>
+                <Route exact path={`${PUBLIC_URL}/`}>
+                    <HomePageNew></HomePageNew>
+                </Route>
+                <SubRoutes></SubRoutes>
+            </Switch>
         </Route>}
-    </Router>;
+    </BrowserRouter>;
 }
 export default MyRouter;

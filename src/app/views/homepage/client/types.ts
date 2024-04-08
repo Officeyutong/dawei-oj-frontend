@@ -14,6 +14,7 @@ interface HomePageData {
     friendLinks: FriendLinkEntry[];
     toolbox: ToolBoxEntry[];
     showRanklist: boolean;
+    dayCountdowns: { name: string; date: string }[];
 };
 
 export type {

@@ -23,7 +23,6 @@ const Container = React.memo((({ child }) => {
     return <>{child}</>
 }) as React.FC<React.PropsWithChildren<{ child: React.ReactNode }>>);
 const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
-    // const [showDiscussionDetail, setShowDiscussionDetail] = useState(false);
     const userState = useSelector((s: StateType) => s.userState);
     const logout = () => {
         axiosObj.post("/api/logout").then(() => window.location.reload());

@@ -77,6 +77,9 @@ class UserClient extends GeneralClient {
     async loginBySmsCode(phone: string, code: string) {
         await this.client!.post("/api/phoneuser/login", { phone, code });
     }
+    async logout() {
+        await this.client!.post("/api/logout");
+    }
 };
 
 const userClient = new UserClient();

@@ -25,3 +25,5 @@ build.7z
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/*.png

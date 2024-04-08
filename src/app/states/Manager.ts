@@ -36,6 +36,7 @@ export interface UserStateType {
         maxProblemDifficulty: number;
         hasProblemManagePermission: boolean;
         hasProblemTagManagePermission: boolean;
+        siteName: string;
     }
 }
 
@@ -77,7 +78,8 @@ const defaultState: StateType = {
             maxProblemDifficulty: 0,
             minProblemDifficulty: 0,
             hasProblemManagePermission: false,
-            hasProblemTagManagePermission: false
+            hasProblemTagManagePermission: false,
+            siteName: "HJ2",
         }
     },
     generalClient: null,
