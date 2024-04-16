@@ -1,4 +1,4 @@
-import { Col, Image, Menu, Row, Typography } from "antd";
+import { Col, Menu, Row } from "antd";
 import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../App";
 import { BarChartOutlined, BarsOutlined, BookOutlined, CalculatorOutlined, CloudOutlined, CodeOutlined, ContainerOutlined, DashboardOutlined, DatabaseOutlined, FileImageOutlined, GroupOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MergeOutlined, PlusOutlined, ProjectOutlined, TeamOutlined } from "@ant-design/icons";
