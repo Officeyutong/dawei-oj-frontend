@@ -80,6 +80,12 @@ class UserClient extends GeneralClient {
     async logout() {
         await this.client!.post("/api/logout");
     }
+    async requestSyncXiaoeTechUid(uid: number): Promise<{ newID: string }> {
+        return (await this.client!.post("/api/user/sync_xiaoe_tech_user_id", { uid })).data;
+    }
+    async requestSyncXiaoeTechPermissions(uid: number): Promise<string[]> {
+        return (await this.client!.post("/api/user/claim_permissions_from_xiaoe_tech", { uid })).data;
+    }
 };
 
 const userClient = new UserClient();

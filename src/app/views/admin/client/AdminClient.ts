@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { AdminBasicInfo, AllUserListEntry, BatchCreateUserEntry, BatchQueryGrantedTeamsResponse, FeedListResponse, HomepageSwiperList, PermissionGroupList, ProblemBatchUploadResponseEntry, RatedContestList, SubmissionStatisticsEntry, TeamGrantOperation } from "./types";
+import { AdminBasicInfo, AllUserListEntry, BatchCreateUserEntry, BatchQueryGrantedTeamsResponse, FeedListResponse, HomepageSwiperList, PermissionGroupList, ProblemBatchUploadResponseEntry, RatedContestList, SubmissionStatisticsEntry, TeamGrantOperation, XiaoeTechCourseEntry } from "./types";
 
 class AdminClient extends GeneralClient {
     async getAdminBasicInfo(): Promise<AdminBasicInfo> {
@@ -63,6 +63,18 @@ class AdminClient extends GeneralClient {
     }
     async batchCreateUser(users: BatchCreateUserEntry[]): Promise<void> {
         await this.client!.post("/api/admin/batch_create_user", { users });
+    }
+    async syncXiaoeTechCourses(): Promise<void> {
+        await this.client!.post("/api/admin/sync_xiaoetech_courses");
+    }
+    async getXiaoeTechCourses(): Promise<XiaoeTechCourseEntry[]> {
+        return (await this.client!.post("/api/admin/get_xiaoetech_courses")).data;
+    }
+    async getXiaoeTechCourseBoundTeams(courseID: string): Promise<number[]> {
+        return (await this.client!.post("/api/admin/get_bind_team_for_course", { course_id: courseID })).data;
+    }
+    async setXiaoeTechCourseBoundTeams(courseID: string, teamIDs: number[]) {
+        await this.client!.post("/api/admin/set_bind_team_for_course", { course_id: courseID, teams: teamIDs });
     }
 };
 

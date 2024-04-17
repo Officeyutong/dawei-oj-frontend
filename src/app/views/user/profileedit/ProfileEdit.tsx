@@ -67,6 +67,21 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
             window.location.reload();
         } catch { } finally { }
     };
+    const syncXioeTechUid = async () => {
+        try {
+            setLoading(true);
+            const { newID } = await userClient.requestSyncXiaoeTechUid(uid);
+            setData({ ...data!, xiaoe_tech_uid: newID });
+            showSuccessModal("同步完成")
+        } catch { } finally { setLoading(false); }
+    }
+    const syncXiaoeTechTeams = async () => {
+        try {
+            setLoading(true);
+            const resp = await userClient.requestSyncXiaoeTechPermissions(uid);
+            showSuccessModal("您新获得了以下团队的权限:\n" + resp.join("\n"));
+        } catch { } finally { setLoading(false); }
+    };
     return <div>
         <Header as="h1">
             用户资料编辑
@@ -113,10 +128,10 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                         {data.phone_verified ? <div> <a href="/permissionpack/user_packs" target="_blank">请前往此处进行操作</a></div> : <div style={{ fontSize: "large" }}>请先验证手机号后再尝试领取权限包！</div>}
                     </Form.Field>
                      */}
-                     <Form.Field>
+                    <Form.Field>
                         <label>积分</label>
                         {data.credit}
-                     </Form.Field>
+                    </Form.Field>
                     <Form.Field>
                         <label>已授权团队</label>
                         <div style={{ overflowY: "scroll" }}>
@@ -139,6 +154,13 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                                 </Table.Body>
                             </Table>
                         </div>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>小鹅通UID</label>
+                        {data.xiaoe_tech_uid === null ? <Button color="green" size="tiny" onClick={syncXioeTechUid}>点此同步</Button> : <div>{data.xiaoe_tech_uid}
+                            <Button color="green" onClick={syncXiaoeTechTeams} size="tiny">同步小鹅通团队列表</Button>
+                        </div>}
+
                     </Form.Field>
                     <Divider></Divider>
                     <Form.Field>

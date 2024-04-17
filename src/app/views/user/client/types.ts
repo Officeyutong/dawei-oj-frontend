@@ -30,6 +30,7 @@ interface UserProfileResponseEditing extends UserProfileResponse {
         granter: { uid: number; username: string; }
     }[]
     credit: number;
+    xiaoe_tech_uid: string | null;
 }
 interface UserProfileUpdateRequest {
     banned: number;

@@ -15,6 +15,7 @@ import UserManagement from "./tabs/UserManagement";
 import ProblemBatchUpload from "./tabs/ProblemBatchUplaod";
 import UserBatchManagement from "./tabs/TeamGrant";
 import BatchCreateUsers from "./tabs/BatchCreateUsers";
+import XiaoeTechCourseBind from "./tabs/XiaoeTechCourseBind";
 
 const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
     useDocumentTitle("后台管理");
@@ -43,7 +44,8 @@ const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
                 { menuItem: "题目批量上传", pane: <Tab.Pane key={9}><ProblemBatchUpload></ProblemBatchUpload></Tab.Pane> },
                 { menuItem: "团队批量授权", pane: <Tab.Pane key={10}><UserBatchManagement></UserBatchManagement></Tab.Pane> },
                 { menuItem: "批量创建用户", pane: <Tab.Pane key={11}><BatchCreateUsers></BatchCreateUsers></Tab.Pane> },
-                { menuItem: "杂项", pane: <Tab.Pane key={12}><MiscManagement></MiscManagement></Tab.Pane> },
+                { menuItem: "小鹅通课程绑定管理", pane: <Tab.Pane key={12}><XiaoeTechCourseBind></XiaoeTechCourseBind></Tab.Pane> },
+                { menuItem: "杂项", pane: <Tab.Pane key={13}><MiscManagement></MiscManagement></Tab.Pane> },
             ]}></Tab>
         </div>
     </> : <>

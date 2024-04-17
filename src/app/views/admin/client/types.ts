@@ -87,6 +87,13 @@ interface BatchCreateUserEntry {
 };
 
 type TeamGrantOperation = "cancel" | "cancel_all" | "grant";
+
+interface XiaoeTechCourseEntry {
+    xiaoe_tech_course_id: string;
+    name: string;
+    bound_team_count: number;
+}
+
 export type {
     AdminBasicInfo,
     GeneralInfo,
@@ -105,5 +112,6 @@ export type {
     AllUserListEntry,
     TeamGrantOperation,
     BatchQueryGrantedTeamsResponse,
-    BatchCreateUserEntry
+    BatchCreateUserEntry,
+    XiaoeTechCourseEntry
 };
