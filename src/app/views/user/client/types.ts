@@ -18,6 +18,8 @@ interface UserProfileResponse {
     group_name: string;
     managable: boolean; //是否有user.manage权限
     canSetAdmin: boolean; //是否有permission.manage权限
+    selfHasUserManagerPerm: boolean;
+    selfHasPermissionManagePerm: boolean;
 };
 interface UserProfileResponseEditing extends UserProfileResponse {
     phone_number: string | undefined;

@@ -155,13 +155,14 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                             </Table>
                         </div>
                     </Form.Field>
-                    <Form.Field>
+                    {(data.selfHasPermissionManagePerm || data.selfHasUserManagerPerm) && <Form.Field>
                         <label>小鹅通UID</label>
-                        {data.xiaoe_tech_uid === null ? <Button color="green" size="tiny" onClick={syncXioeTechUid}>点此同步</Button> : <div>{data.xiaoe_tech_uid}
-                            <Button color="green" onClick={syncXiaoeTechTeams} size="tiny">同步小鹅通团队列表</Button>
+                        {data.xiaoe_tech_uid === null ? (
+                            data.selfHasUserManagerPerm ? <Button color="green" size="tiny" onClick={syncXioeTechUid}>点此同步</Button> : <p>没有同步权限</p>
+                        ) : <div>{data.xiaoe_tech_uid}
+                            {data.selfHasPermissionManagePerm ? <Button color="green" onClick={syncXiaoeTechTeams} size="tiny">获取用户在小鹅通加入的课程并授权用户加入对应团队</Button> : <p>没有同步权限</p>}
                         </div>}
-
-                    </Form.Field>
+                    </Form.Field>}
                     <Divider></Divider>
                     <Form.Field>
                         <label>更改密码(不需要请留空)</label>
