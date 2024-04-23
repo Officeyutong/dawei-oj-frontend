@@ -30,11 +30,11 @@ const GeneralTeamStuff: React.FC<React.PropsWithChildren<GeneralTeamStuffProps>>
         {empty ? <Container style={{ marginTop: "20px" }} textAlign="center">
             <span>没有数据...</span>
         </Container> : <>
-            <Container style={{ marginTop: "10px" }} textAlign="right">
+            {/* <Container style={{ marginTop: "10px" }} textAlign="right">
                 <Button color="green" size="tiny" onClick={() => showSuccessModal("操作完成！")}>
                     解锁权限
                 </Button>
-            </Container>
+            </Container> */}
 
             <Table
             >
