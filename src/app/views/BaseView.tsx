@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Icon, Menu, Image, Container as SMContainer, Popup } from "semantic-ui-react";
 import { axiosObj, PUBLIC_URL } from "../App";
-import {  useProfileImageMaker } from "../common/Utils";
+import { useProfileImageMaker } from "../common/Utils";
 import { StateType } from "../states/Manager";
 import TimedProblemSetCard from "./TimedProblemsetCard";
 
@@ -27,7 +27,7 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const logout = () => {
         axiosObj.post("/api/logout").then(() => window.location.reload());
     };
-    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering } = useSelector((s: StateType) => s.userState.userData);
+    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, showPermissionPack } = useSelector((s: StateType) => s.userState.userData);
     const profileMaker = useProfileImageMaker();
     const [width, setWidth] = useState(document.documentElement.clientWidth);
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -112,10 +112,10 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                         <Icon name="chart line"></Icon>
                         虚拟比赛
                     </Menu.Item>
-                    <Menu.Item as={Link} to={`${PUBLIC_URL}/permissionpack/user_packs`}>
+                    {showPermissionPack && <Menu.Item as={Link} to={`${PUBLIC_URL}/permissionpack/user_packs`}>
                         <Icon name="exchange"></Icon>
                         权限包
-                    </Menu.Item>
+                    </Menu.Item>}
                     <Menu.Item as={Link} to={`${PUBLIC_URL}/blog/list/${userState.userData.uid}`}>
                         <Icon name="address card"></Icon>
                         博客
@@ -174,7 +174,7 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     </Menu>
 
     const mainBody = <>
-        <SMContainer style={{width:"100%"}}>
+        <SMContainer style={{ width: "100%" }}>
             <div style={{ width: "100%", marginBottom: "70px" }}>
                 <Container child={children}></Container>
             </div>

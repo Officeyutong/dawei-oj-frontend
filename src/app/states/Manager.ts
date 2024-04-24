@@ -37,6 +37,7 @@ export interface UserStateType {
         hasProblemManagePermission: boolean;
         hasProblemTagManagePermission: boolean;
         siteName: string;
+        showPermissionPack: boolean;
     }
 }
 
@@ -82,6 +83,7 @@ const defaultState: StateType = {
             hasProblemManagePermission: false,
             hasProblemTagManagePermission: false,
             siteName: "HJ2",
+            showPermissionPack: false
         }
     },
     generalClient: null,

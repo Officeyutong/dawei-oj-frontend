@@ -28,10 +28,6 @@ const useInputValue: (text?: string) => { value: string; onChange: onChangeType 
     return { value, onChange };
 };
 
-// const makeGravatarImageURL: (email: string) => string = (email) => {
-//     const hashval = md5(email.trim().toLowerCase());
-//     return `https://gravatar.loli.net/avatar/${hashval}`;
-// };
 
 function useProfileImageMaker(): (email: string, size?: number | string) => string {
     const profileURL = useSelector((s: StateType) => s.userState.userData.gravatarURL);

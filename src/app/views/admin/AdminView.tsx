@@ -16,6 +16,8 @@ import ProblemBatchUpload from "./tabs/ProblemBatchUplaod";
 import UserBatchManagement from "./tabs/TeamGrant";
 import BatchCreateUsers from "./tabs/BatchCreateUsers";
 import XiaoeTechCourseBind from "./tabs/XiaoeTechCourseBind";
+import { StateType } from "../../states/Manager";
+import { useSelector } from "react-redux";
 
 const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
     useDocumentTitle("后台管理");
@@ -29,6 +31,7 @@ const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
             })();
         }
     }, [loaded]);
+    const { showPermissionPack } = useSelector((s: StateType) => s.userState.userData);
     return loaded ? <>
         <div>
             <Header as="h1">后台管理</Header>
@@ -46,7 +49,10 @@ const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
                 { menuItem: "批量创建用户", pane: <Tab.Pane key={11}><BatchCreateUsers></BatchCreateUsers></Tab.Pane> },
                 { menuItem: "小鹅通课程绑定管理", pane: <Tab.Pane key={12}><XiaoeTechCourseBind></XiaoeTechCourseBind></Tab.Pane> },
                 { menuItem: "杂项", pane: <Tab.Pane key={13}><MiscManagement></MiscManagement></Tab.Pane> },
-            ]}></Tab>
+            ].filter(t => {
+                if (!showPermissionPack && t.menuItem === "权限包管理") return false;
+                return true;
+            })}></Tab>
         </div>
     </> : <>
         <div style={{ height: "400px" }}>

@@ -1,7 +1,6 @@
 import React from "react";
-import { Button, Container, Input, Table } from "semantic-ui-react";
+import { Container, Input, Table } from "semantic-ui-react";
 import { useInputValue } from "../../../common/Utils";
-import { showSuccessModal } from "../../../dialogs/Dialog";
 import { TeamDetail } from "../client/types";
 
 type TeamStuff = TeamDetail["team_problems"] | TeamDetail["team_contests"] | TeamDetail["team_problemsets"];

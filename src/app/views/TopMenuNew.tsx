@@ -8,7 +8,7 @@ import Logo from "./logo.png";
 import userClient from "./user/client/UserClient";
 const TopMenuNew = () => {
     const alreadyLogin = useSelector((s: StateType) => s.userState.login);
-    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, canUseImageStore, backend_managable, username, uid } = useSelector((s: StateType) => s.userState.userData);
+    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, canUseImageStore, backend_managable, username, uid, showPermissionPack } = useSelector((s: StateType) => s.userState.userData);
     return <Row>
         <Col span={3} offset={2} style={{ backgroundColor: "white", alignContent: "center", textAlign: "center" }}>
             {/* <img src={logo} alt="logo"></img> */}
@@ -54,7 +54,7 @@ const TopMenuNew = () => {
                                     type: "group" as "group", label: "通用功能", children: [
                                         { label: <Link to={`${PUBLIC_URL}/ide`}>在线IDE</Link>, key: "ide", icon: <CodeOutlined></CodeOutlined> },
                                         { label: <Link to={`${PUBLIC_URL}/virtualcontest/list`}>虚拟比赛</Link>, key: "virtual-contest", icon: <BarChartOutlined></BarChartOutlined> },
-                                        { label: <Link to={`${PUBLIC_URL}/permissionpack/user_packs`}>权限包</Link>, key: "permission-pack", icon: <MergeOutlined></MergeOutlined> },
+                                        showPermissionPack ? { label: <Link to={`${PUBLIC_URL}/permissionpack/user_packs`}>权限包</Link>, key: "permission-pack", icon: <MergeOutlined></MergeOutlined> } : null,
                                         { label: <Link to={`${PUBLIC_URL}/blog/list/${uid}`}>博客</Link>, key: "blog", icon: <CloudOutlined></CloudOutlined> },
                                         { label: <Link to={`${PUBLIC_URL}/userproblemfilter/list`}>题目筛选</Link>, key: "problem-filter", icon: <ContainerOutlined></ContainerOutlined> },
                                         { label: <Link to={`${PUBLIC_URL}/monitoreduser/list`}>绑定用户</Link>, key: "monitored-user", icon: <DashboardOutlined></DashboardOutlined> }
