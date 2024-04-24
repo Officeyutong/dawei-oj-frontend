@@ -47,7 +47,7 @@ const UserBatchManagement = () => {
         {modalOpen && <TeamPermissionGrantModal users={selectedList} onClose={() => setModalOpen(false)}></TeamPermissionGrantModal>}
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
         <Grid columns="2">
-            <Grid.Column>
+            <Grid.Column style={{ width: "max-content" }}>
                 <Header as="h3">用户列表</Header>
                 <Form>
                     <Form.Group>
@@ -68,7 +68,6 @@ const UserBatchManagement = () => {
                         setSelectedList([...selectedList, ...toJoin]);
                     }}>全部加入</Form.Button>
                 </Form>
-
                 <Table collapsing stackable size="small">
                     <Table.Header>
                         <Table.Row>
