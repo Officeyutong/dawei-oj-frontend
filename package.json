@@ -69,6 +69,7 @@
     "@types/webpack-env": "^1.16.0",
     "cross-env": "^7.0.3",
     "customize-cra": "^1.0.0",
+    "file-loader": "^6.2.0",
     "react-app-rewired": "^2.1.8",
     "react-error-overlay": "^6.0.10"
   },

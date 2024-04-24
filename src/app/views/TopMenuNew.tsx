@@ -4,7 +4,7 @@ import { PUBLIC_URL } from "../App";
 import { BarChartOutlined, BarsOutlined, BookOutlined, CalculatorOutlined, CloudOutlined, CodeOutlined, ContainerOutlined, DashboardOutlined, DatabaseOutlined, FileImageOutlined, GroupOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MergeOutlined, PlusOutlined, ProjectOutlined, TeamOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { StateType } from "../states/Manager";
-import Logo from "./logo.png";
+import Logo from "../assets/logo.png";
 import userClient from "./user/client/UserClient";
 const TopMenuNew = () => {
     const alreadyLogin = useSelector((s: StateType) => s.userState.login);

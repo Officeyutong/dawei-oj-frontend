@@ -1,9 +1,11 @@
+
 import { useRef, useState } from "react";
 import { Button, Form, Input, Label, Message, Progress, Table } from "semantic-ui-react";
 import { showErrorModal } from "../../../dialogs/Dialog";
 import { ProblemBatchUploadResponseEntry } from "../client/types";
 import { adminClient } from "../client/AdminClient";
-
+import UploadExample from "../../../assets/batch_upload_example.zip";
+console.log(UploadExample);
 const ProblemBatchUpload = () => {
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -37,7 +39,7 @@ const ProblemBatchUpload = () => {
             });
             setSuccessData(resp);
             inputRef.inputRef.current.files = null;
-        } catch(e) { showErrorModal(String(e)) } finally {
+        } catch (e) { showErrorModal(String(e)) } finally {
             setUploading(false);
         }
     };
@@ -85,7 +87,7 @@ const ProblemBatchUpload = () => {
                                 <Table.Cell>[题目的输出格式]</Table.Cell>
                                 <Table.Cell>[题目的提示]</Table.Cell>
                                 <Table.Cell>[题目的难度]</Table.Cell>
-                                <Table.Cell><Label>以英文逗号分隔的题目标签</Label></Table.Cell>
+                                <Table.Cell><Label>以英文逗号分隔的题目标签ID</Label></Table.Cell>
                                 <Table.Cell><Label>_example</Label></Table.Cell>
                                 <Table.Cell>[第一个样例的输入内容]</Table.Cell>
                                 <Table.Cell>[第一个样例的输出内容]</Table.Cell>
@@ -99,6 +101,9 @@ const ProblemBatchUpload = () => {
                 </Message.Item>
                 <Message.Item><Label>存放题目数据的文件夹名</Label>可以为空，此时系统不会为这个题目自动上传文件</Message.Item>
                 <Message.Item>如果第I列的内容是<Label>_example</Label>，那么系统会把接下来两列的内容识别为一组样例的输入和输出。可以按照相同的规则继续添加更多的样例。</Message.Item>
+                <Message.Item>
+                    可以点击<a target="_blank" rel="noreferrer" href={UploadExample}>此处</a>下载批量上传示例文件
+                </Message.Item>
             </Message.List>
         </Message>
         {successData && <Message success>
