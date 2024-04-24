@@ -6,6 +6,8 @@ import UserLink from "../../utils/UserLink";
 import { useInputValue } from "../../../common/Utils";
 import { showErrorModal } from "../../../dialogs/Dialog";
 import TeamPermissionGrantModal from "./modals/TeamPermissionGrantModal";
+import { TeamListEntry } from "../../team/client/types";
+import teamClient from "../../team/client/TeamClient";
 
 const ITEMS_PER_PAGE = 30;
 
@@ -18,16 +20,23 @@ const UserBatchManagement = () => {
     const [selectedList, setSelectedList] = useState<AllUserListEntry[]>([]);
     const [page, setPage] = useState(1);
     const [modalOpen, setModalOpen] = useState(false);
+    const [teamList, setTeamList] = useState<TeamListEntry[] | null>(null);
     const keywordFilter = useInputValue("");
 
     const filteredList = useMemo(() => fullData.filter(t => (t.email.search(keywordFilter.value) !== -1 || t.username.search(keywordFilter.value) !== -1 || (t.phoneNumber && t.phoneNumber.search(keywordFilter.value) !== -1) || (t.realName && t.realName.search(keywordFilter.value) !== -1))), [fullData, keywordFilter.value]);
     const pageCount = Math.ceil(filteredList.length / ITEMS_PER_PAGE);
     const currToRender = useMemo(() => filteredList.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE), [filteredList, page]);
-    const refreshUserList = async (filteringTeamID: number | undefined) => {
+    const refreshUserList = async (filteringTeamID: number | undefined, shouldRefreshTeamList: boolean = false) => {
         try {
             setLoading(true);
-            const data = await adminClient.getAllUsers(filteringTeamID);
-            setfullData(data);
+            if (shouldRefreshTeamList) {
+                const [a, b] = await Promise.all([adminClient.getAllUsers(filteringTeamID), teamClient.getTeamList()]);
+                setfullData(a);
+                setTeamList(b);
+            } else {
+                const data = await adminClient.getAllUsers(filteringTeamID);
+                setfullData(data);
+            }
             setPage(1);
             setFilteringTeamID(filteringTeamID);
             setLoaded(true);
@@ -37,7 +46,7 @@ const UserBatchManagement = () => {
     };
     useEffect(() => {
         if (!loaded) {
-            refreshUserList(undefined);
+            refreshUserList(undefined, true);
         }
     }, [loaded]);
     const currentSelectedUID = useMemo(() => {
@@ -46,17 +55,17 @@ const UserBatchManagement = () => {
     return <div>
         {modalOpen && <TeamPermissionGrantModal users={selectedList} onClose={() => setModalOpen(false)}></TeamPermissionGrantModal>}
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
-        <Grid columns="2">
+        {loaded && <Grid columns="2">
             <Grid.Column style={{ width: "max-content" }}>
                 <Header as="h3">用户列表</Header>
                 <Form>
-                    <Form.Group>
-                        <Form.Checkbox toggle label="只显示被授权了某个团队使用权限的用户" checked={filteringTeamID !== undefined} onChange={(_, d) => d.checked ? setFilteringTeamID(1) : refreshUserList(undefined)}></Form.Checkbox>
-                        {filteringTeamID && <>
-                            <Form.Input label="团队ID" type="number" value={filteringTeamID} onChange={(_, d) => setFilteringTeamID(parseInt(d.value as string))}></Form.Input>
-                            <Form.Button color="green" size="small" onClick={() => refreshUserList(filteringTeamID)}>刷新</Form.Button>
-                        </>}
-                    </Form.Group>
+                    <Form.Checkbox toggle label="只显示被授权了某个团队使用权限的用户" checked={filteringTeamID !== undefined} onChange={(_, d) => d.checked ? setFilteringTeamID(1) : refreshUserList(undefined)}></Form.Checkbox>
+                    {filteringTeamID && <>
+                        <Form.Select value={filteringTeamID} onChange={(_, d) => setFilteringTeamID(d.value! as number)} label="团队" options={
+                            teamList!.map(t => ({ "text": `${t.id}. ${t.name}`, value: t.id }))
+                        }></Form.Select>
+                        <Form.Button color="green" size="small" onClick={() => refreshUserList(filteringTeamID)}>刷新</Form.Button>
+                    </>}
                     <Form.Input {...keywordFilter} label="按关键字过滤"></Form.Input>
                     <Form.Button color="green" onClick={() => {
                         const toJoin = [];
@@ -115,7 +124,7 @@ const UserBatchManagement = () => {
                     </Table.Body>
                 </Table>
             </Grid.Column>
-        </Grid>
+        </Grid>}
     </div>
 }
 

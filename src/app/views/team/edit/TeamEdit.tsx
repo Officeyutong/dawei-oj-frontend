@@ -1,7 +1,7 @@
 import { Schema, validate } from "jsonschema";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Button, Checkbox, Dimmer, Divider, Form, Header, Input, Loader, Message, Segment } from "semantic-ui-react";
+import { Button, Checkbox, Dimmer, Divider, Form, Header, Input, Label, Loader, Message, Segment } from "semantic-ui-react";
 import { ButtonClickEvent } from "../../../common/types";
 import { useDocumentTitle } from "../../../common/Utils";
 import teamClient from "../client/TeamClient";
@@ -164,7 +164,7 @@ const TeamEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Message info>
                         <Message.Header>提示</Message.Header>
                         <Message.Content>
-                            <p>团队题目、团队比赛、团队习题集的填写格式为：中括号内，用逗号分开的相应ID</p>
+                            <div>团队题目、团队比赛、团队习题集的填写格式为：中括号内，用逗号分开的相应ID。比如<Label>[1,2,3]</Label></div>
                             <p>团队内的用户会自动获得相应的使用权限。如果某个题目、比赛或者习题集被从团队内删除，则相应用户自动失去权限。</p>
                         </Message.Content>
                     </Message>
