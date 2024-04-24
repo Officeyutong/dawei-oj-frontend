@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Input, Table, Image, Button, Icon, Dimmer, Loader, Modal } from "semantic-ui-react";
+import { Input, Table, Image, Button, Icon, Dimmer, Loader, Modal, Message } from "semantic-ui-react";
 import { showSuccessPopup } from "../../../dialogs/Utils";
 import HomepageSwiper from "../../utils/HomepageSwiper";
 import { adminClient } from "../client/AdminClient";
 import { HomepageSwiperList } from "../client/types";
+import { PUBLIC_URL } from "../../../App";
 
 const HomepageSwiperManagement: React.FC<React.PropsWithChildren<{}>> = () => {
     //TODO: 没写完
@@ -38,6 +39,13 @@ const HomepageSwiperManagement: React.FC<React.PropsWithChildren<{}>> = () => {
             <div style={{ height: "400px" }}></div>
         </div>}
         {loaded && <div>
+            <Message positive>
+                <Message.Header>关于轮播内容的提示</Message.Header>
+                <Message.Content>
+                    <p>图片URL为指向一张图片的链接，可以使用OJ内置的图床（工具箱-图片上传）上传并获取链接，或者直接点击<a href={`${PUBLIC_URL}/imagestore/list`} rel="noreferrer" target="_blank">此处</a></p>
+                    <p>链接URL为点击图片后打开的URL，如果不希望点击后打开链接，请留空</p>
+                </Message.Content>
+            </Message>
             <Table>
                 <Table.Header>
                     <Table.Row>
