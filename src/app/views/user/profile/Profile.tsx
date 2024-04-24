@@ -67,6 +67,7 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
                         <div style={{ color: "black" }}>
                             <div>Rating: {data.rating}</div>
                             <div>Email: {data.email}</div>
+                            <div>用户ID/UID: {data.id}</div>
                         </div>
                     </Card.Content>
                     {data.banned === 1 && <Card.Content extra>
