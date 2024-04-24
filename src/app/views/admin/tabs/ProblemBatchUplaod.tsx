@@ -5,7 +5,6 @@ import { showErrorModal } from "../../../dialogs/Dialog";
 import { ProblemBatchUploadResponseEntry } from "../client/types";
 import { adminClient } from "../client/AdminClient";
 import UploadExample from "../../../assets/batch_upload_example.zip";
-console.log(UploadExample);
 const ProblemBatchUpload = () => {
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
