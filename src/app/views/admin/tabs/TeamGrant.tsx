@@ -103,6 +103,7 @@ const UserBatchManagement = () => {
                 <Header as="h3">已选择的用户</Header>
                 <Button color="green" onClick={() => setModalOpen(true)}>团队授权设置</Button>
                 <Divider></Divider>
+                <Button size="small" color="red" onClick={() => setSelectedList([])} >清空</Button>
                 <Table size="small">
                     <Table.Header>
                         <Table.Row>
