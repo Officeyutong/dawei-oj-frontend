@@ -63,7 +63,7 @@ const TeamPermissionGrantModal: React.FC<TeamPermissionGrantProps> = ({ onClose,
                         <Form.Radio label="取消使用所有团队的权限" checked={opt === "cancel_all"} onClick={() => setOpt("cancel_all")}></Form.Radio>
                     </Form.Group>
                     <Form.Select value={selectedTeam} onChange={(_, d) => setSelectedTeam(d.value! as number)} label="对应团队" disabled={opt === "cancel_all"} options={
-                        allTeams.map(t => ({ "text": t.name, value: t.id }))
+                        allTeams.map(t => ({ "text": `${t.id}. ${t.name}`, value: t.id }))
                     }></Form.Select>
                 </Form>
                 <Divider></Divider>
