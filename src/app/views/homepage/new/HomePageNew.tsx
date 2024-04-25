@@ -48,7 +48,7 @@ const HomePageNew = () => {
         }
     }, [loaded, alreadyLogin])
     return <Row>
-        <Col span={16}>
+        <Col span={18}>
             <Spin spinning={loading}>
                 <div style={BLOCK_CSS}>
                     <Typography.Title level={4}><FormOutlined></FormOutlined>最新动态</Typography.Title>
@@ -64,7 +64,7 @@ const HomePageNew = () => {
             </Spin>
             {alreadyLogin && <ProblemTodoBoxNew></ProblemTodoBoxNew>}
         </Col>
-        <Col span={8}>
+        <Col span={6}>
             <ProblemSearchBoxNew></ProblemSearchBoxNew>
             {homePageData && <>
                 <RecentCountdowns countdowns={homePageData.dayCountdowns}></RecentCountdowns>

@@ -108,7 +108,7 @@ const SubRoutes = () => {
         </Route>
 
     </>
-    const innerWithContainer = <Container style={{ marginTop: "50px", marginBottom: "70px", width: "65%" }}>
+    const innerWithContainer = <Container style={{ marginTop: "50px", marginBottom: "70px", width: "75%" }}>
         {routers}
     </Container>
     return (() => {
