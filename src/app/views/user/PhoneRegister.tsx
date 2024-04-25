@@ -25,7 +25,7 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
     const [sended, setSended] = useState(false);
     const [loading, setLoading] = useState(false);
     const [showingModal, setShowingModal] = useState(false);
-    const salt = useSelector((s: StateType) => s.userState.userData.salt);
+    const { salt, requireEmailWhenRegisteringUsePhone } = useSelector((s: StateType) => s.userState.userData);
     const doRegister = async () => {
         if (password1.value !== password2.value) {
             setErrorMessage("两次密码输入不一致");
@@ -35,13 +35,13 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
             setErrorMessage("请输入验证码");
             return;
         }
-        if (username.value === "" || password1.value === "" || email.value === "" || realName.value === "") {
-            setErrorMessage("请输入用户名或密码或邮箱或者姓名");
+        if (username.value === "" || password1.value === "" || realName.value === "") {
+            setErrorMessage("请输入用户名或密码或者姓名");
             return;
         }
         try {
             setLoading(true);
-            await userClient.doPhoneRegister(username.value, md5(password1.value + salt), email.value, phone.value, authcode.value, realName.value);
+            await userClient.doPhoneRegister(username.value, md5(password1.value + salt), requireEmailWhenRegisteringUsePhone ? email.value : "default@bad-email", phone.value, authcode.value, realName.value);
             showSuccessPopup("注册完成，将要跳转");
             setTimeout(() => window.location.href = ("/"), 500);
         } catch {
@@ -65,34 +65,34 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                 <Loader></Loader>
             </Dimmer>}
             <Form error={errorMessage !== ""}>
-                <Form.Field>
+                <Form.Field required>
                     <label>用户名</label>
                     <Input {...username} onClick={cancelError}></Input>
                 </Form.Field>
-                <Form.Field>
+                {requireEmailWhenRegisteringUsePhone && <Form.Field>
                     <label>邮箱</label>
                     <Input {...email} onClick={cancelError}></Input>
-                </Form.Field>
-                <Form.Field>
+                </Form.Field>}
+                <Form.Field required>
                     <label>姓名</label>
                     <Input {...realName} onClick={cancelError}></Input>
                 </Form.Field>
                 <Form.Group>
-                    <Form.Field>
+                    <Form.Field required>
                         <label>手机号</label>
                         <Input {...phone} onClick={cancelError}></Input>
                     </Form.Field>
-                    {sended && <Form.Field>
+                    {sended && <Form.Field required>
                         <label>验证码</label>
                         <Input {...authcode} onClick={cancelError}></Input>
                     </Form.Field>}
                 </Form.Group>
                 <Form.Group>
-                    <Form.Field>
+                    <Form.Field required>
                         <label>密码</label>
                         <Input type="password" {...password1} onClick={cancelError}></Input>
                     </Form.Field>
-                    <Form.Field>
+                    <Form.Field required>
                         <label>重复密码</label>
                         <Input type="password" {...password2} onClick={cancelError}></Input>
                     </Form.Field>
@@ -100,9 +100,9 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                 <Message>
                     <Message.Header>注意</Message.Header>
                     <Message.Content>
-                        <p>1. 手机号为区分不同用户的唯一依据，也是关联小鹅通学习数据的依据。</p>
-                        <p>2. 用户名、手机号、姓名在注册后无法更改。如有特殊情况请联系管理员。</p>
-                        <p>3. 注册后可以在个人信息页面更改密码，或者在登录页面找回密码。</p>
+                        <p>1. 用户名、手机号、姓名在注册后无法更改。如有特殊情况请联系管理员。</p>
+                        <p>2. 注册后可以在个人信息页面更改密码，或者在登录页面找回密码。</p>
+                        <p>3. 姓名栏请填写自己的姓名，而非家长的姓名</p>
                     </Message.Content>
                 </Message>
                 <Message error>
