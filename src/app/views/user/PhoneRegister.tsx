@@ -25,7 +25,7 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
     const [sended, setSended] = useState(false);
     const [loading, setLoading] = useState(false);
     const [showingModal, setShowingModal] = useState(false);
-    const { salt, requireEmailWhenRegisteringUsePhone } = useSelector((s: StateType) => s.userState.userData);
+    const { salt, requireEmailWhenRegisteringUsePhone, usernameRegex, badUsernamePrompt } = useSelector((s: StateType) => s.userState.userData);
     const doRegister = async () => {
         if (password1.value !== password2.value) {
             setErrorMessage("两次密码输入不一致");
@@ -51,6 +51,10 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
     const doSendCode = () => {
         if (!/[0-9]{11}/.test(phone.value)) {
             setErrorMessage("请输入合法的11位国内手机号");
+            return;
+        }
+        if (!new RegExp(usernameRegex).test(username.value)) {
+            setErrorMessage(badUsernamePrompt);
             return;
         }
         setShowingModal(true);
@@ -100,9 +104,9 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                 <Message>
                     <Message.Header>注意</Message.Header>
                     <Message.Content>
-                        <p>1. 用户名、手机号、姓名在注册后无法更改。如有特殊情况请联系管理员。</p>
-                        <p>2. 注册后可以在个人信息页面更改密码，或者在登录页面找回密码。</p>
-                        <p>3. 姓名栏请填写自己的姓名，而非家长的姓名</p>
+                        <p>1. 用户名用于在OJ系统中登录。姓名栏请填写自己的姓名，而非家长的姓名。</p>
+                        <p>2. 用户名、手机号、姓名在注册后无法更改。如有特殊情况请联系管理员。</p>
+                        <p>3. 注册后可以在个人信息页面更改密码，或者在登录页面找回密码。</p>
                     </Message.Content>
                 </Message>
                 <Message error>

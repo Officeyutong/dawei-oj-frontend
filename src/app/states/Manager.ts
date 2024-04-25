@@ -39,6 +39,8 @@ export interface UserStateType {
         siteName: string;
         showPermissionPack: boolean;
         requireEmailWhenRegisteringUsePhone: boolean;
+        usernameRegex: string;
+        badUsernamePrompt: string;
     }
 }
 
@@ -85,7 +87,9 @@ const defaultState: StateType = {
             hasProblemTagManagePermission: false,
             siteName: "HJ2",
             showPermissionPack: false,
-            requireEmailWhenRegisteringUsePhone: true
+            requireEmailWhenRegisteringUsePhone: true,
+            badUsernamePrompt: "",
+            usernameRegex: ""
         }
     },
     generalClient: null,
