@@ -47,28 +47,19 @@ const HomePageNew = () => {
             })();
         }
     }, [loaded, alreadyLogin])
-    return <Row >
+    return <Row>
         <Col span={16}>
             <Spin spinning={loading}>
                 <div style={BLOCK_CSS}>
                     <Typography.Title level={4}><FormOutlined></FormOutlined>最新动态</Typography.Title>
-                    <Row>
-                        <Col span={12}>
-                            <Carousel autoplay dots>
-                                {swipers.map((item, idx) => <a key={idx} href={item.link_url === "" ? undefined : item.link_url} target="_blank" rel="noreferrer">
-                                    <img alt={item.image_url} src={item.image_url} ></img>
-                                </a>)}
-                            </Carousel>
-                            <div style={{ overflowY: "scroll", maxHeight: alreadyLogin ? "300px" : "500px" }}>
-                                <FeedArea withProfileImage={true} data={feed.filter(t => t.top)}></FeedArea>
-                            </div>
-                        </Col>
-                        <Col span={12} style={{ overflowY: "scroll", maxHeight: alreadyLogin ? "400px" : "600px" }}>
-                            <div>
-                                <FeedArea withProfileImage={true} data={feed.filter(t => !t.top)}></FeedArea>
-                            </div>
-                        </Col>
-                    </Row>
+                    <Carousel autoplay dots>
+                        {swipers.map((item, idx) => <a key={idx} href={item.link_url === "" ? undefined : item.link_url} target="_blank" rel="noreferrer">
+                            <img alt={item.image_url} src={item.image_url} ></img>
+                        </a>)}
+                    </Carousel>
+                    <div style={{ overflowY: "scroll", maxHeight: alreadyLogin ? "300px" : "500px" }}>
+                        <FeedArea withProfileImage={true} data={feed} showTopLabel></FeedArea>
+                    </div>
                 </div>
             </Spin>
             {alreadyLogin && <ProblemTodoBoxNew></ProblemTodoBoxNew>}
