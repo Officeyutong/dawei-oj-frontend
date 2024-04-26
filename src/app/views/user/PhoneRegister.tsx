@@ -71,20 +71,20 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
             <Form error={errorMessage !== ""}>
                 <Form.Field required>
                     <label>用户名</label>
-                    <Input {...username} onClick={cancelError}></Input>
+                    <Input disabled={sended} {...username} onClick={cancelError}></Input>
                 </Form.Field>
                 {requireEmailWhenRegisteringUsePhone && <Form.Field>
                     <label>邮箱</label>
-                    <Input {...email} onClick={cancelError}></Input>
+                    <Input {...email} disabled={sended} onClick={cancelError}></Input>
                 </Form.Field>}
                 <Form.Field required>
                     <label>姓名</label>
-                    <Input {...realName} onClick={cancelError}></Input>
+                    <Input {...realName} disabled={sended} onClick={cancelError}></Input>
                 </Form.Field>
                 <Form.Group>
                     <Form.Field required>
                         <label>手机号</label>
-                        <Input {...phone} onClick={cancelError}></Input>
+                        <Input {...phone} disabled={sended} onClick={cancelError}></Input>
                     </Form.Field>
                     {sended && <Form.Field required>
                         <label>验证码</label>
@@ -94,11 +94,11 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                 <Form.Group>
                     <Form.Field required>
                         <label>密码</label>
-                        <Input type="password" {...password1} onClick={cancelError}></Input>
+                        <Input type="password" {...password1} disabled={sended} onClick={cancelError}></Input>
                     </Form.Field>
                     <Form.Field required>
                         <label>重复密码</label>
-                        <Input type="password" {...password2} onClick={cancelError}></Input>
+                        <Input type="password" {...password2} disabled={sended} onClick={cancelError}></Input>
                     </Form.Field>
                 </Form.Group>
                 <Message>

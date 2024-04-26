@@ -180,34 +180,34 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                             </Form.Field>
                         </Form.Group>
                     </Form.Field>
-                    <Divider></Divider>
-                    <Form.Field>
-                        <label>权限组</label>
-                        <Input value={data.permission_group} onChange={(_, d) => setData({ ...data, permission_group: d.value })}></Input>
-                    </Form.Field>
-                    <Form.Field>
-                        <label>组权限列表</label>
-                        <div>
-                            <Grid columns="8">
-                                {data.group_permissions.map((x, i) => <Grid.Column key={i}>
-                                    <div style={{ wordBreak: "break-word" }}>{x}</div>
-                                </Grid.Column>)}
-                            </Grid>
-                        </div>
-                    </Form.Field>
-                    <Form.Field>
-                        <label>用户权限列表</label>
-                        <AceEditor
-                            value={data.permissions.join("\n")}
-                            onChange={v => setData({ ...data, permissions: v.trim().split("\n") })}
-                            mode="plain_text"
-                            theme={aceTheme}
-                            name={uuidv4()}
-                            width="100%"
-                            height="400px"
-                        ></AceEditor>
-                    </Form.Field>
-                    <Button size="tiny" onClick={() => setShowing(true)} color="green">查看所有权限</Button>
+                    {data.selfHasPermissionManagePerm && <><Divider></Divider>
+                        <Form.Field>
+                            <label>权限组</label>
+                            <Input value={data.permission_group} onChange={(_, d) => setData({ ...data, permission_group: d.value })}></Input>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>组权限列表</label>
+                            <div>
+                                <Grid columns="8">
+                                    {data.group_permissions.map((x, i) => <Grid.Column key={i}>
+                                        <div style={{ wordBreak: "break-word" }}>{x}</div>
+                                    </Grid.Column>)}
+                                </Grid>
+                            </div>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>用户权限列表</label>
+                            <AceEditor
+                                value={data.permissions.join("\n")}
+                                onChange={v => setData({ ...data, permissions: v.trim().split("\n") })}
+                                mode="plain_text"
+                                theme={aceTheme}
+                                name={uuidv4()}
+                                width="100%"
+                                height="400px"
+                            ></AceEditor>
+                        </Form.Field>
+                        <Button size="tiny" onClick={() => setShowing(true)} color="green">查看所有权限</Button></>}
                     {data.managable && <>
                         <Divider></Divider>
                         <Checkbox toggle label="账户封禁" checked={data.banned !== 0} onChange={(_, d) => setData({ ...data, banned: (d.checked ? 1 : 0) })}></Checkbox>
