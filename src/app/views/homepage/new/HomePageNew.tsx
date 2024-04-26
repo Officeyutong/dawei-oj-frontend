@@ -50,9 +50,9 @@ const HomePageNew = () => {
     return <Row>
         <Col span={18}>
             <Spin spinning={loading}>
-                <div style={BLOCK_CSS}>
+                <div style={{ ...BLOCK_CSS }}>
                     <Typography.Title level={4}><FormOutlined></FormOutlined>最新动态</Typography.Title>
-                    <Carousel autoplay dots>
+                    <Carousel autoplay dots style={{ height: "400px", width: "870px", overflow: "hidden" }}>
                         {swipers.map((item, idx) => <a key={idx} href={item.link_url === "" ? undefined : item.link_url} target="_blank" rel="noreferrer">
                             <img alt={item.image_url} src={item.image_url} ></img>
                         </a>)}
