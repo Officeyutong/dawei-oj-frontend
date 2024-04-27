@@ -48,7 +48,7 @@ const HomePageNew = () => {
         }
     }, [loaded, alreadyLogin])
     return <Row>
-        <Col>
+        <Col span={16}>
             <Spin spinning={loading}>
                 <div style={{ ...BLOCK_CSS }}>
                     <Typography.Title level={4}><FormOutlined></FormOutlined>最新动态</Typography.Title>
@@ -59,7 +59,6 @@ const HomePageNew = () => {
                             </a>)}
                         </Carousel>
                     </div>
-
                     <div style={{ overflowY: "scroll", maxHeight: alreadyLogin ? "300px" : "500px" }}>
                         <FeedArea withProfileImage={true} data={feed} showTopLabel></FeedArea>
                     </div>
