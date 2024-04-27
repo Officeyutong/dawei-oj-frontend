@@ -107,10 +107,10 @@ const SubRoutes = () => {
             <ErrorAndSuccess error={false}></ErrorAndSuccess>
         </Route>
     </>
-    const baseContainerMaxWidth = useSelector((s: StateType) => s.baseContainerMaxWidth);
+    const { baseContainerMaxWidth, baseContainerWidth } = useSelector((s: StateType) => s);
 
     const innerWithContainer = <div style={{ marginTop: "50px", marginBottom: "70px", display: "flex", justifyContent: "center" }}>
-        <div style={{ minWidth: "70%", maxWidth: baseContainerMaxWidth, marginLeft: "auto", marginRight: "auto" }}>{routers}</div>
+        <div style={{ minWidth: "70%", width: baseContainerWidth, maxWidth: baseContainerMaxWidth, marginLeft: "auto", marginRight: "auto" }}>{routers}</div>
     </div>
     return (() => {
         if (displayBaseView === "new") return <BaseViewNew>{innerWithContainer}</BaseViewNew>

@@ -35,13 +35,14 @@ const HomePageNew = () => {
     const [loaded, setLoaded] = useState(false);
     const [homePageData, setHomePageData] = useState<HomePageData | null>(null);
     const [feed, setFeed] = useState<FeedStreamEntry[]>([]);
-
     useEffect(() => {
         const oldMaxWidth = store.getState().baseContainerMaxWidth;
         store.dispatch({ type: "UPDATE_MAXWIDTH", modify: s => ({ ...s, baseContainerMaxWidth: "100%" }) });
-        return () => { store.dispatch({ type: "UPDATE_MAXWIDTH", modify: s => ({ ...s, baseContainerMaxWidth: oldMaxWidth }) }); };
-
-    });
+        return () => {
+            console.log("Restored max width");
+            store.dispatch({ type: "UPDATE_MAXWIDTH", modify: s => ({ ...s, baseContainerMaxWidth: oldMaxWidth }) });
+        };
+    }, []);
     useEffect(() => {
         if (!loaded) {
             (async () => {

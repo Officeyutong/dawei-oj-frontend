@@ -8,7 +8,7 @@ import { Markdown } from "../../../common/Markdown";
 import { ButtonClickEvent } from "../../../common/types";
 import { useCurrentUid, useDocumentTitle, useInputValue } from "../../../common/Utils";
 import { showSuccessPopup } from "../../../dialogs/Utils";
-import { StateType } from "../../../states/Manager";
+import { StateType, store } from "../../../states/Manager";
 import InviteCodeInputModal from "../../utils/InviteCodeInputModal";
 import UserLink from "../../utils/UserLink";
 import teamClient from "../client/TeamClient";
@@ -133,6 +133,11 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
             }
         });
     };
+    useEffect(() => {
+        const oldWidth = store.getState().baseContainerWidth;
+        store.dispatch({ type: "UPDATE_WIDTH", modify: s => ({ ...s, baseContainerWidth: "70%" }) });
+        return () => { store.dispatch({ type: "UPDATE_WIDTH", modify: s => ({ ...s, baseContainerWidth: oldWidth }) }); };
+    }, []);
     return <>
         {selectedProblemsetId !== null && <InTeamProblemsetRanklist
             onClose={() => setSelectedProblemsetId(null)}
@@ -160,92 +165,90 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                     </Header>
                     <Ref innerRef={contextRef}>
                         <div>
-                            <div>
-                                <Segment stacked>
-                                    {working && <Dimmer active>
-                                        <Loader></Loader>
-                                    </Dimmer>}
-                                    {hasPermission ? <>
-                                        <Tab menu={{ pointing: true }} panes={[
-                                            {
-                                                menuItem: "简介",
-                                                render: () => data.description.trim() === "" ? <div>这个团队没有简介...</div> : <Markdown markdown={data.description}></Markdown>
-                                            },
-                                            {
-                                                menuItem: "成员列表",
-                                                render: () => <TeamMembers
-                                                    admins={data.admins}
-                                                    members={data.members}
-                                                    owner_id={data.owner_id}
-                                                    setAdmin={setAdmin}
-                                                    kick={kickOut}
-                                                    hasManagePermission={hasManagePermission}
-                                                    isTeamOwner={currUser === data.owner_id}
-                                                ></TeamMembers>
-                                            },
-                                            {
-                                                menuItem: "团队题目",
-                                                render: () => <GeneralTeamStuff
-                                                    promptButtonString="添加团队题目"
-                                                    addCallback={text => addStuff(text, "problem")}
-                                                    isTeamAdmin={isTeamAdmin}
-                                                    data={data.team_problems}
-                                                    lineMapper={(line) => [<Link to={`${PUBLIC_URL}/show_problem/${line.id}?source_team=${data.id}`}>#{line.id}. {(line as TeamDetail["team_problems"][0]).title}</Link>]}
-                                                ></GeneralTeamStuff>
-                                            },
-                                            {
-                                                menuItem: "团队比赛",
-                                                render: () => <GeneralTeamStuff
-                                                    promptButtonString="添加团队比赛"
-                                                    addCallback={text => addStuff(text, "contest")}
-                                                    isTeamAdmin={isTeamAdmin}
-                                                    data={sortedTeamContests}
-                                                    title={["ID", "比赛", "开始时间"]}
-                                                    lineMapper={(line) => {
-                                                        const currLine = line as TeamDetail["team_contests"][0];
-                                                        return [<Link to={`${PUBLIC_URL}/contest/${currLine.id}?source_team=${data.id}`}>{currLine.id}</Link>, <Link to={`${PUBLIC_URL}/contest/${currLine.id}?source_team=${data.id}`}>{currLine.name}</Link>, <span>{DateTime.fromSeconds(currLine.start_time).toJSDate().toLocaleString()}</span>]
-                                                    }}
-                                                ></GeneralTeamStuff>
-                                            },
-                                            {
-                                                menuItem: "团队习题集",
-                                                render: () => <GeneralTeamStuff
-                                                    promptButtonString="添加团队习题集"
-                                                    addCallback={text => addStuff(text, "problemset")}
-                                                    isTeamAdmin={isTeamAdmin}
-                                                    data={data.team_problemsets}
-                                                    title={["ID", "名称", "操作"]}
-                                                    lineMapper={(line) => {
-                                                        const currLine = line as TeamDetail["team_problemsets"][0];
-                                                        return [
-                                                            <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}>#{currLine.id}</Link>,
-                                                            <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}> {currLine.name}</Link>,
-                                                            <Button size="small" color="blue" onClick={() => setSelectedProblemsetId(line.id)}>查看排行榜</Button>
-                                                        ]
-                                                    }}
-                                                ></GeneralTeamStuff>
-                                            },
-                                            {
-                                                menuItem: "团队文件",
-                                                render: () => <TeamFile
-                                                    isAdmin={isTeamAdmin}
-                                                    teamID={data.id}
-                                                ></TeamFile>
-                                            },
-                                            (data.canManage ? {
-                                                menuItem: "管理与统计",
-                                                render: () => <TeamManage
-                                                    team={data.id}
-                                                    reloadCallback={() => setLoaded(false)}
-                                                    teamMembers={data.members}
-                                                ></TeamManage>
-                                            } : {})
-                                        ]}></Tab>
-                                    </> : <>
-                                        <span style={{ fontSize: "large" }}>本团队为私有团队，请加入后查看详情。</span>
-                                    </>}
-                                </Segment>
-                            </div>
+                            <Segment stacked>
+                                {working && <Dimmer active>
+                                    <Loader></Loader>
+                                </Dimmer>}
+                                {hasPermission ? <>
+                                    <Tab menu={{ pointing: true }} panes={[
+                                        {
+                                            menuItem: "简介",
+                                            render: () => data.description.trim() === "" ? <div>这个团队没有简介...</div> : <Markdown markdown={data.description}></Markdown>
+                                        },
+                                        {
+                                            menuItem: "成员列表",
+                                            render: () => <TeamMembers
+                                                admins={data.admins}
+                                                members={data.members}
+                                                owner_id={data.owner_id}
+                                                setAdmin={setAdmin}
+                                                kick={kickOut}
+                                                hasManagePermission={hasManagePermission}
+                                                isTeamOwner={currUser === data.owner_id}
+                                            ></TeamMembers>
+                                        },
+                                        {
+                                            menuItem: "团队题目",
+                                            render: () => <GeneralTeamStuff
+                                                promptButtonString="添加团队题目"
+                                                addCallback={text => addStuff(text, "problem")}
+                                                isTeamAdmin={isTeamAdmin}
+                                                data={data.team_problems}
+                                                lineMapper={(line) => [<Link to={`${PUBLIC_URL}/show_problem/${line.id}?source_team=${data.id}`}>#{line.id}. {(line as TeamDetail["team_problems"][0]).title}</Link>]}
+                                            ></GeneralTeamStuff>
+                                        },
+                                        {
+                                            menuItem: "团队比赛",
+                                            render: () => <GeneralTeamStuff
+                                                promptButtonString="添加团队比赛"
+                                                addCallback={text => addStuff(text, "contest")}
+                                                isTeamAdmin={isTeamAdmin}
+                                                data={sortedTeamContests}
+                                                title={["ID", "比赛", "开始时间"]}
+                                                lineMapper={(line) => {
+                                                    const currLine = line as TeamDetail["team_contests"][0];
+                                                    return [<Link to={`${PUBLIC_URL}/contest/${currLine.id}?source_team=${data.id}`}>{currLine.id}</Link>, <Link to={`${PUBLIC_URL}/contest/${currLine.id}?source_team=${data.id}`}>{currLine.name}</Link>, <span>{DateTime.fromSeconds(currLine.start_time).toJSDate().toLocaleString()}</span>]
+                                                }}
+                                            ></GeneralTeamStuff>
+                                        },
+                                        {
+                                            menuItem: "团队习题集",
+                                            render: () => <GeneralTeamStuff
+                                                promptButtonString="添加团队习题集"
+                                                addCallback={text => addStuff(text, "problemset")}
+                                                isTeamAdmin={isTeamAdmin}
+                                                data={data.team_problemsets}
+                                                title={["ID", "名称", "操作"]}
+                                                lineMapper={(line) => {
+                                                    const currLine = line as TeamDetail["team_problemsets"][0];
+                                                    return [
+                                                        <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}>#{currLine.id}</Link>,
+                                                        <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}> {currLine.name}</Link>,
+                                                        <Button size="small" color="blue" onClick={() => setSelectedProblemsetId(line.id)}>查看排行榜</Button>
+                                                    ]
+                                                }}
+                                            ></GeneralTeamStuff>
+                                        },
+                                        {
+                                            menuItem: "团队文件",
+                                            render: () => <TeamFile
+                                                isAdmin={isTeamAdmin}
+                                                teamID={data.id}
+                                            ></TeamFile>
+                                        },
+                                        (data.canManage ? {
+                                            menuItem: "管理与统计",
+                                            render: () => <TeamManage
+                                                team={data.id}
+                                                reloadCallback={() => setLoaded(false)}
+                                                teamMembers={data.members}
+                                            ></TeamManage>
+                                        } : {})
+                                    ]}></Tab>
+                                </> : <>
+                                    <span style={{ fontSize: "large" }}>本团队为私有团队，请加入后查看详情。</span>
+                                </>}
+                            </Segment>
                             <Rail position="right">
                                 <Sticky context={contextRef}>
                                     <Segment>
