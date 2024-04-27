@@ -78,7 +78,6 @@ interface ProblemInfo extends ProblemStatement {
     output_file_name: string;
     downloads: string[];
     provides: string[];
-
     lastUsedParameters: number[];
     allowManualGrading: boolean;
     difficulty: number;
@@ -146,6 +145,8 @@ type WrittenTestAnswer = string | string[];
 
 type WrittenTestStatement = Pick<ProblemStatement, "background" | "content" | "title">;
 
+type RemoteOJ = "luogu";
+
 export type {
     ProblemFileEntry,
     ProblemInfo,
@@ -164,7 +165,8 @@ export type {
     FillBlankQuestion,
     WrittenTestQuestion,
     WrittenTestAnswer,
-    WrittenTestStatement
+    WrittenTestStatement,
+    RemoteOJ
 }
 
 export {

@@ -41,6 +41,7 @@ export interface UserStateType {
         requireEmailWhenRegisteringUsePhone: boolean;
         usernameRegex: string;
         badUsernamePrompt: string;
+        enableRemoteJudge: boolean;
     }
 }
 
@@ -89,7 +90,8 @@ const defaultState: StateType = {
             showPermissionPack: false,
             requireEmailWhenRegisteringUsePhone: true,
             badUsernamePrompt: "",
-            usernameRegex: ""
+            usernameRegex: "",
+            enableRemoteJudge: false
         }
     },
     generalClient: null,

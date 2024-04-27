@@ -15,6 +15,7 @@ import ProblemFilter from "./ProblemFilter";
 import { showErrorModal } from "../../../dialogs/Dialog";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
+import ImportRemoteProblemModal from "../ImportRemoteProblemModal";
 const ProblemFilterSchema: Schema = {
     id: "ProblemFilter",
     type: "object",
@@ -63,6 +64,7 @@ const ProblemList: React.FC<React.PropsWithChildren<{}>> = () => {
     const [data, setData] = useState<ProblemListEntry[]>([]);
     const [allTags, setAllTags] = useState<ProblemTagEntry[]>([]);
     const [tagsLoaded, setTagsLoaded] = useState(false);
+    const [showRemoteImportModal, setShowRemoteImportModal] = useState(false);
     const tagMapping = useMemo(() => new Map(allTags.map(x => ([x.id, x]))), [allTags]);
     const userState = useSelector((s: StateType) => s.userState.userData);
     useDocumentTitle("题目列表");
@@ -108,9 +110,13 @@ const ProblemList: React.FC<React.PropsWithChildren<{}>> = () => {
         </Header>
         <Segment stacked>
             {loading && <Dimmer active> <Loader></Loader></Dimmer>}
+            {showRemoteImportModal && <ImportRemoteProblemModal onClose={() => setShowRemoteImportModal(false)}></ImportRemoteProblemModal>}
             <Container textAlign="right">
                 {userState.hasProblemTagManagePermission && <Button as={Link} color="green" icon to={`${PUBLIC_URL}/tags/edit`} >
                     <Icon name="plus"></Icon>题目标签编辑
+                </Button>}
+                {userState.hasProblemManagePermission && userState.enableRemoteJudge && <Button color="blue" icon onClick={() => setShowRemoteImportModal(true)}>
+                    <Icon name="plus"></Icon>添加远程题目
                 </Button>}
                 {userState.hasProblemManagePermission && <Button as={Link} color="blue" icon to={`${PUBLIC_URL}/import_from_syzoj`}>
                     <Icon name="plus"></Icon> 从SYZOJ导入题目

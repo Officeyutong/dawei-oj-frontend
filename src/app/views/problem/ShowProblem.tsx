@@ -45,9 +45,6 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
 
                         return;
                     }
-                    if (data.problem_type === "remote_judge") {
-                        window.location.href = `/remote_judge/show_problem/${data.id}`;
-                    }
                     data.languages.sort((x, y) => {
                         if (x.id < y.id) return -1;
                         if (x.id === y.id) return 0;
