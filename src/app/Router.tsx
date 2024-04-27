@@ -108,8 +108,8 @@ const SubRoutes = () => {
             <ErrorAndSuccess error={false}></ErrorAndSuccess>
         </Route>
     </>
-    const innerWithContainer = <Container style={{ marginTop: "50px", marginBottom: "70px", width: "75%" }}>
-        {routers}
+    const innerWithContainer = <Container style={{ marginTop: "50px", marginBottom: "70px", width: "95%", display: "flex", justifyContent: "center" }}>
+        <div style={{ minWidth: "70%" }}>{routers}</div>
     </Container>
     return (() => {
         if (displayBaseView === "new") return <BaseViewNew>{innerWithContainer}</BaseViewNew>
@@ -122,7 +122,7 @@ const MyRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     return <BrowserRouter>
         {clientLoaded && <Route path={`${PUBLIC_URL}`}>
             <Switch>
-                <Route path={`${PUBLIC_URL}/wechat_statistics_view`}>
+                <Route exact path={`${PUBLIC_URL}/wechat_statistics_view`}>
                     <WechatStatistics></WechatStatistics>
                 </Route>
                 <SubRoutes></SubRoutes>

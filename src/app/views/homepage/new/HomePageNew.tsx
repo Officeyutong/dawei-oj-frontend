@@ -17,7 +17,7 @@ import { BroadcastBoxNew, FriendLinkNew, ProblemSearchBoxNew, ProblemTodoBoxNew,
 
 const BLOCK_CSS: CSSProperties = {
     backgroundColor: "white",
-    margin: "24px",
+    margin: "22px",
     padding: "24px"
 };
 
@@ -48,7 +48,7 @@ const HomePageNew = () => {
         }
     }, [loaded, alreadyLogin])
     return <Row>
-        <Col span={16}>
+        <Col span={19}>
             <Spin spinning={loading}>
                 <div style={{ ...BLOCK_CSS }}>
                     <Typography.Title level={4}><FormOutlined></FormOutlined>最新动态</Typography.Title>
@@ -66,7 +66,7 @@ const HomePageNew = () => {
             </Spin>
             {alreadyLogin && <ProblemTodoBoxNew></ProblemTodoBoxNew>}
         </Col>
-        <Col span={6}>
+        <Col span={5}>
             <ProblemSearchBoxNew></ProblemSearchBoxNew>
             {homePageData && <>
                 <RecentCountdowns countdowns={homePageData.dayCountdowns}></RecentCountdowns>
