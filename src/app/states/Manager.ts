@@ -42,6 +42,7 @@ export interface UserStateType {
         usernameRegex: string;
         badUsernamePrompt: string;
         enableRemoteJudge: boolean;
+        companyName: string;
     }
 }
 
@@ -91,7 +92,8 @@ const defaultState: StateType = {
             requireEmailWhenRegisteringUsePhone: true,
             badUsernamePrompt: "",
             usernameRegex: "",
-            enableRemoteJudge: false
+            enableRemoteJudge: false,
+            companyName: "HelloJudge2"
         }
     },
     generalClient: null,

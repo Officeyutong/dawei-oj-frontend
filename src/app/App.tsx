@@ -81,16 +81,6 @@ axios.post("/api/query_login_state").then(resp => {
     store.dispatch(makeUserStateUpdateAction(result.result, result));
 });
 const App: React.FC<React.PropsWithChildren<{}>> = () => {
-    // const [displayBaseView, setDisplayBaseView] = useState(store.getState().displayBaseView);
-    // useEffect(() => {
-    //     const unsubscribe = store.subscribe(() => setDisplayBaseView(store.getState().displayBaseView));
-    //     return unsubscribe;
-    // }, []);
-    // const inner = <>
-    // </>
-    // return displayBaseView ? <Container style={{ marginTop: "70px", marginBottom: "70px" }}>
-    //     {inner}
-    // </Container> : inner;
     return <Provider store={store} >
         <MyRouter></MyRouter>
     </Provider>;

@@ -50,15 +50,16 @@ const PhoneLogin = () => {
             </Form>
         </Segment>
         {showSendModal && <Modal open closeOnDimmerClick={false}>
-            <SendSMSCodeDialog
-                // mustNotUse={false}
-                phoneUsingState="must_use"
-                phone={phone.value}
-                onClose={() => {
-                    setShowSendModal(false);
-                    setSended(true);
-                }}
-            ></SendSMSCodeDialog>
+            <Modal.Content>
+                <SendSMSCodeDialog
+                    phoneUsingState="must_use"
+                    phone={phone.value}
+                    onClose={() => {
+                        setShowSendModal(false);
+                        setSended(true);
+                    }}
+                ></SendSMSCodeDialog>
+            </Modal.Content>
         </Modal>}
     </div>
 };

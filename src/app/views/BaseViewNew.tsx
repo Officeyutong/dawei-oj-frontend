@@ -5,7 +5,7 @@ import { StateType } from "../states/Manager";
 import TimedProblemSetCard from "./TimedProblemsetCard";
 
 const BaseViewNew: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
-    const { displayRepoInFooter, appName } = useSelector((s: StateType) => s.userState.userData);
+    const { displayRepoInFooter, appName, companyName } = useSelector((s: StateType) => s.userState.userData);
     const hasActiveTimedProblemset = useSelector((s: StateType) => s.userState.userData.currentActiveTimedProblemset !== null);
     return <>
         <Affix><HomePageTopMenuNew></HomePageTopMenuNew></Affix>
@@ -15,7 +15,7 @@ const BaseViewNew: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                 {displayRepoInFooter ? <>
                     {appName} powered by <a href="https://github.com/Officeyutong/HelloJudge2">HelloJudge2</a>
                 </> : <>
-                    {appName} by DavidOI
+                    {appName} by {companyName}
                 </>
                 }
             </div>

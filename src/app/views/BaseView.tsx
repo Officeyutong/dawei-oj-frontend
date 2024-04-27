@@ -27,7 +27,7 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const logout = () => {
         axiosObj.post("/api/logout").then(() => window.location.reload());
     };
-    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, showPermissionPack } = useSelector((s: StateType) => s.userState.userData);
+    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, showPermissionPack, companyName } = useSelector((s: StateType) => s.userState.userData);
     const profileMaker = useProfileImageMaker();
     const [width, setWidth] = useState(document.documentElement.clientWidth);
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -184,7 +184,7 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                 {userState.userData.displayRepoInFooter ? <>
                     {userState.userData.appName} powered by <a href="https://github.com/Officeyutong/HelloJudge2">HelloJudge2</a>
                 </> : <>
-                    {userState.userData.appName} by DavidOI
+                    {userState.userData.appName} by {companyName}
                 </>
                 }
 

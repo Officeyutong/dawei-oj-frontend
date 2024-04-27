@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Route, BrowserRouter, useRouteMatch } from "react-router-dom";
+import { Route, BrowserRouter, useRouteMatch, Switch } from "react-router-dom";
 
 import BaseView from "./views/BaseView";
 import AdminView from "./views/admin/AdminView";
@@ -35,6 +35,7 @@ import HomePageNew from "./views/homepage/new/HomePageNew";
 import { PUBLIC_URL } from "./App";
 import { Container } from "semantic-ui-react";
 import BaseViewNew from "./views/BaseViewNew";
+import WechatStatistics from "./views/wechat_statistics/WechatStatistics";
 
 const SubRoutes = () => {
     const [displayBaseView,] = useBaseViewDisplay();
@@ -106,7 +107,6 @@ const SubRoutes = () => {
         <Route path={`${match.path}/success`}>
             <ErrorAndSuccess error={false}></ErrorAndSuccess>
         </Route>
-
     </>
     const innerWithContainer = <Container style={{ marginTop: "50px", marginBottom: "70px", width: "75%" }}>
         {routers}
@@ -121,13 +121,13 @@ const MyRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const clientLoaded = useSelector((s: StateType) => s.generalClient !== null && s.unwrapClient !== null && s.unwrapExtraClient !== null);
     return <BrowserRouter>
         {clientLoaded && <Route path={`${PUBLIC_URL}`}>
-            {/* <Switch>
-                <Route exact path={`${PUBLIC_URL}/`}>
-                    <HomePageNew></HomePageNew>
+            <Switch>
+                <Route path={`${PUBLIC_URL}/wechat_statistics_view`}>
+                    <WechatStatistics></WechatStatistics>
                 </Route>
-               
-            </Switch> */}
-            <SubRoutes></SubRoutes>
+                <SubRoutes></SubRoutes>
+            </Switch>
+
         </Route>}
     </BrowserRouter>;
 }

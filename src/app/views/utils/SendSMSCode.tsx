@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from "react-google-recaptcha";
-import { Button, Dimmer, Grid, Loader, Message, Segment } from 'semantic-ui-react';
+import { Button, Dimmer, Grid, Loader, Message } from 'semantic-ui-react';
 import utilClient from './client/UtilClient';
 import { PhoneNumberUsingState } from '../../common/types';
 (window as typeof window & { recaptchaOptions: any }).recaptchaOptions = {
@@ -53,42 +53,39 @@ const SendSMSCodeDialog: React.FC<React.PropsWithChildren<{ phone: string; phone
         recaptchaRef.current!.reset();
     };
     return <div>
-        <Segment>
-            {(state === States.LOADING || state === States.RECAPTCHA_LOADING) && <Dimmer active>
-                <Loader></Loader></Dimmer>}
-            {state >= States.RECAPTCHA_LOADING && <div>
-                <Grid columns="3" centered>
-                    <Grid.Column>
-                        <Grid columns="1">
-                            <Grid.Column>
-                                <ReCAPTCHA
-                                    ref={recaptchaRef}
-                                    sitekey={siteKey}
-                                    asyncScriptOnLoad={() => setState(States.RECAPTCHA_LOADED)}
-                                    onChange={token => {
-                                        setToken(token);
-                                        setState(States.AUTHED);
+        {(state === States.LOADING || state === States.RECAPTCHA_LOADING) && <Dimmer active>
+            <Loader></Loader></Dimmer>}
+        {state >= States.RECAPTCHA_LOADING && <div style={{ display: "flex", justifyContent: "center" }}>
+            <Grid columns="1">
+                <Grid.Column style={{ display: "flex", justifyContent: "center" }}>
+                    <ReCAPTCHA
+                        ref={recaptchaRef}
+                        sitekey={siteKey}
+                        asyncScriptOnLoad={() => setState(States.RECAPTCHA_LOADED)}
+                        onChange={token => {
+                            setToken(token);
+                            setState(States.AUTHED);
 
-                                    }}
-                                ></ReCAPTCHA>
-                            </Grid.Column>
+                        }}
+                    ></ReCAPTCHA>
+                </Grid.Column>
+                <Grid.Column style={{ display: "flex", justifyContent: "center" }}>
+                    <Button color="green" onClick={onClose}>
+                        关闭
+                    </Button>
+                    {(state >= States.AUTHED) && <Button color="green" loading={state === States.CODE_SENDING} onClick={sendCode}>
+                        {!sended ? "发送验证码" : "重发验证码"}
+                    </Button>}
+                </Grid.Column>
+                <Grid.Column>
+                    {state >= States.CODE_SENDED && <Message success={state === States.CODE_SENDED} error={state === States.CODE_ERROR}>
+                        {message}
+                    </Message>}
+                </Grid.Column>
+            </Grid>
 
-                            <Grid.Column>
-                                <Button color="green" onClick={onClose}>
-                                    关闭
-                                </Button>
-                                {(state >= States.AUTHED) && <Button color="green" loading={state === States.CODE_SENDING} onClick={sendCode}>
-                                    {!sended ? "发送验证码" : "重发验证码"}
-                                </Button>}
-                            </Grid.Column>
-                        </Grid>
-                    </Grid.Column>
-                </Grid>
-                {state >= States.CODE_SENDED && <Message success={state === States.CODE_SENDED} error={state === States.CODE_ERROR}>
-                    {message}
-                </Message>}
-            </div>}
-        </Segment>
+        </div>}
+
     </div>;
 }
 
