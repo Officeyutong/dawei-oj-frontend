@@ -6,9 +6,9 @@ import { Button, Dimmer, Grid, Header, Loader, Rail, Ref, Segment, Sticky, Tab, 
 import { PUBLIC_URL } from "../../../App";
 import { Markdown } from "../../../common/Markdown";
 import { ButtonClickEvent } from "../../../common/types";
-import { useCurrentUid, useDocumentTitle, useInputValue } from "../../../common/Utils";
+import { useBaseContainerWidth, useCurrentUid, useDocumentTitle, useInputValue } from "../../../common/Utils";
 import { showSuccessPopup } from "../../../dialogs/Utils";
-import { StateType, store } from "../../../states/Manager";
+import { StateType } from "../../../states/Manager";
 import InviteCodeInputModal from "../../utils/InviteCodeInputModal";
 import UserLink from "../../utils/UserLink";
 import teamClient from "../client/TeamClient";
@@ -133,11 +133,7 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
             }
         });
     };
-    useEffect(() => {
-        const oldWidth = store.getState().baseContainerWidth;
-        store.dispatch({ type: "UPDATE_WIDTH", modify: s => ({ ...s, baseContainerWidth: "70%" }) });
-        return () => { store.dispatch({ type: "UPDATE_WIDTH", modify: s => ({ ...s, baseContainerWidth: oldWidth }) }); };
-    }, []);
+    useBaseContainerWidth("70%");
     return <>
         {selectedProblemsetId !== null && <InTeamProblemsetRanklist
             onClose={() => setSelectedProblemsetId(null)}

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { InputOnChangeData } from "semantic-ui-react";
 import md5 from "md5";
 import { useSelector } from "react-redux";
-import { StateType } from "../states/Manager";
+import { StateType, store } from "../states/Manager";
 import { sprintf } from "sprintf-js";
 import createPersistedState from "use-persisted-state";
 import { DateTime } from "luxon";
@@ -51,6 +51,15 @@ export function useAlreadyLogin() {
     const login = useSelector((s: StateType) => s.userState.login);
     return login;
 }
+
+export function useBaseContainerWidth(newWidth: string | undefined) {
+    useEffect(() => {
+        const oldWidth = store.getState().baseContainerWidth;
+        store.dispatch({ type: "UPDATE_WIDTH", modify: s => ({ ...s, baseContainerWidth: newWidth }) });
+        return () => { store.dispatch({ type: "UPDATE_WIDTH", modify: s => ({ ...s, baseContainerWidth: oldWidth }) }); };
+    }, [newWidth]);
+}
+
 export function secondsToString(totSecond: number): string {
     const seconds = totSecond % 60;
     const minutes = (Math.floor(totSecond / 60)) % 60;

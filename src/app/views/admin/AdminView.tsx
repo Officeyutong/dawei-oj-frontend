@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dimmer, Header, Loader, Tab } from "semantic-ui-react";
-import { useDocumentTitle } from "../../common/Utils";
+import { useBaseContainerWidth, useDocumentTitle } from "../../common/Utils";
 import PermissionPackList from "../permissionpack/PermissionPackList";
 import { adminClient } from "./client/AdminClient";
 import { AdminBasicInfo } from "./client/types";
@@ -32,6 +32,7 @@ const AdminView: React.FC<React.PropsWithChildren<{}>> = () => {
         }
     }, [loaded]);
     const { showPermissionPack } = useSelector((s: StateType) => s.userState.userData);
+    useBaseContainerWidth("70%");
     return loaded ? <>
         <div>
             <Header as="h1">后台管理</Header>
