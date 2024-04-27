@@ -57,6 +57,7 @@ export interface StateType {
         aceTheme: string;
     };
     displayBaseView: BaseViewDisplayType;
+    baseContainerMaxWidth: string;
 };
 
 const defaultState: StateType = {
@@ -102,7 +103,8 @@ const defaultState: StateType = {
     userConfig: {
         aceTheme: "github"
     },
-    displayBaseView: "new"
+    displayBaseView: "new",
+    baseContainerMaxWidth: "90%"
 };
 
 export interface SimpleAction extends Action<string> {

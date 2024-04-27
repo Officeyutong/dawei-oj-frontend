@@ -33,7 +33,6 @@ import UserProblemFilterRouter from "./views/userproblemfilter/Router";
 import MonitoredUserRouter from "./views/monitoreduser/Router";
 import HomePageNew from "./views/homepage/new/HomePageNew";
 import { PUBLIC_URL } from "./App";
-import { Container } from "semantic-ui-react";
 import BaseViewNew from "./views/BaseViewNew";
 import WechatStatistics from "./views/wechat_statistics/WechatStatistics";
 
@@ -108,9 +107,11 @@ const SubRoutes = () => {
             <ErrorAndSuccess error={false}></ErrorAndSuccess>
         </Route>
     </>
-    const innerWithContainer = <Container style={{ marginTop: "50px", marginBottom: "70px", width: "95%", display: "flex", justifyContent: "center" }}>
-        <div style={{ minWidth: "70%" }}>{routers}</div>
-    </Container>
+    const baseContainerMaxWidth = useSelector((s: StateType) => s.baseContainerMaxWidth);
+
+    const innerWithContainer = <div style={{ marginTop: "50px", marginBottom: "70px", display: "flex", justifyContent: "center" }}>
+        <div style={{ minWidth: "70%", maxWidth: baseContainerMaxWidth, marginLeft: "auto", marginRight: "auto" }}>{routers}</div>
+    </div>
     return (() => {
         if (displayBaseView === "new") return <BaseViewNew>{innerWithContainer}</BaseViewNew>
         else if (displayBaseView === "old") return <BaseView>{innerWithContainer}</BaseView>;
