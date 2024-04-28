@@ -59,7 +59,7 @@ const LoginView: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Link to={`${PUBLIC_URL}/phone/login`}>使用短信验证码登录</Link>
                 </Form.Field>}
                 <Form.Field>
-                    <label>用户名或邮箱</label>
+                    <label>用户名</label>
                     <Input value={username} onChange={(_, d) => setUsername(d.value)}></Input>
                 </Form.Field>
                 <Form.Field>
