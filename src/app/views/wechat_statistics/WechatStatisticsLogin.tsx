@@ -19,14 +19,14 @@ const WechatStatisticaLogin = () => {
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         if (alreadyLogin) {
-            history.push(`${PUBLIC_URL}/wechat_statistics_view/details`);
+            history.push(`${PUBLIC_URL}/wechat_statistics_view/list`);
         }
     }, [alreadyLogin, history]);
     const doLogin = async () => {
         try {
             setLoading(true);
             await userClient.loginBySmsCode(phone.value, code.value);
-            window.location.href = `${PUBLIC_URL}/wechat_statistics_view/details`;
+            window.location.href = `${PUBLIC_URL}/wechat_statistics_view/list`;
         } catch { } finally {
             setLoading(false);
         }
