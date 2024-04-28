@@ -51,7 +51,7 @@ const XiaoeTechCourseBind: React.FC<{}> = () => {
         <Table>
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell>小鹅通资源ID</Table.HeaderCell>
+                    {/* <Table.HeaderCell>小鹅通资源ID</Table.HeaderCell> */}
                     <Table.HeaderCell>小鹅通商品名</Table.HeaderCell>
                     <Table.HeaderCell>小鹅通侧课程用户数</Table.HeaderCell>
                     <Table.HeaderCell>已绑定团队数目</Table.HeaderCell>
@@ -61,7 +61,7 @@ const XiaoeTechCourseBind: React.FC<{}> = () => {
             </Table.Header>
             <Table.Body>
                 {data.map(item => <Table.Row key={item.xiaoe_tech_course_id}>
-                    <Table.Cell>{item.xiaoe_tech_course_id}</Table.Cell>
+                    {/* <Table.Cell>{item.xiaoe_tech_course_id}</Table.Cell> */}
                     <Table.Cell>{item.name}</Table.Cell>
                     <Table.Cell>{item.user_count}</Table.Cell>
                     <Table.Cell>{item.bound_team_count}</Table.Cell>
