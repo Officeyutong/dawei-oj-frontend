@@ -1,21 +1,17 @@
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Container, Header, Segment } from "semantic-ui-react";
-import { StateType } from "../../states/Manager";
-import { PUBLIC_URL } from "../../App";
+import { useHistory, useParams } from "react-router-dom";
+import { Button, Container, Header } from "semantic-ui-react";
+import UserStatisticsChart from "../user/profile/UserStatisticsChart";
 import { useDocumentTitle } from "../../common/Utils";
 
 const WechatStatisticsDetails = () => {
-    const alreadyLogin = useSelector((s: StateType) => s.userState.login);
-    useEffect(() => {
-        if (!alreadyLogin) window.location.href = `${PUBLIC_URL}/wechat_statistics_view/login`;
-    }, [alreadyLogin]);
-    useDocumentTitle("查看统计信息")
+    const uid = parseInt(useParams<{ uid: string }>().uid);
+    const history = useHistory();
+    useDocumentTitle("查看用户统计数据");
     return <Container>
-        <Header as="h1">查看统计信息</Header>
-        <Segment stacked>
-
-        </Segment>
+        <Header as="h1">查看用户统计数据</Header>
+        <UserStatisticsChart allThingsInOneColumn uid={uid}></UserStatisticsChart>
+        <Button onClick={() => history.goBack()}>返回</Button>
     </Container>;
-};
+}
+
 export default WechatStatisticsDetails;

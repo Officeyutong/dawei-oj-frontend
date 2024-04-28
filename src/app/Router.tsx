@@ -123,7 +123,7 @@ const MyRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     return <BrowserRouter>
         {clientLoaded && <Route path={`${PUBLIC_URL}`}>
             <Switch>
-                <Route exact path={`${PUBLIC_URL}/wechat_statistics_view`}>
+                <Route path={`${PUBLIC_URL}/wechat_statistics_view`}>
                     <WechatStatistics></WechatStatistics>
                 </Route>
                 <SubRoutes></SubRoutes>

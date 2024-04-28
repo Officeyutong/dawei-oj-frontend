@@ -20,7 +20,7 @@ import { StateType } from "../../../states/Manager";
 */
 
 
-const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
+const UserStatisticsChart: React.FC<{ uid: number; allThingsInOneColumn?: boolean; }> = ({ uid, allThingsInOneColumn }) => {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<UserStatisticEntry[]>([]);
     const [tags, setTags] = useState<Map<string, number>>(new Map());
@@ -69,7 +69,6 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
                 sumedSubmission: data[i].submissionCount + (i !== 0 ? result[i - 1].sumedSubmission : 0),
             })
         }
-        console.log(result);
         return result;
     }, [data]);
     useEffect(() => {
@@ -209,40 +208,42 @@ const UserStatisticsChart: React.FC<{ uid: number }> = ({ uid }) => {
         }
         return result;
     }, [data, maxProblemDifficulty, minProblemDifficulty]);
-    return <>
-        <Header as="h3">统计数据</Header>
 
+    const firstRowElem = <>
+        <Grid.Column>
+            <Header as="h4">通过题目难度统计</Header>
+            <PieChart data={difficultyEntries} angleField="value" colorField="type" label={{
+                type: 'inner',
+                offset: '-30%',
+                content: (s: any) => `${(s.percent as number * 100).toFixed(0)}%`,
+                style: {
+                    fontSize: 14,
+                    textAlign: 'center',
+                },
+            }}></PieChart>
+        </Grid.Column>
+        <Grid.Column>
+            <Header as="h4">题目标签词云</Header>
+            <WordCloudChart
+                data={tagEntries}
+                wordField="word"
+                weightField="weight"
+                wordStyle={{ rotation: [0, 0] }}
+                colorField="color"
+            ></WordCloudChart>
+        </Grid.Column>
+    </>;
+    return <>
         <Segment stacked>
             {loading && <Dimmer active><Loader></Loader></Dimmer>}
             <Grid columns={1}>
-                <Grid.Column>
+                {allThingsInOneColumn ? firstRowElem : <Grid.Column>
                     <Grid columns={2}>
                         <Grid.Row divided>
-                            <Grid.Column>
-                                <Header as="h4">通过题目难度统计</Header>
-                                <PieChart data={difficultyEntries} angleField="value" colorField="type" label={{
-                                    type: 'inner',
-                                    offset: '-30%',
-                                    content: (s: any) => `${(s.percent as number * 100).toFixed(0)}%`,
-                                    style: {
-                                        fontSize: 14,
-                                        textAlign: 'center',
-                                    },
-                                }}></PieChart>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Header as="h4">题目标签词云</Header>
-                                <WordCloudChart
-                                    data={tagEntries}
-                                    wordField="word"
-                                    weightField="weight"
-                                    wordStyle={{ rotation: [0, 0] }}
-                                    colorField="color"
-                                ></WordCloudChart>
-                            </Grid.Column>
+                            {firstRowElem}
                         </Grid.Row>
                     </Grid>
-                </Grid.Column>
+                </Grid.Column>}
                 <Grid.Column>
                     <Header as="h4">提交数目统计</Header>
                     <ColumnChart
