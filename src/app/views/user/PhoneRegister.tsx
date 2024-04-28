@@ -5,7 +5,7 @@
 import md5 from "md5";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Dimmer, Form, Header, Input, Loader, Message, Modal, Segment } from "semantic-ui-react";
+import { Dimmer, Form, Header, Input, Loader, Message, Modal, Popup, Segment } from "semantic-ui-react";
 import { useDocumentTitle, useInputValue } from "../../common/Utils";
 import { showSuccessPopup } from "../../dialogs/Utils";
 import { StateType } from "../../states/Manager";
@@ -76,7 +76,12 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
             <Form error={errorMessage !== ""}>
                 <Form.Field required>
                     <label>用户名</label>
-                    <Input disabled={sended} {...username} onClick={cancelError}></Input>
+                    <Popup
+                        trigger={<Input disabled={sended} {...username} onClick={cancelError}></Input>}
+                        on="focus"
+                        content={`用户名用于在OJ系统中登录，必须与其他用户不同。${badUsernamePrompt}。注册后无法更改，如有特殊情况请联系管理员。`}
+                        wide
+                    ></Popup>
                 </Form.Field>
                 {requireEmailWhenRegisteringUsePhone && <Form.Field>
                     <label>邮箱</label>
@@ -84,12 +89,20 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                 </Form.Field>}
                 <Form.Field required>
                     <label>姓名</label>
-                    <Input {...realName} disabled={sended} onClick={cancelError}></Input>
+                    <Popup
+                        trigger={<Input {...realName} disabled={sended} onClick={cancelError}></Input>}
+                        on="focus"
+                        content={"请填写自己的姓名，而非家长的姓名。注册后非特殊情况无法更改。"}
+                    ></Popup>
                 </Form.Field>
                 <Form.Group>
                     <Form.Field required>
                         <label>手机号</label>
-                        <Input {...phone} disabled={sended} onClick={cancelError}></Input>
+                        <Popup
+                            trigger={<Input {...phone} disabled={sended} onClick={cancelError}></Input>}
+                            on="focus"
+                            content="请填写11位国内手机号。注册后非特殊情况无法更改。"
+                        ></Popup>
                     </Form.Field>
                     {sended && <Form.Field required>
                         <label>验证码</label>
@@ -99,11 +112,19 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                 <Form.Group>
                     <Form.Field required>
                         <label>密码</label>
-                        <Input type="password" {...password1} disabled={sended} onClick={cancelError}></Input>
+                        <Popup
+                            trigger={<Input type="password" {...password1} disabled={sended} onClick={cancelError}></Input>}
+                            on="focus"
+                            content="请填写一个自己能记住的密码。"
+                        ></Popup>
                     </Form.Field>
                     <Form.Field required>
                         <label>重复密码</label>
-                        <Input type="password" {...password2} disabled={sended} onClick={cancelError}></Input>
+                        <Popup
+                            trigger={<Input type="password" {...password2} disabled={sended} onClick={cancelError}></Input>}
+                            on="focus"
+                            content="请重复输入一遍你的密码。"
+                        ></Popup>
                     </Form.Field>
                 </Form.Group>
                 <Message>

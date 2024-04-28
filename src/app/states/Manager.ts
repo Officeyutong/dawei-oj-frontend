@@ -106,7 +106,7 @@ const defaultState: StateType = {
         aceTheme: "github"
     },
     displayBaseView: "new",
-    baseContainerMaxWidth: "90%",
+    baseContainerMaxWidth: "75%",
     baseContainerWidth: undefined
 };
 
