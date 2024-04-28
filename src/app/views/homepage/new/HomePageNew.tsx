@@ -1,5 +1,4 @@
-import { FormOutlined, } from "@ant-design/icons";
-import { Carousel, Col, Row, Spin, Typography } from "antd";
+import { Carousel, Col, Row, Spin } from "antd";
 import { useDocumentTitle } from "../../../common/Utils";
 import { useSelector } from "react-redux";
 import { StateType, store } from "../../../states/Manager";
@@ -62,8 +61,8 @@ const HomePageNew = () => {
         <Col span={18}>
             <Spin spinning={loading}>
                 <div style={{ ...BLOCK_CSS }}>
-                    <Typography.Title level={4}><FormOutlined></FormOutlined>最新动态</Typography.Title>
-                    <div className="qwqqaq" style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                    {/* <Typography.Title level={4}><FormOutlined></FormOutlined>最新动态</Typography.Title> */}
+                    <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
                         <Carousel autoplay dots style={{ height: "400px", width: "870px", overflow: "hidden" }}>
                             {swipers.map((item, idx) => <a key={idx} href={item.link_url === "" ? undefined : item.link_url} target="_blank" rel="noreferrer">
                                 {/* <img alt={item.image_url} src={item.image_url} ></img> */}
