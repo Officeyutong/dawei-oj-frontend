@@ -36,7 +36,7 @@ const WechatStatisticsList = () => {
     return <Container>
         <Header as="h1">绑定用户列表</Header>
         <Segment stacked>
-            {loading && <Loader active><Dimmer active></Dimmer></Loader>}
+            {loading && <div style={{ height: "400px" }}><Loader active><Dimmer active></Dimmer></Loader></div>}
             {loaded && data !== null && <Table basic="very">
                 <Table.Body>
                     {data.map(item => <Table.Row key={item.uid}>
