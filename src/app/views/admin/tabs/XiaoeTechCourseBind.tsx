@@ -13,7 +13,9 @@ const XiaoeTechCourseBind: React.FC<{}> = () => {
     const refreshList = async () => {
         try {
             setLoading(true);
-            setData(await adminClient.getXiaoeTechCourses());
+            const courses = await adminClient.getXiaoeTechCourses();
+            courses.sort((x, y) => y.user_count - x.user_count);
+            setData(courses);
             setLoaded(true);
         } catch {
 
@@ -41,7 +43,7 @@ const XiaoeTechCourseBind: React.FC<{}> = () => {
     return <div>
         {editingCourse !== null && <XiaoeTechBoundTeamEditModal courseID={editingCourse} onClose={ok => {
             setEditingCourse(null);
-            if(ok) refreshList();
+            if (ok) refreshList();
         }}></XiaoeTechBoundTeamEditModal>}
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
         <div><Button color="green" onClick={syncXiaoeTechCourses}>同步小鹅通课程列表</Button></div>
