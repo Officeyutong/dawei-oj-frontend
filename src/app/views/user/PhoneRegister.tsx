@@ -48,7 +48,7 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
             setLoading(false);
         }
     };
-    const doSendCode = () => {
+    const doSendCode = async () => {
         if (!/[0-9]{11}/.test(phone.value)) {
             setErrorMessage("请输入合法的11位国内手机号");
             return;
@@ -57,7 +57,12 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
             setErrorMessage(badUsernamePrompt);
             return;
         }
-        setShowingModal(true);
+        try {
+            await userClient.phonePreRegisterCheck(phone.value, username.value);
+            setShowingModal(true);
+        } catch { } finally {
+            setLoading(false);
+        }
     }
     useDocumentTitle("手机号注册");
     return <div>

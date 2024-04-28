@@ -86,6 +86,10 @@ class UserClient extends GeneralClient {
     async requestSyncXiaoeTechPermissions(uid: number): Promise<string[]> {
         return (await this.client!.post("/api/user/claim_permissions_from_xiaoe_tech", { uid })).data;
     }
+    async phonePreRegisterCheck(phone: string, username: string) {
+        await this.client!.post("/api/phoneuser/pre_register_check", { phone, username });
+
+    }
 };
 
 const userClient = new UserClient();
