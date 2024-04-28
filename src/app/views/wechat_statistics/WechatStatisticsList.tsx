@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Button, Container, Dimmer, Header, Loader, Segment, Table } from "semantic-ui-react";
-import { StateType } from "../../states/Manager";
 import { PUBLIC_URL } from "../../App";
 import { timeStampToString, useDocumentTitle } from "../../common/Utils";
 import { MonitoredUserEntry } from "../monitoreduser/client/types";
@@ -11,14 +9,10 @@ import userClient from "../user/client/UserClient";
 import { Link } from "react-router-dom";
 
 const WechatStatisticsList = () => {
-    const alreadyLogin = useSelector((s: StateType) => s.userState.login);
     const [data, setData] = useState<MonitoredUserEntry[] | null>(null);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
     useDocumentTitle("绑定用户列表");
-    useEffect(() => {
-        if (!alreadyLogin) window.location.href = `${PUBLIC_URL}/wechat_statistics_view/login`;
-    }, [alreadyLogin]);
 
     const refreshList = async () => {
         try {
@@ -29,10 +23,9 @@ const WechatStatisticsList = () => {
             setLoading(false);
         }
     }
-
     useEffect(() => {
-        if (!loaded && alreadyLogin) refreshList();
-    }, [alreadyLogin, loaded]);
+        if (!loaded) refreshList();
+    }, [loaded]);
     const logout = async () => {
         try {
             setLoading(true);

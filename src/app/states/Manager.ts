@@ -64,8 +64,7 @@ export interface StateType {
 
 const defaultState: StateType = {
     userState: {
-        // 默认为true，防止毛刺
-        login: true,
+        login: false,
         userData: {
             uid: -1,
             group: "",//用户组ID

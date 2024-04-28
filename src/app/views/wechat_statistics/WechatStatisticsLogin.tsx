@@ -7,6 +7,7 @@ import { StateType } from "../../states/Manager";
 import { useHistory } from "react-router-dom";
 import { PUBLIC_URL } from "../../App";
 import userClient from "../user/client/UserClient";
+import { showErrorModal } from "../../dialogs/Dialog";
 
 const WechatStatisticaLogin = () => {
     const phone = useInputValue("");
@@ -23,6 +24,10 @@ const WechatStatisticaLogin = () => {
         }
     }, [alreadyLogin, history]);
     const doLogin = async () => {
+        if (phone.value.trim() === "") {
+            showErrorModal("请输入手机号");
+            return;
+        }
         try {
             setLoading(true);
             await userClient.loginBySmsCode(phone.value, code.value);
