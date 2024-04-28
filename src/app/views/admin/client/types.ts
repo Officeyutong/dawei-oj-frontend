@@ -92,6 +92,8 @@ interface XiaoeTechCourseEntry {
     xiaoe_tech_course_id: string;
     name: string;
     bound_team_count: number;
+    comment: string;
+    user_count: number;
 }
 
 export type {

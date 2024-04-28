@@ -76,6 +76,12 @@ class AdminClient extends GeneralClient {
     async setXiaoeTechCourseBoundTeams(courseID: string, teamIDs: number[]) {
         await this.client!.post("/api/admin/set_bind_team_for_course", { course_id: courseID, teams: teamIDs });
     }
+    async getXiaoeTechCourseComment(courseID: string): Promise<string> {
+        return ((await this.client!.post("/api/admin/get_xiaoetech_course_comment", { course_id: courseID })).data as { comment: string }).comment;
+    }
+    async setXiaoeTechCourseComment(courseID: string, comment: string) {
+        await this.client!.post("/api/admin/set_xiaoetech_course_comment", { course_id: courseID, comment });
+    }
 };
 
 const adminClient = new AdminClient();
