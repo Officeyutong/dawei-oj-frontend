@@ -7,11 +7,14 @@ import monitoredUserClient from "../monitoreduser/client/MonitoredUserClient";
 import UserLink from "../utils/UserLink";
 import userClient from "../user/client/UserClient";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { StateType } from "../../states/Manager";
 
 const WechatStatisticsList = () => {
     const [data, setData] = useState<MonitoredUserEntry[] | null>(null);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
+    const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
     useDocumentTitle("绑定用户列表");
 
     const refreshList = async () => {
@@ -47,6 +50,7 @@ const WechatStatisticsList = () => {
                     </Table.Row>)}
                 </Table.Body>
             </Table>}
+            <Button color="blue" as={Link} to={`${PUBLIC_URL}/wechat_statistics_view/details/${selfUid}`}>查看自己的统计数据</Button>
             <Button color="red" onClick={logout}>退出登录</Button>
         </Segment>
     </Container>;
