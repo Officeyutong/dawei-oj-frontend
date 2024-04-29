@@ -40,6 +40,7 @@ interface ProblemEditStatement {
 interface ProblemStatement extends ProblemEditStatement {
     id: number;
     subtasks: SubtaskEntry[];
+    problem_type: ProblemType;
 };
 
 type ProblemType = "traditional" | "remote_judge" | "submit_answer" | "written_test";
@@ -70,7 +71,7 @@ interface ProblemInfo extends ProblemStatement {
     can_see_results: boolean;
     create_time: string;
     spj_filename: string;
-    remote_judge_oj: string;
+    remote_judge_oj: string | null;
     using_file_io: boolean;
     remote_problem_id: string;
     uploader_id: number;

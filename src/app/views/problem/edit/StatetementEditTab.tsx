@@ -132,7 +132,7 @@ const StatementEditTab: React.FC<React.PropsWithChildren<StatementEditProps>> = 
             </Grid.Column>
             <Grid.Column width="8">
                 <ProblemStatementView
-                    data={{ ...data, id: id }}
+                    data={{ ...data, id: id, problem_type: "traditional" }}
                     showSubtasks={false}
                 ></ProblemStatementView>
             </Grid.Column>
