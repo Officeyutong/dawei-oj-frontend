@@ -90,7 +90,7 @@ const ProblemBatchUpload = () => {
                                 <Table.Cell><Label>_example</Label></Table.Cell>
                                 <Table.Cell>[第一个样例的输入内容]</Table.Cell>
                                 <Table.Cell>[第一个样例的输出内容]</Table.Cell>
-                                <Table.Cell><Label>可以参考J~K列以添加更多样例</Label></Table.Cell>
+                                <Table.Cell><Label>可以参考K~M列以添加更多样例</Label></Table.Cell>
                             </Table.Row>
                         </Table.Body>
                     </Table>
