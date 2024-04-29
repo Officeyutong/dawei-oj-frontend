@@ -48,7 +48,7 @@ const ProblemBatchUpload = () => {
             <p>题目批量上传需要提供一个zip压缩包，其中包含</p>
             <Message.List>
                 <Message.Item>一个名为data.xlsx的文件。文件内容见下文。</Message.Item>
-                <Message.Item>若干个文件夹，其中每个文件夹对应一个题目。这个文件夹中存放有该题目会用到的文件，比如测试数据。HJ2会自动根据文件名来生成测试点。</Message.Item>
+                <Message.Item>若干个文件夹，其中每个文件夹对应一个题目。这个文件夹中存放有该题目会用到的文件，比如测试数据。OJ会自动根据文件名来生成测试点。</Message.Item>
             </Message.List>
             <p>data.xlsx的格式</p>
             <Message.List>
@@ -99,7 +99,7 @@ const ProblemBatchUpload = () => {
                     每一行的第一列必须固定为problem，否则系统不会识别该行
                 </Message.Item>
                 <Message.Item><Label>存放题目数据的文件夹名</Label>可以为空，此时系统不会为这个题目自动上传文件</Message.Item>
-                <Message.Item>如果第I列的内容是<Label>_example</Label>，那么系统会把接下来两列的内容识别为一组样例的输入和输出。可以按照相同的规则继续添加更多的样例。</Message.Item>
+                <Message.Item>如果第K列的内容是<Label>_example</Label>，那么系统会把接下来两列的内容识别为一组样例的输入和输出。可以按照相同的规则继续添加更多的样例。</Message.Item>
                 <Message.Item>
                     可以点击<a target="_blank" rel="noreferrer" href={UploadExample}>此处</a>下载批量上传示例文件
                 </Message.Item>
