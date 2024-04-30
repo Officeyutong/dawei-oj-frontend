@@ -43,6 +43,7 @@ export interface UserStateType {
         badUsernamePrompt: string;
         enableRemoteJudge: boolean;
         companyName: string;
+        difficultyDisplayMap: { [K: string]: { display: string } };
     }
 }
 
@@ -96,7 +97,9 @@ const defaultState: StateType = {
             badUsernamePrompt: "",
             usernameRegex: "",
             enableRemoteJudge: false,
-            companyName: "HelloJudge2"
+            companyName: "HelloJudge2",
+            difficultyDisplayMap: {}
+
         }
     },
     generalClient: null,
