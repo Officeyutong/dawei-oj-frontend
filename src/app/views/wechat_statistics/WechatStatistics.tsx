@@ -4,6 +4,7 @@ import WechatStatisticsList from "./WechatStatisticsList";
 import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
 import WechatStatisticsDetails from "./WechatStatisticsDetails";
+import WechatStatisticsUsernameLogin from "./WechatStatisticaUsernameLogin";
 
 const WechatStatistics = () => {
 
@@ -13,6 +14,9 @@ const WechatStatistics = () => {
         <Switch>
             <Route exact path={`${match.path}/login`}>
                 <WechatStatisticaLogin></WechatStatisticaLogin>
+            </Route>
+            <Route exact path={`${match.path}/username_login`}>
+                <WechatStatisticsUsernameLogin></WechatStatisticsUsernameLogin>
             </Route>
             <Route exact path={`${match.path}/list`}>
                 <WechatStatisticsList></WechatStatisticsList>
