@@ -95,6 +95,17 @@ interface TeamMemberProblemsetStatistics {
     }[];
 };
 
+interface TeamMemberDetailedProblemsetStatisticsEntry {
+    id: number;
+    name: string;
+    problems: {
+        id: number;
+        title: string;
+        submission_count: number;
+        best_submission: null | { status: string; id: number; };
+    }[];
+};
+
 export type {
     TeamListEntry,
     TeamDetail,
@@ -105,5 +116,6 @@ export type {
     TeamStatisticEntry,
     TeamMemberLookupEntry,
     TeamProblemsetRanklistResponse,
-    TeamMemberProblemsetStatistics
+    TeamMemberProblemsetStatistics,
+    TeamMemberDetailedProblemsetStatisticsEntry
 };

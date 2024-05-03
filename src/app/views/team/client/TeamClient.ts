@@ -1,6 +1,6 @@
 import QueryString from "qs";
 import GeneralClient from "../../../common/GeneralClient";
-import { TeamDetail, TeamFileEntry, TeamListEntry, TeamMemberLookupEntry, TeamMemberProblemsetStatistics, TeamProblemsetRanklistResponse, TeamRawData, TeamStatisticEntry, TeamThingsAddedResponse, TeamUpdateInfo } from "./types";
+import { TeamDetail, TeamFileEntry, TeamListEntry, TeamMemberDetailedProblemsetStatisticsEntry, TeamMemberLookupEntry, TeamMemberProblemsetStatistics, TeamProblemsetRanklistResponse, TeamRawData, TeamStatisticEntry, TeamThingsAddedResponse, TeamUpdateInfo } from "./types";
 import { DateTime } from "luxon";
 
 class TeamClient extends GeneralClient {
@@ -59,6 +59,9 @@ class TeamClient extends GeneralClient {
     }
     async getTeamMemberProblemsetStatistics(teamID: number): Promise<TeamMemberProblemsetStatistics> {
         return (await this.client!.post("/api/team/get_team_member_statistics", { team_id: teamID })).data;
+    }
+    async getTeamMemberDetailedProblemsetStatistics(teamID: number, uid: number): Promise<TeamMemberDetailedProblemsetStatisticsEntry[]> {
+        return (await this.client!.post("/api/team/get_team_member_detailed_problemset_statistics", { team_id: teamID, uid })).data;
     }
 };
 
