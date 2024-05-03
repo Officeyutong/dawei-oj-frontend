@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Dimmer, Form, Grid, Header, Loader, Segment } from "semantic-ui-react";
+import { Dimmer, Form, Grid, Header, Loader } from "semantic-ui-react";
 import { UserStatisticEntry } from "../client/types";
 import { DateTime } from "luxon";
 import userClient from "../client/UserClient";
@@ -234,98 +234,96 @@ const UserStatisticsChart: React.FC<{ uid: number; allThingsInOneColumn?: boolea
         </Grid.Column>
     </>;
     return <>
-        <Segment stacked>
-            {loading && <Dimmer active><Loader></Loader></Dimmer>}
-            <Grid columns={1}>
-                {allThingsInOneColumn ? firstRowElem : <Grid.Column>
-                    <Grid columns={2}>
-                        <Grid.Row divided>
-                            {firstRowElem}
-                        </Grid.Row>
-                    </Grid>
-                </Grid.Column>}
-                <Grid.Column>
-                    <Header as="h4">提交数目统计</Header>
-                    <ColumnChart
-                        data={stackSubmissionStatistics}
-                        isStack
-                        xField="date"
-                        yField="value"
-                        seriesField="type"
-                        label={{
-                            position: 'middle',
-                            layout: [
-                                { type: 'interval-adjust-position' },
-                                { type: 'interval-hide-overlap' },
-                                { type: 'adjust-color' },
-                            ],
-                        }}
-                        slider={{}}
-                        annotations={stackSubmissionAnnotations}
-                        meta={{
-                            date: { alias: "日期" },
-                            value: { alias: "提交数量" },
-                            type: { alias: "类别" }
-                        }}
-                    ></ColumnChart>
-                </Grid.Column>
-                <Grid.Column>
-                    <Header as="h4">通过题目统计</Header>
-                    <LineChart
-                        data={stackProblemStatistics}
-                        xField="date"
-                        yField="value"
-                        seriesField="type"
-                        slider={{}}
-                        smooth
-                    ></LineChart>
-                </Grid.Column>
-                <Grid.Column>
-                    <Header as="h4">按天分布的通过题目难度统计</Header>
-                    <ColumnChart
-                        data={stackProblemDifficultyStatistics}
-                        xField="date"
-                        yField="value"
-                        seriesField="type"
-                        slider={{}}
-                    ></ColumnChart>
-                </Grid.Column>
-                <Grid.Column>
-                    <Header as="h4">看课时长统计</Header>
-                    <LineChart
-                        data={stayTimeStatistics}
-                        xField="date"
-                        yField="value"
-                        seriesField="type"
-                        slider={{}}
-                        smooth
-                    ></LineChart>
-                </Grid.Column>
-                <Grid.Column>
-                    <Header as="h4">日期设置</Header>
-                    <Form>
-                        <Form.Group widths={2}>
-                            <Form.Field>
-                                <label>截止日期</label>
-                                <DatetimePickler
-                                    value={endTime.toJSDate()}
-                                    timeFormat={false}
-                                    onChange={d => {
-                                        if (typeof d != "string") {
-                                            setEndTime(DateTime.fromJSDate(d.toDate()))
-                                        }
-                                    }}
-                                    locale="zh-cn"
-                                ></DatetimePickler>
-                            </Form.Field>
-                            <Form.Input label="查询天数" type="number" value={duration} onChange={(_, d) => setDuration(Math.max(1, parseInt(d.value) as number))}>
-                            </Form.Input>
-                        </Form.Group>
-                        <Form.Button positive onClick={refreshData}>刷新</Form.Button>
-                    </Form>
-                </Grid.Column>
-            </Grid>
-        </Segment>
+        {loading && <Dimmer active><Loader></Loader></Dimmer>}
+        <Grid columns={1}>
+            {allThingsInOneColumn ? firstRowElem : <Grid.Column>
+                <Grid columns={2}>
+                    <Grid.Row divided>
+                        {firstRowElem}
+                    </Grid.Row>
+                </Grid>
+            </Grid.Column>}
+            <Grid.Column>
+                <Header as="h4">提交数目统计</Header>
+                <ColumnChart
+                    data={stackSubmissionStatistics}
+                    isStack
+                    xField="date"
+                    yField="value"
+                    seriesField="type"
+                    label={{
+                        position: 'middle',
+                        layout: [
+                            { type: 'interval-adjust-position' },
+                            { type: 'interval-hide-overlap' },
+                            { type: 'adjust-color' },
+                        ],
+                    }}
+                    slider={{}}
+                    annotations={stackSubmissionAnnotations}
+                    meta={{
+                        date: { alias: "日期" },
+                        value: { alias: "提交数量" },
+                        type: { alias: "类别" }
+                    }}
+                ></ColumnChart>
+            </Grid.Column>
+            <Grid.Column>
+                <Header as="h4">通过题目统计</Header>
+                <LineChart
+                    data={stackProblemStatistics}
+                    xField="date"
+                    yField="value"
+                    seriesField="type"
+                    slider={{}}
+                    smooth
+                ></LineChart>
+            </Grid.Column>
+            <Grid.Column>
+                <Header as="h4">按天分布的通过题目难度统计</Header>
+                <ColumnChart
+                    data={stackProblemDifficultyStatistics}
+                    xField="date"
+                    yField="value"
+                    seriesField="type"
+                    slider={{}}
+                ></ColumnChart>
+            </Grid.Column>
+            <Grid.Column>
+                <Header as="h4">看课时长统计</Header>
+                <LineChart
+                    data={stayTimeStatistics}
+                    xField="date"
+                    yField="value"
+                    seriesField="type"
+                    slider={{}}
+                    smooth
+                ></LineChart>
+            </Grid.Column>
+            <Grid.Column>
+                <Header as="h4">日期设置</Header>
+                <Form>
+                    <Form.Group widths={2}>
+                        <Form.Field>
+                            <label>截止日期</label>
+                            <DatetimePickler
+                                value={endTime.toJSDate()}
+                                timeFormat={false}
+                                onChange={d => {
+                                    if (typeof d != "string") {
+                                        setEndTime(DateTime.fromJSDate(d.toDate()))
+                                    }
+                                }}
+                                locale="zh-cn"
+                            ></DatetimePickler>
+                        </Form.Field>
+                        <Form.Input label="查询天数" type="number" value={duration} onChange={(_, d) => setDuration(Math.max(1, parseInt(d.value) as number))}>
+                        </Form.Input>
+                    </Form.Group>
+                    <Form.Button positive onClick={refreshData}>刷新</Form.Button>
+                </Form>
+            </Grid.Column>
+        </Grid>
     </>
 };
 

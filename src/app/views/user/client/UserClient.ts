@@ -1,6 +1,6 @@
 import qs from "qs";
 import GeneralClient from "../../../common/GeneralClient";
-import { FolloweeItem, FollowerItem, GlobalRanklistItem, UserProfileResponse, UserProfileResponseEditing, UserProfileUpdateRequest, UserStatisticEntry } from "./types";
+import { FolloweeItem, FollowerItem, GlobalRanklistItem, UserExtraStatistics, UserProfileResponse, UserProfileResponseEditing, UserProfileUpdateRequest, UserStatisticEntry } from "./types";
 
 class UserClient extends GeneralClient {
     async doLogin(identifier: string, password: string) {
@@ -88,7 +88,9 @@ class UserClient extends GeneralClient {
     }
     async phonePreRegisterCheck(phone: string, username: string) {
         await this.client!.post("/api/phoneuser/pre_register_check", { phone, username });
-
+    }
+    async getUserExtraStatistics(uid: number): Promise<UserExtraStatistics> {
+        return (await this.client!.post("/api/user/get_extra_statistics", { uid })).data;
     }
 };
 

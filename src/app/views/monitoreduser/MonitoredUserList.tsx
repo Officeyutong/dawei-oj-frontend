@@ -41,7 +41,7 @@ const MonitoredUserList: React.FC<{}> = () => {
             <Message info>
                 <Message.Header>提示</Message.Header>
                 <Message.Content>
-                    您可以查看此处用户的学习统计情况。如果您绑定了微信号，那么您可以每天在微信公众号上收到关于下列用户学习进度的推送。
+                    您可以查看此处用户的学习统计情况。
                 </Message.Content>
             </Message>
             {showAddModal && <AddMonitoredUserModal onClose={b => {

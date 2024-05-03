@@ -20,6 +20,7 @@ interface UserProfileResponse {
     canSetAdmin: boolean; //是否有permission.manage权限
     selfHasUserManagerPerm: boolean;
     selfHasPermissionManagePerm: boolean;
+    selfHasPermissionViewExtraStatistics: boolean;
 };
 interface UserProfileResponseEditing extends UserProfileResponse {
     phone_number: string | undefined;
@@ -72,6 +73,12 @@ interface UserStatisticEntry {
     stayTime: number;
 }
 
+interface UserExtraStatistics {
+    course_watch: { course_id: string; course_name: string; watched: number; total: number }[];
+    problemset_statistics: { team_id: number; team_name: string; course_names: string[]; problemsets: { name: string; accepted_problems: number; total_problems: number; id: number; }[]; }[];
+    real_name: string;
+}
+
 export type {
     UserProfileResponse,
     UserProfileUpdateRequest,
@@ -79,5 +86,6 @@ export type {
     FollowerItem,
     GlobalRanklistItem,
     UserStatisticEntry,
-    UserProfileResponseEditing
+    UserProfileResponseEditing,
+    UserExtraStatistics
 };

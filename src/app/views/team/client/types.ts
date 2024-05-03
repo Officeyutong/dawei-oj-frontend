@@ -87,6 +87,14 @@ interface TeamProblemsetRanklistResponse {
     }[]
 }
 
+interface TeamMemberProblemsetStatistics {
+    problemsets: { id: number; name: string; problems: number[] }[];
+    user_data: {
+        user: { uid: number; username: string; real_name: string | null; course_watch_time: number; course_total_time: number; };
+        statistics: { total_problems: number; accepted_problems: number; submission_count: number; }[];
+    }[];
+};
+
 export type {
     TeamListEntry,
     TeamDetail,
@@ -96,5 +104,6 @@ export type {
     TeamFileEntry,
     TeamStatisticEntry,
     TeamMemberLookupEntry,
-    TeamProblemsetRanklistResponse
+    TeamProblemsetRanklistResponse,
+    TeamMemberProblemsetStatistics
 };

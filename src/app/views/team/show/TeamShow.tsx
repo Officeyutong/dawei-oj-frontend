@@ -232,7 +232,7 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                                 teamID={data.id}
                                             ></TeamFile>
                                         },
-                                        (data.canManage ? {
+                                        (isTeamAdmin ? {
                                             menuItem: "管理与统计",
                                             render: () => <TeamManage
                                                 team={data.id}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Card, Grid, Loader, Modal, Image, Button, Header, Segment, Table, Tab } from "semantic-ui-react";
+import { Card, Grid, Loader, Modal, Image, Button, Header, Segment, Table, Tab, } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../../App";
 import { useCurrentUid, useDocumentTitle, useProfileImageMaker } from "../../../common/Utils";
 import { UserProfileResponse } from "../client/types";
@@ -10,6 +10,7 @@ import DescriptionTab from "./DescriptionTab";
 import GeneralFollowingTab from "./GeneralFollowingTab";
 import JoinedTeamsTab from "./JoinedTeamsTab";
 import UserStatisticsChart from "./UserStatisticsChart";
+import UserExtraStatisticsChart from "../extra_statistics/UserExtraStatisticsChart";
 
 const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
     const uid = parseInt(useParams<{ uid: string }>().uid);
@@ -17,6 +18,7 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
     const [loaded, setLoaded] = useState(false);
     const [data, setData] = useState<UserProfileResponse | null>(null);
     const [toggling, setToggling] = useState(false);
+    const [showExtraStatistics, setShowExtraStatistics] = useState(false);
     const urlMaker = useProfileImageMaker();
     const currUser = useCurrentUid();
     useDocumentTitle(data === null ? "加载中" : `${data.username} - ${data.id} - 用户资料`);
@@ -66,7 +68,7 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Card.Content extra>
                         <div style={{ color: "black" }}>
                             <div>Rating: {data.rating}</div>
-                            <div>Email: {data.email}</div>
+                            {data.email !== "default@bad-email" && <div>Email: {data.email}</div>}
                             <div>用户ID/UID: {data.id}</div>
                         </div>
                     </Card.Content>
@@ -116,9 +118,23 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
                     { menuItem: "通过题目", pane: <Tab.Pane key={4}><AcceptedProblemsTab data={data.ac_problems}></AcceptedProblemsTab></Tab.Pane> },
 
                 ]}></Tab>
-                <UserStatisticsChart uid={uid}></UserStatisticsChart>
+                <Segment stacked>
+                    <UserStatisticsChart uid={uid}></UserStatisticsChart>
+                    <div style={{ marginTop: "10px" }}>
+                        {data.selfHasPermissionViewExtraStatistics && <Button color="green" onClick={() => setShowExtraStatistics(true)}>查看额外统计数据</Button>}
+                    </div>
+                </Segment>
             </Grid.Column>
         </Grid>}
+        {showExtraStatistics && <Modal open>
+            <Modal.Header>额外统计数据</Modal.Header>
+            <Modal.Content>
+                <UserExtraStatisticsChart uid={uid}></UserExtraStatisticsChart>
+            </Modal.Content>
+            <Modal.Actions>
+                <Button color="red" onClick={() => setShowExtraStatistics(false)}>关闭</Button>
+            </Modal.Actions>
+        </Modal>}
     </div>;
 };
 
