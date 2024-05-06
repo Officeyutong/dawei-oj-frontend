@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { UserExtraStatistics } from "../client/types";
 import userClient from "../client/UserClient";
 import { Dimmer, Loader, Tab } from "semantic-ui-react";
-import CourseWatchProgress from "./CourseWatchProgress";
 import TeamProblemsetStatistics from "./TeamProblemsetStatistics";
 import UserStatisticsChart from "../profile/UserStatisticsChart";
 
@@ -23,7 +22,7 @@ const UserExtraStatisticsChart: React.FC<{ uid: number; allThingsInOneColumn?: b
     return <>
         {loading && <div style={{ height: "400px" }}><Dimmer active><Loader active></Loader></Dimmer></div>}
         {data !== null && <Tab renderActiveOnly={false} panes={[
-            { menuItem: "看课统计", pane: <Tab.Pane key={1}><CourseWatchProgress data={data.course_watch}></CourseWatchProgress></Tab.Pane> },
+            // { menuItem: "看课统计", pane: <Tab.Pane key={1}><CourseWatchProgress data={data.course_watch}></CourseWatchProgress></Tab.Pane> },
             { menuItem: "作业统计", pane: <Tab.Pane key={2}><TeamProblemsetStatistics data={data.problemset_statistics}></TeamProblemsetStatistics></Tab.Pane> },
             { menuItem: "刷题统计", pane: <Tab.Pane key={3}><UserStatisticsChart uid={uid} allThingsInOneColumn={allThingsInOneColumn}></UserStatisticsChart></Tab.Pane> }
         ]}></Tab>}

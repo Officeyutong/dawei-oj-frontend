@@ -48,15 +48,15 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
                 </Tab.Pane>
             },
             {
-                menuItem: "作业与看课情况统计", pane: <Tab.Pane key={1}>
+                menuItem: "作业情况统计", pane: <Tab.Pane key={1}>
                     {loading && <Dimmer active><Loader></Loader></Dimmer>}
                     <div style={{ overflowX: "scroll" }}>{extraStatistics !== null && <>
                         <Table compact>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>用户</Table.HeaderCell>
-                                    <Table.HeaderCell>看课进度</Table.HeaderCell>
-                                    <Table.HeaderCell>看课时长</Table.HeaderCell>
+                                    {/* <Table.HeaderCell>看课进度</Table.HeaderCell> */}
+                                    {/* <Table.HeaderCell>看课时长</Table.HeaderCell> */}
                                     {extraStatistics.problemsets.map(item => <Table.HeaderCell key={item.id}>
                                         <Link to={`${PUBLIC_URL}/problemset/show/${item.id}`}>#{item.id}. {item.name}</Link>
                                         <p>共 {item.problems.length} 题</p>
@@ -70,8 +70,8 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
                                         <UserLink data={item.user}></UserLink>
                                         {item.user.real_name && <p style={{ color: "darkgray" }}>{item.user.real_name}</p>}
                                     </Table.Cell>
-                                    <Table.Cell>{item.user.course_watch_time > 0 ? (Math.floor(item.user.course_watch_time / item.user.course_total_time * 100).toFixed(2) + "%") : null}</Table.Cell>
-                                    <Table.Cell>{item.user.course_watch_time}</Table.Cell>
+                                    {/* <Table.Cell>{item.user.course_watch_time > 0 ? (Math.floor(item.user.course_watch_time / item.user.course_total_time * 100).toFixed(2) + "%") : null}</Table.Cell> */}
+                                    {/* <Table.Cell>{item.user.course_watch_time}</Table.Cell> */}
                                     {item.statistics.map((ent, idx) => <Table.Cell key={idx}>通过{ent.accepted_problems}题；累计提交{ent.submission_count}次</Table.Cell>)}
                                     <Table.Cell><Button color="green" size="small" onClick={() => setViewingProblemsetDetailUid(item.user.uid)}>查看详情</Button></Table.Cell>
                                 </Table.Row>)}
