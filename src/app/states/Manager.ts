@@ -43,7 +43,7 @@ export interface UserStateType {
         badUsernamePrompt: string;
         enableRemoteJudge: boolean;
         companyName: string;
-        difficultyDisplayMap: { [K: string]: { display: string } };
+        difficultyDisplayMap: { [K: string]: { display: string; color: SemanticCOLORS } };
     }
 }
 

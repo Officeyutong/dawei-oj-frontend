@@ -1,22 +1,16 @@
 import { useSelector } from "react-redux";
-import { Label, SemanticCOLORS } from "semantic-ui-react";
+import { Label } from "semantic-ui-react";
 import { StateType } from "../../states/Manager";
 
 interface DifficultyLabelProps {
     difficulty: number;
 }
 const DifficultyLabel: React.FC<DifficultyLabelProps> = ({ difficulty }) => {
-    const { minProblemDifficulty, maxProblemDifficulty, difficultyDisplayMap } = useSelector((s: StateType) => s.userState.userData);
-    const diff = difficulty - minProblemDifficulty;
-    const upper = maxProblemDifficulty - minProblemDifficulty;
+    const {  difficultyDisplayMap } = useSelector((s: StateType) => s.userState.userData);
     const diffStr = difficulty.toString();
-    const displayStr = difficultyDisplayMap[diffStr].display || `难度 ${difficulty}`;
-    let color: SemanticCOLORS;
-    if (diff <= 0.5 * upper) color = "green";
-    else if (diff <= 0.7 * upper) color = "yellow"
-    else if (diff < upper) color = "orange";
-    else color = "red";
-    return <Label color={color}>{displayStr}</Label>
+    const obj = difficultyDisplayMap[diffStr];
+    const displayStr = obj.display || `难度 ${difficulty}`;
+    return <Label color={obj.color || ""}>{displayStr}</Label>
 }
 
 export default DifficultyLabel;
