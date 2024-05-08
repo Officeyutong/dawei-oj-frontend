@@ -16,6 +16,7 @@ import ProblemStatementView from "./ProblemStatementView";
 import DifficultyLabel from "../utils/DifficultyLabel";
 import QueryString from "qs";
 import WrittenTestStatementAndSubmit from "./WrittenTestStatementAndSubmit";
+import { PUBLIC_URL } from "../../App";
 
 const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch<{ problemID: string }>();
@@ -69,7 +70,7 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
         showConfirm("您确定要删除此题目吗? 此题目的所有提交记录将会被删除，同时所有使用该题目的比赛将无法访问。", async () => {
             try {
                 await problemClient.removeProblem(data!.id);
-                window.location.href = "/";
+                window.location.href = `${PUBLIC_URL}/problems/1`;
             } catch (e) { } finally { }
         }, "警告");
     };

@@ -52,6 +52,10 @@ interface ProblemsetPublicInfo {
     couldRetriveProblemPermissions: boolean;
     favorited: boolean;
 };
+interface SimplifiedProblemsetListEntry {
+    id: number;
+    name: string;
+};
 export type {
     ProblemsetListItem,
     ForeignProblemEntry,
@@ -59,4 +63,5 @@ export type {
     ProblemsetPublicInfo,
     ProblemsetUpdateInfo,
     ProblemsetUser,
+    SimplifiedProblemsetListEntry
 };

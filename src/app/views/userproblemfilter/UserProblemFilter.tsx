@@ -12,6 +12,7 @@ import { PUBLIC_URL } from "../../App";
 import ProblemTagLabel from "../utils/ProblemTagLabel";
 import CreateProblemSetModal from "./CreateProblemSetModal";
 import DifficultyLabel from "../utils/DifficultyLabel";
+import AddIntoExistedProblemsetModal from "./AddIntoExistedProblemsetModal";
 
 const UserProblemFilter: React.FC<{}> = () => {
     const [filter, setFilter] = useState<ProblemSearchFilter>({ sortingMethod: "id" });
@@ -25,6 +26,7 @@ const UserProblemFilter: React.FC<{}> = () => {
     const [tagsLoaded, setTagsLoaded] = useState(false);
     const [selectedProblem, setSelectedProblem] = useState<UsableProblemEntry[]>([]);
     const [showProblemSetCreateModal, setShowProblemSetCreateModal] = useState(false);
+    const [showAddIntoExistedProblemsetModal, setShowAddIntoExistedProblemsetModal] = useState(false);
     const isSelected = useCallback((id: number) => {
         return selectedProblem.find(x => x.id === id) !== undefined;
     }, [selectedProblem]);
@@ -65,6 +67,11 @@ const UserProblemFilter: React.FC<{}> = () => {
             problems={selectedProblem}
             tagMapping={tagMapping}
         ></CreateProblemSetModal>}
+        {showAddIntoExistedProblemsetModal && <AddIntoExistedProblemsetModal
+            onClose={() => setShowAddIntoExistedProblemsetModal(false)}
+            problems={selectedProblem}
+            tagMapping={tagMapping}
+        ></AddIntoExistedProblemsetModal>}
         <Segment stacked>
             <Grid columns={2} relaxed='very' divided>
                 <Grid.Column width={8}>
@@ -128,6 +135,7 @@ const UserProblemFilter: React.FC<{}> = () => {
                 <Grid.Column width={8}>
                     <Header as="h3">候选题目</Header>
                     <Button size="small" onClick={() => setShowProblemSetCreateModal(true)} color="green">创建习题集</Button>
+                    <Button size="small" onClick={() => setShowAddIntoExistedProblemsetModal(true)} color="green">添加到现有习题集</Button>
                     <Table basic="very">
                         <Table.Header>
                             <Table.Row>

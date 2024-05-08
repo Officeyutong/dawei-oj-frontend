@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { ProblemsetEditInfo, ProblemsetListItem, ProblemsetPublicInfo, ProblemsetUpdateInfo } from "./types";
+import { ProblemsetEditInfo, ProblemsetListItem, ProblemsetPublicInfo, ProblemsetUpdateInfo, SimplifiedProblemsetListEntry } from "./types";
 
 class ProblemsetClient extends GeneralClient {
     async getProblemSetList(page: number, showFavoritedOnly: boolean): Promise<{ data: ProblemsetListItem[]; pageCount: number }> {
@@ -30,6 +30,9 @@ class ProblemsetClient extends GeneralClient {
     }
     async toggleProblemsetFavorited(id: number): Promise<{ newValue: boolean }> {
         return (await this.client!.post("/api/problemset/toggle_favorite", { problemset_id: id })).data;
+    }
+    async getSimplifiedProblemsetList(): Promise<SimplifiedProblemsetListEntry[]> {
+        return (await this.client!.post("/api/problemset/list_simplified")).data;
     }
 };
 

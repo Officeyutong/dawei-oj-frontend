@@ -5,7 +5,10 @@ import { showErrorModal } from "../../../dialogs/Dialog";
 import { ProblemBatchUploadResponseEntry } from "../client/types";
 import { adminClient } from "../client/AdminClient";
 import UploadExample from "../../../assets/batch_upload_example.zip";
+import { useSelector } from "react-redux";
+import { StateType } from "../../../states/Manager";
 const ProblemBatchUpload = () => {
+    const {minProblemDifficulty,maxProblemDifficulty} = useSelector((s:StateType)=>s.userState.userData);
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
     const uploadInputRef = useRef<Input>(null);
@@ -103,6 +106,8 @@ const ProblemBatchUpload = () => {
                 <Message.Item>
                     可以点击<a target="_blank" rel="noreferrer" href={UploadExample}>此处</a>下载批量上传示例文件
                 </Message.Item>
+                <Message.Item>题目难度必须是一个不低于{minProblemDifficulty}，不高于{maxProblemDifficulty}的整数。不得为空。</Message.Item>
+                <Message.Item><Label>存放题目数据的文件夹名</Label>中不能包含中文或中文符号。</Message.Item>
             </Message.List>
         </Message>
         {successData && <Message success>
