@@ -12,8 +12,9 @@ import hljs from 'highlight.js';
 interface SubtaskResultAndCodeViewProps {
     data: SubmissionInfo;
     defaultExpandedTasks: string[];
+    showFileName: boolean;
 }
-const SubtaskResultAndCodeView: React.FC<SubtaskResultAndCodeViewProps> = ({ data, defaultExpandedTasks }) => {
+const SubtaskResultAndCodeView: React.FC<SubtaskResultAndCodeViewProps> = ({ data, defaultExpandedTasks, showFileName }) => {
     const problemSubtasks = useMemo(() => data === null ? new Map<string, SubtaskEntry>() : new Map(data.problem.subtasks.map(x => [x.name, x])), [data]);
     const [expandedTasks, setExpandedTasks] = useState<string[]>(defaultExpandedTasks);
     const expandedTasksSet = useMemo(() => new Set(expandedTasks), [expandedTasks]);
@@ -59,8 +60,8 @@ const SubtaskResultAndCodeView: React.FC<SubtaskResultAndCodeViewProps> = ({ dat
             <Table style={{ maxWidth: "900px" }}>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>输入文件</Table.HeaderCell>
-                        <Table.HeaderCell>输出文件</Table.HeaderCell>
+                        {showFileName && <><Table.HeaderCell>输入文件</Table.HeaderCell>
+                            <Table.HeaderCell>输出文件</Table.HeaderCell></>}
                         <Table.HeaderCell>分数</Table.HeaderCell>
                         <Table.HeaderCell>状态</Table.HeaderCell>
                         <Table.HeaderCell>时间占用</Table.HeaderCell>
@@ -70,9 +71,12 @@ const SubtaskResultAndCodeView: React.FC<SubtaskResultAndCodeViewProps> = ({ dat
                 </Table.Header>
                 {(expandedTasksSet.has(name)) && <Table.Body>
                     {item.testcases.map((testcase, i) => <Table.Row key={i}>
-                        <Table.Cell><a href={`/api/download_file/${data.problem.rawID}/${testcase.input}`}>{testcase.input}</a></Table.Cell>
-                        <Table.Cell><a href={`/api/download_file/${data.problem.rawID}/${testcase.output}`}>{testcase.output}</a></Table.Cell>
-                        <Table.Cell><ScoreLabel fullScore={testcase.full_score} score={testcase.score}></ScoreLabel></Table.Cell>
+                        {showFileName && <>     <Table.Cell><a href={`/api/download_file/${data.problem.rawID}/${testcase.input}`}>{testcase.input}</a></Table.Cell>
+                            <Table.Cell><a href={`/api/download_file/${data.problem.rawID}/${testcase.output}`}>{testcase.output}</a></Table.Cell></>}
+                        <Table.Cell>
+                            {testcase.full_score !== 0 ? <ScoreLabel fullScore={testcase.full_score} score={testcase.score}></ScoreLabel> : <span style={{ fontWeight: "bold" }}>{testcase.score}</span>}
+
+                        </Table.Cell>
                         <Table.Cell><JudgeStatusLabel status={testcase.status}></JudgeStatusLabel></Table.Cell>
                         <Table.Cell>{testcase.time_cost !== -1 && <>{testcase.time_cost} ms</>}</Table.Cell>
                         <Table.Cell>{testcase.memory_cost !== -1 && <MemoryCostLabel memoryCost={testcase.memory_cost}></MemoryCostLabel>}</Table.Cell>

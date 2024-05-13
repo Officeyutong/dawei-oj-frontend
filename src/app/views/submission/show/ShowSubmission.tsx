@@ -188,7 +188,7 @@ const ShowSubmission = () => {
                                 <JudgeStatusLabel status={data.status}></JudgeStatusLabel>
                             </Table.Cell>
                         </Table.Row>
-                        {data.status !== "invisible"  && <>
+                        {data.status !== "invisible" && <>
                             <Table.Row>
                                 <Table.Cell>
                                     得分/总分
@@ -294,6 +294,7 @@ const ShowSubmission = () => {
                 ></WrittenProblemResultView> : <SubtaskResultAndCodeView
                     data={data}
                     defaultExpandedTasks={defaultExpandedTasks}
+                    showFileName={data.problem.problemType !== "remote_judge"}
                 ></SubtaskResultAndCodeView>}
             </Segment>
         </>}
