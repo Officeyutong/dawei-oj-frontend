@@ -32,7 +32,7 @@ const ProblemStatementView: React.FC<React.PropsWithChildren<{
         {data.problem_type === "remote_judge" && <Message positive>
             <Message.Header>提示</Message.Header>
             <Message.Content>
-                这是一道远程评测题目。您的提交将会被发送给洛谷进行评测。
+                这是一道远程评测题目。您的提交将会被发送给{data.remote_oj_display_name || "<隐藏>"}进行评测。此题目在远程OJ上的题目ID为 {data.remote_problem_id || "<隐藏>"}。
             </Message.Content>
         </Message>}
         <ProblemMetaBlock name="题目背景" value={data.background} withCopy={false}></ProblemMetaBlock>

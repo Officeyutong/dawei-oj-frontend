@@ -41,6 +41,8 @@ interface ProblemStatement extends ProblemEditStatement {
     id: number;
     subtasks: SubtaskEntry[];
     problem_type: ProblemType;
+    remote_oj_display_name?: string;
+    remote_problem_id?: string;
 };
 
 type ProblemType = "traditional" | "remote_judge" | "submit_answer" | "written_test";

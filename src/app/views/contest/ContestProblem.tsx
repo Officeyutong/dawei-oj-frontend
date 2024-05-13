@@ -2,14 +2,12 @@ import QueryString from "qs";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router";
 import { Button, Dimmer, Grid, Header, Icon, Loader, Rail, Ref, Segment, Sticky, Table } from "semantic-ui-react";
-import { ProgrammingLanguageEntry } from "../../common/types";
 import { useDocumentTitle } from "../../common/Utils";
 import { showConfirm } from "../../dialogs/Dialog";
 import problemClient from "../problem/client/ProblemClient";
 import CodeInput from "../problem/CodeInput";
 import FileDownloadArea from "../problem/FileDownloadArea";
 import ProblemStatementView from "../problem/ProblemStatementView";
-import utilClient from "../utils/client/UtilClient";
 import contestClient from "./client/ContestClient";
 import { ContestProblemShow } from "./client/types";
 
@@ -21,21 +19,17 @@ const ContestProblem: React.FC<React.PropsWithChildren<{}>> = () => {
     const [data, setData] = useState<ContestProblemShow | null>(null);
     const [loaded, setLoaded] = useState(false);
     const contextRef = useRef(null);
-    const [languages, setLanguages] = useState<ProgrammingLanguageEntry[]>([]);
+    // const [languages, setLanguages] = useState<ProgrammingLanguageEntry[]>([]);
     const [submitting, setSubmitting] = useState(false);
     useDocumentTitle(`${data?.title || '加载中'} - 比赛题目`);
     useEffect(() => {
         if (!loaded) {
             (async () => {
                 try {
-                    const [data, languages] = await Promise.all([
-                        contestClient.getContestProblemDetail(
-                            parseInt(problemID), numberContestID, virtualID
-                        ),
-                        utilClient.getSupportedLanguages()
-                    ]);
+                    const data = await contestClient.getContestProblemDetail(
+                        parseInt(problemID), numberContestID, virtualID
+                    );
                     setData(data);
-                    setLanguages(languages)
                     setLoaded(true);
                 } catch { } finally {
                 }
@@ -88,8 +82,8 @@ const ContestProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                             </Dimmer>}
                             {data.problem_type !== "submit_answer" ? <CodeInput
                                 defaultCode={data.last_code}
-                                defaultLanguage={data.last_lang === "" ? languages[0].id : data.last_lang}
-                                languages={languages}
+                                defaultLanguage={data.last_lang === "" ? data.languages[0].id : data.last_lang}
+                                languages={data.languages}
                                 usedParameters={data.usedParameters}
                                 parameters={data.extra_parameter}
                                 handleSubmit={handleSubmit}
