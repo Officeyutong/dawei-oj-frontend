@@ -194,10 +194,10 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                                                 <Table.Cell>输入/输出文件</Table.Cell>
                                                 <Table.Cell>{data.input_file_name}<br />{data.output_file_name}</Table.Cell>
                                             </Table.Row>}
-                                            <Table.Row>
+                                            {data.problem_type !== "remote_judge" && <Table.Row>
                                                 <Table.Cell>评测方式</Table.Cell>
                                                 <Table.Cell>{data.spj_filename === "" ? "文本比较" : "Special Judge"}</Table.Cell>
-                                            </Table.Row>
+                                            </Table.Row>}
                                             <Table.Row>
                                                 <Table.Cell>题目标签</Table.Cell>
                                                 <Table.Cell>{data.tags.map((x, i) => <ProblemTagLabel key={i} data={x}></ProblemTagLabel>)}</Table.Cell>
@@ -206,6 +206,16 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                                                 <Table.Cell>难度等级</Table.Cell>
                                                 <Table.Cell><DifficultyLabel difficulty={data.difficulty}></DifficultyLabel></Table.Cell>
                                             </Table.Row>
+                                            {data.problem_type === "remote_judge" && <>
+                                                <Table.Row>
+                                                    <Table.Cell>远程OJ</Table.Cell>
+                                                    <Table.Cell>{data.remote_oj_display_name || "<隐藏>"}</Table.Cell>
+                                                </Table.Row>
+                                                <Table.Row>
+                                                    <Table.Cell>远程题目ID</Table.Cell>
+                                                    <Table.Cell>{data.remote_problem_id || "<隐藏>"}</Table.Cell>
+                                                </Table.Row>
+                                            </>}
                                         </Table.Body>
                                     </Table>
                                     <span>{managable && <a target="_blank" rel="noreferrer" href={data.problem_type !== "written_test" ? `/problem_edit/${data.id}` : `/problem/edit/written_test/${data.id}`}>编辑</a>}  </span>

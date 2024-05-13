@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, Grid, Header, Icon, Message, Segment, Table } from "semantic-ui-react";
+import { Button, Container, Grid, Header, Icon, Segment, Table } from "semantic-ui-react";
 import { ProblemStatement } from "./client/types";
 import * as clipboard from "clipboardy";
 import { converter } from "../../common/Markdown";
@@ -29,12 +29,12 @@ const ProblemStatementView: React.FC<React.PropsWithChildren<{
 }>> = ({ data, showSubtasks }) => {
     const willShowSubtask = (showSubtasks === undefined) ? true : showSubtasks;
     return <>
-        {data.problem_type === "remote_judge" && <Message positive>
+        {/* {data.problem_type === "remote_judge" && <Message positive>
             <Message.Header>提示</Message.Header>
             <Message.Content>
                 这是一道远程评测题目。您的提交将会被发送给{data.remote_oj_display_name || "<隐藏>"}进行评测。此题目在远程OJ上的题目ID为 {data.remote_problem_id || "<隐藏>"}。
             </Message.Content>
-        </Message>}
+        </Message>} */}
         <ProblemMetaBlock name="题目背景" value={data.background} withCopy={false}></ProblemMetaBlock>
         <ProblemMetaBlock name="题目内容" value={data.content} withCopy={false}></ProblemMetaBlock>
         <ProblemMetaBlock name="输入格式" value={data.input_format} withCopy={false}></ProblemMetaBlock>
