@@ -46,11 +46,11 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
 
                         return;
                     }
-                    data.languages.sort((x, y) => {
-                        if (x.id < y.id) return -1;
-                        if (x.id === y.id) return 0;
-                        return 1;
-                    });
+                    // data.languages.sort((x, y) => {
+                    //     if (x.id < y.id) return -1;
+                    //     if (x.id === y.id) return 0;
+                    //     return 1;
+                    // });
                     setInTodoList(data.inTodoList);
                     setLoaded(true);
                 } catch (e) { } finally { }
