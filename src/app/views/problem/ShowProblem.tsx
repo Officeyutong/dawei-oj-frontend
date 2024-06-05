@@ -207,14 +207,14 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                                                 <Table.Cell><DifficultyLabel difficulty={data.difficulty}></DifficultyLabel></Table.Cell>
                                             </Table.Row>
                                             {data.problem_type === "remote_judge" && <>
-                                                <Table.Row>
+                                                {data.remote_oj_display_name && <Table.Row>
                                                     <Table.Cell>远程OJ</Table.Cell>
-                                                    <Table.Cell>{data.remote_oj_display_name || "<隐藏>"}</Table.Cell>
-                                                </Table.Row>
-                                                <Table.Row>
+                                                    <Table.Cell>{data.remote_oj_display_name}</Table.Cell>
+                                                </Table.Row>}
+                                                {data.remote_problem_id && <Table.Row>
                                                     <Table.Cell>远程题目ID</Table.Cell>
-                                                    <Table.Cell>{data.remote_problem_id || "<隐藏>"}</Table.Cell>
-                                                </Table.Row>
+                                                    <Table.Cell>{data.remote_problem_id}</Table.Cell>
+                                                </Table.Row>}
                                             </>}
                                         </Table.Body>
                                     </Table>
