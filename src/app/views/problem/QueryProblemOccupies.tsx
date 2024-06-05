@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Dimmer, Header, Loader, Segment, Table } from "semantic-ui-react";
+import { Dimmer, Header, Loader, Message, Segment, Table } from "semantic-ui-react";
 import { ProblemUsageEntry } from "./client/types";
 import { PUBLIC_URL } from "../../App";
 import problemClient from "./client/ProblemClient";
+import { useDocumentTitle } from "../../common/Utils";
 
 const QueryProblemOccupies: React.FC<{}> = () => {
     const params = useParams<{ problemID: string }>();
@@ -20,13 +21,17 @@ const QueryProblemOccupies: React.FC<{}> = () => {
             } catch { } finally { setLoading(false); }
         })();
     }, [loaded, pid])
+    useDocumentTitle("查看题目占用情况");
     return <>
         <Header as="h1">查看题目 {pid} 的占用情况</Header>
         <Segment stacked>
             {loading && <Dimmer active>
                 <Loader active></Loader>
             </Dimmer>}
-            {loaded && <Table>
+            {loaded && (data.length === 0 ? <Message info>
+                <Message.Header>提示</Message.Header>
+                <Message.Content>此题目未在任何比赛、习题集、团队中被使用</Message.Content>
+            </Message> : <Table>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>
@@ -46,7 +51,7 @@ const QueryProblemOccupies: React.FC<{}> = () => {
                         })()}
                     </Table.Row>)}
                 </Table.Body>
-            </Table>}
+            </Table>)}
         </Segment>
     </>
 };
