@@ -292,7 +292,7 @@ const ContestShow: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Markdown markdown={data.description}></Markdown>
                 </>}
             </Segment>
-            <ContestShowProblemList
+            {(managable || status >= 0) && <ContestShowProblemList
                 problems={data.problems}
                 rankCriterion={data.rank_criterion}
                 contestID={data.id}
@@ -300,7 +300,7 @@ const ContestShow: React.FC<React.PropsWithChildren<{}>> = () => {
                 closed={data.closed}
                 running={status === 0}
                 status={status}
-            ></ContestShowProblemList>
+            ></ContestShowProblemList>}
             <ClarificationList
                 closed={data.closed}
                 contestID={data.id}
