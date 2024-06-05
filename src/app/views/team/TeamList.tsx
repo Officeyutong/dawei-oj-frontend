@@ -12,13 +12,13 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
     useDocumentTitle("团队列表");
     const [data, setData] = useState<TeamListEntry[]>([]);
     const [loaded, setLoaded] = useState(false);
-
+    const [hasCreatePermission, setHasCreatePermission] = useState(false);
     useEffect(() => {
         if (!loaded) {
             (async () => {
                 try {
                     const resp = await teamClient.getTeamList();
-                    setData(resp); setLoaded(true);
+                    setData(resp.list); setHasCreatePermission(resp.hasTeamCreatePermission); setLoaded(true);
                 } catch { } finally { }
             })();
         }
@@ -29,7 +29,7 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
             target.classList.add("loading");
             const { team_id } = await teamClient.createTeam();
             window.open(`/team/${team_id}`);
-            setData(await teamClient.getTeamList());
+            setData((await teamClient.getTeamList()).list);
         } catch { } finally {
             target.classList.remove("loading");
         }
@@ -42,13 +42,15 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
             <Dimmer active><Loader></Loader></Dimmer>
             <div style={{ height: "400px" }}></div></Segment>}
         {loaded && <Segment stacked>
-            <Container textAlign="right">
-                <Button color="green" labelPosition="left" icon onClick={addTeam}>
-                    <Icon name="plus"></Icon>
-                    添加团队...
-                </Button>
-            </Container>
-            <Divider></Divider>
+            {hasCreatePermission && <>
+                <Container textAlign="right">
+                    <Button color="green" labelPosition="left" icon onClick={addTeam}>
+                        <Icon name="plus"></Icon>
+                        添加团队...
+                    </Button>
+                </Container>
+                <Divider></Divider>
+            </>}
             <Table basic="very">
                 <Table.Header>
                     <Table.Row>

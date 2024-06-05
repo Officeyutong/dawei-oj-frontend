@@ -33,8 +33,8 @@ const XiaoeTechBoundTeamEditModal: React.FC<XiaoeTechBoundTeamEditModalProps> = 
                         adminClient.getXiaoeTechCourseBoundTeams(courseID),
                         adminClient.getXiaoeTechCourseComment(courseID)
                     ]);
-                    d1.sort((x, y) => x.id - y.id);
-                    setTeams(d1);
+                    d1.list.sort((x, y) => x.id - y.id);
+                    setTeams(d1.list);
                     setUsedTeams(d2);
                     setComment(d3);
                     setLoaded(true);

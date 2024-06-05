@@ -32,7 +32,7 @@ const UserBatchManagement = () => {
             if (shouldRefreshTeamList) {
                 const [a, b] = await Promise.all([adminClient.getAllUsers(filteringTeamID), teamClient.getTeamList()]);
                 setfullData(a);
-                setTeamList(b);
+                setTeamList(b.list);
             } else {
                 const data = await adminClient.getAllUsers(filteringTeamID);
                 setfullData(data);
