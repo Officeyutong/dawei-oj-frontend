@@ -4,6 +4,7 @@ import { Route } from "react-router-dom";
 import GeneralDimmedLoader from "../utils/GeneralDimmedLoader";
 import TagsEdit from "./TagsEdit";
 import WrittenProblemEdit from "./edit/WrittenProblemEdit";
+import QueryProblemOccupies from "./QueryProblemOccupies";
 const ShowProblem = lazy(() => import("./ShowProblem"));
 const ProblemEdit = lazy(() => import("./edit/ProblemEdit"));
 const ProblemList = lazy(() => import("./list/ProblemList"));
@@ -28,6 +29,7 @@ const ProblemRouter: React.FC<React.PropsWithChildren<{}>> = () => {
             </Suspense>
         }></Route>
         <Route exact path={`${match.path}/problem/edit/written_test/:problemID`} component={WrittenProblemEdit}></Route>
+        <Route exact path={`${match.path}/problem/query_problem_occupies/:problemID`} component={QueryProblemOccupies}></Route>
     </>
 };
 

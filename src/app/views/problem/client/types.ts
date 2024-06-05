@@ -150,6 +150,26 @@ type WrittenTestStatement = Pick<ProblemStatement, "background" | "content" | "t
 
 type RemoteOJ = "luogu";
 
+
+interface ProblemUsageTeam {
+    type: "team";
+    team_id: number;
+    team_name: string;
+}
+interface ProblemUsageProblemset {
+    type: "problemset";
+    problemset_id: number;
+    problemset_name: string;
+}
+interface ProblemUsageContest {
+    type: "contest";
+    contest_id: number;
+    contest_name: string;
+}
+
+type ProblemUsageEntry = ProblemUsageTeam | ProblemUsageProblemset | ProblemUsageContest;
+
+
 export type {
     ProblemFileEntry,
     ProblemInfo,
@@ -169,7 +189,8 @@ export type {
     WrittenTestQuestion,
     WrittenTestAnswer,
     WrittenTestStatement,
-    RemoteOJ
+    RemoteOJ,
+    ProblemUsageEntry,
 }
 
 export {

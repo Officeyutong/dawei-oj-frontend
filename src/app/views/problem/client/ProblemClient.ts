@@ -1,6 +1,6 @@
 import GeneralClient from "../../../common/GeneralClient";
 import qs from "qs";
-import { ProblemEditReceiveInfo, ProblemFileEntry, ProblemInfo, ProblemListEntry, ProblemSearchFilter, ProblemUpdateInfo, RemoteOJ } from "./types";
+import { ProblemEditReceiveInfo, ProblemFileEntry, ProblemInfo, ProblemListEntry, ProblemSearchFilter, ProblemUpdateInfo, ProblemUsageEntry, RemoteOJ } from "./types";
 import { ProblemTagEntry } from "../../../common/types";
 import { APIError } from "../../../Exception";
 import { showErrorModal } from "../../../dialogs/Dialog";
@@ -106,6 +106,9 @@ class ProblemClient extends GeneralClient {
     }
     async addRemoteJudgeProblem(oj: RemoteOJ, problemId: string): Promise<{ newProblemID: number }> {
         return (await this.client!.post("/api/problem/add_remote_judge_problem", { remote_oj: oj, remote_problem_id: problemId })).data;
+    }
+    async getProblemUsage(problemId: number): Promise<ProblemUsageEntry[]> {
+        return (await this.client!.post("/api/problem/query_problem_usage", { problem_id: problemId })).data;
     }
 };
 
