@@ -35,6 +35,11 @@ function useProfileImageMaker(): (email: string, size?: number | string) => stri
         return `${profileURL}${md5(email)}` + (size ? `?size=${size}` : "");
     };
 }
+
+export function makeProfileImageURL(uid: number): string {
+    return `/api/user/profile_image/${uid}`;
+}
+
 export function usePasswordSalt() {
     const salt = useSelector((s: StateType) => s.userState.userData.salt);
     return salt;

@@ -92,6 +92,20 @@ class UserClient extends GeneralClient {
     async getUserExtraStatistics(uid: number): Promise<UserExtraStatistics> {
         return (await this.client!.post("/api/user/get_extra_statistics", { uid })).data;
     }
+    async removeCustomProfileImage(uid: number) {
+        await this.client!.post("/api/user/profile_image/remove", { uid });
+    }
+    async getCustomProfileImageStatus(uid: number): Promise<{ hasCustomProfileImage: boolean; }> {
+        return (await this.client!.post("/api/user/profile_image/status", { uid })).data;
+    }
+    async uploadProfileImage(uid: number, imageSize: number, files: FormData, prorgressHandler?: (evt: ProgressEvent) => void) {
+        return (await this.client!.post(`/api/user/profile_image/upload/${uid}`, files, {
+            onUploadProgress: prorgressHandler,
+            headers: {
+                "Content-Length": imageSize
+            }
+        })).data;
+    }
 };
 
 const userClient = new UserClient();

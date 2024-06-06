@@ -5,7 +5,7 @@ import { Dimmer, Grid, Header, Label, Loader, Image, Segment, Container, Divider
 import { PUBLIC_URL } from "../../App";
 import { Markdown } from "../../common/Markdown";
 import { ButtonClickEvent } from "../../common/types";
-import { toLocalTime, useDocumentTitle, useProfileImageMaker } from "../../common/Utils";
+import { makeProfileImageURL, toLocalTime, useDocumentTitle } from "../../common/Utils";
 import UserLink from "../utils/UserLink";
 import discussionClient from "./client/DiscussionClient";
 import { DiscussionDetail } from "./client/types";
@@ -37,7 +37,6 @@ const DiscussionShow: React.FC<React.PropsWithChildren<{}>> = () => {
         }
     }, [loaded, numberID]);
     useDocumentTitle(`${data?.title || "加载中..."} - 查看讨论`);
-    const makeImg = useProfileImageMaker();
     const doReply = (username: string) => {
         setCommentContent(`@${username} `);
         window.scrollTo({ top: 99999 });
@@ -71,7 +70,7 @@ const DiscussionShow: React.FC<React.PropsWithChildren<{}>> = () => {
                 <Grid columns="2">
                     <Grid.Row>
                         <Grid.Column width="1">
-                            <Image circular size="small" src={makeImg(data.email)}></Image>
+                            <Image circular size="small" src={makeProfileImageURL(data.uid)}></Image>
                         </Grid.Column>
                         <Grid.Column width="15">
                             <div style={{ fontSize: "10px", color: "rgba(0,0,0,.6)", marginBottom: "10px" }}>

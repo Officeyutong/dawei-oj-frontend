@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { Button, Card, Container, Dimmer, Grid, Header, Label, Loader, Pagination, Segment, Image, Divider } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
-import { toLocalTime, useDocumentTitle, useProfileImageMaker } from "../../common/Utils";
+import { makeProfileImageURL, toLocalTime, useDocumentTitle } from "../../common/Utils";
 import UserLink from "../utils/UserLink";
 import blogClient from "./client/BlogClient";
 import { BlogListEntry, BlogUserData } from "./client/types";
@@ -38,7 +38,6 @@ const BlogList: React.FC<React.PropsWithChildren<{}>> = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loaded]);
     useDocumentTitle(`${userData?.username || "加载中..."} - 博客列表`);
-    const makeImg = useProfileImageMaker();
 
     return <>
         {!loaded && loading && <>
@@ -104,7 +103,7 @@ const BlogList: React.FC<React.PropsWithChildren<{}>> = () => {
                 <Grid.Column width="4">
                     <div style={{ position: "fixed" }}>
                         <Card>
-                            <Image src={makeImg(userData.email)}></Image>
+                            <Image src={makeProfileImageURL(userData.uid)}></Image>
                             <Card.Content>
                                 <Card.Header>
                                     <UserLink data={userData}></UserLink>

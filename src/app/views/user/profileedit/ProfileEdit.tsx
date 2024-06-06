@@ -116,7 +116,7 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     </Form.Field>
                     <Form.Field>
                         <label>头像</label>
-                        请前往<a href="https://en.gravatar.com/">https://en.gravatar.com/</a>进行更改.
+                        请前往<Link to={`${PUBLIC_URL}/profile_image_edit/${uid}`}>头像编辑页面</Link>进行修改。
                     </Form.Field>
                     <Form.Field>
                         <label>姓名</label>

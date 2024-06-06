@@ -1,15 +1,14 @@
 import React from "react";
 import { Feed, Label } from "semantic-ui-react";
 import { converter } from "../../common/Markdown";
-import { useProfileImageMaker } from "../../common/Utils";
 import { FeedStreamEntry } from "./client/types";
+import { makeProfileImageURL } from "../../common/Utils";
 
 const FeedArea: React.FC<React.PropsWithChildren<{ data: FeedStreamEntry[]; withProfileImage: boolean; showTopLabel?: boolean; }>> = ({ data, withProfileImage, showTopLabel }) => {
-    const makeImageURL = useProfileImageMaker();
     return <Feed>
         {data.map((x, i) => <Feed.Event key={i}>
             {withProfileImage && <Feed.Label>
-                <img src={makeImageURL(x.email)} alt=""></img>
+                <img src={makeProfileImageURL(x.uid)} alt=""></img>
             </Feed.Label>}
             <Feed.Content>
                 <Feed.Summary>

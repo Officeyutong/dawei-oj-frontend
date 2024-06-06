@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { useRouteMatch } from "react-router";
 import { Route } from "react-router-dom";
 import GeneralDimmedLoader from "../utils/GeneralDimmedLoader";
+import ProfileImageEdit from "./profileedit/ProfileImageEdit";
 const EmailRegister = lazy(() => import("./EmailRegister"))
 const EmailRegisterAuth = lazy(() => import("./EmailAuth"))
 // const EmailResetPasswordView = lazy(() => import("./EmailResetPassword"))
@@ -76,6 +77,11 @@ const UserRouter: React.FC<React.PropsWithChildren<{}>> = () => {
         <Route exact path={`${match.path}/phoneauth`} >
             <Suspense fallback={<GeneralDimmedLoader />}>
                 <PhoneAuth></PhoneAuth>
+            </Suspense>
+        </Route>
+        <Route exact path={`${match.path}/profile_image_edit/:uid`}>
+            <Suspense fallback={<GeneralDimmedLoader />}>
+                <ProfileImageEdit></ProfileImageEdit>
             </Suspense>
         </Route>
     </>

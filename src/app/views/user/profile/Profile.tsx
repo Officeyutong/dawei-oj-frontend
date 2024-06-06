@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Card, Grid, Loader, Modal, Image, Button, Header, Segment, Table, Tab, } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../../App";
-import { useCurrentUid, useDocumentTitle, useProfileImageMaker } from "../../../common/Utils";
+import { makeProfileImageURL, useCurrentUid, useDocumentTitle } from "../../../common/Utils";
 import { UserProfileResponse } from "../client/types";
 import userClient from "../client/UserClient";
 import AcceptedProblemsTab from "./AcceptedProblemsTab";
@@ -19,7 +19,6 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
     const [data, setData] = useState<UserProfileResponse | null>(null);
     const [toggling, setToggling] = useState(false);
     const [showExtraStatistics, setShowExtraStatistics] = useState(false);
-    const urlMaker = useProfileImageMaker();
     const currUser = useCurrentUid();
     useDocumentTitle(data === null ? "加载中" : `${data.username} - ${data.id} - 用户资料`);
     useEffect(() => {
@@ -55,7 +54,7 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
         {data !== null && <Grid columns="2">
             <Grid.Column width="5">
                 <Card>
-                    <Image src={urlMaker(data.email, 200)}></Image>
+                    <Image src={makeProfileImageURL(data.id)}></Image>
                     <Card.Content>
                         <Card.Header>{data.username}</Card.Header>
                         <Card.Meta>

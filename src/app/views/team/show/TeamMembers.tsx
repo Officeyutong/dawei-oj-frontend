@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { Grid, Header, Segment, Popup, Button, Container, Label, Pagination, Divider } from "semantic-ui-react";
-import { useProfileImageMaker } from "../../../common/Utils";
 import UserLink from "../../utils/UserLink";
 import { TeamDetail } from "../client/types";
 import _ from "lodash";
+import { makeProfileImageURL } from "../../../common/Utils";
 
 interface TeamMembersProps {
     members: TeamDetail["members"];
@@ -15,11 +15,10 @@ interface TeamMembersProps {
     isTeamOwner: boolean;
 };
 const UserCard: React.FC<React.PropsWithChildren<{ data: TeamDetail["members"][0]; slot?: React.ReactNode }>> = ({ data, slot }) => {
-    const makeUrl = useProfileImageMaker();
     return <Segment style={{ wordBreak: "break-all" }}>
         <Grid columns="2">
             <Grid.Column width="4">
-                <img alt="" src={makeUrl(data.email)} style={{ height: "38px", width: "38px", borderRadius: "19px" }}></img>
+                <img alt="" src={makeProfileImageURL(data.uid)} style={{ height: "38px", width: "38px", borderRadius: "19px" }}></img>
             </Grid.Column>
             <Grid.Column width="12">
                 <Grid columns="1">

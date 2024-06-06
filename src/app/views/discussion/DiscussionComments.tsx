@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import discussionClient from "./client/DiscussionClient";
 import { DiscussionComment } from "./client/types";
 import { Comment, Dimmer, Loader, Container, Divider, Pagination } from "semantic-ui-react";
-import { toLocalTime, useProfileImageMaker } from "../../common/Utils";
+import { makeProfileImageURL, toLocalTime } from "../../common/Utils";
 import UserLink from "../utils/UserLink";
 import { Markdown } from "../../common/Markdown";
 interface DiscussionCommentsProps {
@@ -17,7 +17,6 @@ const DiscussionComments: React.FC<React.PropsWithChildren<DiscussionCommentsPro
     const [page, setPage] = useState(-1);
     const [pageCount, setPageCount] = useState(0);
     const [data, setData] = useState<DiscussionComment[]>([]);
-    const makeImage = useProfileImageMaker();
     const loadPage = async (page: number) => {
         try {
             setLoading(true);
@@ -47,7 +46,7 @@ const DiscussionComments: React.FC<React.PropsWithChildren<DiscussionCommentsPro
         {loaded && data.length !== 0 && <>
             <Comment.Group>
                 {data.map((item, i) => <Comment key={i}>
-                    <Comment.Avatar src={makeImage(item.email)}>
+                    <Comment.Avatar src={makeProfileImageURL(item.uid)}>
                     </Comment.Avatar>
                     <Comment.Content>
                         <Comment.Author as={UserLink} data={{ uid: item.uid, username: item.username }}>

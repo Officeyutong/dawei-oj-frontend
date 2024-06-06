@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { Button, Dimmer, Divider, Feed, Grid, Image, Loader, Pagination } from "semantic-ui-react";
-import { useAlreadyLogin, useProfileImageMaker } from "../../../common/Utils";
+import { makeProfileImageURL, useAlreadyLogin } from "../../../common/Utils";
 import { FolloweeItem, FollowerItem } from "../client/types";
 import userClient from "../client/UserClient";
 
@@ -12,7 +12,6 @@ const GeneralFollowingTab: React.FC<React.PropsWithChildren<{
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [loading, setLoading] = useState(false);
-    const makeImageURL = useProfileImageMaker();
     const alreadyLogin = useAlreadyLogin();
     const loadPage = useCallback(async (page: number) => {
         try {
@@ -36,7 +35,7 @@ const GeneralFollowingTab: React.FC<React.PropsWithChildren<{
         </Dimmer>}
         <Feed size="large">
             {data.map((x, i) => <Fragment key={i}><Feed.Event key={i}>
-                <Feed.Label><Image src={makeImageURL(x.email)}></Image></Feed.Label>
+                <Feed.Label><Image src={makeProfileImageURL(x.uid)}></Image></Feed.Label>
                 <Feed.Content>
                     <Feed.Summary>
                         <a href={`/profile/${x.uid}`}>{x.username}</a><div className="date">生效于 {x.time}</div>

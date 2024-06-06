@@ -1,8 +1,8 @@
 import { Container, Grid, Image, Segment } from "semantic-ui-react";
 import { Markdown } from "../../../common/Markdown";
-import { useProfileImageMaker } from "../../../common/Utils";
 import UserLink from "../../utils/UserLink";
 import { ClarificationDetailResponse } from "../client/types";
+import { makeProfileImageURL } from "../../../common/Utils";
 
 interface ClarificationAreaProps extends ClarificationDetailResponse {
     showEditReply: boolean;
@@ -12,11 +12,10 @@ interface ClarificationAreaProps extends ClarificationDetailResponse {
 
 const ClarificationArea: React.FC<React.PropsWithChildren<ClarificationAreaProps>> = (props) => {
     const managable = props.managable;
-    const makeProfileImage = useProfileImageMaker();
     return <Grid columns="2">
         <Grid.Row>
             <Grid.Column style={{ width: "65px" }}>
-                <Image size="small" circular src={makeProfileImage(props.sender.email)}></Image>
+                <Image size="small" circular src={makeProfileImageURL(props.sender.uid)}></Image>
             </Grid.Column>
             <Grid.Column style={{ maxWidth: "1000px", width: "90%" }}>
                 <div style={{ fontSize: "10px", color: "rgba(0, 0, 0, 0.6)", marginBottom: "10px" }}>
@@ -49,7 +48,7 @@ const ClarificationArea: React.FC<React.PropsWithChildren<ClarificationAreaProps
                 </Container>
                 {props.replied && <Grid columns="2">
                     <Grid.Column style={{ width: "65px" }}>
-                        <Image size="small" circular src={makeProfileImage(props.replier.email)}></Image>
+                        <Image size="small" circular src={makeProfileImageURL(props.replier.uid)}></Image>
                     </Grid.Column>
                     <Grid.Column style={{ width: "90%" }}>
                         <div style={{ fontSize: "10px", color: "rgba(0, 0, 0, 0.6)", marginBottom: "10px" }}>

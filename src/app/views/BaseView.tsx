@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Icon, Menu, Image, Container as SMContainer, Popup } from "semantic-ui-react";
 import { axiosObj, PUBLIC_URL } from "../App";
-import { useProfileImageMaker } from "../common/Utils";
 import { StateType } from "../states/Manager";
 import TimedProblemSetCard from "./TimedProblemsetCard";
+import { makeProfileImageURL } from "../common/Utils";
 
 const useSize = (target: RefObject<HTMLElement>) => {
     const [size, setSize] = useState<DOMRect>()
@@ -28,7 +28,6 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
         axiosObj.post("/api/logout").then(() => window.location.reload());
     };
     const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, showPermissionPack, companyName } = useSelector((s: StateType) => s.userState.userData);
-    const profileMaker = useProfileImageMaker();
     const [width, setWidth] = useState(document.documentElement.clientWidth);
     const sidebarRef = useRef<HTMLDivElement>(null);
     const sidebarRect = useSize(sidebarRef);
@@ -163,7 +162,7 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
         </Menu.Item>}
         {userState.login && <>
             <Menu.Item as={Link} to={`${PUBLIC_URL}/profile/${userState.userData.uid}`}>
-                <Image avatar src={profileMaker(userState.userData.email)}></Image>
+                <Image avatar src={makeProfileImageURL(userState.userData.uid)}></Image>
                 <span>{userState.userData.username}</span>
             </Menu.Item>
             <Menu.Item onClick={logout} >
