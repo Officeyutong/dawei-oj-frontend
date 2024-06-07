@@ -85,7 +85,7 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
                 </Header>
                 <Segment attached="bottom">
                     <div style={{ overflowY: "scroll", maxHeight: "500px" }}>
-                        {data.rating_history.length === 0 ? <div>这个人很懒，没参加如果任何Rated比赛...</div> : <Table basic="very" celled>
+                        {data.rating_history.length === 0 ? <div>这个人很懒，没参加过任何Rated比赛...</div> : <Table basic="very" celled>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>比赛</Table.HeaderCell>
