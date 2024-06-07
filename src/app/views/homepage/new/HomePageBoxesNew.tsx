@@ -33,7 +33,7 @@ const ProblemTodoBoxNew = () => {
     return <div style={BLOCK_CSS}>
         <Row>
             <Col span={12}>
-                <Typography.Title level={4}><CarryOutOutlined /> 待做题目</Typography.Title>
+                <Typography.Title level={4}><CarryOutOutlined />收藏题目</Typography.Title>
             </Col>
             <Col span={12} style={{ textAlign: "right" }}>
                 <Link to={`${PUBLIC_URL}/problemtodo/list`}>全部</Link>
