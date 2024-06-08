@@ -66,12 +66,17 @@ const ProfileImageEdit: React.FC<{}> = () => {
                     <Header as="h3">详情</Header>
                     <Message info>
                         <Message.Header>提示</Message.Header>
-                        {hasCustomProfileImage && <Message.Content>
-                            您在本站上传了头像。您可以选择将上传的头像删除，或者重新上传头像。如果您将上传的头像删除，那么您的头像会自动使用<a href="https://gravatar.com/">Gravatar头像</a>
-                        </Message.Content>}
-                        {!hasCustomProfileImage && <Message.Content>
-                            您没有在本站上传头像。此时您的头像会自动使用<a href="https://gravatar.com/">Gravatar头像</a>。如果您在本站上传了头像，那么您的头像会使用在本站上传的头像。
-                        </Message.Content>}
+                        <Message.List>
+                            {hasCustomProfileImage && <Message.Item>
+                                您在本站上传了头像。您可以选择将上传的头像删除，或者重新上传头像。如果您将上传的头像删除，那么您的头像会自动使用<a href="https://gravatar.com/">Gravatar头像</a>
+                            </Message.Item>}
+                            {!hasCustomProfileImage && <Message.Item>
+                                您没有在本站上传头像。此时您的头像会自动使用<a href="https://gravatar.com/">Gravatar头像</a>。如果您在本站上传了头像，那么您的头像会使用在本站上传的头像。
+                            </Message.Item>}
+                            <Message.Item>
+                                头像的推荐长宽比为1:1（即正方形），否则会被拉伸，影响观看效果。
+                            </Message.Item>
+                        </Message.List>
                     </Message>
                     <Form>
                         <Form.Field>
