@@ -27,7 +27,7 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const logout = () => {
         axiosObj.post("/api/logout").then(() => window.location.reload());
     };
-    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, showPermissionPack, companyName } = useSelector((s: StateType) => s.userState.userData);
+    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, showPermissionPack, companyName, customExtraFooter } = useSelector((s: StateType) => s.userState.userData);
     const [width, setWidth] = useState(document.documentElement.clientWidth);
     const sidebarRef = useRef<HTMLDivElement>(null);
     const sidebarRect = useSize(sidebarRef);
@@ -186,8 +186,8 @@ const BaseView: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                     {userState.userData.appName} by {companyName}
                 </>
                 }
-
             </div>
+            {customExtraFooter && <div style={{ color: "darkgrey" }} >{customExtraFooter}</div>}
         </SMContainer>
     </>;
     const sidebarWidth = (sidebarRect?.width || 0) + 10;

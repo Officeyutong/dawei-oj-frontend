@@ -44,6 +44,7 @@ export interface UserStateType {
         enableRemoteJudge: boolean;
         companyName: string;
         difficultyDisplayMap: { [K: string]: { display: string; color: SemanticCOLORS } };
+        customExtraFooter: string;
     }
 }
 
@@ -98,7 +99,8 @@ const defaultState: StateType = {
             usernameRegex: "",
             enableRemoteJudge: false,
             companyName: "HelloJudge2",
-            difficultyDisplayMap: {}
+            difficultyDisplayMap: {},
+            customExtraFooter: ""
 
         }
     },

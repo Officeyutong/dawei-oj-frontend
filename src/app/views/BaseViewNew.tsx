@@ -5,7 +5,7 @@ import { StateType } from "../states/Manager";
 import TimedProblemSetCard from "./TimedProblemsetCard";
 
 const BaseViewNew: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
-    const { displayRepoInFooter, appName, companyName } = useSelector((s: StateType) => s.userState.userData);
+    const { displayRepoInFooter, appName, companyName, customExtraFooter } = useSelector((s: StateType) => s.userState.userData);
     const hasActiveTimedProblemset = useSelector((s: StateType) => s.userState.userData.currentActiveTimedProblemset !== null);
     return <>
         <Affix><HomePageTopMenuNew></HomePageTopMenuNew></Affix>
@@ -19,6 +19,7 @@ const BaseViewNew: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                 </>
                 }
             </div>
+            {customExtraFooter && <div style={{ color: "darkgrey" }} >{customExtraFooter}</div>}
         </Typography.Text>
         {hasActiveTimedProblemset &&
             <TimedProblemSetCard extraStyle={{ position: "fixed", bottom: 0, left: 20, zIndex: 999 }}></TimedProblemSetCard>
