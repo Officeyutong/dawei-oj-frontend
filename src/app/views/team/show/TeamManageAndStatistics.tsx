@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Dimmer, Loader, Modal, Tab, Table } from "semantic-ui-react";
+import { Button, Dimmer, Input, Loader, Modal, Tab, Table } from "semantic-ui-react";
 import { TeamDetail, TeamMemberProblemsetStatistics } from "../client/types";
 import BatchAddMembersDialog from "./BatchAddMembersDialog";
 import teamClient from "../client/TeamClient";
@@ -9,6 +9,7 @@ import { PUBLIC_URL } from "../../../App";
 import { Link } from "react-router-dom";
 import TeamStatisticsView from "./TeamStatisticsView";
 import ShowMemberDetailedStatistics from "./ShowMemberDetailedStatistics";
+import { useInputValue } from "../../../common/Utils";
 
 interface TeamManageProps {
     team: number;
@@ -22,17 +23,24 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
     const [loaded, setLoaded] = useState(false);
     const [extraStatistics, setExtraStatistics] = useState<TeamMemberProblemsetStatistics | null>(null);
     const [viewingProblemsetDetailUid, setViewingProblemsetDetailUid] = useState<number | null>(null);
-
+    const statisticsFilteringKeyword = useInputValue("");
+    const [filteredUserStatistics, setFilteredUserStatistics] = useState<TeamMemberProblemsetStatistics["user_data"]>([]);
     useEffect(() => {
         if (!loaded) (async () => {
             try {
                 setLoading(true);
-                setExtraStatistics(await teamClient.getTeamMemberProblemsetStatistics(props.team));
+                const data = await teamClient.getTeamMemberProblemsetStatistics(props.team);
+                setExtraStatistics(data);
+                setFilteredUserStatistics(data.user_data);
                 setLoaded(true);
             } catch { } finally { setLoading(false); }
         })();
     }, [loaded, props.team]);
-
+    const doFilter = () => {
+        setFilteredUserStatistics((extraStatistics?.user_data || []).filter(t => (
+            t.user.real_name?.includes(statisticsFilteringKeyword.value) || t.user.username.includes(statisticsFilteringKeyword.value) || t.user.uid.toString().includes(statisticsFilteringKeyword.value)
+        )));
+    };
     return <div>
         {viewingProblemsetDetailUid && <Modal open>
             <Modal.Header>查看用户详细统计数据</Modal.Header>
@@ -51,6 +59,10 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
                 menuItem: "作业情况统计", pane: <Tab.Pane key={1}>
                     {loading && <Dimmer active><Loader></Loader></Dimmer>}
                     <div style={{ overflowX: "scroll" }}>{extraStatistics !== null && <>
+                        <Input {...statisticsFilteringKeyword} placeholder="过滤用户" action={{
+                            content: "搜索",
+                            onClick: doFilter
+                        }}></Input>
                         <Table compact>
                             <Table.Header>
                                 <Table.Row>
@@ -65,7 +77,7 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
                                 </Table.Row>
                             </Table.Header>
                             <Table.Body>
-                                {extraStatistics.user_data.map(item => <Table.Row key={item.user.uid}>
+                                {filteredUserStatistics.map(item => <Table.Row key={item.user.uid}>
                                     <Table.Cell>
                                         <UserLink data={item.user}></UserLink>
                                         {item.user.real_name && <p style={{ color: "darkgray" }}>{item.user.real_name}</p>}
