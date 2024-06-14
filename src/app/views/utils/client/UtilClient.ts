@@ -1,8 +1,9 @@
 import GeneralClient from "../../../common/GeneralClient";
 import { PhoneNumberUsingState, ProgrammingLanguageEntry } from "../../../common/types";
+import { TencentCaptchaPreparationResp } from "./types";
 
 class UtilClient extends GeneralClient {
-    async recaptchaPreparation(): Promise<{ site_key: string }> {
+    async recaptchaPreparation(): Promise<TencentCaptchaPreparationResp> {
         return (await this.client!.post("/api/phoneutil/preparation")).data;
     }
     async sendSMSCode(phone: string, client_response: any, use_state: PhoneNumberUsingState): Promise<{ code: number; message: string }> {
