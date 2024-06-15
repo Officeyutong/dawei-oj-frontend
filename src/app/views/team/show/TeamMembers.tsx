@@ -28,6 +28,7 @@ const UserCard: React.FC<React.PropsWithChildren<{ data: TeamDetail["members"][0
                     <Grid.Column style={{ paddingTop: 0, paddingBottom: "5px" }}>
                         <Grid columns="2">
                             <Grid.Column >
+                                {data.real_name && <div>{data.real_name}</div>}
                                 <span style={{ color: "grey" }}>{data.group_name}</span>
                             </Grid.Column>
                             {slot && <Grid.Column>

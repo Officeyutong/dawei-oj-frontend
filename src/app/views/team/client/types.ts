@@ -18,7 +18,7 @@ interface TeamDetail {
     owner_id: number;
     owner_username: string;
     admins: number[];
-    members: { username: string; uid: number; email: string; group_name: string; }[];
+    members: { username: string; uid: number; email: string; group_name: string; real_name: null | string; }[];
     create_time: string;
     // 是否有查看团队详细信息、自由加入退出的权限
     hasPermission: boolean;
