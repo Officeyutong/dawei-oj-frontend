@@ -13,6 +13,7 @@ interface ContestRanklist {
         rank: number;
         uid: number;
         username: string;
+        real_name?: string;
         virtual: boolean;
         virtualContestID: number | -1;
         scores: {

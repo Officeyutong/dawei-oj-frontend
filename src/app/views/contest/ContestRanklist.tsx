@@ -196,6 +196,7 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
                             <Table.Cell>
                                 <a href={`/profile/${x.uid}`}>{x.username}</a>
                                 {x.virtual && <Label color="red">虚拟提交</Label>}
+                                {x.real_name && <div style={{ color: "grey" }}>{x.real_name}</div>}
                             </Table.Cell>
                             <Table.Cell textAlign="center">
                                 {data.using_penalty ? <span>
