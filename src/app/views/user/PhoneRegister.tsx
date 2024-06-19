@@ -49,6 +49,14 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
         }
     };
     const doSendCode = async () => {
+        if (password1.value !== password2.value) {
+            setErrorMessage("两次密码输入不一致");
+            return;
+        }
+        if (username.value === "" || password1.value === "" || realName.value === "") {
+            setErrorMessage("请输入用户名或密码或者姓名");
+            return;
+        }
         if (!/[0-9]{11}/.test(phone.value)) {
             setErrorMessage("请输入合法的11位国内手机号");
             return;
