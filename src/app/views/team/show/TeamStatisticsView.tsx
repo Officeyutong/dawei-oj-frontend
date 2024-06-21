@@ -130,7 +130,6 @@ const TeamStatisticsView: React.FC<TeamStatisticsViewProps> = ({ team, showThisU
                     { type: 'adjust-color' },
                 ],
             }}
-            slider={{}}
             annotations={stackSubmissionAnnotations}
             meta={{
                 date: { alias: "日期" },

@@ -77,7 +77,7 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
                                 </Table.Row>
                             </Table.Header>
                             <Table.Body>
-                                {filteredUserStatistics.map(item => <Table.Row key={item.user.uid}>
+                                {filteredUserStatistics.map(item => <Table.Row onClick={() => setViewingProblemsetDetailUid(item.user.uid)} style={{ cursor: "pointer" }} key={item.user.uid}>
                                     <Table.Cell>
                                         <UserLink data={item.user}></UserLink>
                                         {item.user.real_name && <p style={{ color: "darkgray" }}>{item.user.real_name}</p>}
