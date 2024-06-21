@@ -106,6 +106,9 @@ const SubRoutes = () => {
         <Route path={`${match.path}/success`}>
             <ErrorAndSuccess error={false}></ErrorAndSuccess>
         </Route>
+        <Route path={`${match.path}/bilibili-video-test`}>
+            <iframe title="bilibili" src="//player.bilibili.com/player.html?isOutside=true&aid=1705704713&bvid=BV1tT421e7xq&cid=1574117861&p=1" ></iframe>
+        </Route>
     </>
     const { baseContainerMaxWidth, baseContainerWidth } = useSelector((s: StateType) => s);
 
