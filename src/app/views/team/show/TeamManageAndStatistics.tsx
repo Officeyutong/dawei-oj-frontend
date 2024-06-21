@@ -63,13 +63,13 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
                             content: "搜索",
                             onClick: doFilter
                         }}></Input>
-                        <Table compact>
+                        <Table>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>用户</Table.HeaderCell>
                                     {/* <Table.HeaderCell>看课进度</Table.HeaderCell> */}
                                     {/* <Table.HeaderCell>看课时长</Table.HeaderCell> */}
-                                    {extraStatistics.problemsets.map(item => <Table.HeaderCell key={item.id}>
+                                    {extraStatistics.problemsets.map(item => <Table.HeaderCell style={{ minWidth: "100px" }} key={item.id}>
                                         <Link to={`${PUBLIC_URL}/problemset/show/${item.id}`}>#{item.id}. {item.name}</Link>
                                         <p>共 {item.problems.length} 题</p>
                                     </Table.HeaderCell>)}
