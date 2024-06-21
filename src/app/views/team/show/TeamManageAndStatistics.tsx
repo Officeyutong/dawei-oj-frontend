@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Dimmer, Input, Loader, Modal, Tab, Table } from "semantic-ui-react";
+import { Button, Dimmer, Header, Input, Loader, Modal, Tab, Table } from "semantic-ui-react";
 import { TeamDetail, TeamMemberProblemsetStatistics } from "../client/types";
 import BatchAddMembersDialog from "./BatchAddMembersDialog";
 import teamClient from "../client/TeamClient";
@@ -22,7 +22,7 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
     const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [extraStatistics, setExtraStatistics] = useState<TeamMemberProblemsetStatistics | null>(null);
-    const [viewingProblemsetDetailUid, setViewingProblemsetDetailUid] = useState<number | null>(null);
+    const [viewingProblemsetDetailUidAndName, setViewingProblemsetDetailUidAndName] = useState<{ uid: number; realName?: string; username: string; } | null>(null);
     const statisticsFilteringKeyword = useInputValue("");
     const [filteredUserStatistics, setFilteredUserStatistics] = useState<TeamMemberProblemsetStatistics["user_data"]>([]);
     useEffect(() => {
@@ -42,12 +42,13 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
         )));
     };
     return <div>
-        {viewingProblemsetDetailUid && <Modal open>
+        {viewingProblemsetDetailUidAndName !== null && <Modal open>
             <Modal.Header>查看用户详细统计数据</Modal.Header>
             <Modal.Content>
-                <ShowMemberDetailedStatistics team={props.team} uid={viewingProblemsetDetailUid}></ShowMemberDetailedStatistics>
+                <Header as="h3">{viewingProblemsetDetailUidAndName.username}{viewingProblemsetDetailUidAndName.realName && `（${viewingProblemsetDetailUidAndName.realName}）`}</Header>
+                <ShowMemberDetailedStatistics team={props.team} uid={viewingProblemsetDetailUidAndName.uid}></ShowMemberDetailedStatistics>
             </Modal.Content>
-            <Modal.Actions><Button color="red" size="small" onClick={() => setViewingProblemsetDetailUid(null)}>关闭</Button></Modal.Actions>
+            <Modal.Actions><Button color="red" size="small" onClick={() => setViewingProblemsetDetailUidAndName(null)}>关闭</Button></Modal.Actions>
         </Modal>}
         <Tab renderActiveOnly={false} panes={[
             {
@@ -77,7 +78,7 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
                                 </Table.Row>
                             </Table.Header>
                             <Table.Body>
-                                {filteredUserStatistics.map(item => <Table.Row onClick={() => setViewingProblemsetDetailUid(item.user.uid)} style={{ cursor: "pointer" }} key={item.user.uid}>
+                                {filteredUserStatistics.map(item => <Table.Row onClick={() => setViewingProblemsetDetailUidAndName({ uid: item.user.uid, realName: item.user.real_name, username: item.user.username })} style={{ cursor: "pointer" }} key={item.user.uid}>
                                     <Table.Cell>
                                         <UserLink data={item.user}></UserLink>
                                         {item.user.real_name && <p style={{ color: "darkgray" }}>{item.user.real_name}</p>}
@@ -85,7 +86,7 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
                                     {/* <Table.Cell>{item.user.course_watch_time > 0 ? (Math.floor(item.user.course_watch_time / item.user.course_total_time * 100).toFixed(2) + "%") : null}</Table.Cell> */}
                                     {/* <Table.Cell>{item.user.course_watch_time}</Table.Cell> */}
                                     {item.statistics.map((ent, idx) => <Table.Cell key={idx}>通过{ent.accepted_problems}题；累计提交{ent.submission_count}次</Table.Cell>)}
-                                    <Table.Cell><Button color="green" size="small" onClick={() => setViewingProblemsetDetailUid(item.user.uid)}>查看详情</Button></Table.Cell>
+                                    <Table.Cell><Button color="green" size="small" onClick={() => setViewingProblemsetDetailUidAndName({ uid: item.user.uid, realName: item.user.real_name, username: item.user.username })}>查看详情</Button></Table.Cell>
                                 </Table.Row>)}
                             </Table.Body>
                         </Table>

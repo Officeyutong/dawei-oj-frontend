@@ -35,7 +35,8 @@ const CreateProblemSetModal: React.FC<{
                 showRanklist: 0,
                 private: publicProblemset ? 1 : 0,
                 timeLimit: timeLimit || 0,
-                invitationCode: resp.invitationCode
+                invitationCode: resp.invitationCode,
+                courseURL: ""
             });
             showSuccessModal(`创建完成！新的习题集ID是${id}`);
             history.push(`${PUBLIC_URL}/problemset/show/${id}`);

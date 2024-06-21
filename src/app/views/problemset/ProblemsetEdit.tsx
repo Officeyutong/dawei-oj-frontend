@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Button, Checkbox, Dimmer, Divider, Form, Header, Icon, Input, Loader, Segment, Table, TextArea } from "semantic-ui-react";
+import { Button, Checkbox, Dimmer, Divider, Form, Header, Icon, Input, Loader, Popup, Segment, Table, TextArea } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { ButtonClickEvent } from "../../common/types";
 import { timeStampToString, useDocumentTitle } from "../../common/Utils";
@@ -42,7 +42,8 @@ const ProblemsetEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 private: data.private,
                 problems: data.problems,
                 showRanklist: data.showRanklist,
-                timeLimit: data.timeLimit
+                timeLimit: data.timeLimit,
+                courseURL: data.courseURL
             });
             showSuccessModal("保存完成");
         } catch { } finally {
@@ -86,6 +87,14 @@ const ProblemsetEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Form.Field>
                         <label>时间限制(秒，填写为0表示不限时间)</label>
                         <Input type="number" value={data.timeLimit} onChange={(e, d) => setData({ ...data, timeLimit: parseInt(d.value) })}></Input>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>课程链接</label>
+                        <Popup
+                            trigger={<Input fluid value={data.courseURL} onChange={(_, d) => setData({ ...data, courseURL: d.value })}></Input>}
+                            on="focus"
+                            content="如果填写，那么在团队习题集页面和习题集展示页面，会显示一个可以跳转到该链接的按钮"
+                        ></Popup>
                     </Form.Field>
                     <Divider></Divider>
                     <Form.Field>
@@ -196,6 +205,7 @@ const ProblemsetEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                             </Table.Body>
                         </Table>
                     </Form.Field>
+
                     <Button color="green" onClick={save}>保存</Button>
                     <Button color="green" as={Link} to={`${PUBLIC_URL}/problemset/show/${data.id}`}>返回</Button>
                 </Form>

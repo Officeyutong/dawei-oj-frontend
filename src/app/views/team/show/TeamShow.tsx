@@ -220,7 +220,10 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                                     return [
                                                         <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}>#{currLine.id}</Link>,
                                                         <Link to={`${PUBLIC_URL}/problemset/show/${currLine.id}?source_team=${data.id}`}> {currLine.name}</Link>,
-                                                        <Button size="small" color="blue" onClick={() => setSelectedProblemsetId(line.id)}>查看排行榜</Button>
+                                                        <>
+                                                            <Button size="small" color="blue" onClick={() => setSelectedProblemsetId(line.id)}>查看排行榜</Button>
+                                                            {currLine.courseURL && <Button size="small" color="green" as="a" href={currLine.courseURL} target="_blank" rel="noreferrer">看课程</Button>}
+                                                        </>
                                                     ]
                                                 }}
                                             ></GeneralTeamStuff>

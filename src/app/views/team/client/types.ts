@@ -25,12 +25,12 @@ interface TeamDetail {
     private: boolean;
     team_problems: { id: number; title: string }[];
     team_contests: { id: number; name: string; start_time: number }[];
-    team_problemsets: { id: number; name: string }[];
+    team_problemsets: { id: number; name: string;courseURL:string; }[];
 };
 interface TeamThingsAddedResponse {
     team_problems: { id: number; title: string }[];
     team_contests: { id: number; name: string }[];
-    team_problemsets: { id: number; name: string }[];
+    team_problemsets: { id: number; name: string;courseURL:string; }[];
 };
 interface TeamRawData {
     id: number;
@@ -90,7 +90,7 @@ interface TeamProblemsetRanklistResponse {
 interface TeamMemberProblemsetStatistics {
     problemsets: { id: number; name: string; problems: number[] }[];
     user_data: {
-        user: { uid: number; username: string; real_name: string | null; course_watch_time: number; course_total_time: number; };
+        user: { uid: number; username: string; real_name?: string; course_watch_time: number; course_total_time: number; };
         statistics: { total_problems: number; accepted_problems: number; submission_count: number; }[];
     }[];
 };

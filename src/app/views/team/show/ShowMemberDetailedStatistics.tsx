@@ -6,6 +6,7 @@ import { TeamMemberDetailedProblemsetStatisticsEntry } from "../client/types";
 import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../../../App";
 import JudgeStatusLabel from "../../utils/JudgeStatusLabel";
+import _ from "lodash";
 
 const ShowMemberDetailedStatistics: React.FC<{ team: number; uid: number }> = ({ team, uid }) => {
     const [data, setData] = useState<TeamMemberDetailedProblemsetStatisticsEntry[]>([]);
@@ -31,7 +32,7 @@ const ShowMemberDetailedStatistics: React.FC<{ team: number; uid: number }> = ({
                             if (activeIndex === item.id) setActiveIndex(null);
                             else setActiveIndex(item.id);
                         }}>
-                            <Icon name="dropdown"></Icon> {item.name}
+                            <Icon name="dropdown"></Icon> {item.name} {_.every(item.problems, item => item.best_submission?.status === "accepted") && <Icon name="checkmark" color="green"></Icon>}
                         </Accordion.Title>
                         <Accordion.Content active={item.id === activeIndex}>
                             <Table>
