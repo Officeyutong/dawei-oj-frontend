@@ -57,7 +57,8 @@ const TopMenuNew = () => {
                                         showPermissionPack ? { label: <Link to={`${PUBLIC_URL}/permissionpack/user_packs`}>权限包</Link>, key: "permission-pack", icon: <MergeOutlined></MergeOutlined> } : null,
                                         { label: <Link to={`${PUBLIC_URL}/blog/list/${uid}`}>博客</Link>, key: "blog", icon: <CloudOutlined></CloudOutlined> },
                                         { label: <Link to={`${PUBLIC_URL}/userproblemfilter/list`}>题目筛选</Link>, key: "problem-filter", icon: <ContainerOutlined></ContainerOutlined> },
-                                        { label: <Link to={`${PUBLIC_URL}/monitoreduser/list`}>绑定用户</Link>, key: "monitored-user", icon: <DashboardOutlined></DashboardOutlined> }
+                                        { label: <Link to={`${PUBLIC_URL}/monitoreduser/list`}>绑定用户</Link>, key: "monitored-user", icon: <DashboardOutlined></DashboardOutlined> },
+                                        // { label: <Link to={`${PUBLIC_URL}/visual_programming/main`}>图形化课程</Link>, key: "visual_programming", icon: <DesktopOutlined></DesktopOutlined> }
                                     ]
                                 },
                                 (canUseImageStore ? {

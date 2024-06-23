@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import AnsiUp from "ansi_up";
 import submissionClient from "../client/SubmissionClient";
 import { SubmissionInfo } from "../client/types";
-import { Button, Dimmer, Divider, Header, Loader, Message, Segment, Table } from "semantic-ui-react";
+import { Button, Dimmer, Divider, Grid, Header, Loader, Message, Segment, Table } from "semantic-ui-react";
 import { timeStampToString, useDocumentTitle, usePreferredMemoryUnit } from "../../../common/Utils";
 import "./Submission.css"
 import { PUBLIC_URL } from "../../../App";
@@ -147,130 +147,137 @@ const ShowSubmission = () => {
                     <p>此评测的结果为人工评测所产生</p>
                 </Message>}
                 <Header as="h3">详情</Header>
-                <Table className="submission-info-table" basic="very" celled style={{ maxWidth: "700px" }}>
-                    <Table.Body>
-                        <Table.Row>
-                            <Table.Cell>提交ID</Table.Cell>
-                            <Table.Cell>{data.id}</Table.Cell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.Cell>题目</Table.Cell>
-                            <Table.Cell>
-                                <Link to={isContestSubmit ? `${PUBLIC_URL}/contest/${data.contest.id}/problem/${data.problem.id}?virtual_contest=${data.virtualContestID}` : `${PUBLIC_URL}/show_problem/${data.problem.id}`}>
-                                    #{data.problem.id}. {data.problem.title}
-                                </Link>
+                <Grid columns={2}>
+                    <Grid.Column width={12}>
+                        <Table className="submission-info-table" basic="very" celled style={{ maxWidth: "700px" }}>
+                            <Table.Body>
+                                <Table.Row>
+                                    <Table.Cell>提交ID</Table.Cell>
+                                    <Table.Cell>{data.id}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>题目</Table.Cell>
+                                    <Table.Cell>
+                                        <Link to={isContestSubmit ? `${PUBLIC_URL}/contest/${data.contest.id}/problem/${data.problem.id}?virtual_contest=${data.virtualContestID}` : `${PUBLIC_URL}/show_problem/${data.problem.id}`}>
+                                            #{data.problem.id}. {data.problem.title}
+                                        </Link>
 
-                            </Table.Cell>
-                        </Table.Row>
-                        {isContestSubmit && <Table.Row>
-                            <Table.Cell>比赛</Table.Cell>
-                            <Table.Cell>
-                                <Link to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${data.virtualContestID}`}>#{data.contest.id}. {data.contest.name}</Link>
-                            </Table.Cell>
-                        </Table.Row>}
-                        <Table.Row>
-                            <Table.Cell>
-                                提交用户
-                            </Table.Cell>
-                            <Table.Cell>
-                                <UserLink data={data.user}></UserLink>
-                            </Table.Cell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.Cell>提交时间</Table.Cell>
-                            <Table.Cell>{data.submit_time}</Table.Cell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.Cell>
-                                状态
-                            </Table.Cell>
-                            <Table.Cell>
-                                <JudgeStatusLabel status={data.status}></JudgeStatusLabel>
-                            </Table.Cell>
-                        </Table.Row>
-                        {data.status !== "invisible" && <>
-                            <Table.Row>
-                                <Table.Cell>
-                                    得分/总分
-                                </Table.Cell>
-                                <Table.Cell>
-                                    <ScoreLabel fullScore={data.problem.score} score={data.score}></ScoreLabel>
-                                </Table.Cell>
-                            </Table.Row>
-                            {data.time_cost !== -1 && <Table.Row>
-                                <Table.Cell>
-                                    时间占用
-                                </Table.Cell>
-                                <Table.Cell>
-                                    {data.time_cost} ms
-                                </Table.Cell>
-                            </Table.Row>}
-                            {data.memory_cost !== -1 && <Table.Row>
-                                <Table.Cell>
-                                    内存占用
-                                </Table.Cell>
-                                <Table.Cell>
-                                    <MemoryCostLabel memoryCost={data.memory_cost}></MemoryCostLabel>
-                                </Table.Cell>
-                            </Table.Row>}
-                        </>}
-                        {!isManualGrading && !isWrittenTest && <><Table.Row>
-                            <Table.Cell>
-                                编译参数
-                            </Table.Cell>
-                            <Table.Cell>
-                                {data.extra_compile_parameter}
-                            </Table.Cell>
-                        </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>
-                                    评测机
-                                </Table.Cell>
-                                <Table.Cell>
-                                    {data.judger}
-                                </Table.Cell>
-                            </Table.Row></>}
-                        {!isWrittenTest && <Table.Row>
-                            <Table.Cell>
-                                编程语言
-                            </Table.Cell>
-                            <Table.Cell>
-                                {data.language_name}
-                            </Table.Cell>
-                        </Table.Row>}
-                        {!isManualGrading && !isWrittenTest && <Table.Row>
-                            <Table.Cell>
-                                内存显示单位
-                            </Table.Cell>
-                            <Table.Cell>
-                                <Button.Group size="tiny">
-                                    <Button active={unit === "byte"} onClick={() => setUnit("byte")}>
-                                        Byte
-                                    </Button>
-                                    <Button active={unit === "kilobyte"} onClick={() => setUnit("kilobyte")}>
-                                        KByte
-                                    </Button>
-                                    <Button active={unit === "millionbyte"} onClick={() => setUnit("millionbyte")}>
-                                        MByte
-                                    </Button>
-                                    <Button active={unit === "gigabyte"} onClick={() => setUnit("gigabyte")}>
-                                        GByte
-                                    </Button>
-                                </Button.Group>
-                            </Table.Cell>
-                        </Table.Row>}
-                        {isManualGrading && <>
-                            <Table.Row>
-                                <Table.Cell>人工评测时间</Table.Cell>
-                                <Table.Cell>{timeStampToString(data.lastManualGradingTime!)}</Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>人工评测用户</Table.Cell>
-                                <Table.Cell><UserLink data={data.lastManualGradingUser!} ></UserLink></Table.Cell>
-                            </Table.Row>
-                        </>}
-                    </Table.Body>
-                </Table>
+                                    </Table.Cell>
+                                </Table.Row>
+                                {isContestSubmit && <Table.Row>
+                                    <Table.Cell>比赛</Table.Cell>
+                                    <Table.Cell>
+                                        <Link to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${data.virtualContestID}`}>#{data.contest.id}. {data.contest.name}</Link>
+                                    </Table.Cell>
+                                </Table.Row>}
+                                <Table.Row>
+                                    <Table.Cell>
+                                        提交用户
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        <UserLink data={data.user}></UserLink>
+                                    </Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>提交时间</Table.Cell>
+                                    <Table.Cell>{data.submit_time}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>
+                                        状态
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        <JudgeStatusLabel status={data.status}></JudgeStatusLabel>
+                                    </Table.Cell>
+                                </Table.Row>
+                                {data.status !== "invisible" && <>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            得分/总分
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <ScoreLabel fullScore={data.problem.score} score={data.score}></ScoreLabel>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    {data.time_cost !== -1 && <Table.Row>
+                                        <Table.Cell>
+                                            时间占用
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {data.time_cost} ms
+                                        </Table.Cell>
+                                    </Table.Row>}
+                                    {data.memory_cost !== -1 && <Table.Row>
+                                        <Table.Cell>
+                                            内存占用
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <MemoryCostLabel memoryCost={data.memory_cost}></MemoryCostLabel>
+                                        </Table.Cell>
+                                    </Table.Row>}
+                                </>}
+                                {!isManualGrading && !isWrittenTest && <><Table.Row>
+                                    <Table.Cell>
+                                        编译参数
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {data.extra_compile_parameter}
+                                    </Table.Cell>
+                                </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            评测机
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {data.judger}
+                                        </Table.Cell>
+                                    </Table.Row></>}
+                                {!isWrittenTest && <Table.Row>
+                                    <Table.Cell>
+                                        编程语言
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {data.language_name}
+                                    </Table.Cell>
+                                </Table.Row>}
+                                {!isManualGrading && !isWrittenTest && <Table.Row>
+                                    <Table.Cell>
+                                        内存显示单位
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        <Button.Group size="tiny">
+                                            <Button active={unit === "byte"} onClick={() => setUnit("byte")}>
+                                                Byte
+                                            </Button>
+                                            <Button active={unit === "kilobyte"} onClick={() => setUnit("kilobyte")}>
+                                                KByte
+                                            </Button>
+                                            <Button active={unit === "millionbyte"} onClick={() => setUnit("millionbyte")}>
+                                                MByte
+                                            </Button>
+                                            <Button active={unit === "gigabyte"} onClick={() => setUnit("gigabyte")}>
+                                                GByte
+                                            </Button>
+                                        </Button.Group>
+                                    </Table.Cell>
+                                </Table.Row>}
+                                {isManualGrading && <>
+                                    <Table.Row>
+                                        <Table.Cell>人工评测时间</Table.Cell>
+                                        <Table.Cell>{timeStampToString(data.lastManualGradingTime!)}</Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>人工评测用户</Table.Cell>
+                                        <Table.Cell><UserLink data={data.lastManualGradingUser!} ></UserLink></Table.Cell>
+                                    </Table.Row>
+                                </>}
+                            </Table.Body>
+                        </Table>
+                    </Grid.Column>
+                    <Grid.Column width={4}>
+                        {isContestSubmit && <Button size="huge" color="blue" as={Link} to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${data.virtualContestID}`}>返回比赛</Button>}
+                    </Grid.Column>
+                </Grid>
                 {data.managable && !data.isRemoteSubmission && !isWrittenTest && <Button color="red" onClick={rejudge}>
                     重测</Button>}
                 {data.enableManualGrading && <Button color="green" as={Link} to={`${PUBLIC_URL}/submission/manual_grade/${data.id}`}>
