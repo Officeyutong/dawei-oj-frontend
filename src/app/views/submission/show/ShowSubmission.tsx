@@ -17,6 +17,8 @@ import { ButtonClickEvent } from "../../../common/types";
 import SubtaskResultAndCodeView from "./SubtaskResultAndCodeView";
 import WrittenProblemResultView from "./WrittenProblemResultView";
 import { WrittenTestAnswer } from "../../problem/client/types";
+import { useSelector } from "react-redux";
+import { StateType } from "../../../states/Manager";
 const ansiUp = new AnsiUp();
 
 enum Stage {
@@ -41,6 +43,7 @@ const ShowSubmission = () => {
 
     const socketRef = useRef<Socket | null>(null);
     const trackerTokenRef = useRef<NodeJS.Timeout | null>(null);
+    const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
     const [defaultExpandedTasks, setDefaultExpandedTasks] = useState<string[]>([]);
     useEffect(() => {
         if (unit !== "byte" && unit !== "kilobyte" && unit !== "gigabyte" && unit !== "millionbyte") {
@@ -131,6 +134,12 @@ const ShowSubmission = () => {
         }
         return [];
     }, [data]);
+    const userSeenVirtualContestId = useMemo(() => {
+
+        if (!data) return;
+        if (data.user.uid === selfUid) return data.virtualContestID;
+        else return -1;
+    }, [data, selfUid]);
     return <>
         {stage === Stage.LOADING && <>
             <div style={{ height: "400px" }}>
@@ -158,7 +167,7 @@ const ShowSubmission = () => {
                                 <Table.Row>
                                     <Table.Cell>题目</Table.Cell>
                                     <Table.Cell>
-                                        <Link to={isContestSubmit ? `${PUBLIC_URL}/contest/${data.contest.id}/problem/${data.problem.id}?virtual_contest=${data.virtualContestID}` : `${PUBLIC_URL}/show_problem/${data.problem.id}`}>
+                                        <Link to={isContestSubmit ? `${PUBLIC_URL}/contest/${data.contest.id}/problem/${data.problem.id}?virtual_contest=${userSeenVirtualContestId}` : `${PUBLIC_URL}/show_problem/${data.problem.id}`}>
                                             #{data.problem.id}. {data.problem.title}
                                         </Link>
 
@@ -167,7 +176,7 @@ const ShowSubmission = () => {
                                 {isContestSubmit && <Table.Row>
                                     <Table.Cell>比赛</Table.Cell>
                                     <Table.Cell>
-                                        <Link to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${data.virtualContestID}`}>#{data.contest.id}. {data.contest.name}</Link>
+                                        <Link to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${userSeenVirtualContestId}`}>#{data.contest.id}. {data.contest.name}</Link>
                                     </Table.Cell>
                                 </Table.Row>}
                                 <Table.Row>
