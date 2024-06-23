@@ -136,7 +136,7 @@ const ShowSubmission = () => {
     }, [data]);
     const userSeenVirtualContestId = useMemo(() => {
 
-        if (!data) return;
+        if (!data) return -1;
         if (data.user.uid === selfUid) return data.virtualContestID;
         else return -1;
     }, [data, selfUid]);
