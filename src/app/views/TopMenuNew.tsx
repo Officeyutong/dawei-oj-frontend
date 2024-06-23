@@ -27,9 +27,9 @@ const TopMenuNew = () => {
                     { label: <Link to={`${PUBLIC_URL}/problems/1`}>题库</Link>, key: "problems", icon: <BarsOutlined></BarsOutlined> },
                     { label: <Link to={`${PUBLIC_URL}/submissions/1`}>提交</Link>, key: "submissions", icon: <DatabaseOutlined></DatabaseOutlined> },
                     { label: <Link to={`${PUBLIC_URL}/team`}>团队</Link>, key: "teams", icon: <TeamOutlined></TeamOutlined> },
-                    { label: <Link to={`${PUBLIC_URL}/challenge/list`}>天梯</Link>, key: "challenge", icon: <ProjectOutlined></ProjectOutlined> },
                     { label: <Link to={`${PUBLIC_URL}/problemset/list/1`}>习题集</Link>, key: "problemset", icon: <BookOutlined></BookOutlined> },
                     { label: <Link to={`${PUBLIC_URL}/contests/1`}>比赛</Link>, key: "contest", icon: <CalculatorOutlined></CalculatorOutlined> },
+                    { label: <Link to={`${PUBLIC_URL}/virtualcontest/list`}>虚拟比赛</Link>, key: "virtual-contest", icon: <BarChartOutlined></BarChartOutlined> },
                     {
                         label: "讨论与百科", key: "discussion", icon: <GroupOutlined></GroupOutlined>, children: [
                             {
@@ -53,7 +53,7 @@ const TopMenuNew = () => {
                                 {
                                     type: "group" as "group", label: "通用功能", children: [
                                         { label: <Link to={`${PUBLIC_URL}/ide`}>在线IDE</Link>, key: "ide", icon: <CodeOutlined></CodeOutlined> },
-                                        { label: <Link to={`${PUBLIC_URL}/virtualcontest/list`}>虚拟比赛</Link>, key: "virtual-contest", icon: <BarChartOutlined></BarChartOutlined> },
+                                        { label: <Link to={`${PUBLIC_URL}/challenge/list`}>天梯</Link>, key: "challenge", icon: <ProjectOutlined></ProjectOutlined> },
                                         showPermissionPack ? { label: <Link to={`${PUBLIC_URL}/permissionpack/user_packs`}>权限包</Link>, key: "permission-pack", icon: <MergeOutlined></MergeOutlined> } : null,
                                         { label: <Link to={`${PUBLIC_URL}/blog/list/${uid}`}>博客</Link>, key: "blog", icon: <CloudOutlined></CloudOutlined> },
                                         { label: <Link to={`${PUBLIC_URL}/userproblemfilter/list`}>题目筛选</Link>, key: "problem-filter", icon: <ContainerOutlined></ContainerOutlined> },
