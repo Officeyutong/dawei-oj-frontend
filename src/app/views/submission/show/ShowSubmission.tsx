@@ -284,7 +284,7 @@ const ShowSubmission = () => {
                         </Table>
                     </Grid.Column>
                     <Grid.Column width={4}>
-                        {isContestSubmit && <Button size="huge" color="blue" as={Link} to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${data.virtualContestID}`}>返回比赛</Button>}
+                        {isContestSubmit && <Button size="huge" color="blue" as={Link} to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${userSeenVirtualContestId}`}>返回比赛</Button>}
                     </Grid.Column>
                 </Grid>
                 {data.managable && !data.isRemoteSubmission && !isWrittenTest && <Button color="red" onClick={rejudge}>
