@@ -226,7 +226,7 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                                     <span>  <a href={`/submissions/1?filter=status%3Daccepted%2Cproblem%3D${data.id}`} target="_blank" rel="noreferrer">通过提交</a> </span>
                                     {managable && <span><a href={`${PUBLIC_URL}/problem/query_problem_occupies/${data.id}`} rel="noreferrer" target="_blank">查看题目使用情况</a></span>}
                                     <div><Button style={{ marginTop: "20px" }} size="tiny" onClick={toggleTodoState} color={inTodoList ? "red" : "green"}>
-                                        {inTodoList ? "从待做列表删除" : "加入待做列表"}
+                                        {inTodoList ? "从题目收藏删除" : "加入题目收藏"}
                                     </Button>
                                         {data.downloads.length !== 0 && <FileDownloadArea data={data} urlMaker={s => `/api/download_file/${data.id}/${s}`}></FileDownloadArea>}</div>
                                 </Segment>

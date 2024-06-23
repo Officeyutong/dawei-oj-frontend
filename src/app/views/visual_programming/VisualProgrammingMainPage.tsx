@@ -25,7 +25,6 @@ const VisualProgrammingMainPage: React.FC<{}> = () => {
                     <Button fluid style={MainMenuButtonStyle}>👉点这里看录播课和直播课👈</Button>
                     <Button fluid style={MainMenuButtonStyle}>👉点这里做作业👈</Button>
                     <Button fluid style={MainMenuButtonStyle}>👉图形化课程学习方法👈</Button>
-
                 </div>
                 <span style={{ color: "#7ea2c7", marginBottom: "200px", fontSize: "large" }}>有任何不清楚的，可以联系班主任老师</span>
             </Grid.Column>
