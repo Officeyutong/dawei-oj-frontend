@@ -4,6 +4,7 @@ import { ProblemStatement } from "./client/types";
 import * as clipboard from "clipboardy";
 import { converter } from "../../common/Markdown";
 import "./ProblemMeta.css";
+import { showSuccessPopup } from "../../dialogs/Utils";
 const ProblemMetaBlock: React.FC<React.PropsWithChildren<{ value: string; name: string; preBlock?: boolean; withCopy?: boolean }>> = ({ name, preBlock, value, withCopy }) => {
     const innerHTML = preBlock === undefined ? converter.makeHtml(value) : value;
     return <div>
@@ -11,8 +12,11 @@ const ProblemMetaBlock: React.FC<React.PropsWithChildren<{ value: string; name: 
             <Container className="problem-meta">
                 <Grid columns="2">
                     <Grid.Column><Header as="h3">{name}</Header></Grid.Column>
-                    {withCopy !== undefined && <Grid.Column textAlign="right">
-                        <Button size="tiny" circular color="orange" icon onClick={() => clipboard.write(value)}><Icon name="clipboard outline"></Icon></Button>
+                    {withCopy && <Grid.Column textAlign="right">
+                        <Button size="tiny" circular color="orange" icon onClick={() => {
+                            clipboard.write(value);
+                            showSuccessPopup("样例内容已复制到剪贴板", 700);
+                        }}><Icon name="clipboard outline"></Icon></Button>
                     </Grid.Column>}
                 </Grid>
                 <Segment>

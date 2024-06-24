@@ -2,9 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Icon, Message, Transition } from "semantic-ui-react";
 export function showAutoDisappearPopup(component: React.ReactElement, timeout: number = 3000) {
-    // for(const item of document.){
-    //     item.remove();
-    // }
     document.querySelectorAll(".my-popup-message").forEach(x => x.remove());
     let elem = document.createElement("div");
     ReactDOM.render(<Transition
@@ -23,6 +20,11 @@ export function showAutoDisappearPopup(component: React.ReactElement, timeout: n
     elem.style.zIndex = "99999";
     document.body.appendChild(elem);
     elem.style.left = (document.body.clientWidth / 2 - elem.clientWidth / 2).toString() + "px";
+    const scrollCallback = () => {
+        elem.remove();
+        document.removeEventListener("scroll", scrollCallback);
+    };
+    document.addEventListener("scroll", scrollCallback);
     setTimeout(() => {
         elem.remove();
     }, timeout);
