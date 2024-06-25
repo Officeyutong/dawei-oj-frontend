@@ -44,6 +44,7 @@ interface UserProfileUpdateRequest {
     newPassword: string;
     permission_group: string;
     permissions: string[];
+    real_name: string | undefined;
 };
 interface FollowerItem extends GeneralUserEntry {
     time: string;

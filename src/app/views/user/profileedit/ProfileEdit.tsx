@@ -55,7 +55,8 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 newPassword: md5(pwd1.value + salt),
                 permission_group: data!.permission_group,
                 permissions: data!.permissions,
-                username: data!.username
+                username: data!.username,
+                real_name: data!.real_name
             });
             if (code === 0) showSuccessModal(message);
             else showErrorModal(message);
@@ -120,7 +121,7 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     </Form.Field>
                     <Form.Field>
                         <label>姓名</label>
-                        {data.real_name || "<未填写姓名，请联系管理员>"}
+                        {data.selfHasUserManagerPerm ? <Input value={data.real_name} onChange={(d, e) => setData({ ...data, real_name: d.target.value })}></Input> : (data.real_name || "<未填写姓名，请联系管理员>")}
                     </Form.Field>
                     <Form.Field>
                         <label>手机号验证</label>
