@@ -45,6 +45,7 @@ export interface UserStateType {
         companyName: string;
         difficultyDisplayMap: { [K: string]: { display: string; color: SemanticCOLORS } };
         customExtraFooter: string;
+        hasVisualProgrammingHomeworkUpdatePerm: boolean;
     }
 }
 
@@ -100,7 +101,8 @@ const defaultState: StateType = {
             enableRemoteJudge: false,
             companyName: "HelloJudge2",
             difficultyDisplayMap: {},
-            customExtraFooter: ""
+            customExtraFooter: "",
+            hasVisualProgrammingHomeworkUpdatePerm: false
 
         }
     },

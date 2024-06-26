@@ -1,14 +1,14 @@
 import { Col, Menu, Row } from "antd";
 import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../App";
-import { BarChartOutlined, BarsOutlined, BookOutlined, CalculatorOutlined, CloudOutlined, CodeOutlined, ContainerOutlined, DashboardOutlined, DatabaseOutlined, FileImageOutlined, GroupOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MergeOutlined, PlusOutlined, ProjectOutlined, TeamOutlined } from "@ant-design/icons";
+import { BarChartOutlined, BarsOutlined, BookOutlined, CalculatorOutlined, CloudOutlined, CodeOutlined, CompassOutlined, ContainerOutlined, DashboardOutlined, DatabaseOutlined, FileImageOutlined, GroupOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MergeOutlined, PlusOutlined, ProjectOutlined, TeamOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { StateType } from "../states/Manager";
 import Logo from "../assets/logo.png";
 import userClient from "./user/client/UserClient";
 const TopMenuNew = () => {
     const alreadyLogin = useSelector((s: StateType) => s.userState.login);
-    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, canUseImageStore, backend_managable, username, uid, showPermissionPack } = useSelector((s: StateType) => s.userState.userData);
+    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, canUseImageStore, backend_managable, username, uid, showPermissionPack, hasVisualProgrammingHomeworkUpdatePerm } = useSelector((s: StateType) => s.userState.userData);
     return <Row>
         <Col span={3} offset={2} style={{ backgroundColor: "white", alignContent: "center", textAlign: "center" }}>
             {/* <img src={logo} alt="logo"></img> */}
@@ -61,9 +61,10 @@ const TopMenuNew = () => {
                                         // { label: <Link to={`${PUBLIC_URL}/visual_programming/main`}>图形化课程</Link>, key: "visual_programming", icon: <DesktopOutlined></DesktopOutlined> }
                                     ]
                                 },
-                                (canUseImageStore ? {
+                                ((canUseImageStore || hasVisualProgrammingHomeworkUpdatePerm) ? {
                                     type: "group" as "group", label: "其他", children: [
-                                        { label: <Link to={`${PUBLIC_URL}/imagestore/list`}>图片上传</Link>, key: "image-store", icon: <FileImageOutlined></FileImageOutlined> }
+                                        (canUseImageStore ? { label: <Link to={`${PUBLIC_URL}/imagestore/list`}>图片上传</Link>, key: "image-store", icon: <FileImageOutlined></FileImageOutlined> } : null),
+                                        (hasVisualProgrammingHomeworkUpdatePerm ? { label: <Link to={`${PUBLIC_URL}/visual_programming_admin/management`}>可视化编程管理</Link>, key: "visualprogramming-admin", icon: <CompassOutlined></CompassOutlined> } : null)
                                     ]
                                 } : null)
                             ]
