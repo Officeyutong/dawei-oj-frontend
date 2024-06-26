@@ -100,9 +100,9 @@ const SubRoutes = () => {
         <Route path={`${match.path}/monitoreduser`}>
             <MonitoredUserRouter></MonitoredUserRouter>
         </Route>
-        <Route path={`${match.path}/visual_programming`}>
+        {/* <Route path={`${match.path}/visual_programming`}>
             <VisualProgrammingRouter></VisualProgrammingRouter>
-        </Route>
+        </Route> */}
         <Route path={`${match.path}/error`}>
             <ErrorAndSuccess error={true}></ErrorAndSuccess>
         </Route>
@@ -128,6 +128,9 @@ const MyRouter: React.FC<React.PropsWithChildren<{}>> = () => {
             <Switch>
                 <Route path={`${PUBLIC_URL}/wechat_statistics_view`}>
                     <WechatStatistics></WechatStatistics>
+                </Route>
+                <Route path={`${PUBLIC_URL}/visual_programming`}>
+                    <VisualProgrammingRouter></VisualProgrammingRouter>
                 </Route>
                 <SubRoutes></SubRoutes>
             </Switch>

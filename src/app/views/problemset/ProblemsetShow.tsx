@@ -190,9 +190,10 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
                     </Button>
                     {data.managable && <>
                         <Button color="green" as={Link} to={`${PUBLIC_URL}/problemset/edit/${data.id}`}>编辑</Button>
-                        <Button color="red" onClick={remove}>删除</Button>
+
                     </>}
-                    {data.courseURL!=="" && <Button color="blue" as="a" href={data.courseURL} target="_blank" rel="noreferrer">看课程</Button>}
+                    {data.selfHasProblemsetRemovePermission && <Button color="red" onClick={remove}>删除</Button>}
+                    {data.courseURL !== "" && <Button color="blue" as="a" href={data.courseURL} target="_blank" rel="noreferrer">看课程</Button>}
                 </Segment>
             </Grid.Column>
         </Grid>}

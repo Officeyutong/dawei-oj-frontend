@@ -254,7 +254,7 @@ const ContestShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                 <Icon name="hdd"></Icon>
                                 所有提交
                             </Button>}
-                            {managable && !data.virtual && <Button
+                            {data.selfHasContestRemovePermission && !data.virtual && <Button
                                 color="red"
                                 size="tiny"
                                 icon

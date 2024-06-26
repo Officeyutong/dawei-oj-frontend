@@ -104,6 +104,7 @@ interface ContestShowDetailResponse {
     closed: boolean;
     virtual: boolean;
     hasPermission: boolean; //是否有权访问
+    selfHasContestRemovePermission: boolean;
 };
 interface ContestEditProblem {
     id: number; weight: number;

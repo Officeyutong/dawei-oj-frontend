@@ -85,6 +85,7 @@ interface ProblemInfo extends ProblemStatement {
     allowManualGrading: boolean;
     difficulty: number;
     writtenTestStatement: WrittenTestQuestion<false>[];
+    selfHasProblemRemovePermission: boolean;
 };
 interface ProblemUpdateInfo extends ProblemStatement {
     extra_parameter: ExtraParameterEntry[];

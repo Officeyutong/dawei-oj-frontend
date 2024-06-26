@@ -1,7 +1,7 @@
 import { Route, useRouteMatch } from "react-router-dom"
 import VisualProgrammingMainPage from "./VisualProgrammingMainPage";
 
-const VirtualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
+const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
 
     return <>
@@ -10,4 +10,4 @@ const VirtualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
         </Route>
     </>
 }
-export default VirtualProgrammingRouter;
+export default VisualProgrammingRouter;

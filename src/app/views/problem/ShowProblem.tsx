@@ -220,7 +220,7 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                                     </Table>
                                     <span>{managable && <a target="_blank" rel="noreferrer" href={data.problem_type !== "written_test" ? `/problem_edit/${data.id}` : `/problem/edit/written_test/${data.id}`}>编辑</a>}  </span>
                                     {// eslint-disable-next-line jsx-a11y/anchor-is-valid
-                                        <span>{managable && <a style={{ cursor: "pointer" }} onClick={removeProblem}>删除</a>}  </span>}
+                                        <span>{data.selfHasProblemRemovePermission && <a style={{ cursor: "pointer" }} onClick={removeProblem}>删除</a>}  </span>}
                                     <span><a href={`/submissions/1?filter=uid%3D${baseUid}%2Cproblem%3D${data.id}`} target="_blank" rel="noreferrer">我的提交</a>  </span>
                                     <span> <a href={`/submissions/1?filter=problem%3D${data.id}`} target="_blank" rel="noreferrer">全部提交</a>  </span>
                                     <span>  <a href={`/submissions/1?filter=status%3Daccepted%2Cproblem%3D${data.id}`} target="_blank" rel="noreferrer">通过提交</a> </span>
