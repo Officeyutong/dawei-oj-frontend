@@ -13,12 +13,12 @@ interface HomeworkDetail {
     course_url: string;
 }
 type HomeworkUpdateRequest = Omit<HomeworkDetail, "id">;
-
+type HomeworkDisplayListEntry = Omit<HomeworkDetail, "video_embed_html">;
 
 export type {
     CreateHomeworkResponse,
     HomeworkDetail,
     HomeworkEditListEntry,
     HomeworkUpdateRequest,
-    
+    HomeworkDisplayListEntry
 }
