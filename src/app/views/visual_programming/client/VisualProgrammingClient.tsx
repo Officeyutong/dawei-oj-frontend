@@ -26,6 +26,11 @@ class VisualProgrammingClient extends GeneralClient {
     async getHomeworkSubmissionList(limit: number, filterCommentStatus: "no" | "commented-only" | "uncommented-only" = "no", uid?: number, homework_id?: number): Promise<HomeworkSubmissionListEntry[]> {
         return (await this.client!.post("/api/visualprogramming/homework/get_submission_for_homework", { limit, uid, homework_id, filterCommentStatus })).data;
     }
+    async submitHomework(homeworkId: number, file: FormData, prorgressHandler?: (evt: ProgressEvent) => void): Promise<{ submission_id: number }> {
+        return (await this.client!.post(`/api/visualprogramming/homework/submit/${homeworkId}`, file, {
+            onUploadProgress: prorgressHandler
+        })).data;
+    }
 };
 
 const visualProgrammingClient = new VisualProgrammingClient();

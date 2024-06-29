@@ -27,6 +27,7 @@ interface HomeworkSubmissionListEntry {
     submission_id: number;
     submit_time: number;
     file_size: number;
+    file_name: string;
     user: {
         uid: number;
         username: string;
