@@ -1,7 +1,7 @@
 import { Header, Tab } from "semantic-ui-react";
-import HomeworkList from "./HomeworkList";
+import HomeworkList from "./TabHomeworkList";
 import { useDocumentTitle } from "../../../common/Utils";
-import UserRanklist from "./UserRanklist";
+import UserRanklist from "./TabUserRanklist";
 
 const VisualProgrammingManagement: React.FC<{}> = () => {
     useDocumentTitle("管理可视化编程作业")

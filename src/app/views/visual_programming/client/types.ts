@@ -44,6 +44,11 @@ interface HomeworkSubmissionListEntry {
     }
 }
 
+interface UserSubmittedHomeworkEntry {
+    homework_id: number;
+    name: string;
+}
+
 export type {
     CreateHomeworkResponse,
     HomeworkDetail,
@@ -51,5 +56,6 @@ export type {
     HomeworkUpdateRequest,
     HomeworkDisplayListEntry,
     RanklistEntry,
-    HomeworkSubmissionListEntry
+    HomeworkSubmissionListEntry,
+    UserSubmittedHomeworkEntry
 }
