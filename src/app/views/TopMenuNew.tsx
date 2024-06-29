@@ -1,7 +1,7 @@
 import { Col, Menu, Row } from "antd";
 import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../App";
-import { BarChartOutlined, BarsOutlined, BookOutlined, CalculatorOutlined, CloudOutlined, CodeOutlined, CompassOutlined, ContainerOutlined, DashboardOutlined, DatabaseOutlined, FileImageOutlined, GroupOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MergeOutlined, PlusOutlined, ProjectOutlined, TeamOutlined } from "@ant-design/icons";
+import { BarChartOutlined, BarsOutlined, BookOutlined, CalculatorOutlined, CloudOutlined, CodeOutlined, CompassOutlined, ContainerOutlined, DashboardOutlined, DatabaseOutlined, DesktopOutlined, FileImageOutlined, GroupOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MergeOutlined, PlusOutlined, ProjectOutlined, TeamOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { StateType } from "../states/Manager";
 import Logo from "../assets/logo.png";
@@ -58,7 +58,7 @@ const TopMenuNew = () => {
                                         { label: <Link to={`${PUBLIC_URL}/blog/list/${uid}`}>博客</Link>, key: "blog", icon: <CloudOutlined></CloudOutlined> },
                                         { label: <Link to={`${PUBLIC_URL}/userproblemfilter/list`}>题目筛选</Link>, key: "problem-filter", icon: <ContainerOutlined></ContainerOutlined> },
                                         { label: <Link to={`${PUBLIC_URL}/monitoreduser/list`}>绑定用户</Link>, key: "monitored-user", icon: <DashboardOutlined></DashboardOutlined> },
-                                        // { label: <Link to={`${PUBLIC_URL}/visual_programming/main`}>图形化课程</Link>, key: "visual_programming", icon: <DesktopOutlined></DesktopOutlined> }
+                                        { label: <Link to={`${PUBLIC_URL}/visual_programming/main`}>图形化课程</Link>, key: "visual_programming", icon: <DesktopOutlined></DesktopOutlined> }
                                     ]
                                 },
                                 ((canUseImageStore || hasVisualProgrammingHomeworkUpdatePerm) ? {

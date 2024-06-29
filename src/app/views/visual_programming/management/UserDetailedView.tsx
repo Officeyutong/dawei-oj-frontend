@@ -104,7 +104,7 @@ const UserDetailedView: React.FC<UserDetailedProps> = ({ uid }) => {
                                 <Table.Cell>{timeStampToString(item.submit_time)}</Table.Cell>
                                 <Table.Cell>{item.file_name}</Table.Cell>
                                 <Table.Cell>{Math.ceil(item.file_size / 1024)}KB</Table.Cell>
-                                <Table.Cell>{item.comment ? "未点评" : "已点评"}</Table.Cell>
+                                <Table.Cell>{item.comment ? "已点评" : "未点评"}</Table.Cell>
                                 <Table.Cell><Button size="small" color="green" onClick={() => setSelectedSubmissionId(item.submission_id)}>查看详情</Button></Table.Cell>
                             </Table.Row>)}
                         </Table.Body>
