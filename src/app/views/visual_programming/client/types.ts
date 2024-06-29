@@ -37,7 +37,7 @@ interface HomeworkSubmissionListEntry {
     comment?: {
         uid: number;
         username: string;
-        real_name: string;
+        real_name?: string;
         email: string;
         comment: string;
         comment_time: number;
