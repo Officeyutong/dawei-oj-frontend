@@ -28,6 +28,8 @@ interface HomeworkSubmissionListEntry {
     submit_time: number;
     file_size: number;
     file_name: string;
+    homework_id: number;
+    homework_name: string;
     user: {
         uid: number;
         username: string;
@@ -49,6 +51,8 @@ interface UserSubmittedHomeworkEntry {
     name: string;
 }
 
+type CommentStatusFilterType = "no" | "commented-only" | "uncommented-only";
+
 export type {
     CreateHomeworkResponse,
     HomeworkDetail,
@@ -57,5 +61,6 @@ export type {
     HomeworkDisplayListEntry,
     RanklistEntry,
     HomeworkSubmissionListEntry,
-    UserSubmittedHomeworkEntry
+    UserSubmittedHomeworkEntry,
+    CommentStatusFilterType
 }

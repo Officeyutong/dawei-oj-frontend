@@ -9,7 +9,13 @@ import { Markdown } from "../../../common/Markdown";
 import AceEditor from "react-ace";
 import { useAceTheme } from "../../../states/StateUtils";
 import { showSuccessPopup } from "../../../dialogs/Utils";
-const SubmissionDetailedModal: React.FC<{ uid: number; homeworkId: number; submissionId: number; closeCallback: (shouldRefresh: boolean) => void; }> = ({ submissionId, closeCallback, uid, homeworkId }) => {
+interface BasicSubmissionDetailProps {
+    uid: number;
+    homeworkId: number;
+    submissionId: number;
+};
+
+const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCallback: (shouldRefresh: boolean) => void; }> = ({ submissionId, closeCallback, uid, homeworkId }) => {
     const [data, setData] = useState<HomeworkSubmissionListEntry | null>(null);
     const [loading, setLoading] = useState(false);
     const [newComment, setNewComment] = useState("");
@@ -117,5 +123,5 @@ const SubmissionDetailedModal: React.FC<{ uid: number; homeworkId: number; submi
         </Modal.Actions>
     </Modal>
 };
-
+export type { BasicSubmissionDetailProps }
 export default SubmissionDetailedModal;

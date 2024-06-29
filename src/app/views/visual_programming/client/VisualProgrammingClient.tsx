@@ -1,6 +1,6 @@
 import _ from "lodash";
 import GeneralClient from "../../../common/GeneralClient"
-import { CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, RanklistEntry, UserSubmittedHomeworkEntry } from "./types";
+import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, RanklistEntry, UserSubmittedHomeworkEntry } from "./types";
 
 class VisualProgrammingClient extends GeneralClient {
     async createHomework(): Promise<CreateHomeworkResponse> {
@@ -27,7 +27,7 @@ class VisualProgrammingClient extends GeneralClient {
     async getHomeworkRanklist(page: number): Promise<{ pageCount: number; data: RanklistEntry[] }> {
         return (await this.client!.post("/api/visualprogramming/homework/get_homework_ranklist", { page })).data;
     }
-    async getHomeworkSubmissionList(limit?: number, filterCommentStatus: "no" | "commented-only" | "uncommented-only" = "no", uid?: number, homework_id?: number, page?: number, filterBySubmissionId?: number[]): Promise<{ data: HomeworkSubmissionListEntry[]; pageCount: number }> {
+    async getHomeworkSubmissionList(limit?: number, filterCommentStatus: CommentStatusFilterType = "no", uid?: number, homework_id?: number, page?: number, filterBySubmissionId?: number[]): Promise<{ data: HomeworkSubmissionListEntry[]; pageCount: number }> {
         return (await this.client!.post("/api/visualprogramming/homework/get_submission_list", { limit, uid, homework_id, filterCommentStatus, page, filterBySubmissionId })).data;
     }
     async submitHomework(homeworkId: number, file: FormData, prorgressHandler?: (evt: ProgressEvent) => void): Promise<{ submission_id: number }> {
