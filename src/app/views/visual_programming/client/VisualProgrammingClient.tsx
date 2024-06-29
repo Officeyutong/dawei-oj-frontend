@@ -1,3 +1,4 @@
+import _ from "lodash";
 import GeneralClient from "../../../common/GeneralClient"
 import { CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, RanklistEntry } from "./types";
 
@@ -21,7 +22,10 @@ class VisualProgrammingClient extends GeneralClient {
         return (await this.client!.post("/api/visualprogramming/homework/get_display_list", { page })).data;
     }
     async getSimpleHomeworkRanklist(): Promise<RanklistEntry[]> {
-        return (await this.client!.post("/api/visualprogramming/homework/get_simple_ranklist")).data;
+        return _.take((await this.getHomeworkRanklist(1)).data, 4);
+    }
+    async getHomeworkRanklist(page: number): Promise<{ pageCount: number; data: RanklistEntry[] }> {
+        return (await this.client!.post("/api/visualprogramming/homework/get_simple_ranklist", { page })).data;
     }
     async getHomeworkSubmissionList(limit: number, filterCommentStatus: "no" | "commented-only" | "uncommented-only" = "no", uid?: number, homework_id?: number): Promise<HomeworkSubmissionListEntry[]> {
         return (await this.client!.post("/api/visualprogramming/homework/get_submission_for_homework", { limit, uid, homework_id, filterCommentStatus })).data;
