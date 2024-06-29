@@ -15,10 +15,40 @@ interface HomeworkDetail {
 type HomeworkUpdateRequest = Omit<HomeworkDetail, "id">;
 type HomeworkDisplayListEntry = Omit<HomeworkDetail, "video_embed_html">;
 
+interface RanklistEntry {
+    uid: number;
+    username: string;
+    email: string;
+    real_name?: string;
+    submission_count: number;
+}
+
+interface HomeworkSubmissionListEntry {
+    submission_id: number;
+    submit_time: number;
+    file_size: number;
+    user: {
+        uid: number;
+        username: string;
+        email: string;
+        real_name?: string;
+    };
+    comment?: {
+        uid: number;
+        username: string;
+        real_name: string;
+        email: string;
+        comment: string;
+        comment_time: number;
+    }
+}
+
 export type {
     CreateHomeworkResponse,
     HomeworkDetail,
     HomeworkEditListEntry,
     HomeworkUpdateRequest,
-    HomeworkDisplayListEntry
+    HomeworkDisplayListEntry,
+    RanklistEntry,
+    HomeworkSubmissionListEntry
 }
