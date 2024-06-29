@@ -7,6 +7,8 @@ import visualProgrammingClient from "./client/VisualProgrammingClient";
 import { Markdown } from "../../common/Markdown";
 import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../../App";
+import _ from "lodash";
+
 const VisualProgrammingHomeworkList: React.FC<{}> = () => {
     useDocumentTitle("图形化课程作业列表");
 
@@ -53,6 +55,14 @@ const VisualProgrammingHomeworkList: React.FC<{}> = () => {
                         </Grid>
                     </Fragment>)}
                 </>}
+
+                <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
+                    <Button circular size="tiny" style={{ backgroundColor: "#57baec", color: "white", fontSize: "medium" }} icon="angle left" onClick={page !== 1 ? () => loadPage(page - 1) : undefined}></Button>
+                    {_.range(1, pageCount + 1).map(item => <span style={{ color: page === item ? "#57baec" : "#a6aaac", paddingLeft: "9px", paddingRight: "9px", paddingTop: "10px", fontWeight: "bold", fontSize: "large", cursor: item !== page ? "pointer" : undefined }} key={item} onClick={item !== page ? () => loadPage(item) : undefined}>
+                        {item}
+                    </span>)}
+                    <Button circular size="tiny" style={{ backgroundColor: "#57baec", color: "white", marginLeft: "3px", fontSize: "medium" }} icon="angle right" onClick={page !== pageCount ? () => loadPage(page + 1) : undefined}></Button>
+                </div>
             </Segment>
         </div>
     </Segment>
