@@ -6,6 +6,7 @@ import { SemanticCOLORS, SemanticICONS } from 'semantic-ui-react/dist/commonjs/g
 
 export interface UserStateType {
     login: boolean;
+    initialRequestDone: boolean;
     userData: {
         uid: number;
         group: string;
@@ -68,6 +69,7 @@ export interface StateType {
 const defaultState: StateType = {
     userState: {
         login: false,
+        initialRequestDone: false,
         userData: {
             uid: -1,
             group: "",//用户组ID
@@ -125,11 +127,12 @@ export function makeUserStateUpdateAction(login: boolean, userData: UserStateTyp
     return {
         type: 'USERSTATE_UPDATE',
         modify: (state: StateType) => {
-            let result = {
+            let result: StateType = {
                 ...state,
                 userState: {
                     login: login,
-                    userData: userData
+                    userData: userData,
+                    initialRequestDone: true
                 }
             };
             return result;
