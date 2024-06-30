@@ -12631,6 +12631,11 @@ shellwords@^0.1.1:
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   integrity sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==
 
+showdown-toc-export@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmmirror.com/showdown-toc-export/-/showdown-toc-export-1.0.3.tgz#9c62d13f8243560310b8e049a459c15aac3ea45b"
+  integrity sha512-IaqOOp1jwpnicaqlU0/DuH2a37VdhcmyuqQ2XjmtMD4N9oLZkESEiSxzCvfiOowlY9bN3qEQkaQ8ykiXR3BcgA==
+
 showdown@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/showdown/-/showdown-1.9.1.tgz#134e148e75cd4623e09c21b0511977d79b5ad0ef"
