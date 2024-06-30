@@ -26,7 +26,7 @@ const UserSubmissionListModal: React.FC<{ uid: number; homeworkId: number; close
     return <>
         {selectedSubmission !== null && <SubmissionDetailedModal
             {...selectedSubmission}
-            allowNewComment={true}
+            allowNewComment={false}
             closeCallback={() => {
                 setSelectedSubmission(null);
             }}

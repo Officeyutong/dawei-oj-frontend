@@ -1,18 +1,18 @@
 import { useParams } from "react-router-dom";
 import { useDocumentTitle } from "../../common/Utils";
 import { Button, Dimmer, Image, Loader, Modal, Progress } from "semantic-ui-react";
-import { useEffect, useState, useCallback, useRef, ChangeEvent, CSSProperties } from "react";
+import { useEffect, useState, useCallback, useRef, ChangeEvent, CSSProperties, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
 import visualProgrammingClient from "./client/VisualProgrammingClient";
 import { HomeworkDetail, HomeworkSubmissionListEntry, RanklistEntry } from "./client/types";
-import './video.css';
+import './EmbedVideo.css';
 import { showErrorModal } from "../../dialogs/Dialog";
 import { Markdown } from "../../common/Markdown";
 import UserSubmissionListModal from "./UserSubmissionListModal";
 import medal from './assets/medal.png'
 import '../../LinkButton.css'
-
+const EMBED_URL_REGEX = /<iframe.*?src="(.*?)".*?>/;
 const VisualProgrammingSubmit: React.FC<{}> = () => {
     const { id } = useParams<{ id: string }>();
     const { uid } = useSelector((s: StateType) => s.userState.userData);
@@ -25,12 +25,18 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     const [homeworkData, setHomeworkData] = useState<null | HomeworkDetail>(null);
     const [rankData, setRankData] = useState<null | RanklistEntry[]>(null);
     const [commentData, setCommentData] = useState<null | HomeworkSubmissionListEntry[]>(null);
-    const [iframeSrc, setIframeSrc] = useState<null | String>(null);
     const [buttonText, setButtonText] = useState<'提交' | '已提交'>('提交');
 
     const [showSubmissionModal, setShowSubmissionModal] = useState(false);
 
     const uploadRef = useRef<HTMLInputElement>(null);
+
+    const iframeSrc = useMemo(() => {
+        if (!homeworkData) return "";
+        const match = homeworkData.video_embed_html.match(EMBED_URL_REGEX);
+        const src = match ? match[1] : '';
+        return src;
+    }, [homeworkData]);
 
     const classAddedIframe = `<iframe src="${iframeSrc}" class="videoClass" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>`;
 
@@ -68,7 +74,6 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     }
 
     const getData = useCallback(async () => {
-        const srcRegex = /<iframe.*?src="(.*?)".*?>/;
         let flag = false;
         try {
             setLoading(true);
@@ -81,13 +86,10 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
             setCommentData(commentData.data)
             setHomeworkData(workData)
             setLoaded(true)
-            console.log('1')
-            const match = workData.video_embed_html.match(srcRegex);
-            const src = match ? match[1] : '';
+
             if (commentData.data.length !== 0) {
                 setButtonText('已提交')
             }
-            setIframeSrc(src)
             flag = true;
         } catch { } finally {
             if (flag) {
@@ -102,12 +104,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     }, [id, uid])
 
     useEffect(() => {
-
         if (initialRequestDone && homeworkData === null && rankData === null && commentData === null) getData();
-        // console.log(JSON.stringify(commentData))
-        return () => {
-
-        }
     }, [homeworkData, getData, commentData, rankData, initialRequestDone])
 
     useEffect(() => {
