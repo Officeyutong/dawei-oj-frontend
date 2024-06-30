@@ -1,5 +1,5 @@
 import React from "react";
-import showdown from "showdown";
+import showdown, { ConverterOptions } from "showdown";
 import { renderKatex } from "./katex-wrapper";
 import { StateType } from "../states/Manager";
 import { connect } from "react-redux";
@@ -26,7 +26,8 @@ const showdownBindings = Object.keys(showdownClassMap)
         regex: new RegExp(`<${key}(.*)>`, 'g'),
         replace: `<${key} class="${showdownClassMap[key as keyof typeof showdownClassMap]}" $1>`
     }));
-const converter = new showdown.Converter({
+
+const GlobalShowdownConfig: ConverterOptions = {
     extensions: [
         {
             type: 'lang', regex: `${DOLLARD_CHR}${DOLLARD_CHR}([\\S\\s]+?)${DOLLARD_CHR}${DOLLARD_CHR}`, replace: (x: string, y: string) => {
@@ -50,7 +51,9 @@ const converter = new showdown.Converter({
     tables: true,
     literalMidWordUnderscores: true,
     strikethrough: true
-});
+};
+
+const converter = new showdown.Converter(GlobalShowdownConfig);
 
 
 
@@ -62,4 +65,4 @@ const Markdown = connect((state: StateType) => ({ state: state }))
         </div>
     }) as React.FC<React.PropsWithChildren<{ markdown: string, state: StateType } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>>>);
 
-export { converter, Markdown };
+export { converter, Markdown, GlobalShowdownConfig };

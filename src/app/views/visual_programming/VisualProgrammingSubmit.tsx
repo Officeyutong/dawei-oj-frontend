@@ -12,7 +12,9 @@ import { Markdown } from "../../common/Markdown";
 import UserSubmissionListModal from "./UserSubmissionListModal";
 import medal from './assets/medal.png'
 import '../../LinkButton.css'
+
 const EMBED_URL_REGEX = /<iframe.*?src="(.*?)".*?>/;
+
 const VisualProgrammingSubmit: React.FC<{}> = () => {
     const { id } = useParams<{ id: string }>();
     const { uid } = useSelector((s: StateType) => s.userState.userData);
@@ -66,6 +68,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                     setProgress(Math.floor(evt.loaded / evt.total * 100));
                 });
                 uploadRef.current.files = null;
+                await getData();
                 setButtonText('已提交')
             }
         } catch { } finally {
@@ -158,12 +161,12 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         </div>
                         <div style={{ backgroundColor: 'white', height: '25%', width: '80%', border: '1.5rem solid', borderRadius: '50px', borderColor: '#a2c173' }}>
                             <div style={{ width: '100%', height: '80%' }}>
-                                {buttonText === '提交' && <p style={{ margin: "3%" }}>
+                                {buttonText === '提交' && <p style={{ margin: "3%", fontWeight: 'bold' }}>
                                     请提交作业，提交后等待批改即可查看评语
                                 </p>}
                                 {commentData !== undefined && commentData && commentData.length !== 0 && rankData && buttonText === '已提交' &&
                                     <div style={{ overflowY: "scroll", maxHeight: "105%", margin: "3%", maxWidth: '95%', wordWrap: 'break-word' }}>
-                                        <Markdown markdown={commentData[0].comment ? commentData[0].comment.comment : '等待老师批改完成后可查看评语'}></Markdown>
+                                        <Markdown style={{ fontWeight: 'bold' }} markdown={commentData[0].comment ? commentData[0].comment.comment : '等待老师批改完成后可查看评语'}></Markdown>
                                     </div>}
                             </div>
                         </div>
@@ -174,11 +177,11 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                         <div key={item.uid} style={{ width: '25%', height: '100%', marginLeft: '1%', display: 'grid', placeItems: 'center' }}>
                                             <Image style={{ position: 'absolute', zIndex: '999', top: '58%', paddingRight: '6%', paddingTop: '1.5%' } as CSSProperties} src={medal}></Image>
                                             <Image style={{ border: "solid", borderColor: '#a2c173' }} src={`/api/user/profile_image/${item.uid}`} size='small' circular />
-                                            <a target="_blank" rel="noreferrer" style={{ fontSize: '2em', color: 'black', textAlign: "center", fontWeight: 'bold' }} href={`/profile/${item.uid}`}>{item.real_name && `${item.real_name}`}</a>
+                                            <a target="_blank" rel="noreferrer" style={{ fontSize: '2em', color: 'black', textAlign: "center", fontWeight: 'bold' }} href={`/profile/${item.uid}`}>{item.real_name ? `${item.real_name}` : `${item.username}`}</a>
                                             <p style={item.real_name ? { marginTop: '1px', fontSize: "1.5em", color: 'red', fontWeight: '500' } : { marginTop: '20px', fontSize: "1.5em", color: 'red', fontWeight: '500' }}>已交作业</p>
                                             {item.real_name ? <div style={{ width: '70%', height: '80%', background: '#fff5bc', borderRadius: '40px', textAlign: 'center' }}>
                                                 <p style={{ color: 'red', marginTop: "-2%", fontSize: '3em', fontWeight: 'bold' }}>{item.submission_count}</p>
-                                            </div> : <div style={{ width: '70%', height: '78%', background: '#fff5bc', borderRadius: '40px', textAlign: 'center' }}>
+                                            </div> : <div style={{ width: '70%', height: '80%', marginTop: '4%', background: '#fff5bc', borderRadius: '40px', textAlign: 'center' }}>
                                                 <p style={{ color: 'red', marginTop: "-4%", fontSize: '3em', fontWeight: 'bold' }}>{item.submission_count}</p>
                                             </div>}
 
