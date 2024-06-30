@@ -1,27 +1,201 @@
 import { useParams } from "react-router-dom";
 import { useDocumentTitle } from "../../common/Utils";
-import { Grid, Header, Segment } from "semantic-ui-react";
-import { useEffect } from "react";
+import { Button, Dimmer, Image, Loader, Modal, Progress } from "semantic-ui-react";
+import { useEffect, useState, useCallback, useRef, ChangeEvent, CSSProperties } from "react";
+import { useSelector } from "react-redux";
+import { StateType } from "../../states/Manager";
+import visualProgrammingClient from "./client/VisualProgrammingClient";
+import { HomeworkDetail, HomeworkSubmissionListEntry, RanklistEntry } from "./client/types";
+import './video.css';
+import { showErrorModal } from "../../dialogs/Dialog";
+import { Markdown } from "../../common/Markdown";
+import UserSubmissionListModal from "./UserSubmissionListModal";
+import medal from './assets/medal.png'
+import '../../LinkButton.css'
 
 const VisualProgrammingSubmit: React.FC<{}> = () => {
     const { id } = useParams<{ id: string }>();
-    useDocumentTitle("可视化作业提交");
+    const { uid } = useSelector((s: StateType) => s.userState.userData);
+    const { initialRequestDone } = useSelector((s: StateType) => s.userState);
+    const [loading, setLoading] = useState(true);
+    const [loaded, setLoaded] = useState(false);
+    const [uploading, setUpLoading] = useState(false);
+    const [progress, setProgress] = useState(0);
+
+    const [homeworkData, setHomeworkData] = useState<null | HomeworkDetail>(null);
+    const [rankData, setRankData] = useState<null | RanklistEntry[]>(null);
+    const [commentData, setCommentData] = useState<null | HomeworkSubmissionListEntry[]>(null);
+    const [iframeSrc, setIframeSrc] = useState<null | String>(null);
+    const [buttonText, setButtonText] = useState<'提交' | '已提交'>('提交');
+
+    const [showSubmissionModal, setShowSubmissionModal] = useState(false);
+
+    const uploadRef = useRef<HTMLInputElement>(null);
+
+    const classAddedIframe = `<iframe src="${iframeSrc}" class="videoClass" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>`;
+
+    useDocumentTitle(`${homeworkData?.name || "可视化作业提交"}`);
+
+    const handleClick = () => {
+        if (uploadRef.current) {
+            uploadRef.current.click();
+        }
+    }
+
+    const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+        try {
+            setUpLoading(true)
+            setProgress(0);
+            if (event.target && uploadRef.current) {
+                const fileObj = event.target.files && event.target.files[0];
+                if (!fileObj) {
+                    showErrorModal("请选择文件!");
+                    return;
+                }
+                const formData = new FormData();
+                formData.append(
+                    fileObj.name, fileObj, fileObj.name
+                );
+                await visualProgrammingClient.submitHomework(Number(id), formData, (evt: ProgressEvent) => {
+                    setProgress(Math.floor(evt.loaded / evt.total * 100));
+                });
+                uploadRef.current.files = null;
+                setButtonText('已提交')
+            }
+        } catch { } finally {
+            setUpLoading(false);
+        }
+    }
+
+    const getData = useCallback(async () => {
+        const srcRegex = /<iframe.*?src="(.*?)".*?>/;
+        let flag = false;
+        try {
+            setLoading(true);
+            const [workData, rankData, commentData] = await Promise.all([
+                visualProgrammingClient.getHomeworkDetail(Number(id)),
+                visualProgrammingClient.getSimpleHomeworkRanklist(),
+                visualProgrammingClient.getHomeworkSubmissionList(1, 'no', uid, Number(id))
+            ])
+            setRankData(rankData);
+            setCommentData(commentData.data)
+            setHomeworkData(workData)
+            setLoaded(true)
+            console.log('1')
+            const match = workData.video_embed_html.match(srcRegex);
+            const src = match ? match[1] : '';
+            if (commentData.data.length !== 0) {
+                setButtonText('已提交')
+            }
+            setIframeSrc(src)
+            flag = true;
+        } catch { } finally {
+            if (flag) {
+                setTimeout(() => {
+                    setLoading(false);
+                }, 2500);
+            } else {
+                setLoading(false)
+            }
+
+        }
+    }, [id, uid])
+
+    useEffect(() => {
+
+        if (initialRequestDone && homeworkData === null && rankData === null && commentData === null) getData();
+        // console.log(JSON.stringify(commentData))
+        return () => {
+
+        }
+    }, [homeworkData, getData, commentData, rankData, initialRequestDone])
+
     useEffect(() => {
         const oldColor = document.body.style.backgroundColor;
         document.body.style.backgroundColor = "#d6eefa";
         return () => { document.body.style.backgroundColor = oldColor };
     }, []);
-    return <div style={{ display: "flex", justifyContent: "space-around",width:"100%" }}>
-        <Grid columns={2}>
-            <Grid.Column>
-                <Header as="h1" style={{ color: "#3e6143" }}>作业目录</Header>
-            </Grid.Column>
-            <Grid.Column>
 
-            </Grid.Column>
-        </Grid>
-    </div>
+    return (
+        <>
+            {showSubmissionModal && <UserSubmissionListModal uid={uid} homeworkId={parseInt(id)} closeCallback={() => setShowSubmissionModal(false)}
+            ></UserSubmissionListModal>}
+            {uploading &&
+                <Modal size="tiny" closeOnDimmerClick={false} open>
+                    <Modal.Header>
+                        上传文件中
+                    </Modal.Header>
+                    <Modal.Content>
+                        <Progress percent={progress} progress="percent" active color="green"></Progress>
+                    </Modal.Content>
+                </Modal>}
+            {loading &&
+                <Dimmer active={loading}>
+                    <Loader>加载中</Loader>
+                </Dimmer>}
+            {loaded && commentData && rankData && homeworkData && iframeSrc &&
+                <div style={{ position: 'absolute', display: "flex", justifyContent: "center", width: "100%", height: "100%" }}>
+                    {iframeSrc && <div style={{ flex: 'auto', display: "flex", width: '50%', height: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <h1 style={{ color: "#3e6143", fontSize: '3em', marginTop: '120px' }}>作业介绍</h1>
+                        <div dangerouslySetInnerHTML={{ __html: classAddedIframe }} style={{ height: '75%', width: '90%', marginBottom: '200px', backgroundColor: '#FFFFFF', borderRadius: '20px' }}>
+                        </div>
+                    </div>}
 
+                    <div style={{ display: "flex", width: '50%', height: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <div style={{ marginTop: '200px', width: '100%' }}>
+
+                            <input
+                                style={{ display: 'none' }}
+                                disabled={uploading}
+                                ref={uploadRef}
+                                type="file"
+                                onChange={handleFileChange}
+                            />
+                            <div style={{ width: '100%', display: 'grid', placeItems: 'center' }}>
+                                <Button style={{ width: '30%', height: '20%', minHeight: '50px', borderRadius: '30px', background: '#de5f50', border: 'none', fontSize: '2em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={handleClick}>
+                                    {buttonText}
+                                </Button>
+                                <p style={{ width: '70%', height: '5%', textAlign: 'center' }}>已提交后可多次重复提交</p>
+                                <button className="link-button" onClick={() => { setShowSubmissionModal(true) }}>点此跳转提交记录</button>
+                            </div>
+                        </div>
+                        <div style={{ backgroundColor: 'white', height: '25%', width: '80%', border: '1.5rem solid', borderRadius: '50px', borderColor: '#a2c173' }}>
+                            <div style={{ width: '100%', height: '80%' }}>
+                                {buttonText === '提交' && <p style={{ margin: "3%" }}>
+                                    请提交作业，提交后等待批改即可查看评语
+                                </p>}
+                                {commentData !== undefined && commentData && commentData.length !== 0 && rankData && buttonText === '已提交' &&
+                                    <div style={{ overflowY: "scroll", maxHeight: "105%", margin: "3%", maxWidth: '95%', wordWrap: 'break-word' }}>
+                                        <Markdown markdown={commentData[0].comment ? commentData[0].comment.comment : '等待老师批改完成后可查看评语'}></Markdown>
+                                    </div>}
+                            </div>
+                        </div>
+                        <div style={{ height: '35%', width: '80%', display: 'flex' }}>
+                            {
+                                rankData.map((item) => {
+                                    return (
+                                        <div key={item.uid} style={{ width: '25%', height: '100%', marginLeft: '1%', display: 'grid', placeItems: 'center' }}>
+                                            <Image style={{ position: 'absolute', zIndex: '999', top: '58%', paddingRight: '6%', paddingTop: '1.5%' } as CSSProperties} src={medal}></Image>
+                                            <Image style={{ border: "solid", borderColor: '#a2c173' }} src={`/api/user/profile_image/${item.uid}`} size='small' circular />
+                                            <a target="_blank" rel="noreferrer" style={{ fontSize: '2em', color: 'black', textAlign: "center", fontWeight: 'bold' }} href={`/profile/${item.uid}`}>{item.real_name && `${item.real_name}`}</a>
+                                            <p style={item.real_name ? { marginTop: '1px', fontSize: "1.5em", color: 'red', fontWeight: '500' } : { marginTop: '20px', fontSize: "1.5em", color: 'red', fontWeight: '500' }}>已交作业</p>
+                                            {item.real_name ? <div style={{ width: '70%', height: '80%', background: '#fff5bc', borderRadius: '40px', textAlign: 'center' }}>
+                                                <p style={{ color: 'red', marginTop: "-2%", fontSize: '3em', fontWeight: 'bold' }}>{item.submission_count}</p>
+                                            </div> : <div style={{ width: '70%', height: '78%', background: '#fff5bc', borderRadius: '40px', textAlign: 'center' }}>
+                                                <p style={{ color: 'red', marginTop: "-4%", fontSize: '3em', fontWeight: 'bold' }}>{item.submission_count}</p>
+                                            </div>}
+
+
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+
+                    </div>
+                </div >}
+        </>
+    )
 };
 
 export default VisualProgrammingSubmit;
