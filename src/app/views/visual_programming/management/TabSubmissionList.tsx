@@ -1,15 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import { CommentStatusFilterType, HomeworkSubmissionListEntry } from "../client/types";
 import visualProgrammingClient from "../client/VisualProgrammingClient";
-import { Button, Dimmer, Divider, Form, Loader, Pagination, Radio, Table } from "semantic-ui-react";
+import { Button, Dimmer, Divider, Form, Icon, Label, Loader, Pagination, Radio, Table } from "semantic-ui-react";
 import UserLink from "../../utils/UserLink";
 import { timeStampToString } from "../../../common/Utils";
 import SubmissionDetailedModal, { BasicSubmissionDetailProps } from "./SubmissionDetailedModal";
+import SelectUserModal, { SelectedUser } from "./SelectUserModal";
+import SelectHomeworkModal, { SelectedHomework } from "./SelectHomeworkModal";
 
 const TabSubmissionList: React.FC<{}> = () => {
-    const [filterUser, setFilterUser] = useState<{ uid: number; email: string; username: string; real_name?: string } | null>(null);
-    const [homeworkFilter, setHomeworkFilter] = useState<{ name: string; id: number } | null>(null);
+    const [userFilter, setUserFilter] = useState<SelectedUser | null>(null);
+    const [homeworkFilter, setHomeworkFilter] = useState<SelectedHomework | null>(null);
     const [commentFilter, setCommentFilter] = useState<CommentStatusFilterType>("no");
+
+    const [showSelectUsetModal, setShowSelectUserModal] = useState(false);
+    const [showSelectHomeworkModal, setShowSelectHomeworkModal] = useState(false);
 
     const [page, setPage] = useState(1);
     const [data, setData] = useState<HomeworkSubmissionListEntry[]>([]);
@@ -24,7 +29,7 @@ const TabSubmissionList: React.FC<{}> = () => {
         try {
             setLoading(true);
             const resp = await visualProgrammingClient.getHomeworkSubmissionList(
-                undefined, commentFilter, filterUser?.uid, homeworkFilter?.id, page, undefined
+                undefined, commentFilter, userFilter?.uid, homeworkFilter?.id, page, undefined
             );
             setPageCount(Math.max(resp.pageCount, 1));
             setData(resp.data);
@@ -33,11 +38,21 @@ const TabSubmissionList: React.FC<{}> = () => {
         } catch { } finally {
             setLoading(false);
         }
-    }, [commentFilter, filterUser?.uid, homeworkFilter?.id]);
+    }, [commentFilter, userFilter?.uid, homeworkFilter?.id]);
     useEffect(() => {
         if (!loading && !loaded) loadPage(1);
     }, [loadPage, loaded, loading]);
     return <>
+        {showSelectHomeworkModal && <SelectHomeworkModal
+            closeCallback={data => {
+                if (data) setHomeworkFilter(data);
+                setShowSelectHomeworkModal(false);
+            }}
+        ></SelectHomeworkModal>}
+        {showSelectUsetModal && <SelectUserModal closeCallback={data => {
+            if (data) setUserFilter(data);
+            setShowSelectUserModal(false);
+        }}></SelectUserModal>}
         {selectedSubmission !== null && <SubmissionDetailedModal
             {...selectedSubmission}
             closeCallback={flag => {
@@ -51,9 +66,11 @@ const TabSubmissionList: React.FC<{}> = () => {
             <Form.Group widths={3}>
                 <Form.Field>
                     <label>过滤用户</label>
+                    {userFilter === null ? <Button size="small" onClick={() => setShowSelectUserModal(true)} color="green">选择用户</Button> : <Label onClick={() => setUserFilter(null)} size="large" color="blue">{userFilter.username} {userFilter.real_name && `（${userFilter.real_name}）`}<Icon name="delete"></Icon></Label>}
                 </Form.Field>
                 <Form.Field>
                     <label>过滤作业题</label>
+                    {homeworkFilter === null ? <Button size="small" onClick={() => setShowSelectHomeworkModal(true)} color="green">选择作业</Button> : <Label onClick={() => setHomeworkFilter(null)} size="large" color="blue">#{homeworkFilter.id}. {homeworkFilter.name}<Icon name="delete"></Icon></Label>}
                 </Form.Field>
                 <Form.Field>
                     <label>过滤点评状态</label>
@@ -65,6 +82,7 @@ const TabSubmissionList: React.FC<{}> = () => {
                     </Form.Group>
                 </Form.Field>
             </Form.Group>
+            <Form.Button size="small" color="green" onClick={() => loadPage(1)}>进行过滤</Form.Button>
         </Form>
         <Divider></Divider>
         <Table>
