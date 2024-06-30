@@ -52,6 +52,7 @@ const UserDetailedView: React.FC<UserDetailedProps> = ({ uid }) => {
             }}
             submissionId={selectedSubmissionId}
             homeworkId={selectedHomework!}
+            allowNewComment={true}
             uid={uid}
         ></SubmissionDetailedModal>}
         {loading && <Dimmer active><Loader active></Loader></Dimmer>}

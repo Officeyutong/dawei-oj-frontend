@@ -23,7 +23,7 @@ const TabSubmissionList: React.FC<{}> = () => {
     const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
-    const [selectedSubmission, setSelectedSubmission] = useState<BasicSubmissionDetailProps | null>(null);
+    const [selectedSubmission, setSelectedSubmission] = useState<Omit<BasicSubmissionDetailProps, "allowNewComment"> | null>(null);
 
     const loadPage = useCallback(async (page: number) => {
         try {
@@ -55,6 +55,7 @@ const TabSubmissionList: React.FC<{}> = () => {
         }}></SelectUserModal>}
         {selectedSubmission !== null && <SubmissionDetailedModal
             {...selectedSubmission}
+            allowNewComment={true}
             closeCallback={flag => {
                 if (flag) loadPage(page);
                 setSelectedSubmission(null);

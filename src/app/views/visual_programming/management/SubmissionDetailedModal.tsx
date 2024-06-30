@@ -13,9 +13,10 @@ interface BasicSubmissionDetailProps {
     uid: number;
     homeworkId: number;
     submissionId: number;
+    allowNewComment: boolean;
 };
 
-const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCallback: (shouldRefresh: boolean) => void; }> = ({ submissionId, closeCallback, uid, homeworkId }) => {
+const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCallback: (shouldRefresh: boolean) => void; }> = ({ submissionId, closeCallback, uid, homeworkId, allowNewComment }) => {
     const [data, setData] = useState<HomeworkSubmissionListEntry | null>(null);
     const [loading, setLoading] = useState(false);
     const [newComment, setNewComment] = useState("");
@@ -102,7 +103,7 @@ const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCall
                             </div>
                         </Form.Field>
                     </>}
-                    <Form.Field>
+                    {allowNewComment && <Form.Field>
                         <label>编写新点评</label>
                         <AceEditor
                             onChange={d => setNewComment(d)}
@@ -113,13 +114,13 @@ const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCall
                             height="200px"
                             theme={aceTheme}
                         ></AceEditor>
-                    </Form.Field>
+                    </Form.Field>}
                 </Form>
             </>}
         </Modal.Content>
         <Modal.Actions>
             <Button color="red" size="small" disabled={loading} onClick={() => closeCallback(false)}>取消</Button>
-            <Button color="green" size="small" onClick={save} disabled={loading}>保存</Button>
+            {allowNewComment && <Button color="green" size="small" onClick={save} disabled={loading}>保存</Button>}
         </Modal.Actions>
     </Modal>
 };
