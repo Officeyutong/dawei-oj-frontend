@@ -1,12 +1,13 @@
-import { Route, useRouteMatch } from "react-router-dom"
+import { Route, Switch, useRouteMatch } from "react-router-dom"
 import VisualProgrammingMainPage from "./VisualProgrammingMainPage";
 import VisualProgrammingHomeworkList from "./VisualProgrammingHomeworkList";
 import VisualProgrammingSubmit from "./VisualProgrammingSubmit";
+import VisualProgrammingManual from "./VisualProgrammingManual";
 
 const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
 
-    return <>
+    return <Switch>
         <Route exact path={`${match.path}/main`}>
             <VisualProgrammingMainPage></VisualProgrammingMainPage>
         </Route>
@@ -16,6 +17,9 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
         <Route exact path={`${match.path}/submit/:id`}>
             <VisualProgrammingSubmit></VisualProgrammingSubmit>
         </Route>
-    </>
+        <Route exact path={`${match.path}/manual`}>
+            <VisualProgrammingManual></VisualProgrammingManual>
+        </Route>
+    </Switch>
 }
 export default VisualProgrammingRouter;

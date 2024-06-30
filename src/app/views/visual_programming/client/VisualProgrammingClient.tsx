@@ -1,6 +1,6 @@
 import _ from "lodash";
 import GeneralClient from "../../../common/GeneralClient"
-import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, RanklistEntry, UserSubmittedHomeworkEntry } from "./types";
+import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, RanklistEntry, UserSubmittedHomeworkEntry, VisualProgrammingConfig } from "./types";
 
 class VisualProgrammingClient extends GeneralClient {
     async createHomework(): Promise<CreateHomeworkResponse> {
@@ -40,6 +40,9 @@ class VisualProgrammingClient extends GeneralClient {
     }
     async updateComment(submissionId: number, comment: string) {
         await this.client!.post("/api/visualprogramming/homework/update_comment", { submission_id: submissionId, comment });
+    }
+    async getConfig(): Promise<VisualProgrammingConfig> {
+        return (await this.client!.post("/api/visualprogramming/config")).data;
     }
 };
 

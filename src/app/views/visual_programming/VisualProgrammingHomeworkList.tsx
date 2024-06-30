@@ -1,4 +1,4 @@
-import { Button, Dimmer, Grid, Header, Image, Loader, Segment } from "semantic-ui-react"
+import { Button, Dimmer, Divider, Grid, Header, Image, Loader, Segment } from "semantic-ui-react"
 import Logo from "./assets/logo.png"
 import { useDocumentTitle } from "../../common/Utils";
 import { Fragment, useEffect, useState } from "react";
@@ -35,7 +35,7 @@ const VisualProgrammingHomeworkList: React.FC<{}> = () => {
         <Image src={Logo} style={{ position: "absolute" }}></Image>
         <div style={{ display: "flex", justifyContent: "space-around", flexDirection: "column", alignItems: "center" }}>
             <Header as="h1" style={{ color: "#de5f50", fontSize: "xxx-large", marginBottom: "5px" }}>图形化课程作业</Header>
-            <Segment style={{ width: "80%", marginTop: "5px" }}>
+            <Segment style={{ width: "60%", marginTop: "5px" }}>
                 {!loaded && <div style={{ height: "600px" }}></div>}
                 {loading && <Dimmer active><Loader active></Loader></Dimmer>}
                 {loaded && <>
@@ -53,6 +53,7 @@ const VisualProgrammingHomeworkList: React.FC<{}> = () => {
                                 </div>
                             </Grid.Column>
                         </Grid>
+                        <Divider></Divider>
                     </Fragment>)}
                 </>}
 

@@ -53,6 +53,10 @@ interface UserSubmittedHomeworkEntry {
 
 type CommentStatusFilterType = "no" | "commented-only" | "uncommented-only";
 
+interface VisualProgrammingConfig {
+    generalConfigURL: string;
+}
+
 export type {
     CreateHomeworkResponse,
     HomeworkDetail,
@@ -62,5 +66,6 @@ export type {
     RanklistEntry,
     HomeworkSubmissionListEntry,
     UserSubmittedHomeworkEntry,
-    CommentStatusFilterType
+    CommentStatusFilterType,
+    VisualProgrammingConfig
 }
