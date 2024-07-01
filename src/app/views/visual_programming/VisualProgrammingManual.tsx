@@ -45,14 +45,11 @@ const VisualProgrammingManual: React.FC<{}> = () => {
         const result = converter.makeHtml(baseText);
         return [toc, result];
     }, [baseText]);
-    // console.log(tocEntries, renderedText);
     useEffect(() => {
         const oldColor = document.body.style.backgroundColor;
         document.body.style.backgroundColor = "#d6eefa";
         return () => { document.body.style.backgroundColor = oldColor };
     }, []);
-
-
 
     return (
         <>
