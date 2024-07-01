@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useDocumentTitle } from "../../common/Utils";
-import { Button, Dimmer, Image, Loader, Modal, Progress } from "semantic-ui-react";
+import { Button, Dimmer, Grid, GridColumn, GridRow, Image, Loader, Modal, Progress } from "semantic-ui-react";
 import { useEffect, useState, useCallback, useRef, ChangeEvent, CSSProperties, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
@@ -56,8 +56,13 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
             setProgress(0);
             if (event.target && uploadRef.current) {
                 const fileObj = event.target.files && event.target.files[0];
+
                 if (!fileObj) {
                     showErrorModal("请选择文件!");
+                    return;
+                }
+                if (fileObj.name.slice(-4) !== '.sb3') {
+                    showErrorModal("文件类型错误")
                     return;
                 }
                 const formData = new FormData();
@@ -98,7 +103,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
             if (flag) {
                 setTimeout(() => {
                     setLoading(false);
-                }, 2500);
+                }, 1000);
             } else {
                 setLoading(false)
             }
@@ -134,58 +139,85 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                     <Loader>加载中</Loader>
                 </Dimmer>}
             {loaded && commentData && rankData && homeworkData && iframeSrc &&
-                <div style={{ position: 'absolute', display: "flex", justifyContent: "center", width: "100%", height: "100%" }}>
+                <div style={{ position: 'absolute', display: "flex", justifyContent: "center", width: "100%", height: "100%", overflow: 'hidden' }}>
                     {iframeSrc && <div style={{ flex: 'auto', display: "flex", width: '50%', height: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <h1 style={{ color: "#3e6143", fontSize: '3em', marginTop: '120px' }}>作业介绍</h1>
+                        <h1 style={{ color: "#3e6143", fontSize: '3em', marginTop: '60px' }}>作业介绍</h1>
                         <div dangerouslySetInnerHTML={{ __html: classAddedIframe }} style={{ height: '75%', width: '90%', marginBottom: '200px', backgroundColor: '#FFFFFF', borderRadius: '20px' }}>
                         </div>
                     </div>}
 
-                    <div style={{ display: "flex", width: '50%', height: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <div style={{ marginTop: '200px', width: '100%' }}>
+                    <div style={{ display: "flex", width: '50%', height: '95%', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <div style={{ marginTop: '100px', width: '90%', height: '33%', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
+                            <Grid >
+                                <GridRow style={{ height: '35px' }}>
+                                    <GridColumn>
+                                        <p style={{ fontSize: '2em', fontWeight: 'bold', paddingLeft: '1.4%' }}>{homeworkData.name}</p>
+                                    </GridColumn>
+                                </GridRow>
+                                <GridRow style={{ height: '200px' }} >
+                                    <GridColumn>
+                                        <div style={{ overflowY: "scroll", maxHeight: "80%", margin: "2%", maxWidth: '95%', wordWrap: 'break-word' }}>
+                                            <Markdown style={{ fontWeight: 'bold' }} markdown={homeworkData.description}></Markdown>
+                                        </div>
+                                    </GridColumn>
+                                </GridRow>
+                                <GridRow style={{ height: '30px' }}>
+                                    <GridColumn width={8}>
 
-                            <input
-                                style={{ display: 'none' }}
-                                disabled={uploading}
-                                ref={uploadRef}
-                                type="file"
-                                onChange={handleFileChange}
-                            />
-                            <div style={{ width: '100%', display: 'grid', placeItems: 'center' }}>
-                                <Button style={{ width: '30%', height: '20%', minHeight: '50px', borderRadius: '30px', background: '#de5f50', border: 'none', fontSize: '2em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={handleClick}>
-                                    {buttonText}
-                                </Button>
-                                <p style={{ width: '70%', height: '5%', textAlign: 'center' }}>已提交后可多次重复提交</p>
-                                <button className="link-button" onClick={() => { setShowSubmissionModal(true) }}>点此跳转提交记录</button>
-                            </div>
+                                    </GridColumn>
+                                    <GridColumn width={4}>
+                                        <div style={{ width: '150%', height: "2%", display: 'grid', placeItems: 'center', position: 'absolute', paddingRight: '30%' }}>
+
+                                            <p style={{ width: '80%', height: '5%', textAlign: 'center' }}>已提交后可多次重复提交</p>
+                                            <button className="link-button" onClick={() => { setShowSubmissionModal(true) }}>点此跳转提交记录</button>
+                                        </div>
+                                    </GridColumn>
+                                    <GridColumn width={4}>
+                                        <input
+                                            style={{ display: 'none' }}
+                                            disabled={uploading}
+                                            ref={uploadRef}
+                                            type="file"
+                                            onChange={handleFileChange}
+                                        />
+                                        <Button style={{ width: '80%', height: '10%', minHeight: '50px', borderRadius: '30px', background: '#de5f50', border: 'none', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={handleClick}>
+                                            {buttonText}
+                                        </Button>
+                                    </GridColumn>
+                                </GridRow>
+                            </Grid>
                         </div>
-                        <div style={{ backgroundColor: 'white', height: '25%', width: '80%', border: '1.5rem solid', borderRadius: '50px', borderColor: '#a2c173' }}>
+                        <div style={{ backgroundColor: 'white', height: '20%', width: '90%', border: '1.5rem solid', borderRadius: '50px', borderColor: '#a2c173' }}>
                             <div style={{ width: '100%', height: '80%' }}>
                                 {buttonText === '提交' && <p style={{ margin: "3%", fontWeight: 'bold' }}>
                                     请提交作业，提交后等待批改即可查看评语
                                 </p>}
                                 {commentData !== undefined && commentData && commentData.length !== 0 && rankData && buttonText === '已提交' &&
-                                    <div style={{ overflowY: "scroll", maxHeight: "105%", margin: "3%", maxWidth: '95%', wordWrap: 'break-word' }}>
+                                    <div style={{ overflowY: "scroll", maxHeight: "105%", margin: "2%", maxWidth: '95%', wordWrap: 'break-word' }}>
                                         <Markdown style={{ fontWeight: 'bold' }} markdown={commentData[0].comment ? commentData[0].comment.comment : '等待老师批改完成后可查看评语'}></Markdown>
                                     </div>}
                             </div>
                         </div>
-                        <div style={{ height: '35%', width: '80%', display: 'flex' }}>
+                        <div style={{ height: '35%', width: '90%', paddingTop: '5%', display: 'flex' }}>
                             {
                                 rankData.map((item) => {
                                     return (
-                                        <div key={item.uid} style={{ width: '25%', height: '100%', marginLeft: '1%', display: 'grid', placeItems: 'center' }}>
-                                            <Image style={{ position: 'absolute', zIndex: '999', top: '58%', paddingRight: '6%', paddingTop: '1.5%' } as CSSProperties} src={medal}></Image>
-                                            <Image style={{ border: "solid", borderColor: '#a2c173' }} src={`/api/user/profile_image/${item.uid}`} size='small' circular />
-                                            <a target="_blank" rel="noreferrer" style={{ fontSize: '2em', color: 'black', textAlign: "center", fontWeight: 'bold' }} href={`/profile/${item.uid}`}>{item.real_name ? `${item.real_name}` : `${item.username}`}</a>
-                                            <p style={item.real_name ? { marginTop: '1px', fontSize: "1.5em", color: 'red', fontWeight: '500' } : { marginTop: '20px', fontSize: "1.5em", color: 'red', fontWeight: '500' }}>已交作业</p>
-                                            {item.real_name ? <div style={{ width: '70%', height: '80%', background: '#fff5bc', borderRadius: '40px', textAlign: 'center' }}>
-                                                <p style={{ color: 'red', marginTop: "-2%", fontSize: '3em', fontWeight: 'bold' }}>{item.submission_count}</p>
-                                            </div> : <div style={{ width: '70%', height: '80%', marginTop: '4%', background: '#fff5bc', borderRadius: '40px', textAlign: 'center' }}>
-                                                <p style={{ color: 'red', marginTop: "-4%", fontSize: '3em', fontWeight: 'bold' }}>{item.submission_count}</p>
-                                            </div>}
-
-
+                                        <div key={item.uid} style={{ width: '50%', height: '100%', marginLeft: '1%', placeItems: 'center' }}>
+                                            <Grid style={{ height: '90%', paddingRight: '18%' }}>
+                                                <GridColumn width={9}>
+                                                    <Image style={{ position: 'absolute', zIndex: '999', top: '-8%', marginLeft: '-10%', paddingTop: '-2%', transform: 'scale(0.8)' } as CSSProperties} src={medal}></Image>
+                                                    <Image style={{ border: "solid", borderColor: '#a2c173' }} src={`/api/user/profile_image/${item.uid}`} size='medium' circular />
+                                                </GridColumn>
+                                                <GridColumn width={7} >
+                                                    <div style={{ height: '30%', paddingLeft: '6%' }}>
+                                                        <a target="_blank" rel="noreferrer" style={{ fontSize: '2em', color: 'black', textAlign: "center", fontWeight: 'bold' }} href={`/profile/${item.uid}`}>{item.real_name ? `${item.real_name}` : `${item.username}`}</a>
+                                                    </div>
+                                                    <p style={{ marginTop: '1px', fontSize: "1.3em", color: 'red', fontWeight: '500' }} >已交作业</p>
+                                                    <div style={{ width: '110%', height: '29%', background: '#fff5bc', borderRadius: '40px', textAlign: 'center' }}>
+                                                        <p style={{ color: 'red', fontSize: '2.8em', fontWeight: 'bold' }}>{item.submission_count}</p>
+                                                    </div>
+                                                </GridColumn>
+                                            </Grid>
                                         </div>
                                     )
                                 })

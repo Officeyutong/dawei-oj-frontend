@@ -22,7 +22,7 @@ class VisualProgrammingClient extends GeneralClient {
         return (await this.client!.post("/api/visualprogramming/homework/get_display_list", { page })).data;
     }
     async getSimpleHomeworkRanklist(): Promise<RanklistEntry[]> {
-        return _.take((await this.getHomeworkRanklist(1)).data, 4);
+        return _.take((await this.getHomeworkRanklist(1)).data, 3);
     }
     async getHomeworkRanklist(page: number): Promise<{ pageCount: number; data: RanklistEntry[] }> {
         return (await this.client!.post("/api/visualprogramming/homework/get_homework_ranklist", { page })).data;
