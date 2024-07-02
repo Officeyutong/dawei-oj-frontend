@@ -9,6 +9,10 @@ import { Markdown } from "../../../common/Markdown";
 import AceEditor from "react-ace";
 import { useAceTheme } from "../../../states/StateUtils";
 import { showSuccessPopup } from "../../../dialogs/Utils";
+import { useSelector } from "react-redux";
+import { StateType } from "../../../states/Manager";
+import VisualProgrammingGradeLabel from "../../utils/VisualProgrammingGradeLabel";
+import _ from "lodash";
 interface BasicSubmissionDetailProps {
     uid: number;
     homeworkId: number;
@@ -17,14 +21,16 @@ interface BasicSubmissionDetailProps {
 };
 
 const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCallback: (shouldRefresh: boolean) => void; }> = ({ submissionId, closeCallback, uid, homeworkId, allowNewComment }) => {
+    const allLevels = useSelector((s: StateType) => s.userState.userData.visualProgrammingGradeLevel);
     const [data, setData] = useState<HomeworkSubmissionListEntry | null>(null);
     const [loading, setLoading] = useState(false);
     const [newComment, setNewComment] = useState("");
+    const [newGrade, setNewGrade] = useState(0);
     const save = () => {
         const doSave = async () => {
             try {
                 setLoading(true);
-                await visualProgrammingClient.updateComment(submissionId, newComment);
+                await visualProgrammingClient.updateComment(submissionId, newComment, newGrade);
                 setLoading(false);
                 showSuccessPopup("操作完成！");
                 closeCallback(true);
@@ -95,6 +101,10 @@ const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCall
                                 <label>点评时间</label>
                                 <span>{timeStampToString(data.comment.comment_time)}</span>
                             </Form.Field>
+                            <Form.Field>
+                                <label>点评等级</label>
+                                <VisualProgrammingGradeLabel level={data.comment.comment_grade}></VisualProgrammingGradeLabel>
+                            </Form.Field>
                         </Form.Group>
                         <Form.Field>
                             <label>点评内容</label>
@@ -103,18 +113,24 @@ const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCall
                             </div>
                         </Form.Field>
                     </>}
-                    {allowNewComment && <Form.Field>
-                        <label>编写新点评</label>
-                        <AceEditor
-                            onChange={d => setNewComment(d)}
-                            value={newComment}
-                            name="new-comment-edit"
-                            mode="markdown"
-                            width="100%"
-                            height="200px"
-                            theme={aceTheme}
-                        ></AceEditor>
-                    </Form.Field>}
+                    {allowNewComment && <>
+                        <Form.Field>
+                            <label>编写新点评</label>
+                            <AceEditor
+                                onChange={d => setNewComment(d)}
+                                value={newComment}
+                                name="new-comment-edit"
+                                mode="markdown"
+                                width="100%"
+                                height="200px"
+                                theme={aceTheme}
+                            ></AceEditor>
+                        </Form.Field>
+                        <Form.Group>
+                            <label>新点评等级</label>
+                            {_.range(0, allLevels.length).map(item => <Form.Radio label={allLevels[item]} checked={item === newGrade} onChange={() => setNewGrade(item)} key={item} />)}
+                        </Form.Group>
+                    </>}
                 </Form>
             </>}
         </Modal.Content>

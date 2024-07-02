@@ -46,8 +46,8 @@ class VisualProgrammingClient extends GeneralClient {
     async queryUserSubmittedHomeworks(uid: number): Promise<UserSubmittedHomeworkEntry[]> {
         return (await this.client!.post("/api/visualprogramming/homework/query_submitted_homeworks", { uid })).data;
     }
-    async updateComment(submissionId: number, comment: string) {
-        await this.client!.post("/api/visualprogramming/homework/update_comment", { submission_id: submissionId, comment });
+    async updateComment(submissionId: number, comment: string, grade: number) {
+        await this.client!.post("/api/visualprogramming/homework/update_comment", { submission_id: submissionId, comment, grade });
     }
     async getConfig(): Promise<VisualProgrammingConfig> {
         return (await this.client!.post("/api/visualprogramming/config")).data;

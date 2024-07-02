@@ -47,6 +47,7 @@ export interface UserStateType {
         difficultyDisplayMap: { [K: string]: { display: string; color: SemanticCOLORS } };
         customExtraFooter: string;
         hasVisualProgrammingHomeworkUpdatePerm: boolean;
+        visualProgrammingGradeLevel: string[];
     }
 }
 
@@ -104,8 +105,8 @@ const defaultState: StateType = {
             companyName: "HelloJudge2",
             difficultyDisplayMap: {},
             customExtraFooter: "",
-            hasVisualProgrammingHomeworkUpdatePerm: false
-
+            hasVisualProgrammingHomeworkUpdatePerm: false,
+            visualProgrammingGradeLevel: []
         }
     },
     generalClient: null,

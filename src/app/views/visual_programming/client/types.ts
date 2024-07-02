@@ -43,6 +43,7 @@ interface HomeworkSubmissionListEntry {
         email: string;
         comment: string;
         comment_time: number;
+        comment_grade: number;
     }
 }
 

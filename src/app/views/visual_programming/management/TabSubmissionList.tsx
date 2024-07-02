@@ -38,8 +38,9 @@ const TabSubmissionList: React.FC<{}> = () => {
             setData(resp.data);
             setPage(page);
             setLoaded(true);
-        } catch { } finally {
             setLoading(false);
+        } catch { } finally {
+
         }
     }, [commentFilter, userFilter?.uid, homeworkFilter?.id, teamFilter?.id]);
     useEffect(() => {
