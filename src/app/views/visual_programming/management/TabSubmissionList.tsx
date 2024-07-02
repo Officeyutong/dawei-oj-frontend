@@ -8,6 +8,7 @@ import SubmissionDetailedModal, { BasicSubmissionDetailProps } from "./Submissio
 import SelectUserModal, { SelectedUser } from "./SelectUserModal";
 import SelectHomeworkModal, { SelectedHomework } from "./SelectHomeworkModal";
 import SelectTeamModal, { SelectedTeam } from "./SelectTeamModal";
+import QueryString from "qs";
 
 const TabSubmissionList: React.FC<{}> = () => {
     const [userFilter, setUserFilter] = useState<SelectedUser | null>(null);
@@ -44,6 +45,12 @@ const TabSubmissionList: React.FC<{}> = () => {
     useEffect(() => {
         if (!loading && !loaded) loadPage(1);
     }, [loadPage, loaded, loading]);
+    const doBatchDownload = () => {
+        const qs = QueryString.stringify({
+            submission_ids: data.map(t => t.submission_id).join(",")
+        });
+        window.open(`/api/visualprogramming/homework/batch_download?${qs}`);
+    };
     return <>
         {showSelectTeamModal && <SelectTeamModal
             closeCallback={data => {
@@ -91,11 +98,11 @@ const TabSubmissionList: React.FC<{}> = () => {
                         <Form.Field control={Radio} checked={commentFilter === "no"} label="不过滤" onChange={() => setCommentFilter("no")}></Form.Field>
                         <Form.Field control={Radio} checked={commentFilter === "commented-only"} label="只显示已点评" onChange={() => setCommentFilter("commented-only")}></Form.Field>
                         <Form.Field control={Radio} checked={commentFilter === "uncommented-only"} label="只显示未点评" onChange={() => setCommentFilter("uncommented-only")}></Form.Field>
-
                     </Form.Group>
                 </Form.Field>
             </Form.Group>
             <Form.Button size="small" color="green" onClick={() => loadPage(1)}>进行过滤</Form.Button>
+            <Form.Button size="small" color="green" onClick={doBatchDownload}>下载当前页面所有文件</Form.Button>
         </Form>
         <Divider></Divider>
         <Table>
