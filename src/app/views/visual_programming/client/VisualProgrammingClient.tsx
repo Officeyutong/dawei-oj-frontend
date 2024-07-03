@@ -1,6 +1,6 @@
 import _ from "lodash";
 import GeneralClient from "../../../common/GeneralClient"
-import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, RanklistEntry, UserSubmittedHomeworkEntry, VisualProgrammingConfig } from "./types";
+import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, RanklistEntry, SubmittedHomeworkCountStatisticsEntry, UserSubmittedHomeworkEntry, VisualProgrammingConfig } from "./types";
 
 class VisualProgrammingClient extends GeneralClient {
     async createHomework(): Promise<CreateHomeworkResponse> {
@@ -51,6 +51,9 @@ class VisualProgrammingClient extends GeneralClient {
     }
     async getConfig(): Promise<VisualProgrammingConfig> {
         return (await this.client!.post("/api/visualprogramming/config")).data;
+    }
+    async getSubmittedHomeworkStatistics(startTimestamp: number, endTimestamp: number): Promise<SubmittedHomeworkCountStatisticsEntry[]> {
+        return (await this.client!.post("/api/visualprogramming/get_submitted_homework_statistics", { start_timestamp: startTimestamp, end_timestamp: endTimestamp })).data;
     }
 };
 

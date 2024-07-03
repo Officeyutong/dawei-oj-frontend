@@ -57,6 +57,10 @@ type CommentStatusFilterType = "no" | "commented-only" | "uncommented-only";
 interface VisualProgrammingConfig {
     generalConfigURL: string;
 }
+interface SubmittedHomeworkCountStatisticsEntry {
+    date_timestamp: number;
+    count: number;
+}
 
 export type {
     CreateHomeworkResponse,
@@ -68,5 +72,6 @@ export type {
     HomeworkSubmissionListEntry,
     UserSubmittedHomeworkEntry,
     CommentStatusFilterType,
-    VisualProgrammingConfig
+    VisualProgrammingConfig,
+    SubmittedHomeworkCountStatisticsEntry
 }
