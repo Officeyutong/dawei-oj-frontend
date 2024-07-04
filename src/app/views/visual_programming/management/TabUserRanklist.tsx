@@ -5,7 +5,7 @@ import { Button, Dimmer, Loader, Modal, Pagination, Table } from "semantic-ui-re
 import UserLink from "../../utils/UserLink";
 import UserDetailedView, { UserDetailedProps } from "./UserDetailedView";
 
-const UserRanklist: React.FC<{}> = () => {
+const TabUserRanklist: React.FC<{}> = () => {
     const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [data, setData] = useState<RanklistEntry[]>([]);
@@ -75,5 +75,5 @@ const UserRanklist: React.FC<{}> = () => {
     </>
 }
 
-export default UserRanklist;
+export default TabUserRanklist;
 

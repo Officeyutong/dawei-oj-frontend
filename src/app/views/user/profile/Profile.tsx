@@ -69,6 +69,7 @@ const Profile: React.FC<React.PropsWithChildren<{}>> = () => {
                             <div>Rating: {data.rating}</div>
                             {data.email !== "default@bad-email" && <div>Email: {data.email}</div>}
                             <div>用户ID/UID: {data.id}</div>
+                            {data.adminComment && <div>管理侧备注：{data.adminComment}</div>}
                         </div>
                     </Card.Content>
                     {data.banned === 1 && <Card.Content extra>

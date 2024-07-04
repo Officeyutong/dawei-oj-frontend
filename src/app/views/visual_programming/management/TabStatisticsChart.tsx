@@ -8,7 +8,7 @@ import { SubmittedHomeworkCountStatisticsEntry } from "../client/types";
 import visualProgrammingClient from "../client/VisualProgrammingClient";
 import { ColumnChart } from "@opd/g2plot-react";
 import { timestampToYMD } from "../../../common/Utils";
-const StatisticsChart: React.FC<{}> = () => {
+const TabStatisticsChart: React.FC<{}> = () => {
     const [endTime, setEndTime] = useState<luxon.DateTime>(DateTime.now().minus({ days: 0 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }));
     const [duration, setDuration] = useState<number>(14);
     const [data, setData] = useState<null | SubmittedHomeworkCountStatisticsEntry[]>(null);
@@ -74,4 +74,4 @@ const StatisticsChart: React.FC<{}> = () => {
     </>
 };
 
-export default StatisticsChart;
+export default TabStatisticsChart;

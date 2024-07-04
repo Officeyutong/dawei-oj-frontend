@@ -19,6 +19,7 @@ const TabSubmissionList: React.FC<{}> = () => {
     const [showSelectUsetModal, setShowSelectUserModal] = useState(false);
     const [showSelectHomeworkModal, setShowSelectHomeworkModal] = useState(false);
     const [showSelectTeamModal, setShowSelectTeamModal] = useState(false);
+
     const [page, setPage] = useState(1);
     const [data, setData] = useState<HomeworkSubmissionListEntry[]>([]);
     const [pageCount, setPageCount] = useState(1);

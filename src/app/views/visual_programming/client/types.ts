@@ -62,6 +62,18 @@ interface SubmittedHomeworkCountStatisticsEntry {
     count: number;
 }
 
+interface PerTeamStatisticsResponse {
+    problems: { id: number; name: string; }[];
+    statistics: {
+        user: {
+            uid: number;
+            real_name?: string;
+            username: string;
+        };
+        data: number[];
+    }[]
+}
+
 export type {
     CreateHomeworkResponse,
     HomeworkDetail,
@@ -73,5 +85,6 @@ export type {
     UserSubmittedHomeworkEntry,
     CommentStatusFilterType,
     VisualProgrammingConfig,
-    SubmittedHomeworkCountStatisticsEntry
+    SubmittedHomeworkCountStatisticsEntry,
+    PerTeamStatisticsResponse
 }

@@ -1,6 +1,6 @@
 import _ from "lodash";
 import GeneralClient from "../../../common/GeneralClient"
-import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, RanklistEntry, SubmittedHomeworkCountStatisticsEntry, UserSubmittedHomeworkEntry, VisualProgrammingConfig } from "./types";
+import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, PerTeamStatisticsResponse, RanklistEntry, SubmittedHomeworkCountStatisticsEntry, UserSubmittedHomeworkEntry, VisualProgrammingConfig } from "./types";
 
 class VisualProgrammingClient extends GeneralClient {
     async createHomework(): Promise<CreateHomeworkResponse> {
@@ -54,6 +54,9 @@ class VisualProgrammingClient extends GeneralClient {
     }
     async getSubmittedHomeworkStatistics(startTimestamp: number, endTimestamp: number): Promise<SubmittedHomeworkCountStatisticsEntry[]> {
         return (await this.client!.post("/api/visualprogramming/get_submitted_homework_statistics", { start_timestamp: startTimestamp, end_timestamp: endTimestamp })).data;
+    }
+    async getPerTeamStatistics(team_id: number, filterByUser?: number): Promise<PerTeamStatisticsResponse> {
+        return (await this.client!.post("/api/visualprogramming/get_statistics_by_team", { team_id, filterByUser })).data;
     }
 };
 

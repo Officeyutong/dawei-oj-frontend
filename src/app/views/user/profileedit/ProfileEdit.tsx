@@ -25,12 +25,14 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
     const [showing, setShowing] = useState(false);
     const salt = usePasswordSalt();
     const { showPermissionPack } = useSelector((s: StateType) => s.userState.userData);
+    const [newAdminComment, setNewAdminComment] = useState("");
     useEffect(() => {
         if (!loaded) {
             (async () => {
                 try {
                     setLoading(true);
                     const resp = await userClient.getUserProfile(uid, true);
+                    if (resp.adminComment !== undefined) setNewAdminComment(resp.adminComment);
                     setData(resp);
                     setLoaded(true);
                 } catch { } finally { setLoading(false); }
@@ -56,7 +58,8 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 permission_group: data!.permission_group,
                 permissions: data!.permissions,
                 username: data!.username,
-                real_name: data!.real_name
+                real_name: data!.real_name,
+                newAdminComment: data!.adminComment === undefined ? undefined : newAdminComment
             });
             if (code === 0) showSuccessModal(message);
             else showErrorModal(message);
@@ -132,6 +135,10 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                         {data.phone_verified ? <div> <a href="/permissionpack/user_packs" target="_blank">请前往此处进行操作</a></div> : <div style={{ fontSize: "large" }}>请先验证手机号后再尝试领取权限包！</div>}
                     </Form.Field>
                     }
+                    {data.adminComment !== undefined && <Form.Field>
+                        <label>管理侧备注</label>
+                        <Input value={newAdminComment} onChange={(_, d) => setNewAdminComment(d.value)}></Input>
+                    </Form.Field>}
                     <Form.Field>
                         <label>积分</label>
                         {data.credit}

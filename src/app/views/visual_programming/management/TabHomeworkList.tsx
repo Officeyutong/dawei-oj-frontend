@@ -6,7 +6,7 @@ import { showConfirm } from "../../../dialogs/Dialog";
 import { showSuccessPopup } from "../../../dialogs/Utils";
 import HomeworkEdit from "./HomeworkEdit";
 
-const HomeworkList: React.FC<{}> = () => {
+const TabHomeworkList: React.FC<{}> = () => {
     const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [data, setData] = useState<HomeworkEditListEntry[]>([]);
@@ -76,4 +76,4 @@ const HomeworkList: React.FC<{}> = () => {
     </>
 };
 
-export default HomeworkList;
+export default TabHomeworkList;

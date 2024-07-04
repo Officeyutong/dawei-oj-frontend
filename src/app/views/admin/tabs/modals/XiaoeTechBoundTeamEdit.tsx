@@ -29,7 +29,7 @@ const XiaoeTechBoundTeamEditModal: React.FC<XiaoeTechBoundTeamEditModalProps> = 
                 try {
                     setLoading(true);
                     const [d1, d2, d3] = await Promise.all([
-                        teamClient.getTeamList(),
+                        teamClient.getTeamList(false),
                         adminClient.getXiaoeTechCourseBoundTeams(courseID),
                         adminClient.getXiaoeTechCourseComment(courseID)
                     ]);

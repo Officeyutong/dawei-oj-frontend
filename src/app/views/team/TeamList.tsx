@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Dimmer, Divider, Header, Icon, Loader, Segment, Table } from "semantic-ui-react";
+import { Checkbox, Dimmer, Divider, Form, Header, Icon, Loader, Segment, Table } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { ButtonClickEvent } from "../../common/types";
 import { useDocumentTitle } from "../../common/Utils";
@@ -12,15 +12,24 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
     useDocumentTitle("团队列表");
     const [data, setData] = useState<TeamListEntry[]>([]);
     const [loaded, setLoaded] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [hasCreatePermission, setHasCreatePermission] = useState(false);
+    const [showJoinableOnly, setShowJoinableOnly] = useState(false);
+    const loadData = async (showJoinableOnly: boolean) => {
+        try {
+            setLoading(true);
+            const resp = await teamClient.getTeamList(showJoinableOnly);
+            setLoading(false);
+            setData(resp.list);
+            setShowJoinableOnly(showJoinableOnly);
+            setHasCreatePermission(resp.hasTeamCreatePermission);
+            setLoaded(true);
+        } catch { } finally { }
+    };
+
     useEffect(() => {
         if (!loaded) {
-            (async () => {
-                try {
-                    const resp = await teamClient.getTeamList();
-                    setData(resp.list); setHasCreatePermission(resp.hasTeamCreatePermission); setLoaded(true);
-                } catch { } finally { }
-            })();
+            loadData(true);
         }
     }, [loaded]);
     const addTeam = async (evt: ButtonClickEvent) => {
@@ -29,7 +38,8 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
             target.classList.add("loading");
             const { team_id } = await teamClient.createTeam();
             window.open(`/team/${team_id}`);
-            setData((await teamClient.getTeamList()).list);
+            // setData((await teamClient.getTeamList(showJoinableOnly)).list);
+            await loadData(false);
         } catch { } finally {
             target.classList.remove("loading");
         }
@@ -38,48 +48,52 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
         <Header as="h1">
             团队列表
         </Header>
-        {!loaded && <Segment stacked>
-            <Dimmer active><Loader></Loader></Dimmer>
-            <div style={{ height: "400px" }}></div></Segment>}
-        {loaded && <Segment stacked>
-            {hasCreatePermission && <>
-                <Container textAlign="right">
-                    <Button color="green" labelPosition="left" icon onClick={addTeam}>
+
+        {<Segment stacked>
+            {loading && <Segment stacked>
+                <Dimmer active><Loader></Loader></Dimmer>
+                <div style={{ height: "400px" }}></div></Segment>}
+            {loaded && <>
+                <Form >
+                    <Form.Field>
+                        <Checkbox toggle checked={showJoinableOnly} onChange={(_, d) => loadData(d.checked!)} label="只显示自己可以访问的团队"></Checkbox>
+                    </Form.Field>
+                    {hasCreatePermission && <Form.Button color="green" labelPosition="left" icon onClick={addTeam}>
                         <Icon name="plus"></Icon>
                         添加团队...
-                    </Button>
-                </Container>
+                    </Form.Button>}
+                </Form>
                 <Divider></Divider>
+                <Table basic="very">
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell textAlign="center" style={{ maxWidth: "80px", width: "80px" }}>团队ID</Table.HeaderCell>
+                            <Table.HeaderCell>团队名</Table.HeaderCell>
+                            <Table.HeaderCell>创建者</Table.HeaderCell>
+                            <Table.HeaderCell textAlign="center">访问权限</Table.HeaderCell>
+                            <Table.HeaderCell textAlign="center">人数</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {data.map((x, i) => <Table.Row key={i}>
+                            <Table.Cell textAlign="center" style={{ maxWidth: "80px", width: "80px" }}>{x.id}</Table.Cell>
+                            <Table.Cell style={{ minWidth: "300px" }}>
+                                {/* <a href={`/team/${x.id}`}>{x.name}</a> */}
+                                <Link to={`${PUBLIC_URL}/team/${x.id}`}>{x.name}</Link>
+                            </Table.Cell>
+                            <Table.Cell>
+                                <UserLink data={{ uid: x.owner_id, username: x.owner_username }}></UserLink>
+                            </Table.Cell>
+                            <Table.Cell textAlign="center" positive={x.accessible} negative={!x.accessible}>
+                                {x.private ? <Icon name={x.accessible ? "lock open" : "lock"}></Icon> : "公开"}
+                            </Table.Cell>
+                            <Table.Cell textAlign="center">
+                                {x.member_count}
+                            </Table.Cell>
+                        </Table.Row>)}
+                    </Table.Body>
+                </Table>
             </>}
-            <Table basic="very">
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell textAlign="center" style={{ maxWidth: "80px", width: "80px" }}>团队ID</Table.HeaderCell>
-                        <Table.HeaderCell>团队名</Table.HeaderCell>
-                        <Table.HeaderCell>创建者</Table.HeaderCell>
-                        <Table.HeaderCell textAlign="center">访问权限</Table.HeaderCell>
-                        <Table.HeaderCell textAlign="center">人数</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {data.map((x, i) => <Table.Row key={i}>
-                        <Table.Cell textAlign="center" style={{ maxWidth: "80px", width: "80px" }}>{x.id}</Table.Cell>
-                        <Table.Cell style={{ minWidth: "300px" }}>
-                            {/* <a href={`/team/${x.id}`}>{x.name}</a> */}
-                            <Link to={`${PUBLIC_URL}/team/${x.id}`}>{x.name}</Link>
-                        </Table.Cell>
-                        <Table.Cell>
-                            <UserLink data={{ uid: x.owner_id, username: x.owner_username }}></UserLink>
-                        </Table.Cell>
-                        <Table.Cell textAlign="center" positive={x.accessible} negative={!x.accessible}>
-                            {x.private ? <Icon name={x.accessible ? "lock open" : "lock"}></Icon> : "公开"}
-                        </Table.Cell>
-                        <Table.Cell textAlign="center">
-                            {x.member_count}
-                        </Table.Cell>
-                    </Table.Row>)}
-                </Table.Body>
-            </Table>
         </Segment>}
     </>;
 };

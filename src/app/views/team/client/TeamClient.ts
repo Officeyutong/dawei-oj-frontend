@@ -8,8 +8,8 @@ class TeamClient extends GeneralClient {
     async addTeamThings(teamID: number, problems: number[], contests: number[], problemsets: number[]) {
         await this.client!.post("/api/team/add_problem_or_contest_or_problemset", { teamID, problems, contests, problemsets });
     }
-    async getTeamList(): Promise<{ list: TeamListEntry[]; hasTeamCreatePermission: boolean; }> {
-        return (await this.client!.post("/api/team/list")).data;
+    async getTeamList(showJoinableOnly: boolean): Promise<{ list: TeamListEntry[]; hasTeamCreatePermission: boolean; }> {
+        return (await this.client!.post("/api/team/list", { showJoinableOnly })).data;
     }
     async createTeam(): Promise<{ team_id: number }> {
         return (await this.unwrapExtraClient!.post("/api/team/create")).data;
