@@ -38,7 +38,6 @@ const VisualProgrammingMainPage: React.FC<{}> = () => {
         })();
     }, [config]);
     const doHomeworkButton = <Button as={isLogin ? Link : undefined} to={`${PUBLIC_URL}/visual_programming/homework_list`} fluid style={{ ...MainMenuButtonStyle, ...(isLogin ? {} : { opacity: "0.45" }) }}>👉点这里做作业👈</Button>;
-    console.log(isLogin)
     return <div style={{ display: "flex", justifyContent: "space-around" }}>
         <Segment style={{ backgroundSize: "100% 100%", backgroundImage: `url(${MainBackground})`, width: "80%" }}>
             {loading && <Dimmer active><Loader active></Loader></Dimmer>}
@@ -60,7 +59,7 @@ const VisualProgrammingMainPage: React.FC<{}> = () => {
                         </div>
                     </div>
 
-                    <span style={{ marginTop: "10px", color: "#7ea2c7", fontSize: "large", marginBottom: "600px" }}>有任何不清楚的，可以联系班主任老师</span>
+                    <span style={{ marginTop: "10px", color: "#7ea2c7", fontSize: "large", marginBottom: "290px" }}>有任何不清楚的，可以联系班主任老师</span>
                 </Grid.Column>
             </Grid>
             <Image src={Pussy} style={{
