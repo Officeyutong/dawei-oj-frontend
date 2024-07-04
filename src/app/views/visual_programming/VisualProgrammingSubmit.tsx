@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useDocumentTitle } from "../../common/Utils";
-import { Button, Dimmer, Grid, GridColumn, GridRow, Image, Loader, Modal, Progress } from "semantic-ui-react";
+import { Button, Dimmer, Divider, Grid, GridColumn, GridRow, Header, Image, Loader, Modal, Progress, Segment } from "semantic-ui-react";
 import { useEffect, useState, useCallback, useRef, ChangeEvent, CSSProperties, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
@@ -139,54 +139,50 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                     <Loader>加载中</Loader>
                 </Dimmer>}
             {loaded && commentData && rankData && homeworkData && iframeSrc &&
-                <div style={{ position: 'absolute', display: "flex", justifyContent: "center", width: "100%", height: "100%", overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', display: "flex", justifyContent: "center", width: "100%", height: "100%" }}>
                     {iframeSrc && <div style={{ flex: 'auto', display: "flex", width: '50%', height: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
                         <h1 style={{ color: "#3e6143", fontSize: '3em', marginTop: '60px' }}>作业介绍</h1>
                         <div dangerouslySetInnerHTML={{ __html: classAddedIframe }} style={{ height: '75%', width: '90%', marginBottom: '200px', backgroundColor: '#FFFFFF', borderRadius: '20px' }}>
                         </div>
                     </div>}
-
                     <div style={{ display: "flex", width: '50%', height: '95%', justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <div style={{ marginTop: '100px', width: '90%', height: '33%', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
-                            <Grid >
-                                <GridRow style={{ height: '35px' }}>
+                        <Segment style={{ marginTop: '70px', width: '90%', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
+                            <Grid>
+                                <GridRow >
                                     <GridColumn>
-                                        <p style={{ fontSize: '2em', fontWeight: 'bold', paddingLeft: '1.4%' }}>{homeworkData.name}</p>
+                                        <Header as="h2">{homeworkData.name}</Header>
                                     </GridColumn>
                                 </GridRow>
-                                <GridRow style={{ height: '200px' }} >
-                                    <GridColumn>
+                                <GridRow>
+                                    <GridColumn style={{ height: '200px' }} >
                                         <div style={{ overflowY: "scroll", maxHeight: "80%", margin: "2%", maxWidth: '95%', wordWrap: 'break-word' }}>
                                             <Markdown style={{ fontWeight: 'bold' }} markdown={homeworkData.description}></Markdown>
                                         </div>
+                                        <Divider></Divider>
                                     </GridColumn>
                                 </GridRow>
-                                <GridRow style={{ height: '30px' }}>
-                                    <GridColumn width={8}>
-
-                                    </GridColumn>
-                                    <GridColumn width={4}>
-                                        <div style={{ width: '150%', height: "2%", display: 'grid', placeItems: 'center', position: 'absolute', paddingRight: '30%' }}>
-
-                                            <p style={{ width: '80%', height: '5%', textAlign: 'center' }}>已提交后可多次重复提交</p>
-                                            <button className="link-button" onClick={() => { setShowSubmissionModal(true) }}>点此跳转提交记录</button>
+                                <GridRow style={{ paddingTop: 0 }}>
+                                    <Grid.Column style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", }}>
+                                        <div style={{ width: "200px", textAlign: "center" }}>
+                                            <p style={{ textAlign: "center" }}>已提交后可多次重复提交</p>
+                                            <button style={{ textAlign: "center" }} className="link-button" onClick={() => { setShowSubmissionModal(true) }}>点此跳转提交记录</button>
                                         </div>
-                                    </GridColumn>
-                                    <GridColumn width={4}>
-                                        <input
-                                            style={{ display: 'none' }}
-                                            disabled={uploading}
-                                            ref={uploadRef}
-                                            type="file"
-                                            onChange={handleFileChange}
-                                        />
-                                        <Button style={{ width: '80%', height: '10%', minHeight: '50px', borderRadius: '30px', background: '#de5f50', border: 'none', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={handleClick}>
-                                            {buttonText}
-                                        </Button>
-                                    </GridColumn>
+                                        <div style={{ marginRight: "10px", height: "100%" }}>
+                                            <input
+                                                style={{ display: 'none' }}
+                                                disabled={uploading}
+                                                ref={uploadRef}
+                                                type="file"
+                                                onChange={handleFileChange}
+                                            />
+                                            <Button style={{ height: "100%", borderRadius: '30px', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={handleClick}>
+                                                {buttonText}
+                                            </Button>
+                                        </div>
+                                    </Grid.Column>
                                 </GridRow>
                             </Grid>
-                        </div>
+                        </Segment>
                         <div style={{ backgroundColor: 'white', height: '20%', width: '90%', border: '1.5rem solid', borderRadius: '50px', borderColor: '#a2c173' }}>
                             <div style={{ width: '100%', height: '80%' }}>
                                 {buttonText === '提交' && <p style={{ margin: "3%", fontWeight: 'bold' }}>
@@ -198,14 +194,14 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                     </div>}
                             </div>
                         </div>
-                        <div style={{ height: '35%', width: '90%', paddingTop: '5%', display: 'flex' }}>
+                        <div style={{ height: '30%', width: '90%', paddingTop: '5%', display: 'flex' }}>
                             {
                                 rankData.map((item) => {
                                     return (
-                                        <div key={item.uid} style={{ width: '50%', height: '100%', marginLeft: '1%', placeItems: 'center' }}>
+                                        <div key={item.uid} style={{ width: '50%', height: '90%', marginLeft: '1%', placeItems: 'center' }}>
                                             <Grid style={{ height: '90%', paddingRight: '18%' }}>
                                                 <GridColumn width={9}>
-                                                    <Image style={{ position: 'absolute', zIndex: '999', top: '-8%', marginLeft: '-10%', paddingTop: '-2%', transform: 'scale(0.8)' } as CSSProperties} src={medal}></Image>
+                                                    <Image style={{ position: 'absolute', zIndex: '999', top: '-8%', marginLeft: '-10%', paddingTop: '-2%', transform: 'scale(0.9)' } as CSSProperties} src={medal}></Image>
                                                     <Image style={{ border: "solid", borderColor: '#a2c173' }} src={`/api/user/profile_image/${item.uid}`} size='medium' circular />
                                                 </GridColumn>
                                                 <GridColumn width={7} >
