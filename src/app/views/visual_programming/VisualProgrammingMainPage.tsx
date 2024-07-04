@@ -1,4 +1,4 @@
-import { Button, Dimmer, Grid, Header, Image, Loader, Segment } from "semantic-ui-react";
+import { Button, Dimmer, Grid, Header, Image, Loader, Popup, Segment } from "semantic-ui-react";
 import { useDocumentTitle } from "../../common/Utils";
 import MainBackground from "./assets/background.png";
 import { CSSProperties, useEffect, useState } from "react";
@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../../App";
 import { VisualProgrammingConfig } from "./client/types";
 import visualProgrammingClient from "./client/VisualProgrammingClient";
+import { useSelector } from "react-redux";
+import { StateType } from "../../states/Manager";
 const MainMenuButtonStyle: CSSProperties = {
     color: "white",
     fontSize: "xx-large",
@@ -25,6 +27,8 @@ const VisualProgrammingMainPage: React.FC<{}> = () => {
     useDocumentTitle("图形化课程入口");
     const [config, setConfig] = useState<VisualProgrammingConfig | null>(null);
     const [loading, setLoading] = useState(false);
+    const { username, realName } = useSelector((s: StateType) => s.userState.userData);
+    const isLogin = useSelector((s: StateType) => s.userState.login);
     useEffect(() => {
         if (config === null) (async () => {
             try {
@@ -33,6 +37,8 @@ const VisualProgrammingMainPage: React.FC<{}> = () => {
             } catch { } finally { setLoading(false); }
         })();
     }, [config]);
+    const doHomeworkButton = <Button as={isLogin ? Link : undefined} to={`${PUBLIC_URL}/visual_programming/homework_list`} fluid style={{ ...MainMenuButtonStyle, ...(isLogin ? {} : { opacity: "0.45" }) }}>👉点这里做作业👈</Button>;
+    console.log(isLogin)
     return <div style={{ display: "flex", justifyContent: "space-around" }}>
         <Segment style={{ backgroundSize: "100% 100%", backgroundImage: `url(${MainBackground})`, width: "80%" }}>
             {loading && <Dimmer active><Loader active></Loader></Dimmer>}
@@ -42,10 +48,19 @@ const VisualProgrammingMainPage: React.FC<{}> = () => {
                     <Header as="h1" style={{ color: "#de5f50", fontSize: "xxx-large" }}>大卫信奥图形化课程入口</Header>
                     <div style={{ maxWidth: "500px" }}>
                         <Button as="a" href={config?.generalConfigURL} target="_blank" rel="noreferrer" fluid style={{ ...MainMenuButtonStyle, marginTop: "10px" }}>👉点这里看录播课和直播课👈</Button>
-                        <Button as={Link} to={`${PUBLIC_URL}/visual_programming/homework_list`} fluid style={MainMenuButtonStyle}>👉点这里做作业👈</Button>
+                        {isLogin ? doHomeworkButton : <Popup trigger={doHomeworkButton} content="登录后才能做作业！" position="top center" on="hover"></Popup>}
                         <Button as={Link} to={`${PUBLIC_URL}/visual_programming/manual`} fluid style={MainMenuButtonStyle}>👉图形化课程学习方法👈</Button>
+                        <div style={{ display: 'flex' }}>
+                            {isLogin ? <div style={{ height: '70px', width: '100%' }}>
+                                <p style={{ marginTop: "10px", color: "#7ea2c7", fontSize: "xx-large", marginBottom: "400px", textAlign: 'center' }}>欢迎回来，{realName || username}</p>
+                            </div> : <>
+                                <Button as={Link} to={`${PUBLIC_URL}/login?callback=${window.location.href}`} fluid style={{ ...MainMenuButtonStyle, backgroundColor: "#eb9a81" }}>👉登录👈</Button>
+                                <Button as={Link} to={`${PUBLIC_URL}/phone/register?callback=${window.location.href}`} fluid style={{ ...MainMenuButtonStyle, backgroundColor: "#eb9a81" }}>👉注册👈</Button>
+                            </>}
+                        </div>
                     </div>
-                    <span style={{ marginTop: "10px", color: "#7ea2c7", fontSize: "large", marginBottom: "400px" }}>有任何不清楚的，可以联系班主任老师</span>
+
+                    <span style={{ marginTop: "10px", color: "#7ea2c7", fontSize: "large", marginBottom: "600px" }}>有任何不清楚的，可以联系班主任老师</span>
                 </Grid.Column>
             </Grid>
             <Image src={Pussy} style={{

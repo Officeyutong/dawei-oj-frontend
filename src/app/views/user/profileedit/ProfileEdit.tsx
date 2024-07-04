@@ -97,7 +97,8 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
             {loading && data === null && <div style={{ height: "400px" }}><Dimmer active><Loader></Loader></Dimmer></div>}
             {data !== null && <div>
                 {loading && data !== null && <Dimmer active> <Loader></Loader></Dimmer>}
-                <Form>
+                <Form autoComplete="off">
+                    <input name="hidden" type="text" value="sssssss" readOnly style={{ display: "none" }} />
                     <Form.Field disabled>
                         <label>用户名</label>
                         <Input value={data.username} onChange={(_, d) => setData({ ...data, username: d.value })}></Input>
@@ -124,7 +125,7 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     </Form.Field>
                     <Form.Field>
                         <label>姓名</label>
-                        {data.selfHasUserManagerPerm ? <Input value={data.real_name} onChange={(d, e) => setData({ ...data, real_name: d.target.value })}></Input> : (data.real_name || "<未填写姓名，请联系管理员>")}
+                        {data.selfHasUserManagerPerm ? <Input value={data.real_name || ""} onChange={(d, e) => setData({ ...data, real_name: d.target.value })}></Input> : (data.real_name || "<未填写姓名，请联系管理员>")}
                     </Form.Field>
                     <Form.Field>
                         <label>手机号验证</label>
@@ -137,7 +138,7 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     }
                     {data.adminComment !== undefined && <Form.Field>
                         <label>管理侧备注</label>
-                        <Input value={newAdminComment} onChange={(_, d) => setNewAdminComment(d.value)}></Input>
+                        <Input autoComplete="username" value={newAdminComment} onChange={(_, d) => setNewAdminComment(d.value)}></Input>
                     </Form.Field>}
                     <Form.Field>
                         <label>积分</label>
@@ -180,11 +181,11 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                         <Form.Group widths="equal">
                             <Form.Field>
                                 <label>密码</label>
-                                <Input type="password" {...pwd1}></Input>
+                                <Input autoComplete="new-password" type="password" {...pwd1}></Input>
                             </Form.Field>
                             <Form.Field>
                                 <label>重复密码</label>
-                                <Input type="password" {...pwd2}></Input>
+                                <Input autoComplete="new-password" type="password" {...pwd2}></Input>
                             </Form.Field>
                         </Form.Group>
                     </Form.Field>

@@ -4,17 +4,23 @@
  */
 
 import md5 from "md5";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Button, Container, Dimmer, Form, Grid, Header, Input, Loader, Segment } from "semantic-ui-react";
 import { useDocumentTitle } from "../../common/Utils";
 import { showErrorModal, showSuccessModal } from "../../dialogs/Dialog";
 import { StateType } from "../../states/Manager";
 import userClient from "./client/UserClient";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { PUBLIC_URL } from "../../App";
+import QueryString from "qs";
+import { LoginAndRegisterCustomCallback } from "./client/types";
 
 const LoginView: React.FC<React.PropsWithChildren<{}>> = () => {
+    const location = useLocation();
+    const parsedArgs = useMemo(() => {
+        return QueryString.parse(location.search.substring(1)) as LoginAndRegisterCustomCallback;
+    }, [location.search]);
     useDocumentTitle("用户登录");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -29,7 +35,9 @@ const LoginView: React.FC<React.PropsWithChildren<{}>> = () => {
         try {
             setLoading(true);
             await userClient.doLogin(username, md5(password + salt));
-            window.location.href = ("/");
+            if (parsedArgs.callback) window.location.href = parsedArgs.callback;
+            else
+                window.location.href = ("/");
         } catch (e) { setLoading(false); } finally { }
     }
     const doResetPassword = async () => {

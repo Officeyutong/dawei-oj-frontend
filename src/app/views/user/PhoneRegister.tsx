@@ -3,7 +3,7 @@
  * */
 
 import md5 from "md5";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dimmer, Form, Header, Input, Loader, Message, Modal, Popup, Segment } from "semantic-ui-react";
 import { useDocumentTitle, useInputValue } from "../../common/Utils";
@@ -11,8 +11,16 @@ import { showSuccessPopup } from "../../dialogs/Utils";
 import { StateType } from "../../states/Manager";
 import SendSMSCodeDialog from "../utils/SendSMSCode";
 import userClient from "./client/UserClient";
+import { useLocation } from "react-router-dom";
+import QueryString from "qs";
+import { LoginAndRegisterCustomCallback } from "./client/types";
 
 const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
+    const location = useLocation();
+    const parsedArgs = useMemo(() => {
+        return QueryString.parse(location.search.substring(1)) as LoginAndRegisterCustomCallback;
+    }, [location.search]);
+
     const username = useInputValue();
     const email = useInputValue();
     const phone = useInputValue();
@@ -43,7 +51,11 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
             setLoading(true);
             await userClient.doPhoneRegister(username.value, md5(password1.value + salt), requireEmailWhenRegisteringUsePhone ? email.value : "default@bad-email", phone.value, authcode.value, realName.value);
             showSuccessPopup("注册完成，将要跳转");
-            setTimeout(() => window.location.href = ("/"), 500);
+            setTimeout(() => {
+                if (parsedArgs.callback) window.location.href = parsedArgs.callback;
+                else
+                    window.location.href = ("/");
+            }, 500);
         } catch {
             setLoading(false);
         }

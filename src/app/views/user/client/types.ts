@@ -82,6 +82,10 @@ interface UserExtraStatistics {
     real_name: string;
 }
 
+interface LoginAndRegisterCustomCallback {
+    callback?: string;
+}
+
 export type {
     UserProfileResponse,
     UserProfileUpdateRequest,
@@ -90,5 +94,6 @@ export type {
     GlobalRanklistItem,
     UserStatisticEntry,
     UserProfileResponseEditing,
-    UserExtraStatistics
+    UserExtraStatistics,
+    LoginAndRegisterCustomCallback
 };

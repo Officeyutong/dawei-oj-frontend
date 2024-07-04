@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button, Dimmer, Form, Header, Input, Loader, Modal, Segment } from "semantic-ui-react";
 import { useInputValue } from "../../common/Utils";
 import SendSMSCodeDialog from "../utils/SendSMSCode";
 import userClient from "./client/UserClient";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { PUBLIC_URL } from "../../App";
+import { LoginAndRegisterCustomCallback } from "./client/types";
+import QueryString from "qs";
 
 const PhoneLogin = () => {
+    const location = useLocation();
+    const parsedArgs = useMemo(() => {
+        return QueryString.parse(location.search.substring(1)) as LoginAndRegisterCustomCallback;
+    }, [location.search]);
     const [loading, setLoading] = useState(false);
     const [showSendModal, setShowSendModal] = useState(false);
     const [sended, setSended] = useState(false);
@@ -16,7 +22,9 @@ const PhoneLogin = () => {
         try {
             setLoading(true);
             await userClient.loginBySmsCode(phone.value, code.value);
-            window.location.href = "/";
+            if (parsedArgs.callback) window.location.href = parsedArgs.callback;
+            else
+                window.location.href = ("/");
         } catch { } finally {
             setLoading(false);
         }

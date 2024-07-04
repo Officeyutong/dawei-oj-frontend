@@ -2,7 +2,7 @@
  * 邮箱注册
  * */
 import md5 from "md5";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dimmer, Form, Header, Input, Loader, Message, Segment } from "semantic-ui-react";
 import { useDocumentTitle, useInputValue } from "../../common/Utils";
@@ -11,9 +11,15 @@ import { showSuccessPopup } from "../../dialogs/Utils";
 import { StateType } from "../../states/Manager";
 import userClient from "./client/UserClient";
 import { PUBLIC_URL } from "../../App";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { LoginAndRegisterCustomCallback } from "./client/types";
+import QueryString from "qs";
 
 const EmailRegister = () => {
+    const location = useLocation();
+    const parsedArgs = useMemo(() => {
+        return QueryString.parse(location.search.substring(1)) as LoginAndRegisterCustomCallback;
+    }, [location.search]);
     const username = useInputValue();
     const email = useInputValue();
     const password1 = useInputValue();
@@ -38,7 +44,11 @@ const EmailRegister = () => {
                 showSuccessModal(message)
             } else if (code === 0) {
                 showSuccessPopup("注册成功，即将跳转");
-                setTimeout(() => window.location.href = ("/"), 500);
+                setTimeout(() => {
+                    if (parsedArgs.callback) window.location.href = parsedArgs.callback;
+                    else
+                        window.location.href = ("/");
+                }, 500);
             } else {
                 showErrorModal(String(message));
             }

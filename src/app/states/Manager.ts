@@ -48,6 +48,7 @@ export interface UserStateType {
         customExtraFooter: string;
         hasVisualProgrammingHomeworkUpdatePerm: boolean;
         visualProgrammingGradeLevel: string[];
+        realName?: string;
     }
 }
 
@@ -106,7 +107,8 @@ const defaultState: StateType = {
             difficultyDisplayMap: {},
             customExtraFooter: "",
             hasVisualProgrammingHomeworkUpdatePerm: false,
-            visualProgrammingGradeLevel: []
+            visualProgrammingGradeLevel: [],
+            realName: undefined
         }
     },
     generalClient: null,
