@@ -1,24 +1,37 @@
 import { Route, Switch, useRouteMatch } from "react-router-dom"
-import VisualProgrammingMainPage from "./VisualProgrammingMainPage";
-import VisualProgrammingHomeworkList from "./VisualProgrammingHomeworkList";
-import VisualProgrammingSubmit from "./VisualProgrammingSubmit";
-import VisualProgrammingManual from "./VisualProgrammingManual";
+import { lazy, Suspense } from "react";
+import GeneralDimmedLoader from "../utils/GeneralDimmedLoader";
+
+const VisualProgrammingMainPage = lazy(() => import("./VisualProgrammingMainPage"));
+const VisualProgrammingHomeworkList = lazy(() => import("./VisualProgrammingHomeworkList"));
+const VisualProgrammingSubmit = lazy(() => import("./VisualProgrammingSubmit"));
+const VisualProgrammingManual = lazy(() => import("./VisualProgrammingManual"));
 
 const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
 
     return <Switch>
-        <Route exact path={`${match.path}/main`}>
-            <VisualProgrammingMainPage></VisualProgrammingMainPage>
+        <Route exact path={`${match.path}/main`} >
+            <Suspense fallback={<GeneralDimmedLoader />}>
+                <VisualProgrammingMainPage></VisualProgrammingMainPage>
+            </Suspense>
         </Route>
         <Route exact path={`${match.path}/homework_list`}>
-            <VisualProgrammingHomeworkList></VisualProgrammingHomeworkList>
+            <Suspense fallback={<GeneralDimmedLoader />}>
+                <VisualProgrammingHomeworkList></VisualProgrammingHomeworkList>
+            </Suspense>
         </Route>
         <Route exact path={`${match.path}/submit/:id`}>
-            <VisualProgrammingSubmit></VisualProgrammingSubmit>
+
+            <Suspense fallback={<GeneralDimmedLoader />}>
+                <VisualProgrammingSubmit></VisualProgrammingSubmit>
+            </Suspense>
         </Route>
         <Route exact path={`${match.path}/manual`}>
-            <VisualProgrammingManual></VisualProgrammingManual>
+
+            <Suspense fallback={<GeneralDimmedLoader />}>
+                <VisualProgrammingManual></VisualProgrammingManual>
+            </Suspense>
         </Route>
     </Switch>
 }
