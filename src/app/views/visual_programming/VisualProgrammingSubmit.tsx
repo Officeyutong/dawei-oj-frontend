@@ -138,7 +138,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                 <Dimmer active={loading}>
                     <Loader>加载中</Loader>
                 </Dimmer>}
-            {loaded && commentData && rankData && homeworkData && iframeSrc &&
+            {loaded && commentData && rankData && homeworkData &&
                 <div style={{ position: 'absolute', display: "flex", justifyContent: "center", width: "100%", height: "100%" }}>
                     {iframeSrc && <div style={{ flex: 'auto', display: "flex", width: '50%', height: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
                         <h1 style={{ color: "#3e6143", fontSize: '3em', marginTop: '60px' }}>作业介绍</h1>
