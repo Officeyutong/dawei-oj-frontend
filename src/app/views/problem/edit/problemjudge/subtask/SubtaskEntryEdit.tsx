@@ -56,6 +56,7 @@ const SubtaskEntryEdit: React.FC<React.PropsWithChildren<SubtaskEntryEditProps>>
                     width="100%"
                     height="100px"
                     onChange={v => update({ ...subtask, comment: v })}
+                    mode="markdown"
                 ></AceEditor>
             </Form.Field>
             <Form.Field>

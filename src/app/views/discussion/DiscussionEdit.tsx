@@ -72,6 +72,7 @@ const DiscussionEdit: React.FC<React.PropsWithChildren<DiscussionEditProps>> = (
                                     width="100%"
                                     height="300px"
                                     theme={theme}
+                                    mode="markdown"
                                 ></AceEditor>
                             </Form.Field>
                             <Form.Field>

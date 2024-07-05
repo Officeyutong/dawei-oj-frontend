@@ -115,6 +115,7 @@ const DiscussionShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                     width="100%"
                                     height="300px"
                                     theme={theme}
+                                    mode="markdown"
                                 ></AceEditor>
                             </Form.Field>
                             <Button color="green" onClick={sendComment}>

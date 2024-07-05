@@ -113,6 +113,7 @@ const BlogEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                                     value={content}
                                     onChange={setContent}
                                     theme={theme}
+                                    mode="markdown"
                                 ></AceEditor>
                             </Form.Field>
                         </Form>

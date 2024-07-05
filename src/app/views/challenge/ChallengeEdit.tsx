@@ -100,6 +100,7 @@ const ChallengeEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                             width="100%"
                             height="200px"
                             theme={theme}
+                            mode="markdown"
                         />
                        
                     </Form.Field>

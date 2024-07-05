@@ -131,7 +131,7 @@ const TeamEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                             value={teamStuff.problems}
                             onChange={d => setTeamStuff({ ...teamStuff, problems: d })}
                             theme={aceTheme}
-                            // mode="javascript"
+                            mode="plain_text"
                             wrapEnabled
                             width="100%"
                             height="50px"
@@ -144,6 +144,7 @@ const TeamEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                             onChange={d => setTeamStuff({ ...teamStuff, contests: d })}
                             theme={aceTheme}
                             // mode="javascript"
+                            mode="plain_text"
                             wrapEnabled
                             width="100%"
                             height="50px"
@@ -156,6 +157,7 @@ const TeamEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                             onChange={d => setTeamStuff({ ...teamStuff, problemsets: d })}
                             theme={aceTheme}
                             // mode="javascript"
+                            mode="plain_text"
                             wrapEnabled
                             width="100%"
                             height="50px"
