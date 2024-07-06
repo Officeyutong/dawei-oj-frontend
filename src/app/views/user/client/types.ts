@@ -63,6 +63,7 @@ interface GlobalRanklistItem {
     uid: number;
     rating: number;
     description: string;
+    real_name?: string;
 };
 
 interface UserStatisticEntry {

@@ -78,14 +78,14 @@ const BatchAddMembers: React.FC<React.PropsWithChildren<BatchAddMembersProps>> =
                                 <Table.Header>
                                     <Table.Row>
                                         <Table.HeaderCell>UID</Table.HeaderCell>
-                                        <Table.HeaderCell>用户名</Table.HeaderCell>
+                                        <Table.HeaderCell>用户</Table.HeaderCell>
                                         <Table.HeaderCell>操作</Table.HeaderCell>
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
                                     {searchResult.map(x => <Table.Row key={x.uid}>
                                         <Table.Cell>{x.uid}</Table.Cell>
-                                        <Table.Cell><UserLink data={x}></UserLink></Table.Cell>
+                                        <Table.Cell><UserLink data={x}></UserLink>{x.real_name && `（${x.real_name}）`}</Table.Cell>
                                         <Table.Cell>
                                             <Button color="green" size="tiny" onClick={() => setUsed([...used, x])} disabled={usedSet.has(x.uid) || memberSet.has(x.uid)}>添加</Button>
                                         </Table.Cell>

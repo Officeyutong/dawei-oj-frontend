@@ -2,10 +2,10 @@ import React, { lazy, Suspense } from "react";
 import { useRouteMatch } from "react-router";
 import { Route } from "react-router-dom";
 import GeneralDimmedLoader from "../utils/GeneralDimmedLoader";
-import TeamEdit from "./edit/TeamEdit";
 
 const TeamList = lazy(() => import("./TeamList"));
 const TeamShow = lazy(() => import("./show/TeamShow"));
+const TeamEdit = lazy(() => import("./edit/TeamEdit"));
 
 const TeamRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
@@ -25,8 +25,6 @@ const TeamRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                 <TeamEdit></TeamEdit>
             </Suspense>
         </Route>
-        
-
     </>
 };
 
