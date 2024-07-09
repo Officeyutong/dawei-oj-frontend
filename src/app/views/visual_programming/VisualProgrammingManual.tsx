@@ -55,34 +55,33 @@ const VisualProgrammingManual: React.FC<{}> = () => {
         <>
             {loading && <Dimmer active><Loader active></Loader></Dimmer>}
             <Image style={{ position: 'absolute', top: '10px', left: '20px' }} src={logo}></Image>
-            <div style={{ marginTop: '100px' }} >
+            <div style={{ marginTop: '100px', width: '90%' }} >
                 <Grid>
-                    <GridColumn width={4}>
+                    <GridColumn width={5}>
                     </GridColumn>
                     <GridColumn width={11}>
                         <div ref={mainElement}>
-                            <Rail position='left'>
-                                <Sticky context={mainElement.current}>
-                                    <div style={{ width: '100%' }}>
-                                        <div style={{ position: 'relative', marginLeft: '-50%', backgroundColor: '#a6defa', padding: '5%', width: "150%" }}>
-                                            {tocEntries.map((item) => {
-                                                return (
-                                                    <div key={item.text}>
-                                                        <button style={{ paddingLeft: `${(item.level - 1) * 30}px`, fontSize: `${2.2 + -(item.level) * 0.25}em`, marginTop: '3%', color: item.level === 1 ? "#de5f50" : 'black', textDecoration: 'none', fontWeight: 'bold' }} className="link-button" onClick={() => {
-                                                            const anchor = document.getElementById(item.anchor);
-                                                            if (anchor !== null) {
-                                                                anchor.scrollIntoView(true)
-                                                            }
-                                                        }}>{decodeEntity(item.text)}</button>
-                                                    </div>
+                            <Rail position='left' style={{ width: '20vw' }}>
+                                <Sticky context={mainElement.current} style={{ width: '100%' }}>
 
-                                                )
-                                            })}
-                                        </div>
+                                    <div style={{ position: 'relative', marginLeft: '-40%', backgroundColor: '#a6defa', padding: '0%', width: "150%" }}>
+                                        {tocEntries.map((item) => {
+                                            return (
+                                                <div key={item.text} style={{ display: 'flex', justifyContent: 'center' }}>
+                                                    <button style={{ paddingLeft: `${(item.level - 1) * 30}px`, fontSize: `${2 + -(item.level) * 0.25}vw`, marginTop: '3%', color: item.level === 1 ? "#de5f50" : 'black', textDecoration: 'none', fontWeight: 'bold' }} className="link-button" onClick={() => {
+                                                        const anchor = document.getElementById(item.anchor);
+                                                        if (anchor !== null) {
+                                                            anchor.scrollIntoView(true)
+                                                        }
+                                                    }}>{decodeEntity(item.text)}</button>
+                                                </div>
+                                            )
+                                        })}
                                     </div>
+
                                 </Sticky>
                             </Rail>
-                            <div style={{ backgroundColor: 'white', padding: '3%' }} dangerouslySetInnerHTML={{ __html: renderedText }}>
+                            <div style={{ backgroundColor: 'white', padding: '5%', width: '100%' }} dangerouslySetInnerHTML={{ __html: renderedText }}>
                             </div>
                         </div>
                     </GridColumn>
