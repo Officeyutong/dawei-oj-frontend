@@ -67,13 +67,13 @@ const VisualProgrammingManual: React.FC<{}> = () => {
                                     <div style={{ position: 'relative', marginLeft: '-40%', backgroundColor: '#a6defa', padding: '0%', width: "150%" }}>
                                         {tocEntries.map((item) => {
                                             return (
-                                                <div key={item.text} style={{ display: 'flex', justifyContent: 'center' }}>
-                                                    <button style={{ paddingLeft: `${(item.level - 1) * 30}px`, fontSize: `${2 + -(item.level) * 0.25}vw`, marginTop: '3%', color: item.level === 1 ? "#de5f50" : 'black', textDecoration: 'none', fontWeight: 'bold' }} className="link-button" onClick={() => {
+                                                <div key={item.text} style={{ display: 'flex' }}>
+                                                    <button style={{ paddingLeft: `${(item.level - 1) * 30 + 30}px`, fontSize: `${2 + -(item.level) * 0.25}vw`, marginTop: '3%', color: item.level === 1 ? "#de5f50" : 'black', textDecoration: 'none', fontWeight: 'bold' }} className="link-button" onClick={() => {
                                                         const anchor = document.getElementById(item.anchor);
                                                         if (anchor !== null) {
                                                             anchor.scrollIntoView(true)
                                                         }
-                                                    }}>{decodeEntity(item.text)}</button>
+                                                    }}>{decodeEntity(item.text).trim()}</button>
                                                 </div>
                                             )
                                         })}
