@@ -22,7 +22,13 @@ interface RanklistEntry {
     real_name?: string;
     submission_count: number;
 }
-
+interface RecentSubmittedUserEntry {
+    uid: number;
+    max_submit_time: number;
+    real_name?: string;
+    username: string;
+    email: string;
+}
 interface HomeworkSubmissionListEntry {
     submission_id: number;
     submit_time: number;
@@ -86,5 +92,6 @@ export type {
     CommentStatusFilterType,
     VisualProgrammingConfig,
     SubmittedHomeworkCountStatisticsEntry,
-    PerTeamStatisticsResponse
+    PerTeamStatisticsResponse,
+    RecentSubmittedUserEntry
 }
