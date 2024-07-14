@@ -34,7 +34,7 @@ const LoginView: React.FC<React.PropsWithChildren<{}>> = () => {
         }
         try {
             setLoading(true);
-            await userClient.doLogin(username, md5(password + salt));
+            await userClient.doLogin(username, md5(password + salt), false);
             if (parsedArgs.callback) window.location.href = parsedArgs.callback;
             else
                 window.location.href = ("/");

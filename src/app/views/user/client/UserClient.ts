@@ -3,8 +3,8 @@ import GeneralClient from "../../../common/GeneralClient";
 import { FolloweeItem, FollowerItem, GlobalRanklistItem, UserExtraStatistics, UserProfileResponse, UserProfileResponseEditing, UserProfileUpdateRequest, UserStatisticEntry } from "./types";
 
 class UserClient extends GeneralClient {
-    async doLogin(identifier: string, password: string) {
-        await this.client!.post("/api/login", qs.stringify({ identifier: identifier, password: (password) }));
+    async doLogin(identifier: string, password: string, identifierIsPhone: boolean) {
+        await this.client!.post("/api/login", qs.stringify({ identifier: identifier, password: (password), identifierIsPhone: JSON.stringify(identifierIsPhone) }));
     }
     async doRequireResetPassword(identifier: string) {
         await this.client!.post("/api/require_reset_password", { identifier });

@@ -21,7 +21,7 @@ const WechatStatisticsUsernameLogin = () => {
         }
         try {
             setLoading(true);
-            await userClient.doLogin(username.value, md5(password.value + salt));
+            await userClient.doLogin(username.value, md5(password.value + salt), false);
             window.location.href = `${PUBLIC_URL}/wechat_statistics_view/list`;
 
         } catch { } finally { setLoading(false); }
