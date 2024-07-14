@@ -50,6 +50,7 @@ const PhoneAuth: React.FC<React.PropsWithChildren<{}>> = () => {
         </Segment>
         {showDialog && <Modal open={showDialog} closeOnDimmerClick={false}>
             <SendSMSCodeDialog
+                autoCloseOnSuccees={false}
                 phoneUsingState="must_not_use"
                 phone={phone.value}
                 onClose={() => {

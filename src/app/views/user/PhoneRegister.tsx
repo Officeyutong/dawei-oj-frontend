@@ -147,14 +147,6 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
                         ></Popup>
                     </Form.Field>
                 </Form.Group>
-                {/* <Message>
-                    <Message.Header>注意</Message.Header>
-                    <Message.Content>
-                        <p>1. 用户名用于在OJ系统中登录。姓名栏请填写自己的姓名，而非家长的姓名。</p>
-                        <p>2. 用户名、手机号、姓名在注册后无法更改。如有特殊情况请联系管理员。</p>
-                        <p>3. 注册后可以在个人信息页面更改密码，或者在登录页面找回密码。</p>
-                    </Message.Content>
-                </Message> */}
                 <Message error>
                     <Message.Header>错误</Message.Header>
                     <Message.Content>{errorMessage}</Message.Content>
@@ -165,7 +157,7 @@ const PhoneRegister: React.FC<React.PropsWithChildren<{}>> = () => {
         </Segment>
         <Modal open={showingModal}>
             <Modal.Content><SendSMSCodeDialog
-                // mustNotUse={true}
+                autoCloseOnSuccees={false}
                 phoneUsingState="must_not_use"
                 onClose={() => { setShowingModal(false); setSended(true) }}
                 phone={phone.value}

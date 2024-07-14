@@ -20,7 +20,12 @@ enum States {
     CODE_SENDED = 8, //验证码已发送
     CODE_ERROR = 9,//验证码发送错误
 };
-const SendSMSCodeDialog: React.FC<React.PropsWithChildren<{ phone: string; phoneUsingState: PhoneNumberUsingState; onClose: () => void }>> = ({ phone, phoneUsingState, onClose }) => {
+const SendSMSCodeDialog: React.FC<React.PropsWithChildren<{
+    phone: string;
+    phoneUsingState: PhoneNumberUsingState;
+    onClose: () => void;
+    autoCloseOnSuccees: boolean;
+}>> = ({ phone, phoneUsingState, onClose, autoCloseOnSuccees }) => {
     const [captchaPrep, setCaptchaPrep] = useState<CaptchaPreparationResp | null>(null);
     const [state, setState] = useState<States>(States.UNLOADED);
     const [authResult, setAuthResult] = useState<string | TencentCaptchaAuthResp | null>(null);
@@ -55,6 +60,7 @@ const SendSMSCodeDialog: React.FC<React.PropsWithChildren<{ phone: string; phone
         else setState(States.CODE_SENDED);
         if (recaptchaRef.current) recaptchaRef.current!.reset();
         else if (tencentRef.current) tencentRef.current!.refresh();
+        if (autoCloseOnSuccees) onClose();
     };
     return <div>
         <Header as="h3">进行验证</Header>

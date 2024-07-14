@@ -60,6 +60,7 @@ const PhoneLogin = () => {
         {showSendModal && <Modal open closeOnDimmerClick={false}>
             <Modal.Content>
                 <SendSMSCodeDialog
+                    autoCloseOnSuccees={false}
                     phoneUsingState="must_use"
                     phone={phone.value}
                     onClose={() => {

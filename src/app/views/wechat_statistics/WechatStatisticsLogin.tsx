@@ -52,6 +52,7 @@ const WechatStatisticaLogin = () => {
             <Modal.Header>发送短信验证码</Modal.Header>
             <Modal.Content>
                 <SendSMSCodeDialog
+                    autoCloseOnSuccees={false}
                     phoneUsingState="must_use"
                     phone={phone.value}
                     onClose={() => {

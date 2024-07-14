@@ -77,7 +77,7 @@ const ForgetUsername: React.FC<React.PropsWithChildren<{}>> = () => {
         <Modal open={modalShowing}>
             <Modal.Content>
                 <SendSMSCodeDialog
-                    // mustNotUse={false}
+                    autoCloseOnSuccees={false}
                     phoneUsingState="must_use"
                     onClose={() => { setModalShowing(false); setCodeSended(true); }}
                     phone={phone.value}
