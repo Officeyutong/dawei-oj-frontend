@@ -3,7 +3,7 @@ import { useBackgroundColor, useDocumentTitle, useInputValue, usePasswordSalt } 
 import Logo from "./assets/logo.png"
 import Cat from "./assets/cat.png"
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SendSMSCodeDialog from "../utils/SendSMSCode";
 import { showSuccessPopup } from "../../dialogs/Utils";
 import { showErrorModal } from "../../dialogs/Dialog";
@@ -69,7 +69,7 @@ const VisualProgrammingRegister: React.FC<{}> = () => {
       await userClient.doPhoneRegister(userName.value, md5(pwd.value + salt), "default@bad-email", phone.value, smsCode.value, realName.value);
       showSuccessPopup("注册完成，将要跳转");
       setTimeout(() => {
-
+        window.location.href = '/visual_programming/main'
       }, 500);
     } catch {
       setLoading(false);
@@ -148,7 +148,7 @@ const VisualProgrammingRegister: React.FC<{}> = () => {
                     </FormField>
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                       <Button style={{ width: '8rem', height: "3.5rem", borderRadius: '1rem', marginRight: '4rem', backgroundColor: "#de5f50", color: 'white', fontSize: '1.5rem', padding: '0' }} onClick={handleSendSMS}>发送验证码</Button>
-                      <Button style={{ width: '8rem', height: "3.5rem", borderRadius: '1rem', backgroundColor: "#a2c173", color: 'white', fontSize: '1.5rem', padding: '0' }} onClick={handleRegister}>登录</Button>
+                      <Button style={{ width: '8rem', height: "3.5rem", borderRadius: '1rem', backgroundColor: "#a2c173", color: 'white', fontSize: '1.5rem', padding: '0' }} onClick={handleRegister}>注册</Button>
                       <Link to='/rs/visual_programming/main' style={{ display: 'block', textAlign: 'center', lineHeight: '3.5rem' }} >返回主页</Link>
                     </div>
                   </div>
