@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { CommentStatusFilterType, HomeworkSubmissionListEntry } from "../client/types";
 import visualProgrammingClient from "../client/VisualProgrammingClient";
-import { Button, Dimmer, Divider, Form, Icon, Label, Loader, Pagination, Radio, Table } from "semantic-ui-react";
+import { Button, Checkbox, Dimmer, Divider, Form, Icon, Label, Loader, Pagination, Radio, Table } from "semantic-ui-react";
 import UserLink from "../../utils/UserLink";
 import { timeStampToString } from "../../../common/Utils";
 import SubmissionDetailedModal, { BasicSubmissionDetailProps } from "./SubmissionDetailedModal";
@@ -9,7 +9,9 @@ import SelectUserModal, { SelectedUser } from "./SelectUserModal";
 import SelectHomeworkModal, { SelectedHomework } from "./SelectHomeworkModal";
 import SelectTeamModal, { SelectedTeam } from "./SelectTeamModal";
 import QueryString from "qs";
-
+import _ from "lodash";
+import { showErrorModal } from "../../../dialogs/Dialog";
+import XLSX from "xlsx-js-style";
 const TabSubmissionList: React.FC<{}> = () => {
     const [userFilter, setUserFilter] = useState<SelectedUser[]>([]);
     const [homeworkFilter, setHomeworkFilter] = useState<SelectedHomework | null>(null);
@@ -29,6 +31,8 @@ const TabSubmissionList: React.FC<{}> = () => {
 
     const [selectedSubmission, setSelectedSubmission] = useState<Omit<BasicSubmissionDetailProps, "allowNewComment"> | null>(null);
 
+    const [checkedSubmission, setCheckedSubmission] = useState<number[]>([]);
+
     const loadPage = useCallback(async (page: number) => {
         try {
             setLoading(true);
@@ -40,6 +44,7 @@ const TabSubmissionList: React.FC<{}> = () => {
             setPage(page);
             setLoaded(true);
             setLoading(false);
+            setCheckedSubmission([]);
         } catch { } finally {
 
         }
@@ -48,11 +53,36 @@ const TabSubmissionList: React.FC<{}> = () => {
         if (!loading && !loaded) loadPage(1);
     }, [loadPage, loaded, loading]);
     const doBatchDownload = () => {
+        if (checkedSubmission.length === 0) {
+            showErrorModal("请选择至少一份提交！");
+            return;
+        }
         const qs = QueryString.stringify({
-            submission_ids: data.map(t => t.submission_id).join(",")
+            submission_ids: checkedSubmission.join(",")
         });
         window.open(`/api/visualprogramming/homework/batch_download?${qs}`);
     };
+    const exportListContent = () => {
+        const workbook = XLSX.utils.book_new();
+        const sheetData: string[][] = [];
+        sheetData.push([
+            "作业名", "用户", "提交时间", "文件大小（KB）", "是否已点评"
+        ])
+        for (const line of data) {
+            if (checkedSubmission.includes(line.submission_id)) {
+                sheetData.push([
+                    line.homework_name,
+                    line.user.username + (line.user.real_name ? `（${line.user.real_name}）` : ""),
+                    timeStampToString(line.submit_time),
+                    (line.file_size / 1024).toFixed(2),
+                    line.comment ? "已点评" : "未点评"
+                ])
+            }
+        }
+        const sheet = XLSX.utils.aoa_to_sheet(sheetData);
+        XLSX.utils.book_append_sheet(workbook, sheet, "data");
+        XLSX.writeFile(workbook, `export.xlsx`)
+    }
     return <>
         {showSelectTeamModal && <SelectTeamModal
             closeCallback={data => {
@@ -105,12 +135,17 @@ const TabSubmissionList: React.FC<{}> = () => {
                 </Form.Field>
             </Form.Group>
             <Form.Button size="small" color="green" onClick={() => loadPage(1)}>筛选查找</Form.Button>
-            <Form.Button size="small" color="green" onClick={doBatchDownload}>下载当前页面所有文件</Form.Button>
         </Form>
         <Divider></Divider>
+        <Button size="tiny" color="blue" onClick={() => setCheckedSubmission(data.map(t => t.submission_id))}>全选</Button>
+        <Button size="tiny" color="blue" onClick={() => setCheckedSubmission([])}>全不选</Button>
+        <Button size="tiny" color="blue" onClick={() => setCheckedSubmission(c => _.difference(data.map(t => t.submission_id), c))}>反选</Button>
+        <Button size="tiny" color="blue" onClick={doBatchDownload}>下载选中的作业文件</Button>
+        <Button size="tiny" color="blue" onClick={exportListContent}>导出选中的信息</Button>
         <Table>
             <Table.Header>
                 <Table.Row>
+                    <Table.HeaderCell></Table.HeaderCell>
                     <Table.HeaderCell>
                         作业
                     </Table.HeaderCell>
@@ -129,6 +164,12 @@ const TabSubmissionList: React.FC<{}> = () => {
             </Table.Header>
             <Table.Body>
                 {data.map(item => <Table.Row key={item.submission_id}>
+                    <Table.Cell>
+                        <Checkbox checked={checkedSubmission.includes(item.submission_id)} onClick={() => {
+                            if (checkedSubmission.includes(item.submission_id)) setCheckedSubmission(c => c.filter(t => t !== item.submission_id));
+                            else setCheckedSubmission(c => [...c, item.submission_id]);
+                        }}></Checkbox>
+                    </Table.Cell>
                     <Table.Cell>
                         #{item.homework_id}. {item.homework_name}
                     </Table.Cell>
