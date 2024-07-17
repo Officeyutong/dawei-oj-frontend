@@ -88,7 +88,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
             const [workData, rankData, commentData] = await Promise.all([
                 visualProgrammingClient.getHomeworkDetail(Number(id)),
                 visualProgrammingClient.getSimpleHomeworkRanklist(),
-                visualProgrammingClient.getHomeworkSubmissionList(1, 'no', uid, Number(id))
+                visualProgrammingClient.getHomeworkSubmissionList(1, 'no', [uid], Number(id))
             ])
             setRankData(rankData);
             setCommentData(commentData.data)

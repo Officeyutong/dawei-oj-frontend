@@ -11,7 +11,7 @@ import SelectTeamModal, { SelectedTeam } from "./SelectTeamModal";
 import QueryString from "qs";
 
 const TabSubmissionList: React.FC<{}> = () => {
-    const [userFilter, setUserFilter] = useState<SelectedUser | null>(null);
+    const [userFilter, setUserFilter] = useState<SelectedUser[]>([]);
     const [homeworkFilter, setHomeworkFilter] = useState<SelectedHomework | null>(null);
     const [commentFilter, setCommentFilter] = useState<CommentStatusFilterType>("no");
     const [teamFilter, setTeamFilter] = useState<SelectedTeam | null>(null);
@@ -33,7 +33,7 @@ const TabSubmissionList: React.FC<{}> = () => {
         try {
             setLoading(true);
             const resp = await visualProgrammingClient.getHomeworkSubmissionList(
-                undefined, commentFilter, userFilter?.uid, homeworkFilter?.id, page, undefined, teamFilter?.id
+                undefined, commentFilter, userFilter.length > 0 ? userFilter.map(item => item.uid) : undefined, homeworkFilter?.id, page, undefined, teamFilter?.id
             );
             setPageCount(Math.max(resp.pageCount, 1));
             setData(resp.data);
@@ -43,7 +43,7 @@ const TabSubmissionList: React.FC<{}> = () => {
         } catch { } finally {
 
         }
-    }, [commentFilter, userFilter?.uid, homeworkFilter?.id, teamFilter?.id]);
+    }, [commentFilter, userFilter, homeworkFilter?.id, teamFilter?.id]);
     useEffect(() => {
         if (!loading && !loaded) loadPage(1);
     }, [loadPage, loaded, loading]);
@@ -67,7 +67,7 @@ const TabSubmissionList: React.FC<{}> = () => {
             }}
         ></SelectHomeworkModal>}
         {showSelectUsetModal && <SelectUserModal closeCallback={data => {
-            if (data) setUserFilter(data);
+            if (data) setUserFilter(c => [...c.filter(t => t.uid !== data.uid), data]);
             setShowSelectUserModal(false);
         }}></SelectUserModal>}
         {selectedSubmission !== null && <SubmissionDetailedModal
@@ -84,7 +84,8 @@ const TabSubmissionList: React.FC<{}> = () => {
             <Form.Group widths={4}>
                 <Form.Field>
                     <label>过滤用户</label>
-                    {userFilter === null ? <Button size="small" onClick={() => setShowSelectUserModal(true)} color="green">选择用户</Button> : <Label onClick={() => setUserFilter(null)} size="large" color="blue">{userFilter.username} {userFilter.real_name && `（${userFilter.real_name}）`}<Icon name="delete"></Icon></Label>}
+                    {userFilter.map(item => <Label key={item.uid} onClick={() => setUserFilter(c => c.filter(t => t.uid !== item.uid))} size="large" color="blue">{item.username} {item.real_name && `（${item.real_name}）`}<Icon name="delete"></Icon></Label>)}
+                    <Button size="small" onClick={() => setShowSelectUserModal(true)} color="green">添加用户</Button>
                 </Form.Field>
                 <Form.Field>
                     <label>过滤作业题</label>
@@ -103,7 +104,7 @@ const TabSubmissionList: React.FC<{}> = () => {
                     </Form.Group>
                 </Form.Field>
             </Form.Group>
-            <Form.Button size="small" color="green" onClick={() => loadPage(1)}>进行过滤</Form.Button>
+            <Form.Button size="small" color="green" onClick={() => loadPage(1)}>筛选查找</Form.Button>
             <Form.Button size="small" color="green" onClick={doBatchDownload}>下载当前页面所有文件</Form.Button>
         </Form>
         <Divider></Divider>

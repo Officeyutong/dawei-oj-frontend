@@ -15,7 +15,7 @@ const UserSubmissionListModal: React.FC<{ uid: number; homeworkId: number; close
             try {
                 setLoading(true);
                 setData((await visualProgrammingClient.getHomeworkSubmissionList(
-                    undefined, "no", uid, homeworkId, 1, undefined
+                    undefined, "no", [uid], homeworkId, 1, undefined
                 )).data);
 
             } catch { } finally {

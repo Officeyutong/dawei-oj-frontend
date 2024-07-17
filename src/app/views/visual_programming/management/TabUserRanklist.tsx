@@ -41,7 +41,6 @@ const TabUserRanklist: React.FC<{}> = () => {
         {!loaded && <div style={{ height: "400px" }}></div>}
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
         {loaded && <>
-
             <Table>
                 <Table.Header>
                     <Table.Row>
@@ -52,7 +51,7 @@ const TabUserRanklist: React.FC<{}> = () => {
                             姓名
                         </Table.HeaderCell>
                         <Table.HeaderCell>
-                            提交过的可视化作业数
+                            提交的课数
                         </Table.HeaderCell>
                         <Table.HeaderCell>
                             操作
