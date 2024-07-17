@@ -5,7 +5,6 @@ import { Button, Container, Dimmer, Header, Label, Loader, Message, Pagination, 
 import { useCurrentUid, useDocumentTitle } from "../../common/Utils";
 import contestClient from "./client/ContestClient";
 import { ContestRanklist as ContestRanklistType } from "./client/types";
-// import XLSX from "xlsx";
 import XLSX from "xlsx-js-style";
 import { DateTime } from "luxon";
 import { ButtonClickEvent } from "../../common/types";
