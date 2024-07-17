@@ -24,7 +24,6 @@ const VisualProgrammingRegister: React.FC<{}> = () => {
   const repeatPwd = useInputValue();
   const realName = useInputValue();
   const salt = usePasswordSalt();
-  const history = useHistory();
   const { usernameRegex, badUsernamePrompt } = useSelector((s: StateType) => s.userState.userData);
 
   const handleSendSMS = () => {
@@ -70,7 +69,7 @@ const VisualProgrammingRegister: React.FC<{}> = () => {
       await userClient.doPhoneRegister(userName.value, md5(pwd.value + salt), "default@bad-email", phone.value, smsCode.value, realName.value);
       showSuccessPopup("注册完成，将要跳转");
       setTimeout(() => {
-        history.push('/rs/visual_programming/main')
+
       }, 500);
     } catch {
       setLoading(false);
@@ -115,7 +114,7 @@ const VisualProgrammingRegister: React.FC<{}> = () => {
                       <div style={{ display: 'flex', flexDirection: 'row' }}>
                         <label style={{ fontSize: '1.5rem', fontWeight: 'normal', width: '10rem', lineHeight: '4rem' }}>密码</label>
                         <Popup
-                          trigger={<Input {...pwd} style={{ marginTop: '0.5rem', height: '3rem', borderRadius: '1rem', borderColor: 'gray', type: 'password' }} />}
+                          trigger={<Input {...pwd} style={{ marginTop: '0.5rem', height: '3rem', borderRadius: '1rem', borderColor: 'gray' }} type='password' />}
                           on="focus"
                           content="请填写一个自己能记住的密码。"
                         ></Popup>
@@ -125,7 +124,7 @@ const VisualProgrammingRegister: React.FC<{}> = () => {
                       <div style={{ display: 'flex', flexDirection: 'row' }}>
                         <label style={{ fontSize: '1.5rem', fontWeight: 'normal', width: '10rem', lineHeight: '4rem' }}>重复密码</label>
                         <Popup
-                          trigger={<Input {...repeatPwd} style={{ marginTop: '0.5rem', height: '3rem', borderRadius: '1rem', borderColor: 'gray', type: 'password' }} />}
+                          trigger={<Input {...repeatPwd} style={{ marginTop: '0.5rem', height: '3rem', borderRadius: '1rem', borderColor: 'gray' }} type='password' />}
                           on="focus"
                           content="请重复输入一遍你的密码。"
                         ></Popup>
@@ -168,7 +167,6 @@ const VisualProgrammingRegister: React.FC<{}> = () => {
                 phone={phone.value}
                 onClose={() => {
                   setShowSendModal(false);
-                  showSuccessPopup('发送验证码成功')
                 }}
               ></SendSMSCodeDialog>
             </Modal.Content>

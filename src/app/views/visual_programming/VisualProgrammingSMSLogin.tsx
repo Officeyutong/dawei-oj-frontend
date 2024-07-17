@@ -113,7 +113,6 @@ const VisualProgrammingSMSLogin: React.FC<{}> = () => {
                 phone={phone.value}
                 onClose={() => {
                   setShowSendModal(false);
-                  showSuccessPopup('发送验证码成功')
                 }}
               ></SendSMSCodeDialog>
             </Modal.Content>
