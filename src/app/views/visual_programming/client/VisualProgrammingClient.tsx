@@ -30,7 +30,7 @@ class VisualProgrammingClient extends GeneralClient {
     async getHomeworkSubmissionList(
         limit?: number,
         filterCommentStatus: CommentStatusFilterType = "no",
-        uid?: number,
+        uid?: number[],
         homework_id?: number,
         page?: number,
         filterBySubmissionId?: number[],

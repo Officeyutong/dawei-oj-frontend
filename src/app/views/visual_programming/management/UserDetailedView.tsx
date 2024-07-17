@@ -22,7 +22,7 @@ const UserDetailedView: React.FC<UserDetailedProps> = ({ uid }) => {
         try {
             setLoading(true);
             const resp = await visualProgrammingClient.getHomeworkSubmissionList(
-                undefined, "no", uid, selectedHomework,
+                undefined, "no", [uid], selectedHomework,
             );
             setSubmissionList(resp.data);
             setSubmissionListPageCount(Math.max(1, resp.pageCount));

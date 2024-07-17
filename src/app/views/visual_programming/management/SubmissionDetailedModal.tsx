@@ -51,7 +51,7 @@ const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCall
                 try {
                     setLoading(true);
                     const data = await visualProgrammingClient.getHomeworkSubmissionList(
-                        undefined, "no", uid, homeworkId, 1, [submissionId]
+                        undefined, "no", [uid], homeworkId, 1, [submissionId]
                     )
                     if (data.data.length === 0) {
                         showErrorModal("非法提交ID");
