@@ -164,11 +164,10 @@ const VisualProgrammingRegister: React.FC<{}> = () => {
             <Modal.Content>
               <SendSMSCodeDialog
                 autoCloseOnSuccees={true}
-                phoneUsingState="must_use"
+                phoneUsingState="must_not_use"
                 phone={phone.value}
                 onClose={() => {
                   setShowSendModal(false);
-                  showSuccessPopup('发送验证码成功')
                 }}
               ></SendSMSCodeDialog>
             </Modal.Content>

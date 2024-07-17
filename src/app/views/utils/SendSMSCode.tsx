@@ -23,7 +23,7 @@ enum States {
 const SendSMSCodeDialog: React.FC<React.PropsWithChildren<{
     phone: string;
     phoneUsingState: PhoneNumberUsingState;
-    onClose: () => void;
+    onClose: (autoClosed: boolean) => void;
     autoCloseOnSuccees: boolean;
 }>> = ({ phone, phoneUsingState, onClose, autoCloseOnSuccees }) => {
     const [captchaPrep, setCaptchaPrep] = useState<CaptchaPreparationResp | null>(null);
@@ -57,10 +57,13 @@ const SendSMSCodeDialog: React.FC<React.PropsWithChildren<{
         let resp = await utilClient.sendSMSCode(phone, currAuthResult || authResult, phoneUsingState);
         setMessage(resp.message);
         if (resp.code === -1) setState(States.CODE_ERROR);
-        else setState(States.CODE_SENDED);
+        else {
+            setState(States.CODE_SENDED);
+            if (autoCloseOnSuccees) onClose(true);
+        }
         if (recaptchaRef.current) recaptchaRef.current!.reset();
         else if (tencentRef.current) tencentRef.current!.refresh();
-        if (autoCloseOnSuccees) onClose();
+
     };
     return <div>
         <Header as="h3">进行验证</Header>
@@ -119,7 +122,7 @@ const SendSMSCodeDialog: React.FC<React.PropsWithChildren<{
                             </Grid.Column>
 
                             <Grid.Column>
-                                <Button color="green" onClick={onClose}>
+                                <Button color="green" onClick={() => onClose(false)}>
                                     关闭
                                 </Button>
                                 {(state >= States.AUTHED) && (captchaPrep?.provider !== "tencent") && <Button color="green" loading={state === States.CODE_SENDING} onClick={() => sendCode()}>
