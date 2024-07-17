@@ -53,8 +53,8 @@ const VisualProgrammingMainPage: React.FC<{}> = () => {
                             {isLogin ? <div style={{ height: '70px', width: '100%' }}>
                                 <p style={{ marginTop: "10px", color: "#7ea2c7", fontSize: "xx-large", marginBottom: "400px", textAlign: 'center' }}>欢迎回来，{realName || username}</p>
                             </div> : <>
-                                <Button as={Link} to={`${PUBLIC_URL}/login?callback=${window.location.href}`} fluid style={{ ...MainMenuButtonStyle, backgroundColor: "#eb9a81" }}>👉登录👈</Button>
-                                <Button as={Link} to={`${PUBLIC_URL}/phone/register?callback=${window.location.href}`} fluid style={{ ...MainMenuButtonStyle, backgroundColor: "#eb9a81" }}>👉注册👈</Button>
+                                <Button as={Link} to={`${PUBLIC_URL}/visual_programming/login`} fluid style={{ ...MainMenuButtonStyle, backgroundColor: "#eb9a81" }}>👉登录👈</Button>
+                                <Button as={Link} to={`${PUBLIC_URL}/visual_programming/register`} fluid style={{ ...MainMenuButtonStyle, backgroundColor: "#eb9a81" }}>👉注册👈</Button>
                             </>}
                         </div>
                     </div>

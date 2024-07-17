@@ -65,6 +65,13 @@ export function useBaseContainerWidth(newWidth: string | undefined) {
     }, [newWidth]);
 }
 
+export function useBackgroundColor(color: string) {
+    useEffect(() => {
+        const oldColor = document.body.style.backgroundColor;
+        document.body.style.backgroundColor = color;
+        return () => { document.body.style.backgroundColor = oldColor };
+    }, [color]);
+}
 export function secondsToString(totSecond: number): string {
     const seconds = totSecond % 60;
     const minutes = (Math.floor(totSecond / 60)) % 60;
@@ -83,9 +90,8 @@ export function timestampToYMD(ts: number) {
 export {
     useDocumentTitle,
     useInputValue,
-    useProfileImageMaker
+    useProfileImageMaker,
 };
-
 export type {
     onChangeType
 };

@@ -6,7 +6,7 @@ import ManualMarkdown from "./assets/scratch-manual.txt";
 import showdownToc from 'showdown-toc-export';
 import Showdown from 'showdown';
 import axios from 'axios';
-import { useDocumentTitle } from '../../common/Utils';
+import { useBackgroundColor, useDocumentTitle } from '../../common/Utils';
 import '../../LinkButton.css'
 interface TOCEntry {
     anchor: string;
@@ -45,11 +45,7 @@ const VisualProgrammingManual: React.FC<{}> = () => {
         const result = converter.makeHtml(baseText);
         return [toc, result];
     }, [baseText]);
-    useEffect(() => {
-        const oldColor = document.body.style.backgroundColor;
-        document.body.style.backgroundColor = "#d6eefa";
-        return () => { document.body.style.backgroundColor = oldColor };
-    }, []);
+    useBackgroundColor('#d6eefa')
 
     return (
         <>

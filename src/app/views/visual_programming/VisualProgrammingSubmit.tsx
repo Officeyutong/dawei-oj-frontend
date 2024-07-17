@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useDocumentTitle } from "../../common/Utils";
+import { useBackgroundColor, useDocumentTitle } from "../../common/Utils";
 import { Button, Dimmer, Divider, Grid, GridColumn, GridRow, Header, Image, Loader, Modal, Progress, Segment } from "semantic-ui-react";
 import { useEffect, useState, useCallback, useRef, ChangeEvent, CSSProperties, useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -115,11 +115,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
         if (initialRequestDone && homeworkData === null && rankData === null && commentData === null) getData();
     }, [homeworkData, getData, commentData, rankData, initialRequestDone])
 
-    useEffect(() => {
-        const oldColor = document.body.style.backgroundColor;
-        document.body.style.backgroundColor = "#d6eefa";
-        return () => { document.body.style.backgroundColor = oldColor };
-    }, []);
+    useBackgroundColor('#d6eefa')
 
     return (
         <>
