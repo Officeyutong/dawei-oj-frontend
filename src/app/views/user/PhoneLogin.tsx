@@ -7,6 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 import { PUBLIC_URL } from "../../App";
 import { LoginAndRegisterCustomCallback } from "./client/types";
 import QueryString from "qs";
+import { showErrorModal } from "../../dialogs/Dialog";
 
 const PhoneLogin = () => {
     const location = useLocation();
@@ -19,6 +20,10 @@ const PhoneLogin = () => {
     const code = useInputValue("");
     const phone = useInputValue("");
     const login = async () => {
+        if (phone.value.length !== 11) {
+            showErrorModal("请输入11位手机号！");
+            return;
+        }
         try {
             setLoading(true);
             await userClient.loginBySmsCode(phone.value, code.value);
