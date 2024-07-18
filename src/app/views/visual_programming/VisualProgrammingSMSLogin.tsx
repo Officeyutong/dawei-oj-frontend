@@ -110,9 +110,9 @@ const VisualProgrammingSMSLogin: React.FC<{}> = () => {
                                 autoCloseOnSuccees={true}
                                 phoneUsingState="must_use"
                                 phone={phone.value}
-                                onClose={() => {
+                                onClose={(flag) => {
                                     setShowSendModal(false);
-                                    showSuccessPopup('发送验证码成功')
+                                    if (flag) showSuccessPopup('发送验证码成功');
                                 }}
                             ></SendSMSCodeDialog>
                         </Modal.Content>
