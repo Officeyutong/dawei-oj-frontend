@@ -1,6 +1,5 @@
 import { Button, Dimmer, Form, FormField, Grid, GridColumn, Header, Image, Input, Loader, Modal, Popup } from "semantic-ui-react";
 import { useBackgroundColor, useDocumentTitle, useInputValue, usePasswordSalt } from "../../common/Utils";
-import Logo from "./assets/logo.png"
 import Cat from "./assets/cat.png"
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -79,7 +78,6 @@ const VisualProgrammingRegister: React.FC<{}> = () => {
     {loading && <Dimmer active>
       <Loader></Loader>
     </Dimmer>}
-    <Image src={Logo} style={{ position: "absolute", margin: '2rem', userSelect: 'none' }}></Image>
     <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '10rem' }}>
       <div style={{ backgroundColor: '#67aeda', width: '70rem', borderRadius: '2rem', border: '0.3rem solid', borderColor: 'white', boxShadow: '-5px 5px 5px 	#8e9ea6' }}>
         <div style={{ height: '45rem' }}>

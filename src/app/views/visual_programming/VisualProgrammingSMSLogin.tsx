@@ -1,9 +1,8 @@
 import { Button, Dimmer, Form, FormField, Grid, GridColumn, Header, Image, Input, Loader, Modal } from "semantic-ui-react";
 import { useBackgroundColor, useDocumentTitle, useInputValue } from "../../common/Utils";
-import Logo from "./assets/logo.png"
 import Cat from "./assets/cat.png"
 import { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SendSMSCodeDialog from "../utils/SendSMSCode";
 import { showErrorModal } from "../../dialogs/Dialog";
 import { showSuccessPopup } from "../../dialogs/Utils";
@@ -15,7 +14,6 @@ const VisualProgrammingSMSLogin: React.FC<{}> = () => {
     useBackgroundColor('#d6eefa')
     useDocumentTitle("手机验证码登录");
     const { login, initialRequestDone } = useSelector((s: StateType) => s.userState);
-    const history = useHistory();
     const phone = useInputValue();
     const smsCode = useInputValue();
     const [showSendModal, setShowSendModal] = useState<boolean>(false)
@@ -54,7 +52,7 @@ const VisualProgrammingSMSLogin: React.FC<{}> = () => {
                 await userClient.loginBySmsCode(phone.value, smsCode.value);
                 showSuccessPopup("登录完成，将要跳转");
                 setTimeout(() => {
-                    history.push('/rs/visual_programming/main')
+                    window.location.href = '/visual_programming/main'
                 }, 500);
             } catch { } finally {
                 setLoading(false);
@@ -65,15 +63,14 @@ const VisualProgrammingSMSLogin: React.FC<{}> = () => {
         if (initialRequestDone && login) {
             showSuccessPopup("您已经登录，将会跳转回主页");
             setTimeout(() => {
-                history.push('/rs/visual_programming/main')
+                window.location.href = '/visual_programming/main'
             }, 500);
         }
-    }, [history, initialRequestDone, login])
+    }, [initialRequestDone, login])
     return (<>
         {loading && <Dimmer active>
             <Loader></Loader>
         </Dimmer>}
-        <Image src={Logo} style={{ position: "absolute", margin: '2rem', userSelect: 'none' }}></Image>
         <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '10rem' }}>
             <div style={{ backgroundColor: '#67aeda', width: '60rem', borderRadius: '2rem', border: '0.3rem solid', borderColor: 'white', boxShadow: '-5px 5px 5px 	#8e9ea6' }}>
                 <div style={{ height: '35rem' }}>

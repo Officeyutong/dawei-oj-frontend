@@ -1,5 +1,4 @@
-import logo from './assets/logo.png'
-import { Dimmer, Grid, GridColumn, Image, Loader, Rail, Sticky } from 'semantic-ui-react';
+import { Dimmer, Grid, GridColumn, Loader, Rail, Sticky } from 'semantic-ui-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GlobalShowdownConfig } from '../../common/Markdown';
 import ManualMarkdown from "./assets/scratch-manual.txt";
@@ -50,7 +49,6 @@ const VisualProgrammingManual: React.FC<{}> = () => {
     return (
         <>
             {loading && <Dimmer active><Loader active></Loader></Dimmer>}
-            <Image style={{ position: 'absolute', top: '10px', left: '20px', userSelect: 'none' }} src={logo}></Image>
             <div style={{ marginTop: '100px', width: '90%' }} >
                 <Grid>
                     <GridColumn width={5}>

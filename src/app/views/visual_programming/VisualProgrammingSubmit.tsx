@@ -141,8 +141,8 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         <div dangerouslySetInnerHTML={{ __html: classAddedIframe }} style={{ height: '75%', width: '90%', marginBottom: '200px', backgroundColor: '#FFFFFF', borderRadius: '20px' }}>
                         </div>
                     </div>}
-                    <div style={{ display: "flex", width: '50%', height: '95%', justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <Segment style={{ marginTop: '70px', width: '90%', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
+                    <div style={{ display: "flex", width: '50%', height: '90%', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <Segment style={{ marginTop: '120px', width: '90%', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
                             <Grid>
                                 <GridRow >
                                     <GridColumn>
@@ -150,7 +150,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                     </GridColumn>
                                 </GridRow>
                                 <GridRow>
-                                    <GridColumn style={{ height: '200px' }} >
+                                    <GridColumn style={{ height: '170px' }} >
                                         <div style={{ overflowY: "scroll", maxHeight: "80%", margin: "2%", maxWidth: '95%', wordWrap: 'break-word' }}>
                                             <Markdown style={{ fontWeight: 'bold' }} markdown={homeworkData.description}></Markdown>
                                         </div>
@@ -190,7 +190,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                     </div>}
                             </div>
                         </div>
-                        <div style={{ height: '30%', width: '90%', paddingTop: '5%', display: 'flex' }}>
+                        <div style={{ height: '20%', width: '90%', paddingTop: '5%', display: 'flex' }}>
                             {
                                 rankData.map((item) => {
                                     return (

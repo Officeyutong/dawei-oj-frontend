@@ -3,7 +3,6 @@ import { useDocumentTitle } from "../../common/Utils";
 import MainBackground from "./assets/background.png";
 import { CSSProperties, useEffect, useState } from "react";
 import Pussy from "./assets/cat.png"
-import Logo from "./assets/logo.png"
 import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../../App";
 import { VisualProgrammingConfig } from "./client/types";
@@ -41,7 +40,6 @@ const VisualProgrammingMainPage: React.FC<{}> = () => {
     return <div style={{ display: "flex", justifyContent: "space-around" }}>
         <Segment style={{ backgroundSize: "100% 100%", backgroundImage: `url(${MainBackground})`, width: "80%" }}>
             {loading && <Dimmer active><Loader active></Loader></Dimmer>}
-            <Image src={Logo} style={{ position: "absolute", userSelect: 'none' }}></Image>
             <Grid columns={1} centered>
                 <Grid.Column style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "80px", maxWidth: "600px", width: "80%" }}>
                     <Header as="h1" style={{ color: "#de5f50", fontSize: "xxx-large" }}>大卫信奥图形化课程入口</Header>

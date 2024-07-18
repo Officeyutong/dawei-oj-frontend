@@ -1,5 +1,4 @@
 import { Button, Dimmer, Divider, Grid, Header, Image, Loader, Segment } from "semantic-ui-react"
-import Logo from "./assets/logo.png"
 import { useDocumentTitle } from "../../common/Utils";
 import { Fragment, useEffect, useState } from "react";
 import { HomeworkDisplayListEntry } from "./client/types";
@@ -32,7 +31,6 @@ const VisualProgrammingHomeworkList: React.FC<{}> = () => {
         if (!loaded) loadPage(1);
     }, [loaded]);
     return <Segment style={{ backgroundColor: "#d6eefa" }}>
-        <Image src={Logo} style={{ position: "absolute", userSelect: 'none' }}></Image>
         <div style={{ display: "flex", justifyContent: "space-around", flexDirection: "column", alignItems: "center" }}>
             <Header as="h1" style={{ color: "#de5f50", fontSize: "xxx-large", marginBottom: "5px" }}>图形化课程作业</Header>
             <Segment style={{ width: "60%", marginTop: "5px" }}>
