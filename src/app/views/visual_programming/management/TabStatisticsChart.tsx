@@ -24,7 +24,7 @@ const TabStatisticsChart: React.FC<{}> = () => {
             for (let now = endTime.minus({ days: duration }); !now.equals(endTime); now = now.plus({ days: 1 })) {
                 const item = dataMap.get(now.toSeconds());
                 if (item !== undefined) result.push(item);
-                else result.push({ count: 0, date_timestamp: now.toSeconds() });
+                else result.push({ commented_count: 0, uncommented_count: 0, date_timestamp: now.toSeconds() });
             }
             setData(result);
             setLoading(false);
@@ -60,15 +60,32 @@ const TabStatisticsChart: React.FC<{}> = () => {
             按天分布的作业提交数
         </Header>
             <ColumnChart
-                data={data.map(item => ({
-                    date: timestampToYMD(item.date_timestamp),
-                    value: item.count,
-                    type: "提交过的作业数目"
-                }))}
+                isStack
+                data={(() => {
+                    const result = [];
+                    for (const item of data) {
+                        result.push({
+                            date: timestampToYMD(item.date_timestamp),
+                            value: item.commented_count,
+                            type: "已批阅的提交数"
+                        });
+                        result.push({
+                            date: timestampToYMD(item.date_timestamp),
+                            value: item.uncommented_count,
+                            type: "未批阅的提交数"
+                        });
+                    }
+                    return result;
+                })()}
                 xField="date"
                 yField="value"
                 seriesField="type"
                 slider={{}}
+                meta={{
+                    date: { alias: "日期" },
+                    value: { alias: "提交数量" },
+                    type: { alias: "类别" }
+                }}
             ></ColumnChart></>}
 
     </>

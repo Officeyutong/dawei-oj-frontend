@@ -65,7 +65,8 @@ interface VisualProgrammingConfig {
 }
 interface SubmittedHomeworkCountStatisticsEntry {
     date_timestamp: number;
-    count: number;
+    commented_count: number;
+    uncommented_count: number;
 }
 
 interface PerTeamStatisticsResponse {

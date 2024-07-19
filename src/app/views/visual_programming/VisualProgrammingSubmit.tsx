@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback, useRef, ChangeEvent, CSSProperties, u
 import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
 import visualProgrammingClient from "./client/VisualProgrammingClient";
-import { HomeworkDetail, HomeworkSubmissionListEntry, RanklistEntry } from "./client/types";
+import { HomeworkDetail, HomeworkSubmissionListEntry, RecentSubmittedUserEntry } from "./client/types";
 import './EmbedVideo.css';
 import { showErrorModal } from "../../dialogs/Dialog";
 import { Markdown } from "../../common/Markdown";
@@ -25,7 +25,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     const [progress, setProgress] = useState(0);
 
     const [homeworkData, setHomeworkData] = useState<null | HomeworkDetail>(null);
-    const [rankData, setRankData] = useState<null | RanklistEntry[]>(null);
+    const [recentSubmittedUser, setRecentSubmittedUser] = useState<null | RecentSubmittedUserEntry[]>(null);
     const [commentData, setCommentData] = useState<null | HomeworkSubmissionListEntry[]>(null);
     const [buttonText, setButtonText] = useState<'提交' | '已提交'>('提交');
 
@@ -85,12 +85,12 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
         let flag = false;
         try {
             setLoading(true);
-            const [workData, rankData, commentData] = await Promise.all([
+            const [workData, recentSubmittedUser, commentData] = await Promise.all([
                 visualProgrammingClient.getHomeworkDetail(Number(id)),
-                visualProgrammingClient.getSimpleHomeworkRanklist(),
+                visualProgrammingClient.getRecentSubmittedUserForHomework(parseInt(id)),
                 visualProgrammingClient.getHomeworkSubmissionList(1, 'no', [uid], Number(id))
             ])
-            setRankData(rankData);
+            setRecentSubmittedUser(recentSubmittedUser);
             setCommentData(commentData.data)
             setHomeworkData(workData)
             setLoaded(true)
@@ -112,8 +112,8 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     }, [id, uid])
 
     useEffect(() => {
-        if (initialRequestDone && homeworkData === null && rankData === null && commentData === null) getData();
-    }, [homeworkData, getData, commentData, rankData, initialRequestDone])
+        if (initialRequestDone && homeworkData === null && recentSubmittedUser === null && commentData === null) getData();
+    }, [homeworkData, getData, commentData, recentSubmittedUser, initialRequestDone])
 
     useBackgroundColor('#d6eefa')
 
@@ -134,7 +134,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                 <Dimmer active={loading}>
                     <Loader>加载中</Loader>
                 </Dimmer>}
-            {loaded && commentData && rankData && homeworkData &&
+            {loaded && commentData !== null && recentSubmittedUser !== null && homeworkData !== null &&
                 <div style={{ position: 'absolute', display: "flex", justifyContent: "center", width: "100%", height: "100%" }}>
                     {iframeSrc && <div style={{ flex: 'auto', display: "flex", width: '50%', height: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
                         <h1 style={{ color: "#3e6143", fontSize: '3em', marginTop: '60px' }}>作业介绍</h1>
@@ -184,7 +184,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                 {buttonText === '提交' && <p style={{ margin: "3%", fontWeight: 'bold' }}>
                                     请提交作业，提交后等待批改即可查看评语
                                 </p>}
-                                {commentData !== undefined && commentData && commentData.length !== 0 && rankData && buttonText === '已提交' &&
+                                {commentData !== undefined && commentData && commentData.length !== 0 && buttonText === '已提交' &&
                                     <div style={{ overflowY: "scroll", maxHeight: "105%", margin: "2%", maxWidth: '95%', wordWrap: 'break-word' }}>
                                         <Markdown style={{ fontWeight: 'bold' }} markdown={commentData[0].comment ? commentData[0].comment.comment : '等待老师批改完成后可查看评语'}></Markdown>
                                     </div>}
@@ -192,7 +192,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         </div>
                         <div style={{ height: '20%', width: '90%', paddingTop: '5%', display: 'flex' }}>
                             {
-                                rankData.map((item) => {
+                                recentSubmittedUser.map((item) => {
                                     return (
                                         <div key={item.uid} style={{ width: '50%', height: '90%', marginLeft: '1%', placeItems: 'center' }}>
                                             <Grid style={{ height: '90%', paddingRight: '18%' }}>
@@ -204,10 +204,10 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                                     <div style={{ height: '30%', paddingLeft: '6%' }}>
                                                         <a target="_blank" rel="noreferrer" style={{ fontSize: '2em', color: 'black', textAlign: "center", fontWeight: 'bold' }} href={`/profile/${item.uid}`}>{item.real_name ? `${item.real_name}` : `${item.username}`}</a>
                                                     </div>
-                                                    <p style={{ marginTop: '1px', fontSize: "1.3em", color: 'red', fontWeight: '500' }} >已交作业</p>
+                                                    {/* <p style={{ marginTop: '1px', fontSize: "1.3em", color: 'red', fontWeight: '500' }} >已交作业</p>
                                                     <div style={{ width: '110%', height: '29%', background: '#fff5bc', borderRadius: '40px', textAlign: 'center' }}>
                                                         <p style={{ color: 'red', fontSize: '2.8em', fontWeight: 'bold' }}>{item.submission_count}</p>
-                                                    </div>
+                                                    </div> */}
                                                 </GridColumn>
                                             </Grid>
                                         </div>
