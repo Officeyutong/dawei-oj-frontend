@@ -1,14 +1,14 @@
 import { Button, Dimmer, Form, FormField, Grid, GridColumn, Header, Image, Input, Loader } from "semantic-ui-react";
-import { useBackgroundColor, useDocumentTitle, useInputValue, usePasswordSalt } from "../../common/Utils";
-import Cat from "./assets/cat.png"
+import { useBackgroundColor, useDocumentTitle, useInputValue, usePasswordSalt } from "../../../common/Utils";
+import Cat from "../assets/cat.png"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { showErrorModal } from "../../dialogs/Dialog";
-import userClient from "../user/client/UserClient";
+import { showErrorModal } from "../../../dialogs/Dialog";
+import userClient from "../../user/client/UserClient";
 import { useSelector } from "react-redux";
-import { StateType } from "../../states/Manager";
+import { StateType } from "../../../states/Manager";
 import md5 from "md5";
-import { showSuccessPopup } from "../../dialogs/Utils";
+import { showSuccessPopup } from "../../../dialogs/Utils";
 
 
 const VisualProgrammingLogin: React.FC<{}> = () => {

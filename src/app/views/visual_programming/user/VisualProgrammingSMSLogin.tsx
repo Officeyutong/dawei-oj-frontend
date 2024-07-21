@@ -1,14 +1,14 @@
 import { Button, Dimmer, Form, FormField, Grid, GridColumn, Header, Image, Input, Loader, Modal } from "semantic-ui-react";
-import { useBackgroundColor, useDocumentTitle, useInputValue } from "../../common/Utils";
-import Cat from "./assets/cat.png"
+import { useBackgroundColor, useDocumentTitle, useInputValue } from "../../../common/Utils";
+import Cat from "../assets/cat.png"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import SendSMSCodeDialog from "../utils/SendSMSCode";
-import { showErrorModal } from "../../dialogs/Dialog";
-import { showSuccessPopup } from "../../dialogs/Utils";
-import userClient from "../user/client/UserClient";
+import SendSMSCodeDialog from "../../utils/SendSMSCode";
+import { showErrorModal } from "../../../dialogs/Dialog";
+import { showSuccessPopup } from "../../../dialogs/Utils";
+import userClient from "../../user/client/UserClient";
 import { useSelector } from "react-redux";
-import { StateType } from "../../states/Manager";
+import { StateType } from "../../../states/Manager";
 
 const VisualProgrammingSMSLogin: React.FC<{}> = () => {
     useBackgroundColor('#d6eefa')

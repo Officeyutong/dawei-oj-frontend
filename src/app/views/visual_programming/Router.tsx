@@ -13,10 +13,10 @@ const VisualProgrammingMainPage = lazy(() => import("./VisualProgrammingMainPage
 const VisualProgrammingHomeworkList = lazy(() => import("./VisualProgrammingHomeworkList"));
 const VisualProgrammingSubmit = lazy(() => import("./VisualProgrammingSubmit"));
 const VisualProgrammingManual = lazy(() => import("./VisualProgrammingManual"));
-const VisualProgrammingLogin = lazy(() => import("./VisualProgrammingLogin"));
-const VisualProgrammingRegister = lazy(() => import("./VisualProgrammingRegister"));
-const VisualProgrammingSMSLogin = lazy(() => import("./VisualProgrammingSMSLogin"));
-
+const VisualProgrammingLogin = lazy(() => import("./user/VisualProgrammingLogin"));
+const VisualProgrammingRegister = lazy(() => import("./user/VisualProgrammingRegister"));
+const VisualProgrammingSMSLogin = lazy(() => import("./user/VisualProgrammingSMSLogin"));
+const VisualProgrammingProfileEdit = lazy(() => import("./user/VisualProgrammingProfileEdit"));
 const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const { uid, username, realName } = useSelector((s: StateType) => s.userState.userData);
     const { login } = useSelector((s: StateType) => s.userState);
@@ -60,7 +60,7 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                         {realName && <Header as='h5' style={{ margin: '0' }}>{realName}</Header>}
                     </Header>}>
                 <Menu vertical style={{ width: '10rem', padding: "0", margin: "0" }}>
-                    <MenuItem href={`${PUBLIC_URL}/profile/${profileImage}`} target='_blank'>
+                    <MenuItem as={Link} to={`${PUBLIC_URL}/visual_programming/profile_edit`}>
                         个人设置
                     </MenuItem>
                     <MenuItem onClick={handleLogout}>退出登录</MenuItem>
@@ -101,6 +101,11 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
             <Route exact path={`${match.path}/smslogin`}>
                 <Suspense fallback={<GeneralDimmedLoader />}>
                     <VisualProgrammingSMSLogin></VisualProgrammingSMSLogin>
+                </Suspense>
+            </Route>
+            <Route exact path={`${match.path}/profile_edit`}>
+                <Suspense fallback={<GeneralDimmedLoader />}>
+                    <VisualProgrammingProfileEdit></VisualProgrammingProfileEdit>
                 </Suspense>
             </Route>
         </Switch>
