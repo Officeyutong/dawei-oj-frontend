@@ -28,6 +28,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
     const { initialRequestDone } = useSelector((s: StateType) => s.userState);
     const [data, setData] = useState<UserProfileResponseEditing | null>(null);
     const [loading, setLoading] = useState(false);
+    const [selectedButton, setSelectedButton] = useState<Number>(1);
 
     useEffect(() => {
         if (initialRequestDone && data === null && uid !== -1) {
@@ -76,26 +77,39 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
 
     return <>
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
-        <div style={{ marginTop: "10%", marginLeft: "20%", marginRight: "20%" }}>
+        <div style={{ marginTop: "10%", marginLeft: "20%", marginRight: "20%", userSelect: 'none' }}>
             {data !== null && <Grid columns={2} >
                 <Grid.Row>
                     <Grid.Column width={4}>
                         <Segment style={{ flexDirection: "column", alignItems: "center", display: "flex" }}>
-                            <div style={{ ...LinkStyle, paddingBottom: "10px", }}>基本信息</div>
-                            <div style={{ ...LinkStyle, paddingTop: "10px" }}>账号设置</div>
-
+                            <div style={{ ...LinkStyle, paddingBottom: "10px", color: selectedButton === 1 ? "#e6877c" : '' }} id='infoList' onClick={() => {
+                                const anchor = document.getElementById('basicInfo');
+                                setSelectedButton(1);
+                                if (anchor !== null) {
+                                    anchor.scrollIntoView(true)
+                                }
+                            }
+                            }>基本信息</div>
+                            <div style={{ ...LinkStyle, paddingTop: "10px", color: selectedButton === 2 ? "#e6877c" : '' }} id='infoList' onClick={() => {
+                                const anchor = document.getElementById('accountInfo');
+                                setSelectedButton(2);
+                                if (anchor !== null) {
+                                    anchor.scrollIntoView(true)
+                                }
+                            }
+                            }>账号设置</div>
                         </Segment>
                     </Grid.Column>
                     <Grid.Column width={12}>
                         <Segment>
-                            <Header style={{ color: "#e6877c" }} as="h2">
+                            <Header style={{ color: "#e6877c" }} as="h2" id='basicInfo'>
                                 基本信息
                             </Header>
                             <Grid columns={2}>
                                 <Grid.Row>
                                     <Grid.Column width={1}></Grid.Column>
                                     <Grid.Column width={3} style={GeneralDivStyle}>
-                                        <Header as="h3">头像</Header>
+                                        <Header as="h3" style={{ textAlign: 'end' }}>头像</Header>
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Image style={GeneralDivStyle} size="tiny" circular src={makeProfileImageURL(uid)}></Image>
@@ -104,7 +118,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                                 <Grid.Row>
                                     <Grid.Column width={1}></Grid.Column>
                                     <Grid.Column width={3} style={GeneralDivStyle}>
-                                        <Header as="h3">手机号</Header>
+                                        <Header as="h3" style={{ textAlign: 'end' }}>手机号</Header>
                                     </Grid.Column>
                                     <Grid.Column>
                                         {data.phone_verified ? data.phone_number : "手机号未验证"}
@@ -113,7 +127,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                                 <Grid.Row>
                                     <Grid.Column width={1}></Grid.Column>
                                     <Grid.Column width={3} style={GeneralDivStyle}>
-                                        <Header as="h3">用户名</Header>
+                                        <Header as="h3" style={{ textAlign: 'end' }}>用户名</Header>
                                     </Grid.Column>
                                     <Grid.Column>
                                         {data.username}
@@ -122,7 +136,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                                 {data.real_name && <Grid.Row>
                                     <Grid.Column width={1}></Grid.Column>
                                     <Grid.Column width={3} style={GeneralDivStyle}>
-                                        <Header as="h3">姓名</Header>
+                                        <Header as="h3" style={{ textAlign: 'end' }}>姓名</Header>
                                     </Grid.Column>
                                     <Grid.Column>
                                         {data.real_name}
@@ -131,7 +145,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                                 <Grid.Row>
                                     <Grid.Column width={1}></Grid.Column>
                                     <Grid.Column width={3} style={GeneralDivStyle}>
-                                        <Header as="h3">积分</Header>
+                                        <Header as="h3" style={{ textAlign: 'end' }}>积分</Header>
                                     </Grid.Column>
                                     <Grid.Column>
                                         {data.credit}
@@ -140,7 +154,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                             </Grid>
                             <Divider style={{ borderColor: "#67aeda", borderTop: "0" }}></Divider>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <Header style={{ color: "#e6877c" }} as="h2">
+                                <Header style={{ color: "#e6877c" }} as="h2" id='accountInfo'>
                                     账号设置
                                 </Header>
                                 <Button style={{ backgroundColor: "#a2c173", color: "white" }} onClick={save} size="medium">保存</Button>
@@ -149,7 +163,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                                 <Grid.Row>
                                     <Grid.Column width={1}></Grid.Column>
                                     <Grid.Column width={3} style={GeneralDivStyle}>
-                                        <Header as="h3">修改头像</Header>
+                                        <Header as="h3" style={{ textAlign: 'end' }}>修改头像</Header>
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Link to={`${PUBLIC_URL}/profile_image_edit/${uid}`}>
@@ -160,7 +174,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                                 <Grid.Row>
                                     <Grid.Column width={1}></Grid.Column>
                                     <Grid.Column width={3} style={GeneralDivStyle}>
-                                        <Header as="h3">修改密码</Header>
+                                        <Header as="h3" style={{ textAlign: 'end' }}>修改密码</Header>
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Popup
@@ -173,7 +187,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                                 <Grid.Row>
                                     <Grid.Column width={1}></Grid.Column>
                                     <Grid.Column width={3} style={GeneralDivStyle}>
-                                        <Header as="h3">重复密码</Header>
+                                        <Header as="h3" style={{ textAlign: 'end' }}>重复密码</Header>
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Popup
