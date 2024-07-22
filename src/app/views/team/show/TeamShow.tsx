@@ -166,7 +166,7 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                     <Loader></Loader>
                                 </Dimmer>}
                                 {hasPermission ? <>
-                                    <Tab menu={{ pointing: true }} panes={[
+                                    <Tab defaultActiveIndex={4} menu={{ pointing: true }} panes={[
                                         {
                                             menuItem: "简介",
                                             render: () => data.description.trim() === "" ? <div>这个团队没有简介...</div> : <Markdown markdown={data.description}></Markdown>
