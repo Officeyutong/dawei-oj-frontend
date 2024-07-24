@@ -110,6 +110,8 @@ const SubRoutes = () => {
         <Route path={`${match.path}/success`}>
             <ErrorAndSuccess error={false}></ErrorAndSuccess>
         </Route>
+        <Route path={`${match.path}/scratch`}>
+        </Route>
     </>
     const { baseContainerMaxWidth, baseContainerWidth } = useSelector((s: StateType) => s);
 
