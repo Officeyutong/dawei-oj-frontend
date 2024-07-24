@@ -187,10 +187,10 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                             menuItem: "团队题目",
                                             render: () => <GeneralTeamStuff
                                                 promptButtonString="添加团队题目"
-                                                addCallback={text => addStuff(text, "problem")}
+                                                addCallback={(text: string) => addStuff(text, "problem")}
                                                 isTeamAdmin={isTeamAdmin}
                                                 data={data.team_problems}
-                                                lineMapper={(line) => [<Link to={`${PUBLIC_URL}/show_problem/${line.id}?source_team=${data.id}`}>#{line.id}. {(line as TeamDetail["team_problems"][0]).title}</Link>]}
+                                                lineMapper={(line: { id: any; title?: string; }) => [<Link to={`${PUBLIC_URL}/show_problem/${line.id}?source_team=${data.id}`}>#{line.id}. {(line as TeamDetail["team_problems"][0]).title}</Link>]}
                                             ></GeneralTeamStuff>
                                         },
                                         {
