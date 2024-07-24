@@ -30,10 +30,10 @@ const VisualProgrammingHomeworkList: React.FC<{}> = () => {
     useEffect(() => {
         if (!loaded) loadPage(1);
     }, [loaded]);
-    return <Segment style={{ backgroundColor: "#d6eefa" }}>
+    return <Segment style={{ backgroundColor: "#d6eefa", border: 'none', boxShadow: 'none' }}>
         <div style={{ display: "flex", justifyContent: "space-around", flexDirection: "column", alignItems: "center" }}>
             <Header as="h1" style={{ color: "#de5f50", fontSize: "xxx-large", marginBottom: "5px" }}>图形化课程作业</Header>
-            <Segment style={{ width: "60%", marginTop: "5px" }}>
+            <Segment style={{ width: "60%", marginTop: "5px", border: 'none', boxShadow: 'none' }}>
                 {!loaded && <div style={{ height: "600px" }}></div>}
                 {loading && <Dimmer active><Loader active></Loader></Dimmer>}
                 {loaded && <>
