@@ -25,10 +25,10 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(-1);
     const [pageCount, setPageCount] = useState(0);
-    const [showFavOnly, setShowFavOnly] = useState(true);
+    const [showFavOnly, setShowFavOnly] = useState<boolean | undefined>(undefined);
     const privileged = useSelector((s: StateType) => s.userState.userData.shouldDisplayFullProblemsetListByDefault);
     const ifLogin = useSelector((s: StateType) => s.userState.login);
-    useEffect(() => { if (privileged || !ifLogin) setShowFavOnly(false); }, [privileged, ifLogin]);
+    const { initialRequestDone } = useSelector((s: StateType) => s.userState);
     const createProblemset = async (evt: ButtonClickEvent) => {
         try {
             setLoading(true);
@@ -59,10 +59,18 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
         }
     };
     useEffect(() => {
-        if (!loaded) {
+        if (initialRequestDone && (privileged || !ifLogin)) {
+            setShowFavOnly(false);
+        } else if (initialRequestDone) {
+            setShowFavOnly(true)
+        }
+    }, [initialRequestDone, privileged, ifLogin])
+    useEffect(() => {
+        if (initialRequestDone && !loaded && showFavOnly !== undefined) {
             loadPage(parseInt(params.page || "1"), showFavOnly);
         }
-    }, [loaded, params.page, showFavOnly]);
+    }, [initialRequestDone, loaded, params.page, showFavOnly]);
+
     const toggleFav = useCallback(() => {
         if (loaded) {
             setShowFavOnly(!showFavOnly);
@@ -85,7 +93,7 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
             {loading && <Dimmer active><Loader></Loader></Dimmer>}
             <Grid columns="1">
                 {ifLogin && <><Grid.Column>
-                    <Checkbox checked={showFavOnly} onChange={toggleFav} toggle label="仅显示收藏习题集"></Checkbox>
+                    <Checkbox checked={showFavOnly} onChange={toggleFav} toggle label="仅显示收藏习题集" defaultChecked={false}></Checkbox>
                 </Grid.Column>
                     {!showFavOnly && <Grid.Column> <Button as="div" color="green" onClick={createProblemset}>
                         创建习题集
@@ -147,7 +155,12 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Pagination
                         totalPages={pageCount}
                         activePage={page}
-                        onPageChange={(e, d) => loadPage(d.activePage as number, showFavOnly)}
+                        onPageChange={(e, d) => {
+                            if (showFavOnly !== undefined) {
+                                loadPage(d.activePage as number, showFavOnly)
+                            }
+
+                        }}
                     ></Pagination>
                 </Grid.Column>
             </Grid>
