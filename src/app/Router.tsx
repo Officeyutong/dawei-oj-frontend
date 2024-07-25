@@ -37,6 +37,7 @@ import BaseViewNew from "./views/BaseViewNew";
 import WechatStatistics from "./views/wechat_statistics/WechatStatistics";
 import VisualProgrammingRouter from "./views/visual_programming/Router"
 import VisualProgramminAdminRouter from "./views/visual_programming/AdminRouter";
+import { useBackgroundColor } from "./common/Utils";
 const SubRoutes = () => {
     const [displayBaseView,] = useBaseViewDisplay();
     const match = useRouteMatch();
@@ -125,6 +126,7 @@ const SubRoutes = () => {
     })();
 };
 const MyRouter: React.FC<React.PropsWithChildren<{}>> = () => {
+    useBackgroundColor('#eef2f7')
     const clientLoaded = useSelector((s: StateType) => s.generalClient !== null && s.unwrapClient !== null && s.unwrapExtraClient !== null);
     return <BrowserRouter>
         {clientLoaded && <Route path={`${PUBLIC_URL}`}>
