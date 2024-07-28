@@ -63,7 +63,7 @@ const PreliminaryContestList: React.FC<React.PropsWithChildren<{}>> = () => {
             </>}
             <Container textAlign="center">
                 <Pagination
-                    totalPages={pageCount}
+                    totalPages={Math.max(pageCount, 1)}
                     activePage={numberPage}
                     onPageChange={(_, d) => history.push(`${PUBLIC_URL}/preliminary/list/${d.activePage as number}`)}
                 ></Pagination>

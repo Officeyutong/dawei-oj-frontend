@@ -125,7 +125,7 @@ const UserProblemFilter: React.FC<{}> = () => {
                     </Table>
                     <Container textAlign="center">
                         <Pagination
-                            totalPages={pageCount}
+                            totalPages={Math.max(pageCount, 1)}
                             activePage={page}
                             onPageChange={(e, d) => setPage(d.activePage as number)}
                         ></Pagination>

@@ -153,7 +153,7 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
             <Grid columns="3" centered >
                 <Grid.Column>
                     <Pagination
-                        totalPages={pageCount}
+                        totalPages={Math.max(pageCount, 1)}
                         activePage={page}
                         onPageChange={(e, d) => {
                             if (showFavOnly !== undefined) {

@@ -115,7 +115,7 @@ const TeamMembers: React.FC<React.PropsWithChildren<TeamMembersProps>> = (props)
             </Grid>
             <Divider></Divider>
             <Container textAlign="center">
-                <Pagination totalPages={totalPages} activePage={page} onPageChange={(_, e) => setPage(e.activePage as number)}></Pagination>
+                <Pagination totalPages={Math.max(totalPages, 1)} activePage={page} onPageChange={(_, e) => setPage(e.activePage as number)}></Pagination>
             </Container>
         </>}
     </>;

@@ -69,7 +69,7 @@ const TabUserRanklist: React.FC<{}> = () => {
                     </Table.Row>)}
                 </Table.Body>
             </Table>
-            <div style={{ display: "flex", justifyContent: "space-around" }}><Pagination activePage={page} totalPages={pageCount} onPageChange={(_, d) => loadPage(d.activePage as number)}></Pagination></div>
+            <div style={{ display: "flex", justifyContent: "space-around" }}><Pagination activePage={page} totalPages={Math.max(pageCount, 1)} onPageChange={(_, d) => loadPage(d.activePage as number)}></Pagination></div>
         </>}
     </>
 }

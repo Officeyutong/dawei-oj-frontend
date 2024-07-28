@@ -111,7 +111,7 @@ const UserDetailedView: React.FC<UserDetailedProps> = ({ uid }) => {
                         </Table.Body>
                     </Table>
                     <div style={{ display: "flex", justifyContent: "space-around" }}>
-                        <Pagination activePage={submissionListPage} totalPages={submissionListPageCount} onPageChange={(_, d) => loadPageOfSubmission(d.activePage as number, selectedHomework)}></Pagination>
+                        <Pagination activePage={submissionListPage} totalPages={Math.max(submissionListPageCount, 1)} onPageChange={(_, d) => loadPageOfSubmission(d.activePage as number, selectedHomework)}></Pagination>
                     </div>
                 </>}
             </Grid.Column>

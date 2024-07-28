@@ -97,11 +97,12 @@ const WikiVersionList: React.FC<React.PropsWithChildren<{}>> = () => {
                 </Table>
                 <Container textAlign="center">
                     <Pagination
-                        totalPages={pageCount}
+                        totalPages={Math.max(pageCount, 1)}
                         activePage={page}
                         onPageChange={(_, d) => loadPage(d.activePage as number)}
                     >
-                    </Pagination></Container>
+                    </Pagination>
+                </Container>
             </> : <Container textAlign="center">无数据！</Container>}
         </Segment>
     </>;

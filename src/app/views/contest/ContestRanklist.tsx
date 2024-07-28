@@ -225,7 +225,7 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
                     </Table.Body>
                 </Table>
                 <Container textAlign="center">
-                    <Pagination totalPages={totalPages} activePage={page} onPageChange={(_, e) => setPage(e.activePage as number)}></Pagination>
+                    <Pagination totalPages={Math.max(totalPages, 1)} activePage={page} onPageChange={(_, e) => setPage(e.activePage as number)}></Pagination>
                 </Container>
             </Segment>
             <div>

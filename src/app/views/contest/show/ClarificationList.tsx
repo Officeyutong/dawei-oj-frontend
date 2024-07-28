@@ -78,7 +78,7 @@ const ClarificationList: React.FC<React.PropsWithChildren<ClarificationListProps
                 <Grid columns="3" centered>
                     <Grid.Column>
                         <Pagination
-                            totalPages={pageCount}
+                            totalPages={Math.max(pageCount, 1)}
                             activePage={page}
                             onPageChange={(e, d) => loadPage(d.activePage as number)}
                         ></Pagination>

@@ -97,7 +97,7 @@ const UserBatchManagement = () => {
                         </Table.Row>)}
                     </Table.Body>
                 </Table>
-                <Pagination totalPages={pageCount} activePage={page} onPageChange={(_, d) => setPage(d.activePage as number)}></Pagination>
+                <Pagination totalPages={Math.max(pageCount, 1)} activePage={page} onPageChange={(_, d) => setPage(d.activePage as number)}></Pagination>
             </Grid.Column>
             <Grid.Column>
                 <Header as="h3">已选择的用户</Header>

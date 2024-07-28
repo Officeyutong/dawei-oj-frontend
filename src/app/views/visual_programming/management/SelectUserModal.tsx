@@ -59,7 +59,7 @@ const SelectUserModal: React.FC<{ closeCallback: (s?: SelectedUser) => void }> =
                 </Table.Body>
             </Table>
             <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <Pagination totalPages={pageCount} activePage={page} onPageChange={(_, d) => setPage(d.activePage as number)}></Pagination>
+                <Pagination totalPages={Math.max(pageCount, 1)} activePage={page} onPageChange={(_, d) => setPage(d.activePage as number)}></Pagination>
             </div>
         </Modal.Content>
         <Modal.Actions>

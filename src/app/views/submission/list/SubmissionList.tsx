@@ -141,7 +141,7 @@ const SubmissionList: React.FC<React.PropsWithChildren<{}>> = () => {
             </Table>
             <Container textAlign="center">
                 <Pagination
-                    totalPages={pageCount}
+                    totalPages={Math.max(pageCount, 1)}
                     activePage={page}
                     onPageChange={(e, d) => {
                         history.push(`${PUBLIC_URL}/submissions/${d.activePage}?${encodeFilterToQuertString(filter)}`);

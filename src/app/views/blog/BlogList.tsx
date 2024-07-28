@@ -92,7 +92,7 @@ const BlogList: React.FC<React.PropsWithChildren<{}>> = () => {
                         <Divider></Divider>
                         <Container textAlign="center">
                             <Pagination
-                                totalPages={pageCount}
+                                totalPages={Math.max(pageCount, 1)}
                                 activePage={page}
                                 onPageChange={(_, d) => loadPage(d.activePage as number)}
                             ></Pagination>

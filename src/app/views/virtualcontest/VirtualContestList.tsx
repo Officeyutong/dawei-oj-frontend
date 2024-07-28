@@ -87,7 +87,7 @@ const VirtualContestList: React.FC<React.PropsWithChildren<{}>> = () => {
                 <Grid columns="3" centered>
                     <Grid.Column>
                         <Pagination
-                            totalPages={pageCount}
+                            totalPages={Math.max(pageCount, 1)}
                             activePage={page}
                             onPageChange={(e, d) => loadPage(d.activePage as number)}
                         ></Pagination>

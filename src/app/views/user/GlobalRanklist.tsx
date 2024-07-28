@@ -111,7 +111,7 @@ const GlobalRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
             </Table>
             <Container textAlign="center">
                 <Pagination
-                    totalPages={pageCount}
+                    totalPages={Math.max(pageCount, 1)}
                     activePage={numberPage}
                     onPageChange={(_, d) => history.push(`${PUBLIC_URL}/ranklist/${d.activePage}${encodeFilter(filter)}`)}
                 ></Pagination>

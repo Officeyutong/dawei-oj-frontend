@@ -69,7 +69,7 @@ const DiscussionComments: React.FC<React.PropsWithChildren<DiscussionCommentsPro
             </Comment.Group>
             <Container textAlign="center">
                 <Pagination
-                    totalPages={pageCount}
+                    totalPages={Math.max(pageCount, 1)}
                     activePage={page}
                     onPageChange={(_, d) => loadPage(d.activePage as number)}
                 ></Pagination>

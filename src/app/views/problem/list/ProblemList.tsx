@@ -203,7 +203,7 @@ const ProblemList: React.FC<React.PropsWithChildren<{}>> = () => {
             </Table>
             <Container textAlign="center">
                 <Pagination
-                    totalPages={pageCount}
+                    totalPages={Math.max(pageCount, 1)}
                     activePage={numberPage}
                     onPageChange={(e, d) => history.push(`${PUBLIC_URL}/problems/${d.activePage}?${encodeFilter(filter)}`)}
                 ></Pagination>

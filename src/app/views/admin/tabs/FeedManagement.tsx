@@ -159,7 +159,7 @@ const GlobalFeedList: React.FC<React.PropsWithChildren<{ dummy: boolean }>> = ({
             <Grid columns="3" centered>
                 <Grid.Column>
                     <Pagination
-                        totalPages={pageCount}
+                        totalPages={Math.max(pageCount, 1)}
                         activePage={page}
                         onPageChange={(_, d) => loadPage(d.activePage as number)}
                     ></Pagination>

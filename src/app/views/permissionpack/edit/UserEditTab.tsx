@@ -90,7 +90,7 @@ const UserEditTab: React.FC<React.PropsWithChildren<{ id: number }>> = ({ id }) 
         <Divider></Divider>
         <Grid columns="3" centered>
             <Grid.Column>
-                <Pagination totalPages={pageCount} activePage={page} onPageChange={(e, d) => loadPage(d.activePage as number)}></Pagination>
+                <Pagination totalPages={Math.max(pageCount, 1)} activePage={page} onPageChange={(e, d) => loadPage(d.activePage as number)}></Pagination>
             </Grid.Column>
         </Grid>
         <Table textAlign="center" celled>

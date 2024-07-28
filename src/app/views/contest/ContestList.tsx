@@ -154,7 +154,7 @@ const ContestList: React.FC<React.PropsWithChildren<{}>> = () => {
                 <Grid columns="3" centered>
                     <Grid.Column>
                         <Pagination
-                            totalPages={data?.page_count || 0}
+                            totalPages={Math.max(data?.page_count || 0, 1)}
                             activePage={numberPage}
                             onPageChange={(e, d) => history.push(`${PUBLIC_URL}/contests/${d.activePage}?${encodeContestListOption(option)}`)}
                         ></Pagination>

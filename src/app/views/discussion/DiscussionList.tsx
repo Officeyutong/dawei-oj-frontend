@@ -117,7 +117,7 @@ const DiscussionList: React.FC<React.PropsWithChildren<{}>> = () => {
                 </Table>
                 <Container textAlign="center">
                     <Pagination
-                        totalPages={pageCount}
+                        totalPages={Math.max(pageCount, 1)}
                         activePage={numberPage}
                         onPageChange={(_, d) => history.push(`${PUBLIC_URL}/discussions/${path}/${d.activePage}`)}
                     ></Pagination>
