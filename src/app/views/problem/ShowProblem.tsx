@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useRouteMatch } from "react-router-dom";
 import { Button, Dimmer, Grid, Header, Icon, Loader, Modal, Rail, Ref, Segment, Sticky, Table } from "semantic-ui-react";
-import { useCurrentUid, useDocumentTitle, useInputValue } from "../../common/Utils";
+import { useCurrentUid, useDocumentTitle, useInputValue, useLastLanguage } from "../../common/Utils";
 import { showConfirm } from "../../dialogs/Dialog";
 import problemtodoClient from "../problemtodo/client/ProblemtodoClient";
 import InviteCodeInputModal from "../utils/InviteCodeInputModal";
@@ -108,6 +108,7 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
 
     };
     const managable = baseUid === data?.uploader?.uid || data?.managable || false;
+    const defaultLanguage = useLastLanguage(data);
 
     return <>
         {!loaded && <Dimmer active>
@@ -145,7 +146,7 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                             </div>}
                             {(data.problem_type === "traditional" || data.problem_type === "remote_judge") && <CodeInput
                                 defaultCode={data.last_code}
-                                defaultLanguage={data.last_lang === "" ? data.languages[0].id : data.last_lang}
+                                defaultLanguage={defaultLanguage || ""}
                                 languages={data.languages}
                                 usedParameters={data.lastUsedParameters}
                                 parameters={data.extra_parameter}

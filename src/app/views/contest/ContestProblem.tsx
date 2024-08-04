@@ -2,7 +2,7 @@ import QueryString from "qs";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router";
 import { Button, Dimmer, Grid, Header, Icon, Loader, Rail, Ref, Segment, Sticky, Table } from "semantic-ui-react";
-import { useDocumentTitle } from "../../common/Utils";
+import { useDocumentTitle, useLastLanguage } from "../../common/Utils";
 import { showConfirm } from "../../dialogs/Dialog";
 import problemClient from "../problem/client/ProblemClient";
 import CodeInput from "../problem/CodeInput";
@@ -59,6 +59,8 @@ const ContestProblem: React.FC<React.PropsWithChildren<{}>> = () => {
             showConfirm("您确认要提交空代码吗?", doNext);
         } else doNext();
     };
+    const defaultLanguage = useLastLanguage(data);
+
     return <>
         {!loaded && <div style={{ height: "400px" }}>
             <Dimmer active>
@@ -82,7 +84,7 @@ const ContestProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                             </Dimmer>}
                             {data.problem_type !== "submit_answer" ? <CodeInput
                                 defaultCode={data.last_code}
-                                defaultLanguage={data.last_lang === "" ? data.languages[0].id : data.last_lang}
+                                defaultLanguage={defaultLanguage}
                                 languages={data.languages}
                                 usedParameters={data.usedParameters}
                                 parameters={data.extra_parameter}

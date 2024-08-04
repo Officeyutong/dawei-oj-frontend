@@ -49,6 +49,7 @@ export interface UserStateType {
         hasVisualProgrammingHomeworkUpdatePerm: boolean;
         visualProgrammingGradeLevel: string[];
         realName?: string;
+        defaultLanguages: string[];
     }
 }
 
@@ -108,7 +109,8 @@ const defaultState: StateType = {
             customExtraFooter: "",
             hasVisualProgrammingHomeworkUpdatePerm: false,
             visualProgrammingGradeLevel: [],
-            realName: undefined
+            realName: undefined,
+            defaultLanguages: []
         }
     },
     generalClient: null,

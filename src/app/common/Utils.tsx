@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { InputOnChangeData } from "semantic-ui-react";
 import md5 from "md5";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { sprintf } from "sprintf-js";
 import createPersistedState from "use-persisted-state";
 import { DateTime } from "luxon";
 import { MemoryUnit } from "../views/utils/MemoryCostLabel";
+import { ProgrammingLanguageEntry } from "./types";
 
 export const usePreferredMemoryUnit = createPersistedState<MemoryUnit>("hj2-preferred-memory-unit");
 
@@ -87,6 +88,24 @@ export function timeStampToString(seconds: number): string {
 export function timestampToYMD(ts: number) {
     return DateTime.fromSeconds(ts).toFormat("L-dd");
 }
+
+export function useLastLanguage(data: { last_lang: string; languages: ProgrammingLanguageEntry[] } | null): string {
+    const defaultLanguageList = useSelector((s: StateType) => s.userState.userData.defaultLanguages);
+    const defaultLanguage = useMemo(() => {
+        if (data === null) return "";
+        if (data.last_lang !== "") return data.last_lang;
+        for (const item of defaultLanguageList) {
+            const curr = data.languages.find(p => p.id === item);
+            if (curr) {
+                return curr.id;
+            }
+        }
+        return data.languages[0].id;
+    }, [data, defaultLanguageList]);
+    return defaultLanguage;
+
+}
+
 export {
     useDocumentTitle,
     useInputValue,
