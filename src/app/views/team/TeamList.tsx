@@ -50,9 +50,9 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
         </Header>
 
         {<Segment stacked>
-            {loading && <Segment stacked>
+            {loading && <>
                 <Dimmer active><Loader></Loader></Dimmer>
-                <div style={{ height: "400px" }}></div></Segment>}
+                <div style={{ height: "400px" }}></div></>}
             {loaded && <>
                 <Form >
                     <Form.Field>
