@@ -214,7 +214,11 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
                                             <div style={{ color: "red" }}>{y.submit_time}</div>
                                         </span> : <span>
                                             {y.status === "accepted" ? <div>
-                                                <div>-{y.submit_count}</div>
+                                                {y.submit_count >= 0 ?
+                                                    <div>{y.submit_count}</div> :
+                                                    <div>-{y.submit_count}</div>
+                                                }
+
                                                 <div style={{ color: "red" }}>{y.penalty}</div>
                                             </div> : <div>-{y.submit_count}</div>}
                                         </span>}
