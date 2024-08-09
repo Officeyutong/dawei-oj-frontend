@@ -12,7 +12,7 @@ import JudgeStatusLabel from "../../utils/JudgeStatusLabel";
 import ScoreLabel from "../../utils/ScoreLabel";
 import MemoryCostLabel from "../../utils/MemoryCostLabel";
 import { io as socketIO, Socket } from "socket.io-client";
-import { showErrorModal } from "../../../dialogs/Dialog";
+import { showConfirm, showErrorModal } from "../../../dialogs/Dialog";
 import { ButtonClickEvent } from "../../../common/types";
 import SubtaskResultAndCodeView from "./SubtaskResultAndCodeView";
 import WrittenProblemResultView from "./WrittenProblemResultView";
@@ -140,6 +140,19 @@ const ShowSubmission = () => {
         if (data.user.uid === selfUid) return data.virtualContestID;
         else return -1;
     }, [data, selfUid]);
+    const [cancelLoading, setCancelLoading] = useState(false);
+    const cancelScore = () => {
+        showConfirm("您确定要取消本次提交的成绩吗？如果取消成绩后希望恢复，请重测本次提交。", async () => {
+            try {
+                setCancelLoading(true);
+                await submissionClient.cancelScore(data!.id);
+                window.location.reload();
+            } catch {
+                setCancelLoading(false);
+            } finally {
+            }
+        });
+    };
     return <>
         {stage === Stage.LOADING && <>
             <div style={{ height: "400px" }}>
@@ -287,8 +300,11 @@ const ShowSubmission = () => {
                         {isContestSubmit && <Button size="huge" color="blue" as={Link} to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${userSeenVirtualContestId}`}>返回比赛</Button>}
                     </Grid.Column>
                 </Grid>
-                {data.managable && !data.isRemoteSubmission && !isWrittenTest && <Button color="red" onClick={rejudge}>
-                    重测</Button>}
+                {data.managable && !isWrittenTest && <>
+                    <Button color="red" onClick={rejudge}>
+                        重测</Button>
+                    <Button color="red" loading={cancelLoading} onClick={cancelScore}>取消成绩</Button>
+                </>}
                 {data.enableManualGrading && <Button color="green" as={Link} to={`${PUBLIC_URL}/submission/manual_grade/${data.id}`}>
                     人工评分
                 </Button>}

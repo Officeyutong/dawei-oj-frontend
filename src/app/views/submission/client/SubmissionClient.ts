@@ -22,6 +22,9 @@ class SubmissionClient extends GeneralClient {
     async updateManualGradeResult(data: SubmissionManualGradingResult): Promise<void> {
         return (await this.client!.post("/api/submission/update_manual_grading", data)).data;
     }
+    async cancelScore(submissionId: number) {
+        await this.client!.post("/api/submission/cancel_score", { submission_id: submissionId });
+    }
 };
 
 const submissionClient = new SubmissionClient();
