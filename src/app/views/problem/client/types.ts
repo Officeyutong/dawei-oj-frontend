@@ -99,6 +99,7 @@ interface ProblemUpdateInfo extends ProblemStatement {
     provides: string[];
     invite_code: string;
     submissionVisible: boolean;
+    submissionVisibleCondition: "no_condition" | "must_accepted";
     newProblemID: number;
     allowManualGrading: boolean;
     difficulty: number;
@@ -108,7 +109,8 @@ interface ProblemUpdateInfo extends ProblemStatement {
 
 interface ProblemEditReceiveInfo extends Omit<ProblemInfo, "writtenTestStatement"> {
     invite_code: string; //编辑模式时存在
-    writtenTestStatement: WrittenTestQuestion<true>[]
+    writtenTestStatement: WrittenTestQuestion<true>[];
+    submissionVisibleCondition: "no_condition" | "must_accepted";
 }
 interface ProblemSearchFilter {
     searchKeyword?: string;

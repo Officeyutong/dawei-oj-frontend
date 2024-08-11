@@ -66,7 +66,7 @@ const WrittenProblemEdit: React.FC<{}> = () => {
             }
             await problemClient.updateProblemInfo(pid, {
                 ...newData,
-                newProblemID: pid
+                newProblemID: pid,
             });
             showSuccessModal("操作完成");
         } catch { } finally {

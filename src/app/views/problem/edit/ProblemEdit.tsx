@@ -72,7 +72,8 @@ const ProblemEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 allowManualGrading: data.allowManualGrading,
                 difficulty: data.difficulty,
                 problem_type: data.problem_type,
-                writtenTestStatement: data.writtenTestStatement
+                writtenTestStatement: data.writtenTestStatement,
+                submissionVisibleCondition: data.submissionVisibleCondition
             });
             showSuccessModal("保存成功!");
         } catch { } finally {

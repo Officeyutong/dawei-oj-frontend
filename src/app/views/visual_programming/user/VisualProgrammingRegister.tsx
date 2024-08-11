@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import userClient from "../../user/client/UserClient";
 import md5 from "md5";
+import { PUBLIC_URL } from "../../../App";
 
 const VisualProgrammingRegister: React.FC<{}> = () => {
   useBackgroundColor('#d6eefa')
@@ -147,7 +148,7 @@ const VisualProgrammingRegister: React.FC<{}> = () => {
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                       <Button style={{ width: '8rem', height: "3.5rem", borderRadius: '1rem', marginRight: '4rem', backgroundColor: "#de5f50", color: 'white', fontSize: '1.5rem', padding: '0' }} onClick={handleSendSMS}>发送验证码</Button>
                       <Button style={{ width: '8rem', height: "3.5rem", borderRadius: '1rem', backgroundColor: "#a2c173", color: 'white', fontSize: '1.5rem', padding: '0' }} onClick={handleRegister}>注册</Button>
-                      <Link to='/rs/visual_programming/main' style={{ display: 'block', textAlign: 'center', lineHeight: '3.5rem' }} >返回主页</Link>
+                      <Link to={`${PUBLIC_URL}/visual_programming/main`} style={{ display: 'block', textAlign: 'center', lineHeight: '3.5rem' }} >返回主页</Link>
                     </div>
                   </div>
                 </Form>

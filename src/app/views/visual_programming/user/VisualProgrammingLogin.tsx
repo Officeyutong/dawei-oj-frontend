@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import md5 from "md5";
 import { showSuccessPopup } from "../../../dialogs/Utils";
+import { PUBLIC_URL } from "../../../App";
 
 
 const VisualProgrammingLogin: React.FC<{}> = () => {
@@ -73,7 +74,7 @@ const VisualProgrammingLogin: React.FC<{}> = () => {
                     </FormField>
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                       <Button style={{ width: '8rem', height: "3.5rem", borderRadius: '1rem', backgroundColor: "#a2c173", color: 'white', fontSize: '1.5rem', padding: '0' }} onClick={handleLogin}>登录</Button>
-                      <Link to='/rs/visual_programming/smslogin' style={{ display: 'block', textAlign: 'center', lineHeight: '3.5rem' }} >使用验证码登录</Link>
+                      <Link to={`${PUBLIC_URL}/visual_programming/smslogin`} style={{ display: 'block', textAlign: 'center', lineHeight: '3.5rem' }} >使用验证码登录</Link>
                     </div>
                   </div>
                 </Form>

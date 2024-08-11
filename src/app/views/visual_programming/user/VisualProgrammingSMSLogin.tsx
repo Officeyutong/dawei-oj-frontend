@@ -9,6 +9,7 @@ import { showSuccessPopup } from "../../../dialogs/Utils";
 import userClient from "../../user/client/UserClient";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
+import { PUBLIC_URL } from "../../../App";
 
 const VisualProgrammingSMSLogin: React.FC<{}> = () => {
     useBackgroundColor('#d6eefa')
@@ -91,7 +92,7 @@ const VisualProgrammingSMSLogin: React.FC<{}> = () => {
                                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                                             <Button style={{ width: '8rem', height: "3.5rem", borderRadius: '1rem', marginRight: '4rem', backgroundColor: "#de5f50", color: 'white', fontSize: '1.5rem', padding: '0' }} onClick={handleSendSMS}>发送验证码</Button>
                                             <Button style={{ width: '8rem', height: "3.5rem", borderRadius: '1rem', backgroundColor: "#a2c173", color: 'white', fontSize: '1.5rem', padding: '0' }} onClick={handleLogin}>登录</Button>
-                                            <Link to='/rs/visual_programming/login' style={{ display: 'block', textAlign: 'center', lineHeight: '3.5rem' }} >使用账号密码登录</Link>
+                                            <Link to={`${PUBLIC_URL}/visual_programming/login`} style={{ display: 'block', textAlign: 'center', lineHeight: '3.5rem' }} >使用账号密码登录</Link>
                                         </div>
                                     </div>
                                 </Form>
