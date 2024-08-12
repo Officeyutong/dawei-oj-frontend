@@ -159,7 +159,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                 </GridRow>
                                 <GridRow style={{ paddingTop: 0 }}>
                                     <Grid.Column style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", }}>
-                                        <div style={{ width: "200px", textAlign: "center" }}>
+                                        <div style={{ width: "12rem", textAlign: "center" }}>
                                             <p style={{ textAlign: "center" }}>已提交后可多次重复提交</p>
                                             <button style={{ textAlign: "center" }} className="link-button" onClick={() => { setShowSubmissionModal(true) }}>点此跳转提交记录</button>
                                         </div>
@@ -171,8 +171,11 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                                 type="file"
                                                 onChange={handleFileChange}
                                             />
-                                            <Button style={{ height: "100%", borderRadius: '30px', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={handleClick}>
+                                            <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={handleClick}>
                                                 {buttonText}
+                                            </Button>
+                                            <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}`) }}>
+                                                在线编辑
                                             </Button>
                                         </div>
                                     </Grid.Column>
