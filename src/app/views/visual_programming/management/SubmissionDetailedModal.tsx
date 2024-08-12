@@ -73,7 +73,7 @@ const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCall
             {loading && <Dimmer active><Loader active></Loader></Dimmer>}
             {data !== null && <>
                 <Form>
-                    <Form.Group widths={4}>
+                    <Form.Group widths={5}>
                         <Form.Field>
                             <label>提交用户</label>
                             <UserLink data={data.user}></UserLink> {data.user.real_name && `（${data.user.real_name}）`}
@@ -89,6 +89,10 @@ const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCall
                         <Form.Field>
                             <label>文件名/下载</label>
                             <a href={`/api/visualprogramming/homework/download_submission_file/${data.submission_id}`} target="_blank" rel="noreferrer">{data.file_name}</a>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>在线查看</label>
+                            <a href={`/scratch?oj_submission_id=${data.submission_id}`} target="_blank" rel="noreferrer">点击此处</a>
                         </Form.Field>
                     </Form.Group>
                     {data.comment && <>
