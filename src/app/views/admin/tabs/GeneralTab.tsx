@@ -11,7 +11,7 @@ import "react-datetime/css/react-datetime.css";
 import 'moment/locale/zh-cn';
 
 const GeneralView: React.FC<React.PropsWithChildren<{ data: GeneralInfo }>> = ({ data: simpleStatisticsData }) => {
-    const [endTime, setEndTime] = useState<DateTime>(DateTime.now().minus({ days: 0 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }));
+    const [endTime, setEndTime] = useState<DateTime>(DateTime.now().setZone("Asia/Shanghai").minus({ days: 0 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }));
     const [duration, setDuration] = useState<number>(14);
     const [loading, setLoading] = useState(false);
     const [subData, setSubData] = useState<SubmissionStatisticsEntry[]>([]);
