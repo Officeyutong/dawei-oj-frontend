@@ -46,7 +46,7 @@ const SubtaskEntryEdit: React.FC<React.PropsWithChildren<SubtaskEntryEditProps>>
                     >
                     </Dropdown>
                 </Form.Field>
-                <Form.Input label="子任务总分" value={subtask.score} onChange={(_, d) => update({ ...subtask, score: parseInt(d.value) })}></Form.Input>
+                <Form.Input label="子任务总分" value={subtask.score} onChange={(_, d) => update({ ...subtask, score: parseInt(d.value) || 0 })}></Form.Input>
             </Form.Group>
             <Form.Field>
                 <label>注释</label>
