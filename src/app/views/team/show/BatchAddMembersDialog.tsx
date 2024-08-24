@@ -166,7 +166,7 @@ const BatchAddMembers: React.FC<React.PropsWithChildren<BatchAddMembersProps>> =
             <Message info>
                 <Message.Header>提示</Message.Header>
                 <Message.Content>
-                    请在左上方搜索相应成员的用户名，而后点击添加按钮将其添加到右侧列表内。选择完需要添加的用户后，点击右下方确认按钮，即可将所选的用户添加至团队中。
+                    请在左上方搜索相应成员的用户名，而后点击添加按钮将其添加到右侧列表内。选择完需要添加的用户后，点击右下方确认按钮，即可将所选的用户添加至团队中。搜索结果可能会受数量限制。
                 </Message.Content>
             </Message>
         </Modal.Content>
