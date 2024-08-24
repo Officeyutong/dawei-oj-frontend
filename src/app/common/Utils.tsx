@@ -106,6 +106,18 @@ export function useLastLanguage(data: { last_lang: string; languages: Programmin
 
 }
 
+export function useIsPolyFillNeeded(): boolean {
+    const ua = navigator.userAgent
+    const chromeReg = ua.match(/Chrome\/([\d.]+)/);
+    if (chromeReg && chromeReg[1]) {
+        const browserInf = chromeReg[1].split('.')[0]
+        if (Number(browserInf) < 90) {
+            return true
+        }
+    }
+    return false
+}
+
 export {
     useDocumentTitle,
     useInputValue,
