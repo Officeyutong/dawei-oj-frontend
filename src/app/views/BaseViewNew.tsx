@@ -8,7 +8,10 @@ const BaseViewNew: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const { displayRepoInFooter, appName, companyName, customExtraFooter } = useSelector((s: StateType) => s.userState.userData);
     const hasActiveTimedProblemset = useSelector((s: StateType) => s.userState.userData.currentActiveTimedProblemset !== null);
     return <>
-        <Affix><HomePageTopMenuNew></HomePageTopMenuNew></Affix>
+        <Affix>
+            <HomePageTopMenuNew />
+        </Affix>
+
         {children}
         <Typography.Text style={{ textAlign: "center" }}>
             <div style={{ color: "darkgrey" }} >

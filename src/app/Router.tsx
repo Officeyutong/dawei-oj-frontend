@@ -37,10 +37,12 @@ import BaseViewNew from "./views/BaseViewNew";
 import WechatStatistics from "./views/wechat_statistics/WechatStatistics";
 import VisualProgrammingRouter from "./views/visual_programming/Router"
 import VisualProgramminAdminRouter from "./views/visual_programming/AdminRouter";
-import { useBackgroundColor } from "./common/Utils";
+import { useBackgroundColor, useIsPolyFillNeeded } from "./common/Utils";
+import { legacyLogicalPropertiesTransformer, StyleProvider } from '@ant-design/cssinjs';
 const SubRoutes = () => {
     const [displayBaseView,] = useBaseViewDisplay();
     const match = useRouteMatch();
+    const isPolyFillNeeded = useIsPolyFillNeeded();
     // console.log("match = ", match);
     const routers = <>
         <ProblemRouter></ProblemRouter>
@@ -120,7 +122,13 @@ const SubRoutes = () => {
         <div style={{ minWidth: "70%", width: baseContainerWidth, maxWidth: baseContainerMaxWidth, marginLeft: "auto", marginRight: "auto" }}>{routers}</div>
     </div>
     return (() => {
-        if (displayBaseView === "new") return <BaseViewNew>{innerWithContainer}</BaseViewNew>
+        if (displayBaseView === "new") return <>
+            {isPolyFillNeeded ? <StyleProvider hashPriority="high" transformers={[legacyLogicalPropertiesTransformer]}>
+                <BaseViewNew>{innerWithContainer}</BaseViewNew>
+            </StyleProvider> :
+                <BaseViewNew>{innerWithContainer}</BaseViewNew>
+            }
+        </>
         else if (displayBaseView === "old") return <BaseView>{innerWithContainer}</BaseView>;
         else return innerWithContainer;
     })();
