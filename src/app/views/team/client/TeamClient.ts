@@ -63,6 +63,9 @@ class TeamClient extends GeneralClient {
     async getTeamMemberDetailedProblemsetStatistics(teamID: number, uid: number): Promise<TeamMemberDetailedProblemsetStatisticsEntry[]> {
         return (await this.client!.post("/api/team/get_team_member_detailed_problemset_statistics", { team_id: teamID, uid })).data;
     }
+    async searchUsersByPermissionGroup(groupId: string): Promise<{ username: string; uid: number; real_name?: string; }[]> {
+        return (await this.client!.post("/api/team/search_user_by_permission_group", { group_id: groupId })).data;
+    }
 };
 
 const teamClient = new TeamClient();
