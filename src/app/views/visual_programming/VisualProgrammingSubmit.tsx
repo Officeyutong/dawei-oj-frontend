@@ -17,7 +17,7 @@ const EMBED_URL_REGEX = /<iframe.*?src="(.*?)".*?>/;
 
 const VisualProgrammingSubmit: React.FC<{}> = () => {
     const { id } = useParams<{ id: string }>();
-    const { uid } = useSelector((s: StateType) => s.userState.userData);
+    const { uid, maxSubmissionCountPerUserPerVisualHomework } = useSelector((s: StateType) => s.userState.userData);
     const { initialRequestDone } = useSelector((s: StateType) => s.userState);
     const [loading, setLoading] = useState(true);
     const [loaded, setLoaded] = useState(false);
@@ -87,7 +87,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
             const [workData, recentSubmittedUser, commentData] = await Promise.all([
                 visualProgrammingClient.getHomeworkDetail(Number(id)),
                 visualProgrammingClient.getRecentSubmittedUserForHomework(parseInt(id)),
-                visualProgrammingClient.getHomeworkSubmissionList(1, 'no', [uid], Number(id))
+                visualProgrammingClient.getHomeworkSubmissionList(undefined, 'no', [uid], Number(id))
             ])
             setRecentSubmittedUser(recentSubmittedUser);
             setCommentData(commentData.data)
@@ -140,7 +140,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         <div dangerouslySetInnerHTML={{ __html: classAddedIframe }} style={{ height: '75%', width: '90%', marginBottom: '200px', backgroundColor: '#FFFFFF', borderRadius: '20px' }}>
                         </div>
                     </div>}
-                    <div style={{ display: "flex", width: '50%', height: '90%', justifyContent: 'center', flexWrap: 'wrap', marginRight: '3rem' }}>
+                    <div style={{ display: "flex", width: '50%', justifyContent: 'center', flexWrap: 'wrap', marginRight: '3rem' }}>
                         <Segment style={{ marginTop: '120px', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
                             <Grid>
                                 <GridRow >
@@ -149,8 +149,8 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                     </GridColumn>
                                 </GridRow>
                                 <GridRow>
-                                    <GridColumn style={{ height: '170px' }} >
-                                        <div style={{ overflowY: "scroll", maxHeight: "80%", margin: "2%", maxWidth: '95%', wordWrap: 'break-word' }}>
+                                    <GridColumn>
+                                        <div style={{ maxHeight: "50vh", overflowY: 'scroll', margin: "2%", maxWidth: '95%', wordWrap: 'break-word' }}>
                                             <Markdown style={{ fontWeight: 'bold' }} markdown={homeworkData.description}></Markdown>
                                         </div>
                                         <Divider></Divider>
@@ -158,8 +158,9 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                 </GridRow>
                                 <GridRow style={{ paddingTop: 0 }}>
                                     <Grid.Column style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", }}>
-                                        <div style={{ width: "12rem", textAlign: "center" }}>
-                                            <p style={{ textAlign: "center" }}>已提交后可多次重复提交</p>
+                                        <div style={{ width: "12rem", flexGrow: '0', textAlign: "center" }}>
+                                            <p style={{ textAlign: "center", display: 'inline' }}>已提交后可多次重复提交 </p>
+                                            <p style={{ textAlign: "center", display: 'inline' }}>当前已提交{commentData.length}/{maxSubmissionCountPerUserPerVisualHomework}次</p>
                                             <button style={{ textAlign: "center" }} className="link-button" onClick={() => { setShowSubmissionModal(true) }}>点此跳转提交记录</button>
                                         </div>
                                         <div style={{ marginRight: "10px", height: "100%" }}>
@@ -170,7 +171,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                                 type="file"
                                                 onChange={handleFileChange}
                                             />
-                                            <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={handleClick}>
+                                            <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} disabled={commentData.length === 5 ? true : false} onClick={handleClick}>
                                                 {isAlreadySubmitted ? '已提交' : '本地提交'}
                                             </Button>
                                             <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}`) }}>
@@ -192,26 +193,22 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                     </div>}
                             </div>
                         </div>
-                        <div style={{ height: '20%', width: '90%', paddingTop: '5%', display: 'flex' }}>
+                        <div style={{ height: '20%', width: '100%', paddingTop: '5%', textAlign: 'center' }}>
                             {
                                 recentSubmittedUser.map((item) => {
                                     return (
-                                        <div key={item.uid} style={{ width: '50%', height: '90%', marginLeft: '1%', placeItems: 'center' }}>
-                                            <Grid style={{ height: '90%', paddingRight: '18%' }}>
-                                                <GridColumn width={9}>
-                                                    <Image style={{ position: 'absolute', zIndex: '999', top: '-8%', marginLeft: '-10%', paddingTop: '-2%', transform: 'scale(0.9)' } as CSSProperties} src={medal}></Image>
-                                                    <Image style={{ border: "solid", borderColor: '#a2c173' }} src={`/api/user/profile_image/${item.uid}`} size='medium' circular />
-                                                </GridColumn>
-                                                <GridColumn width={7} >
-                                                    <div style={{ height: '30%', paddingLeft: '6%' }}>
-                                                        <a target="_blank" rel="noreferrer" style={{ fontSize: '2em', color: 'black', textAlign: "center", fontWeight: 'bold' }} href={`/profile/${item.uid}`}>{item.real_name ? `${item.real_name}` : `${item.username}`}</a>
-                                                    </div>
-                                                    {/* <p style={{ marginTop: '1px', fontSize: "1.3em", color: 'red', fontWeight: '500' }} >已交作业</p>
+                                        <div key={item.uid} style={{ width: '25%', height: '90%', placeItems: 'center', display: 'inline-block' }}>
+                                            <div style={{ position: 'relative', width: '50%', height: '50%', display: 'inline-block' }}>
+                                                <Image style={{ position: 'absolute', zIndex: '999', marginLeft: '-25%', top: '-50%', transform: 'scale(0.7)' } as CSSProperties} src={medal}></Image>
+                                                <Image style={{ border: "solid", borderColor: '#a2c173' }} src={`/api/user/profile_image/${item.uid}`} size='medium' circular />
+                                            </div>
+                                            <div style={{ display: 'inline-block', width: '50%' }}>
+                                                <a target="_blank" rel="noreferrer" style={{ fontSize: '1.5em', color: 'black', textAlign: "center", fontWeight: 'bold', width: '5rem' }} href={`/profile/${item.uid}`}>{item.real_name ? `${item.real_name}` : `${item.username}`}</a>
+                                            </div>
+                                            {/* <p style={{ marginTop: '1px', fontSize: "1.3em", color: 'red', fontWeight: '500' }} >已交作业</p>
                                                     <div style={{ width: '110%', height: '29%', background: '#fff5bc', borderRadius: '40px', textAlign: 'center' }}>
                                                         <p style={{ color: 'red', fontSize: '2.8em', fontWeight: 'bold' }}>{item.submission_count}</p>
                                                     </div> */}
-                                                </GridColumn>
-                                            </Grid>
                                         </div>
                                     )
                                 })
