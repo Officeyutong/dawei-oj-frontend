@@ -40,7 +40,6 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     useEffect(() => {
         if (initialRequestDone && uid) {
             setProfileImage(String(uid))
-            console.log(realName)
         }
     }, [initialRequestDone, realName, uid])
     return (<>
