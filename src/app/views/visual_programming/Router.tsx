@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
 import userClient from "../user/client/UserClient";
 import { showSuccessPopup } from "../../dialogs/Utils";
+import { useBaseViewDisplay } from "../../states/StateUtils";
 
 const VisualProgrammingMainPage = lazy(() => import("./VisualProgrammingMainPage"));
 const VisualProgrammingHomeworkList = lazy(() => import("./VisualProgrammingHomeworkList"));
@@ -42,6 +43,10 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
             setProfileImage(String(uid))
         }
     }, [initialRequestDone, realName, uid])
+    const [, setBaseviewDisplay] = useBaseViewDisplay();
+    useEffect(() => {
+        setBaseviewDisplay("none");
+    }, [setBaseviewDisplay]);
     return (<>
         {loading && <Dimmer active>
             <Loader></Loader>
@@ -55,11 +60,11 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                 position="bottom center"
                 style={{ padding: "0" }}
                 trigger={
-                    <Header as='h2' style={{ position: 'absolute', marginTop: '1%', marginRight: '4%', right: '0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <Image circular src={`/api/user/profile_image/${profileImage}`} />
+                    <div style={{ position: 'absolute', marginTop: '1%', marginRight: '4%', right: '0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Image circular size="tiny" src={`/api/user/profile_image/${profileImage}`} />
                         <Header as='h5' style={{ margin: '0' }}>{username}</Header>
                         {realName && <Header as='h5' style={{ margin: '0' }}>{realName}</Header>}
-                    </Header>}>
+                    </div>}>
                 <Menu vertical style={{ width: '10rem', padding: "0", margin: "0" }}>
                     <MenuItem as={Link} to={`${PUBLIC_URL}/visual_programming/profile_edit`}>
                         个人设置

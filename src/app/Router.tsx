@@ -43,7 +43,6 @@ const SubRoutes = () => {
     const [displayBaseView,] = useBaseViewDisplay();
     const match = useRouteMatch();
     const isPolyFillNeeded = useIsPolyFillNeeded();
-    // console.log("match = ", match);
     const routers = <>
         <ProblemRouter></ProblemRouter>
         <UserRouter></UserRouter>
