@@ -203,7 +203,7 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
                                     <div style={{ color: "red" }}>{x.total.penalty}</div>
                                 </span> : <span>
                                     <div style={{ color: "green" }}>{x.total.score}</div>
-                                    <div style={{ color: "red" }}>{x.total.submit_time_sum}</div>
+                                    {/* <div style={{ color: "red" }}>{x.total.submit_time_sum}</div> */}
                                 </span>}
                             </Table.Cell>
                             {x.scores.map((y, j) => <Table.Cell textAlign="center" positive={y.status === "accepted"} negative={y.status === "unaccepted"} key={j}>
@@ -211,7 +211,7 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
                                     <a href={`/show_submission/${y.submit_id}`}>
                                         {data.using_penalty === false ? <span>
                                             <div>{y.score}</div>
-                                            <div style={{ color: "red" }}>{y.submit_time}</div>
+                                            {/* <div style={{ color: "red" }}>{y.submit_time}</div> */}
                                         </span> : <span>
                                             {y.status === "accepted" ? <div>
                                                 {y.submit_count >= 0 ?
