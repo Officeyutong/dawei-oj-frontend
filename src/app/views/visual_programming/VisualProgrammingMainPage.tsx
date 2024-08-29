@@ -38,7 +38,7 @@ const VisualProgrammingMainPage: React.FC<{}> = () => {
     }, [config]);
     const doHomeworkButton = <Button as={isLogin ? Link : undefined} to={`${PUBLIC_URL}/visual_programming/homework_list`} fluid style={{ ...MainMenuButtonStyle, ...(isLogin ? {} : { opacity: "0.45" }) }}>👉点这里做作业👈</Button>;
     return <div style={{ display: "flex", justifyContent: "space-around" }}>
-        <Segment style={{ backgroundSize: "100% 100%", backgroundImage: `url(${MainBackground})`, width: "80%" }}>
+        <Segment style={{ backgroundSize: "100% 100%", backgroundImage: `url(${MainBackground})`, width: "100%" }}>
             {loading && <Dimmer active><Loader active></Loader></Dimmer>}
             <Grid columns={1} centered>
                 <Grid.Column style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "80px", maxWidth: "600px", width: "80%" }}>

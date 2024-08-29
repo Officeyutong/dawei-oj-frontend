@@ -75,6 +75,7 @@ const VisualProgrammingLogin: React.FC<{}> = () => {
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                       <Button style={{ width: '8rem', height: "3.5rem", borderRadius: '1rem', backgroundColor: "#a2c173", color: 'white', fontSize: '1.5rem', padding: '0' }} onClick={handleLogin}>登录</Button>
                       <Link to={`${PUBLIC_URL}/visual_programming/smslogin`} style={{ display: 'block', textAlign: 'center', lineHeight: '3.5rem' }} >使用验证码登录</Link>
+                      <Link to={`${PUBLIC_URL}/visual_programming/forgetpwd`} style={{ display: 'block', textAlign: 'center', lineHeight: '3.5rem', marginLeft: '10px' }} >找回密码</Link>
                     </div>
                   </div>
                 </Form>

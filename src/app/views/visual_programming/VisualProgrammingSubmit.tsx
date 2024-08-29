@@ -27,7 +27,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     const [homeworkData, setHomeworkData] = useState<null | HomeworkDetail>(null);
     const [recentSubmittedUser, setRecentSubmittedUser] = useState<null | RecentSubmittedUserEntry[]>(null);
     const [commentData, setCommentData] = useState<null | HomeworkSubmissionListEntry[]>(null);
-    const [buttonText, setButtonText] = useState<'提交' | '已提交'>('提交');
+    const [buttonText, setButtonText] = useState<'本地提交' | '已提交'>('本地提交');
 
     const [showSubmissionModal, setShowSubmissionModal] = useState(false);
 
@@ -141,8 +141,8 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         <div dangerouslySetInnerHTML={{ __html: classAddedIframe }} style={{ height: '75%', width: '90%', marginBottom: '200px', backgroundColor: '#FFFFFF', borderRadius: '20px' }}>
                         </div>
                     </div>}
-                    <div style={{ display: "flex", width: '50%', height: '90%', justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <Segment style={{ marginTop: '120px', width: '90%', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
+                    <div style={{ display: "flex", width: '50%', height: '90%', justifyContent: 'center', flexWrap: 'wrap', marginRight: '3rem' }}>
+                        <Segment style={{ marginTop: '120px', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
                             <Grid>
                                 <GridRow >
                                     <GridColumn>
@@ -184,7 +184,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         </Segment>
                         <div style={{ backgroundColor: 'white', height: '20%', width: '90%', border: '1.5rem solid', borderRadius: '50px', borderColor: '#a2c173' }}>
                             <div style={{ width: '100%', height: '80%' }}>
-                                {buttonText === '提交' && <p style={{ margin: "3%", fontWeight: 'bold' }}>
+                                {buttonText === '本地提交' && <p style={{ margin: "3%", fontWeight: 'bold' }}>
                                     请提交作业，提交后等待批改即可查看评语
                                 </p>}
                                 {commentData !== undefined && commentData && commentData.length !== 0 && buttonText === '已提交' &&
