@@ -1,5 +1,5 @@
 import { Button, Dimmer, Loader, Modal, Table } from "semantic-ui-react";
-import { HomeworkSubmissionListEntry } from "./client/types";
+import { HomeworkDetail, HomeworkSubmissionListEntry } from "./client/types";
 import { useEffect, useState } from "react";
 import visualProgrammingClient from "./client/VisualProgrammingClient";
 import { timeStampToString } from "../../common/Utils";
@@ -9,14 +9,16 @@ const UserSubmissionListModal: React.FC<{ uid: number; homeworkId: number; close
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<HomeworkSubmissionListEntry[] | null>(null);
     const [selectedSubmission, setSelectedSubmission] = useState<Omit<BasicSubmissionDetailProps, "allowNewComment"> | null>(null);
-
+    const [homeworkData, setHomeworkData] = useState<null | HomeworkDetail>(null);
     useEffect(() => {
         if (data === null) (async () => {
             try {
                 setLoading(true);
-                setData((await visualProgrammingClient.getHomeworkSubmissionList(
+                const [a, b] = await Promise.all([visualProgrammingClient.getHomeworkSubmissionList(
                     undefined, "no", [uid], homeworkId, 1, undefined
-                )).data);
+                ), visualProgrammingClient.getHomeworkDetail(homeworkId)]);
+                setData(a.data);
+                setHomeworkData(b);
 
             } catch { } finally {
                 setLoading(false);
@@ -33,7 +35,7 @@ const UserSubmissionListModal: React.FC<{ uid: number; homeworkId: number; close
         ></SubmissionDetailedModal>}
         <Modal open size="small">
             <Modal.Header>
-                查看自己的提交
+                查看自己的提交{homeworkData !== null && `（${homeworkData.name}）`}
             </Modal.Header>
             <Modal.Content>
                 {loading && <Dimmer active><Loader active></Loader></Dimmer>}

@@ -65,7 +65,7 @@ const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCall
             })();
         }
     }, [data, homeworkId, submissionId, uid]);
-    return <Modal size="small" open>
+    return <Modal size="large" open>
         <Modal.Header>
             查看提交详情
         </Modal.Header>
@@ -76,7 +76,7 @@ const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCall
                     <Form.Group widths={5}>
                         <Form.Field>
                             <label>提交用户</label>
-                            <UserLink data={data.user}></UserLink> {data.user.real_name && `（${data.user.real_name}）`}
+                            <div onClick={() => window.open(`/profile/${data.user.uid}`)}>{data.user.username} {data.user.real_name && `（${data.user.real_name}）`}</div>
                         </Form.Field>
                         <Form.Field>
                             <label>提交时间</label>
