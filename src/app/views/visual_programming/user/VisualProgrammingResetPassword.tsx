@@ -13,10 +13,10 @@ import { PUBLIC_URL } from "../../../App";
 import SendSMSCodeDialog from "../../utils/SendSMSCode";
 
 
-const VisualProgrammingForgetPwd: React.FC<{}> = () => {
+const VisualProgrammingResetPassword: React.FC<{}> = () => {
   const { initialRequestDone, login } = useSelector((s: StateType) => s.userState);
   useBackgroundColor('#d6eefa')
-  useDocumentTitle("找回密码");
+  useDocumentTitle("重置密码");
   const [loading, setLoading] = useState<boolean>(false)
   const phone = useInputValue();
   const pwd = useInputValue();
@@ -120,4 +120,4 @@ const VisualProgrammingForgetPwd: React.FC<{}> = () => {
   </>)
 };
 
-export default VisualProgrammingForgetPwd;
+export default VisualProgrammingResetPassword;

@@ -18,7 +18,7 @@ const VisualProgrammingLogin = lazy(() => import("./user/VisualProgrammingLogin"
 const VisualProgrammingRegister = lazy(() => import("./user/VisualProgrammingRegister"));
 const VisualProgrammingSMSLogin = lazy(() => import("./user/VisualProgrammingSMSLogin"));
 const VisualProgrammingProfileEdit = lazy(() => import("./user/VisualProgrammingProfileEdit"));
-const VisualProgrammingForgetPwd = lazy(() => import("./user/VisualProgrammingForgetPwd"));
+const VisualProgrammingResetPassword = lazy(() => import("./user/VisualProgrammingResetPassword"));
 const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const { uid, username, realName } = useSelector((s: StateType) => s.userState.userData);
     const { login } = useSelector((s: StateType) => s.userState);
@@ -109,9 +109,9 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                     <VisualProgrammingProfileEdit></VisualProgrammingProfileEdit>
                 </Suspense>
             </Route>
-            <Route exact path={`${match.path}/forgetpwd`}>
+            <Route exact path={`${match.path}/phone_reset_password`}>
                 <Suspense fallback={<GeneralDimmedLoader />}>
-                    <VisualProgrammingForgetPwd />
+                    <VisualProgrammingResetPassword />
                 </Suspense>
             </Route>
         </Switch>
