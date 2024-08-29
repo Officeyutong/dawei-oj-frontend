@@ -44,7 +44,9 @@ const VisualProgrammingHomeworkList: React.FC<{}> = () => {
                                 <Image style={{ borderRadius: "5px" }} src={item.image_url}></Image>
                             </Grid.Column>}
                             <Grid.Column>
-                                <Markdown markdown={item.description}></Markdown>
+                                <div style={{ overflowY: "scroll", maxHeight: "25vh" }}>
+                                    <Markdown markdown={item.description}></Markdown>
+                                </div>
                                 <div style={{ display: "flex", flexDirection: "row", marginTop: "10px", justifyContent: "flex-end" }}>
                                     {item.course_url !== "" && <Button as="a" href={item.course_url} target="_blank" rel="noreferrer" style={{ backgroundColor: "#659a14", color: "white", borderRadius: "15px", marginRight: "20px" }}>看课程</Button>}
                                     <Button as={Link} to={`${PUBLIC_URL}/visual_programming/submit/${item.id}`} style={{ backgroundColor: "#de5f50", color: "white", borderRadius: "15px" }}>去创作</Button>
