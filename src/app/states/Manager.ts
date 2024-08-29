@@ -50,6 +50,7 @@ export interface UserStateType {
         visualProgrammingGradeLevel: string[];
         realName?: string;
         defaultLanguages: string[];
+        maxSubmissionCountPerUserPerVisualHomework: number;
     }
 }
 
@@ -110,7 +111,8 @@ const defaultState: StateType = {
             hasVisualProgrammingHomeworkUpdatePerm: false,
             visualProgrammingGradeLevel: [],
             realName: undefined,
-            defaultLanguages: []
+            defaultLanguages: [],
+            maxSubmissionCountPerUserPerVisualHomework: 1
         }
     },
     generalClient: null,
