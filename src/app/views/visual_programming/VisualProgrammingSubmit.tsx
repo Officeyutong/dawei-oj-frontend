@@ -27,8 +27,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     const [homeworkData, setHomeworkData] = useState<null | HomeworkDetail>(null);
     const [recentSubmittedUser, setRecentSubmittedUser] = useState<null | RecentSubmittedUserEntry[]>(null);
     const [commentData, setCommentData] = useState<null | HomeworkSubmissionListEntry[]>(null);
-    const [buttonText, setButtonText] = useState<'提交' | '已提交'>('提交');
-
+    const [isAlreadySubmitted, setIsAlreadySubmitted] = useState<boolean>(false);
     const [showSubmissionModal, setShowSubmissionModal] = useState(false);
 
     const uploadRef = useRef<HTMLInputElement>(null);
@@ -74,7 +73,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                 });
                 uploadRef.current.files = null;
                 await getData();
-                setButtonText('已提交')
+                setIsAlreadySubmitted(true)
             }
         } catch { } finally {
             setUpLoading(false);
@@ -96,7 +95,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
             setLoaded(true)
 
             if (commentData.data.length !== 0) {
-                setButtonText('已提交')
+                setIsAlreadySubmitted(true)
             }
             flag = true;
         } catch { } finally {
@@ -141,8 +140,8 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         <div dangerouslySetInnerHTML={{ __html: classAddedIframe }} style={{ height: '75%', width: '90%', marginBottom: '200px', backgroundColor: '#FFFFFF', borderRadius: '20px' }}>
                         </div>
                     </div>}
-                    <div style={{ display: "flex", width: '50%', height: '90%', justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <Segment style={{ marginTop: '120px', width: '90%', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
+                    <div style={{ display: "flex", width: '50%', height: '90%', justifyContent: 'center', flexWrap: 'wrap', marginRight: '3rem' }}>
+                        <Segment style={{ marginTop: '120px', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
                             <Grid>
                                 <GridRow >
                                     <GridColumn>
@@ -172,7 +171,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                                 onChange={handleFileChange}
                                             />
                                             <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={handleClick}>
-                                                {buttonText}
+                                                {isAlreadySubmitted ? '已提交' : '本地提交'}
                                             </Button>
                                             <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}`) }}>
                                                 在线编辑
@@ -184,10 +183,10 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         </Segment>
                         <div style={{ backgroundColor: 'white', height: '20%', width: '90%', border: '1.5rem solid', borderRadius: '50px', borderColor: '#a2c173' }}>
                             <div style={{ width: '100%', height: '80%' }}>
-                                {buttonText === '提交' && <p style={{ margin: "3%", fontWeight: 'bold' }}>
+                                {isAlreadySubmitted === false && <p style={{ margin: "3%", fontWeight: 'bold' }}>
                                     请提交作业，提交后等待批改即可查看评语
                                 </p>}
-                                {commentData !== undefined && commentData && commentData.length !== 0 && buttonText === '已提交' &&
+                                {commentData !== undefined && commentData && commentData.length !== 0 && isAlreadySubmitted === true &&
                                     <div style={{ overflowY: "scroll", maxHeight: "105%", margin: "2%", maxWidth: '95%', wordWrap: 'break-word' }}>
                                         <Markdown style={{ fontWeight: 'bold' }} markdown={commentData[0].comment ? commentData[0].comment.comment : '等待老师批改完成后可查看评语'}></Markdown>
                                     </div>}

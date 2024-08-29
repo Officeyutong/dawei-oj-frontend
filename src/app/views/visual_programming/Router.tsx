@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
 import userClient from "../user/client/UserClient";
 import { showSuccessPopup } from "../../dialogs/Utils";
+
 const VisualProgrammingMainPage = lazy(() => import("./VisualProgrammingMainPage"));
 const VisualProgrammingHomeworkList = lazy(() => import("./VisualProgrammingHomeworkList"));
 const VisualProgrammingSubmit = lazy(() => import("./VisualProgrammingSubmit"));
@@ -17,6 +18,7 @@ const VisualProgrammingLogin = lazy(() => import("./user/VisualProgrammingLogin"
 const VisualProgrammingRegister = lazy(() => import("./user/VisualProgrammingRegister"));
 const VisualProgrammingSMSLogin = lazy(() => import("./user/VisualProgrammingSMSLogin"));
 const VisualProgrammingProfileEdit = lazy(() => import("./user/VisualProgrammingProfileEdit"));
+const VisualProgrammingForgetPwd = lazy(() => import("./user/VisualProgrammingForgetPwd"));
 const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const { uid, username, realName } = useSelector((s: StateType) => s.userState.userData);
     const { login } = useSelector((s: StateType) => s.userState);
@@ -106,6 +108,11 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
             <Route exact path={`${match.path}/profile_edit`}>
                 <Suspense fallback={<GeneralDimmedLoader />}>
                     <VisualProgrammingProfileEdit></VisualProgrammingProfileEdit>
+                </Suspense>
+            </Route>
+            <Route exact path={`${match.path}/forgetpwd`}>
+                <Suspense fallback={<GeneralDimmedLoader />}>
+                    <VisualProgrammingForgetPwd />
                 </Suspense>
             </Route>
         </Switch>
