@@ -27,7 +27,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     const [homeworkData, setHomeworkData] = useState<null | HomeworkDetail>(null);
     const [recentSubmittedUser, setRecentSubmittedUser] = useState<null | RecentSubmittedUserEntry[]>(null);
     const [commentData, setCommentData] = useState<null | HomeworkSubmissionListEntry[]>(null);
-    const [buttonText, setButtonText] = useState<boolean>(false);
+    const [submitState, setSubmitState] = useState<boolean>(false);
 
     const [showSubmissionModal, setShowSubmissionModal] = useState(false);
 
@@ -74,7 +74,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                 });
                 uploadRef.current.files = null;
                 await getData();
-                setButtonText(true)
+                setSubmitState(true)
             }
         } catch { } finally {
             setUpLoading(false);
@@ -96,7 +96,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
             setLoaded(true)
 
             if (commentData.data.length !== 0) {
-                setButtonText(true)
+                setSubmitState(true)
             }
             flag = true;
         } catch { } finally {
@@ -172,7 +172,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                                 onChange={handleFileChange}
                                             />
                                             <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={handleClick}>
-                                                {buttonText ? '已提交' : '本地提交'}
+                                                {submitState ? '已提交' : '本地提交'}
                                             </Button>
                                             <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}`) }}>
                                                 在线编辑
@@ -184,10 +184,10 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         </Segment>
                         <div style={{ backgroundColor: 'white', height: '20%', width: '90%', border: '1.5rem solid', borderRadius: '50px', borderColor: '#a2c173' }}>
                             <div style={{ width: '100%', height: '80%' }}>
-                                {buttonText === false && <p style={{ margin: "3%", fontWeight: 'bold' }}>
+                                {submitState === false && <p style={{ margin: "3%", fontWeight: 'bold' }}>
                                     请提交作业，提交后等待批改即可查看评语
                                 </p>}
-                                {commentData !== undefined && commentData && commentData.length !== 0 && buttonText === true &&
+                                {commentData !== undefined && commentData && commentData.length !== 0 && submitState === true &&
                                     <div style={{ overflowY: "scroll", maxHeight: "105%", margin: "2%", maxWidth: '95%', wordWrap: 'break-word' }}>
                                         <Markdown style={{ fontWeight: 'bold' }} markdown={commentData[0].comment ? commentData[0].comment.comment : '等待老师批改完成后可查看评语'}></Markdown>
                                     </div>}
