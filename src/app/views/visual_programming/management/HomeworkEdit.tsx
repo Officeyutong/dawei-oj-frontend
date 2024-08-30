@@ -44,6 +44,10 @@ const HomeworkEdit: React.FC<{ id: number; closeCallback: (shouldRefresh: boolea
                     <Popup trigger={<Input value={data.course_url} onChange={(d, _) => setData({ ...data, course_url: d.target.value })}></Input>} on="focus" content="用户点击看课程按钮后所跳转到的链接。留空则不显示看课程按钮"></Popup>
                 </Form.Field>
                 <Form.Field>
+                    <label>测试链接</label>
+                    <Popup trigger={<Input value={data.exam_url} onChange={(d, _) => setData({ ...data, exam_url: d.target.value })}></Input>} on="focus" content="用户点击去测试按钮后所跳转到的链接。留空则不显示去测试按钮"></Popup>
+                </Form.Field>
+                <Form.Field>
                     <label>课程简介</label>
                     <AceEditor
                         onChange={v => setData({ ...data, description: v })}

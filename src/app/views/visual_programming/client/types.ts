@@ -11,6 +11,7 @@ interface HomeworkDetail {
     video_embed_html: string;
     image_url: string;
     course_url: string;
+    exam_url: string;
 }
 type HomeworkUpdateRequest = Omit<HomeworkDetail, "id">;
 type HomeworkDisplayListEntry = Omit<HomeworkDetail, "video_embed_html">;
