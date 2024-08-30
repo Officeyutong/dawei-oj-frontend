@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback, useRef, ChangeEvent, CSSProperties, u
 import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
 import visualProgrammingClient from "./client/VisualProgrammingClient";
-import { HomeworkDetail, HomeworkSubmissionListEntry, RecentSubmittedUserEntry } from "./client/types";
+import { HomeworkDetail, HomeworkSubmissionListEntry, NewlyGradedUser } from "./client/types";
 import './EmbedVideo.css';
 import { showErrorModal } from "../../dialogs/Dialog";
 import { Markdown } from "../../common/Markdown";
@@ -25,7 +25,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     const [progress, setProgress] = useState(0);
 
     const [homeworkData, setHomeworkData] = useState<null | HomeworkDetail>(null);
-    const [recentSubmittedUser, setRecentSubmittedUser] = useState<null | RecentSubmittedUserEntry[]>(null);
+    const [newlyGradedUser, setNewlyGradedUser] = useState<null | NewlyGradedUser[]>(null);
     const [commentData, setCommentData] = useState<null | HomeworkSubmissionListEntry[]>(null);
     const [isAlreadySubmitted, setIsAlreadySubmitted] = useState<boolean>(false);
     const [showSubmissionModal, setShowSubmissionModal] = useState(false);
@@ -84,12 +84,12 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
         let flag = false;
         try {
             setLoading(true);
-            const [workData, recentSubmittedUser, commentData] = await Promise.all([
+            const [workData, newlyGradedUser, commentData] = await Promise.all([
                 visualProgrammingClient.getHomeworkDetail(Number(id)),
-                visualProgrammingClient.getRecentSubmittedUserForHomework(parseInt(id)),
+                visualProgrammingClient.getNewlyGoodGradedUserForHomework(parseInt(id)),
                 visualProgrammingClient.getHomeworkSubmissionList(undefined, 'no', [uid], Number(id))
             ])
-            setRecentSubmittedUser(recentSubmittedUser);
+            setNewlyGradedUser(newlyGradedUser);
             setCommentData(commentData.data)
             setHomeworkData(workData)
             setLoaded(true)
@@ -111,8 +111,8 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     }, [id, uid])
 
     useEffect(() => {
-        if (initialRequestDone && homeworkData === null && recentSubmittedUser === null && commentData === null) getData();
-    }, [homeworkData, getData, commentData, recentSubmittedUser, initialRequestDone])
+        if (initialRequestDone && homeworkData === null && newlyGradedUser === null && commentData === null) getData();
+    }, [homeworkData, getData, commentData, newlyGradedUser, initialRequestDone])
 
     useBackgroundColor('#d6eefa')
 
@@ -133,7 +133,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                 <Dimmer active={loading}>
                     <Loader>加载中</Loader>
                 </Dimmer>}
-            {loaded && commentData !== null && recentSubmittedUser !== null && homeworkData !== null &&
+            {loaded && commentData !== null && newlyGradedUser !== null && homeworkData !== null &&
                 <div style={{ position: 'absolute', display: "flex", justifyContent: "center", width: "100%", height: "100%" }}>
                     {iframeSrc && <div style={{ flex: 'auto', display: "flex", width: '50%', height: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
                         <h1 style={{ color: "#3e6143", fontSize: '3em', marginTop: '60px' }}>作业介绍</h1>
@@ -195,7 +195,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         </div>
                         <div style={{ height: '20%', width: '100%', paddingTop: '5%', textAlign: 'center' }}>
                             {
-                                recentSubmittedUser.map((item) => {
+                                newlyGradedUser.map((item) => {
                                     return (
                                         <div key={item.uid} style={{ width: '25%', height: '90%', placeItems: 'center', display: 'inline-block' }}>
                                             <div style={{ position: 'relative', width: '50%', height: '50%', display: 'inline-block' }}>

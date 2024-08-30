@@ -81,6 +81,14 @@ interface PerTeamStatisticsResponse {
     }[]
 }
 
+interface NewlyGradedUser {
+    username: string;
+    real_name?: string;
+    email: string;
+    last_comment_time: number;
+    uid: number;
+}
+
 export type {
     CreateHomeworkResponse,
     HomeworkDetail,
@@ -94,5 +102,6 @@ export type {
     VisualProgrammingConfig,
     SubmittedHomeworkCountStatisticsEntry,
     PerTeamStatisticsResponse,
-    RecentSubmittedUserEntry
+    RecentSubmittedUserEntry,
+    NewlyGradedUser
 }

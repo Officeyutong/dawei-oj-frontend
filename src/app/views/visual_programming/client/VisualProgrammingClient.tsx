@@ -1,6 +1,6 @@
 import _ from "lodash";
 import GeneralClient from "../../../common/GeneralClient"
-import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, PerTeamStatisticsResponse, RanklistEntry, RecentSubmittedUserEntry, SubmittedHomeworkCountStatisticsEntry, UserSubmittedHomeworkEntry, VisualProgrammingConfig } from "./types";
+import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, NewlyGradedUser, PerTeamStatisticsResponse, RanklistEntry, RecentSubmittedUserEntry, SubmittedHomeworkCountStatisticsEntry, UserSubmittedHomeworkEntry, VisualProgrammingConfig } from "./types";
 
 class VisualProgrammingClient extends GeneralClient {
     async createHomework(): Promise<CreateHomeworkResponse> {
@@ -60,6 +60,9 @@ class VisualProgrammingClient extends GeneralClient {
     }
     async getRecentSubmittedUserForHomework(homeworkId: number): Promise<RecentSubmittedUserEntry[]> {
         return (await this.client!.post("/api/visualprogramming/homework/get_newest_submitted_user_for_problem", { problem_id: homeworkId })).data;
+    }
+    async getNewlyGoodGradedUserForHomework(homeworkId: number): Promise<NewlyGradedUser[]> {
+        return (await this.client!.post("/api/visualprogramming/get_newly_good_grated_user_for_homework", { homework_id: homeworkId })).data;
     }
 };
 
