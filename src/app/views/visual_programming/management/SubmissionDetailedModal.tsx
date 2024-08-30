@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Dimmer, Form, Loader, Modal } from "semantic-ui-react";
+import { Button, Dimmer, Form, Loader, Message, Modal } from "semantic-ui-react";
 import { HomeworkSubmissionListEntry } from "../client/types";
 import visualProgrammingClient from "../client/VisualProgrammingClient";
 import { showConfirm, showErrorModal } from "../../../dialogs/Dialog";
@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import VisualProgrammingGradeLabel from "../../utils/VisualProgrammingGradeLabel";
 import _ from "lodash";
+import { PUBLIC_URL } from "../../../App";
 interface BasicSubmissionDetailProps {
     uid: number;
     homeworkId: number;
@@ -134,6 +135,12 @@ const SubmissionDetailedModal: React.FC<BasicSubmissionDetailProps & { closeCall
                             <label>新点评等级</label>
                             {_.range(0, allLevels.length).map(item => <Form.Radio label={allLevels[item]} checked={item === newGrade} onChange={() => setNewGrade(item)} key={item} />)}
                         </Form.Group>
+                        <Message info>
+                            <Message.Header>提示</Message.Header>
+                            <Message.Content>
+                                <p>如果要在点评中显示图片，可以前往<a target="_blank" rel="noreferrer" href={`${PUBLIC_URL}/imagestore/list`}>OJ内置的图床</a>上传图片后，复制对应Markdown代码嵌入。</p>
+                            </Message.Content>
+                        </Message>
                     </>}
                 </Form>
             </>}
