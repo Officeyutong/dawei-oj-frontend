@@ -174,7 +174,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                             <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} disabled={commentData.length === 5 ? true : false} onClick={handleClick}>
                                                 {isAlreadySubmitted ? '已提交' : '本地提交'}
                                             </Button>
-                                            <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}`) }}>
+                                            <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}` + (homeworkData.has_template_project ? "&with_template_project=1" : "")) }}>
                                                 在线编辑
                                             </Button>
                                         </div>

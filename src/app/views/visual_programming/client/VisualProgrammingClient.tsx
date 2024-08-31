@@ -64,6 +64,17 @@ class VisualProgrammingClient extends GeneralClient {
     async getNewlyGoodGradedUserForHomework(homeworkId: number): Promise<NewlyGradedUser[]> {
         return (await this.client!.post("/api/visualprogramming/get_newly_good_grated_user_for_homework", { homework_id: homeworkId })).data;
     }
+    async clearTemplateProject(homeworkId: number) {
+        await this.client!.post("/api/visualprogramming/clear_template_project", { homework_id: homeworkId });
+    }
+    async uploadTemplateProject(homeworkId: number, file: FormData, prorgressHandler?: (evt: ProgressEvent) => void) {
+        await this.client!.post(`/api/visualprogramming/upload_template_project/${homeworkId}`, file, {
+            onUploadProgress: prorgressHandler
+        })
+    }
+    getTemplateProjectUrl(homeworkId: number): string {
+        return `/api/visualprogramming/download_template_project/${homeworkId}`;
+    }
 };
 
 const visualProgrammingClient = new VisualProgrammingClient();
