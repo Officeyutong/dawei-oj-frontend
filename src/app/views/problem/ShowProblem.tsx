@@ -17,6 +17,10 @@ import DifficultyLabel from "../utils/DifficultyLabel";
 import QueryString from "qs";
 import WrittenTestStatementAndSubmit from "./WrittenTestStatementAndSubmit";
 import { PUBLIC_URL } from "../../App";
+import { useSelector } from "react-redux";
+import { StateType } from "../../states/Manager";
+import submissionClient from "../submission/client/SubmissionClient";
+import { showSuccessPopup } from "../../dialogs/Utils";
 
 const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch<{ problemID: string }>();
@@ -46,11 +50,6 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
 
                         return;
                     }
-                    // data.languages.sort((x, y) => {
-                    //     if (x.id < y.id) return -1;
-                    //     if (x.id === y.id) return 0;
-                    //     return 1;
-                    // });
                     setInTodoList(data.inTodoList);
                     setLoaded(true);
                 } catch (e) { } finally { }
@@ -109,7 +108,18 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
     };
     const managable = baseUid === data?.uploader?.uid || data?.managable || false;
     const defaultLanguage = useLastLanguage(data);
-
+    const uid = useSelector((s: StateType) => s.userState.userData.uid);
+    const resetProblem = () => {
+        showConfirm("你确定要重置本题吗？这会删除你在这道题里所有通过的提交。此操作不可逆。", async () => {
+            try {
+                setSubmitting(true);
+                const { removedCount } = await submissionClient.removeAcceptedSubmissions(uid, parseInt(problemID));
+                showSuccessPopup(`操作完成！删除了 ${removedCount} 份提交。`);
+            } catch { } finally {
+                setSubmitting(false);
+            }
+        });
+    };
     return <>
         {!loaded && <Dimmer active>
             <Loader></Loader>
@@ -151,6 +161,9 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
                                 usedParameters={data.lastUsedParameters}
                                 parameters={data.extra_parameter}
                                 handleSubmit={handleSubmit}
+                                extraButton={
+                                    <Button color="red" onClick={resetProblem}>重置本题</Button>
+                                }
                             ></CodeInput>}
 
                         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Button, Checkbox, Grid, Header, Icon, Menu, Segment, Table } from "semantic-ui-react";
 import { int, ProgrammingLanguageEntry } from "../../common/types";
 import { ExtraParameterEntry } from "./client/types";
@@ -9,12 +9,10 @@ interface CodeInputProps {
     defaultCode: string;
     languages: ProgrammingLanguageEntry[];
     defaultLanguage: string;
-    // onCurrentLanguageChange: (lang: string) => void;
     parameters: ExtraParameterEntry[];
     usedParameters: int[];
-    // setCurrentParameters: (val: int[]) => void;
     handleSubmit: (code: string, language: string, parameters: number[]) => void;
-
+    extraButton?: ReactNode;
 };
 
 const CodeInput: React.FC<React.PropsWithChildren<CodeInputProps>> = (props) => {
@@ -89,13 +87,17 @@ const CodeInput: React.FC<React.PropsWithChildren<CodeInputProps>> = (props) => 
                 </Segment>
             </Grid.Column>
             <Grid.Column>
-                <Grid columns="3" centered>
+                <Grid columns="3">
+                    <Grid.Column></Grid.Column>
                     <Grid.Column>
                         <Button icon color="green" labelPosition="left" onClick={() => props.handleSubmit(code, currentLanguage, params)}>
                             <Icon name="paper plane outline"></Icon>
                             提交
                         </Button>
                     </Grid.Column>
+                    {props.extraButton && <Grid.Column>
+                        {props.extraButton}
+                    </Grid.Column>}
                 </Grid>
             </Grid.Column>
         </Grid>
