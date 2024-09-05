@@ -110,11 +110,11 @@ const ShowProblem: React.FC<React.PropsWithChildren<{}>> = () => {
     const defaultLanguage = useLastLanguage(data);
     const uid = useSelector((s: StateType) => s.userState.userData.uid);
     const resetProblem = () => {
-        showConfirm("你确定要重置本题吗？这会删除你在这道题里所有通过的提交。此操作不可逆。", async () => {
+        showConfirm("你确定要重置本题吗？这会删除你在这道题上所有提交的代码。不会影响提交的分数、状态和记录等。此操作不可逆。", async () => {
             try {
                 setSubmitting(true);
-                const { removedCount } = await submissionClient.removeAcceptedSubmissions(uid, parseInt(problemID));
-                showSuccessPopup(`操作完成！删除了 ${removedCount} 份提交。`);
+                const { removedCount } = await submissionClient.removeSubmissionCode(uid, parseInt(problemID));
+                showSuccessPopup(`操作完成！删除了 ${removedCount} 份代码。`);
             } catch { } finally {
                 setSubmitting(false);
             }

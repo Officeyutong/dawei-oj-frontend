@@ -25,8 +25,8 @@ class SubmissionClient extends GeneralClient {
     async cancelScore(submissionId: number) {
         await this.client!.post("/api/submission/cancel_score", { submission_id: submissionId });
     }
-    async removeAcceptedSubmissions(uid: number, problem: number): Promise<{ removedCount: number }> {
-        return (await this.client!.post("/api/submission/remove_accepted_submissions", { uid, problem_id: problem })).data;
+    async removeSubmissionCode(uid: number, problem: number): Promise<{ removedCount: number }> {
+        return (await this.client!.post("/api/submission/remove_submission_code", { uid, problem_id: problem })).data;
     }
 };
 
