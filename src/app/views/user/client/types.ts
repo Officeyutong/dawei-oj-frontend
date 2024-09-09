@@ -87,6 +87,12 @@ interface LoginAndRegisterCustomCallback {
     callback?: string;
 }
 
+interface CreditHistoryEntry {
+    createTime: number;
+    value: number;
+    reason: string;
+}
+
 export type {
     UserProfileResponse,
     UserProfileUpdateRequest,
@@ -96,5 +102,6 @@ export type {
     UserStatisticEntry,
     UserProfileResponseEditing,
     UserExtraStatistics,
-    LoginAndRegisterCustomCallback
+    LoginAndRegisterCustomCallback,
+    CreditHistoryEntry
 };

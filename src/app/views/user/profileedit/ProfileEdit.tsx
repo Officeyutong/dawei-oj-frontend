@@ -14,6 +14,7 @@ import { PUBLIC_URL } from "../../../App";
 import UserLink from "../../utils/UserLink";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
+import UserCreditHistory from "./UserCreditHistory";
 const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
     const uid = parseInt(useParams<{ uid: string }>().uid);
     const [data, setData] = useState<UserProfileResponseEditing | null>(null);
@@ -26,6 +27,7 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
     const salt = usePasswordSalt();
     const { showPermissionPack } = useSelector((s: StateType) => s.userState.userData);
     const [newAdminComment, setNewAdminComment] = useState("");
+    const [showCreditHistory, setShowCreditHistory] = useState(false);
     useEffect(() => {
         if (!loaded) {
             (async () => {
@@ -94,6 +96,7 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
             用户资料编辑
         </Header>
         <Segment stacked>
+            {showCreditHistory && <UserCreditHistory uid={uid} onClose={() => setShowCreditHistory(false)}></UserCreditHistory>}
             {loading && data === null && <div style={{ height: "400px" }}><Dimmer active><Loader></Loader></Dimmer></div>}
             {data !== null && <div>
                 {loading && data !== null && <Dimmer active> <Loader></Loader></Dimmer>}

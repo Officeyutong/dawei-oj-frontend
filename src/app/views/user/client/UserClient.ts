@@ -1,6 +1,6 @@
 import qs from "qs";
 import GeneralClient from "../../../common/GeneralClient";
-import { FolloweeItem, FollowerItem, GlobalRanklistItem, UserExtraStatistics, UserProfileResponse, UserProfileResponseEditing, UserProfileUpdateRequest, UserStatisticEntry } from "./types";
+import { CreditHistoryEntry, FolloweeItem, FollowerItem, GlobalRanklistItem, UserExtraStatistics, UserProfileResponse, UserProfileResponseEditing, UserProfileUpdateRequest, UserStatisticEntry } from "./types";
 
 class UserClient extends GeneralClient {
     async doLogin(identifier: string, password: string, identifierIsPhone: boolean) {
@@ -105,6 +105,9 @@ class UserClient extends GeneralClient {
                 "Content-Length": imageSize
             }
         })).data;
+    }
+    async getUserCreditHistory(uid: number, page: number): Promise<{ data: CreditHistoryEntry[]; pageCount: number }> {
+        return (await this.client!.post("/api/user/get_credit_history", { uid, page })).data;
     }
 };
 
