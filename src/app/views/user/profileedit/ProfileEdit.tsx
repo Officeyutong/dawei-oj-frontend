@@ -91,6 +91,7 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
             showSuccessModal("您新获得了以下团队的权限:\n" + resp.join("\n"));
         } catch { } finally { setLoading(false); }
     };
+
     return <div>
         <Header as="h1">
             用户资料编辑
@@ -145,7 +146,8 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     </Form.Field>}
                     <Form.Field>
                         <label>积分</label>
-                        {data.credit}
+                        {data.credit}，
+                        <button className="link-button" onClick={() => setShowCreditHistory(true)}>显示历史积分变更记录</button>
                     </Form.Field>
                     <Form.Field>
                         <label>已授权团队</label>

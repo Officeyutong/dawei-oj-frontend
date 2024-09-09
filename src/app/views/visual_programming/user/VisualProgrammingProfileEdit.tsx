@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../../../App";
 import { showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
 import md5 from "md5";
+import UserCreditHistory from "../../user/profileedit/UserCreditHistory";
 
 const GeneralDivStyle: CSSProperties = {
     display: "flex",
@@ -29,6 +30,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
     const [data, setData] = useState<UserProfileResponseEditing | null>(null);
     const [loading, setLoading] = useState(false);
     const [selectedButton, setSelectedButton] = useState<Number>(1);
+    const [showCreditHistory, setShowCreditHistory] = useState(false);
 
     useEffect(() => {
         if (initialRequestDone && data === null && uid !== -1) {
@@ -77,6 +79,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
 
     return <>
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
+        {showCreditHistory && <UserCreditHistory uid={uid} onClose={() => setShowCreditHistory(false)}></UserCreditHistory>}
         <div style={{ marginTop: "10%", marginLeft: "20%", marginRight: "20%", userSelect: 'none' }}>
             {data !== null && <Grid columns={2} >
                 <Grid.Row>
@@ -148,7 +151,8 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                                         <Header as="h3" style={{ textAlign: 'end' }}>积分</Header>
                                     </Grid.Column>
                                     <Grid.Column>
-                                        {data.credit}
+                                        {data.credit}，
+                                        <button className="link-button" onClick={() => setShowCreditHistory(true)}>显示历史积分变更记录</button>
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
