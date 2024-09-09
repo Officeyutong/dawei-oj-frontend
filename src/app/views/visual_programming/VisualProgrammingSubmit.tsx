@@ -140,8 +140,8 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         <div dangerouslySetInnerHTML={{ __html: classAddedIframe }} style={{ height: '75%', width: '90%', marginBottom: '200px', backgroundColor: '#FFFFFF', borderRadius: '20px' }}>
                         </div>
                     </div>}
-                    <div style={{ display: "flex", width: '50%', justifyContent: 'center', flexWrap: 'wrap', marginRight: '3rem' }}>
-                        <Segment style={{ marginTop: '120px', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
+                    <div style={{ display: "flex", width: '50%', justifyContent: 'center', flexWrap: 'wrap', marginRight: '2vw' }}>
+                        <Segment style={{ width: '80%', marginTop: '120px', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
                             <Grid>
                                 <GridRow >
                                     <GridColumn>
@@ -171,10 +171,11 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                                 type="file"
                                                 onChange={handleFileChange}
                                             />
-                                            <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} disabled={commentData.length === 5 ? true : false} onClick={handleClick}>
+                                            <Button style={{ height: "90%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} disabled={commentData.length === 5 ? true : false} onClick={handleClick}>
                                                 {isAlreadySubmitted ? '已提交' : '本地提交'}
                                             </Button>
-                                            <Button style={{ height: "100%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}` + (homeworkData.has_template_project ? "&with_template_project=1" : "")) }}>
+                                            <p style={{ position: 'absolute', fontSize: "1rem" }}>初次通过此题可得{homeworkData.earn_score}分</p>
+                                            <Button style={{ height: "90%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}` + (homeworkData.has_template_project ? "&with_template_project=1" : "")) }}>
                                                 在线编辑
                                             </Button>
                                         </div>

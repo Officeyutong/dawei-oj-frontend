@@ -60,7 +60,7 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                 position="bottom center"
                 style={{ padding: "0" }}
                 trigger={
-                    <div style={{ position: 'absolute', marginTop: '1%', marginRight: '4%', right: '0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ position: 'absolute', marginTop: '1%', marginRight: '4%', right: '0', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '8rem', width: "4rem" }}>
                         <Image circular size="tiny" src={`/api/user/profile_image/${profileImage}`} />
                         <Header as='h5' style={{ margin: '0' }}>{username}</Header>
                         {realName && <Header as='h5' style={{ margin: '0' }}>{realName}</Header>}
