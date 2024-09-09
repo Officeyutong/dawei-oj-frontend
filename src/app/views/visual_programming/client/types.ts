@@ -13,6 +13,7 @@ interface HomeworkDetail {
     course_url: string;
     exam_url: string;
     has_template_project: boolean;
+    earn_score: number;
 }
 type HomeworkUpdateRequest = Omit<HomeworkDetail, "id">;
 type HomeworkDisplayListEntry = Omit<HomeworkDetail, "video_embed_html">;

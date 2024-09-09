@@ -37,7 +37,13 @@ const HomeworkEdit: React.FC<{ id: number; closeCallback: (shouldRefresh: boolea
             <Modal.Content>
                 {loading && <Dimmer active><Loader active></Loader></Dimmer>}
                 {data !== null && <Form>
-                    <Form.Input label="作业名称" value={data.name} onChange={(d, _) => setData({ ...data, name: d.target.value })}></Form.Input>
+                    <Form.Group widths={2}>
+                        <Form.Input label="作业名称" value={data.name} onChange={(d, _) => setData({ ...data, name: d.target.value })}></Form.Input>
+                        <Form.Field>
+                            <label>通过作业后可以获得的积分</label>
+                            <Popup trigger={<Input type="number" value={data.earn_score} onChange={(d, _) => setData({ ...data, earn_score: parseInt(d.target.value) || 0 })}></Input>} on="focus" content="用户首次在该过夜获得通过的评价后可以获得的积分数量"></Popup>
+                        </Form.Field>
+                    </Form.Group>
                     <Form.Field>
                         <label>图片链接</label>
                         <Popup trigger={<Input value={data.image_url} onChange={(d, _) => setData({ ...data, image_url: d.target.value })}></Input>} on="focus" content="作业列表页面所展示的图片的链接。留空则不显示图片"></Popup>
@@ -59,9 +65,8 @@ const HomeworkEdit: React.FC<{ id: number; closeCallback: (shouldRefresh: boolea
                             theme={aceTheme}
                             mode="markdown"
                             width="100%"
-                            height="200px"
+                            height="100px"
                         ></AceEditor>
-
                     </Form.Field>
                     <Form.Field>
                         <label>嵌入式播放器HTML</label>
@@ -72,7 +77,7 @@ const HomeworkEdit: React.FC<{ id: number; closeCallback: (shouldRefresh: boolea
                             theme={aceTheme}
                             mode="plain_text"
                             width="100%"
-                            height="200px"
+                            height="100px"
                         ></AceEditor>} on="focus" content="视频播放的HTML代码，留空则不显示视频"></Popup>
                     </Form.Field>
                     <Form.Field>
