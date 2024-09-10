@@ -4,7 +4,7 @@ import { CSSProperties, useEffect, useState } from "react";
 import { UserProfileResponseEditing } from "../../user/client/types";
 import userClient from "../../user/client/UserClient";
 import { makeProfileImageURL, useBackgroundColor, useDocumentTitle, useInputValue, usePasswordSalt } from "../../../common/Utils";
-import { Image, Dimmer, Grid, Header, Loader, Segment, Divider, Input, Popup, Button } from "semantic-ui-react";
+import { Image, Dimmer, Grid, Header, Loader, Segment, Divider, Input, Popup, Button, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../../../App";
 import { showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
@@ -148,7 +148,13 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                                 <Grid.Row>
                                     <Grid.Column width={1}></Grid.Column>
                                     <Grid.Column width={3} style={GeneralDivStyle}>
-                                        <Header as="h3" style={{ textAlign: 'end' }}>积分</Header>
+                                        <Header as="h3" style={{ textAlign: 'end' }} >
+                                            <div style={{ overflow: "hidden" }}>
+                                                <Popup content='积分满200分后可联系班主任老师换取礼品' trigger={<Icon circular name="info" size='small' style={{ cursor: 'pointer' }}></Icon>} position='right center' />
+                                                <p style={{ display: 'inline-block' }}>积分</p>
+                                            </div>
+                                        </Header>
+
                                     </Grid.Column>
                                     <Grid.Column>
                                         {data.credit}，
