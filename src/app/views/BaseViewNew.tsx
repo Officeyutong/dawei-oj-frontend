@@ -22,7 +22,7 @@ const BaseViewNew: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
                 </>
                 }
             </div>
-            {customExtraFooter && <div style={{ color: "darkgrey" }} >{customExtraFooter}</div>}
+            {customExtraFooter && <div style={{ color: "darkgrey" }} dangerouslySetInnerHTML={{ __html: customExtraFooter }}></div>}
         </Typography.Text>
         {hasActiveTimedProblemset &&
             <TimedProblemSetCard extraStyle={{ position: "fixed", bottom: 0, left: 20, zIndex: 999 }}></TimedProblemSetCard>
