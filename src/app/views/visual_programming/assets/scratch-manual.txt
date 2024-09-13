@@ -110,7 +110,7 @@ d. 建议的学习完成时间：
 之前没有接触过电脑的同学，可以熟悉下电脑操作，并且练习打字，平时在家的电脑可以用【金山打字通】来练习，在外的话就用打字网站来练习
 
 
-打字网站：[www.dazidazi.com](www.dazidazi.com) 或者 [https://qwerty.kaiyi.cool/](https://qwerty.kaiyi.cool/)
+打字网站：[https://www.dazidazi.com](https://www.dazidazi.com) 或者 [https://qwerty.kaiyi.cool/](https://qwerty.kaiyi.cool/)
 
 
 **最后，希望你拥有一个愉快的学习过程！学自己喜欢的东西，终究是快乐的！也预祝大家通过我们的课程取得理想的编程竞赛结果！不过也别忘了，学习是一件要终身去实践的事情！活到老学到老！Enjoy！**
