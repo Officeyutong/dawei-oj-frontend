@@ -103,6 +103,7 @@ const GeneralView: React.FC<React.PropsWithChildren<{ data: GeneralInfo }>> = ({
                     <Grid.Column>
                         <Header as="h3">总提交数统计</Header>
                         <ColumnChart
+
                             data={stackSubmissionStatistics}
                             isStack
                             xField="date"

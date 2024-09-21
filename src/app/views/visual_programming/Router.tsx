@@ -2,14 +2,15 @@ import { Link, Route, Switch, useRouteMatch } from "react-router-dom"
 import { lazy, Suspense, useEffect, useState } from "react";
 import GeneralDimmedLoader from "../utils/GeneralDimmedLoader";
 import Logo from "./assets/logo.png"
-import { Dimmer, Header, Image, Loader, Menu, MenuItem, Popup } from "semantic-ui-react";
+import { Button, Dimmer, Header, Icon, Image, Loader, Menu, MenuItem, Modal, ModalActions, ModalContent, Popup } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
-import { useBackgroundColor } from "../../common/Utils";
+import { useBackgroundColor, useViewportWidth } from "../../common/Utils";
 import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
 import userClient from "../user/client/UserClient";
 import { showSuccessPopup } from "../../dialogs/Utils";
 import { useBaseViewDisplay } from "../../states/StateUtils";
+import { RotateRightOutlined } from "@ant-design/icons";
 
 const VisualProgrammingMainPage = lazy(() => import("./VisualProgrammingMainPage"));
 const VisualProgrammingHomeworkList = lazy(() => import("./VisualProgrammingHomeworkList"));
@@ -21,11 +22,13 @@ const VisualProgrammingSMSLogin = lazy(() => import("./user/VisualProgrammingSMS
 const VisualProgrammingProfileEdit = lazy(() => import("./user/VisualProgrammingProfileEdit"));
 const VisualProgrammingResetPassword = lazy(() => import("./user/VisualProgrammingResetPassword"));
 const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
+    const viewportWidth = useViewportWidth();
     const { uid, username, realName } = useSelector((s: StateType) => s.userState.userData);
     const { login } = useSelector((s: StateType) => s.userState);
     const { initialRequestDone } = useSelector((s: StateType) => s.userState);
     const [profileImage, setProfileImage] = useState<String>('');
     const [loading, setLoading] = useState<boolean>(false)
+    const [showTipModel, setShowTipModel] = useState<boolean>(false);
     const match = useRouteMatch();
     useBackgroundColor('#d6eefa')
     const handleLogout = async () => {
@@ -43,11 +46,44 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
             setProfileImage(String(uid))
         }
     }, [initialRequestDone, realName, uid])
+
+    useEffect(() => {
+        if (viewportWidth < 840) {
+            setShowTipModel(true)
+        } else {
+            setShowTipModel(false)
+        }
+    }, [viewportWidth])
+
     const [, setBaseviewDisplay] = useBaseViewDisplay();
     useEffect(() => {
         setBaseviewDisplay("none");
     }, [setBaseviewDisplay]);
     return (<>
+        <Modal
+            basic
+            onClose={() => setShowTipModel(false)}
+            open={showTipModel}
+            size='small'>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                <Header style={{ color: "white" }}>
+                    <RotateRightOutlined style={{ display: "block", fontSize: "400%" }} />
+                    竖屏显示可能存在问题
+                </Header>
+                <ModalContent>
+                    <p>
+                        竖屏显示此页面可能效果不佳，请切换横屏或使用更大屏幕。
+                    </p>
+                </ModalContent>
+                <ModalActions style={{ marginTop: "2rem" }}>
+                    <Button basic color='red' inverted onClick={() => setShowTipModel(false)}>
+                        <Icon name='remove' />
+                        忽略
+                    </Button>
+                </ModalActions>
+            </div>
+
+        </Modal>
         {loading && <Dimmer active>
             <Loader></Loader>
         </Dimmer>}

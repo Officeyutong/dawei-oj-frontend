@@ -113,7 +113,6 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     useEffect(() => {
         if (initialRequestDone && homeworkData === null && newlyGradedUser === null && commentData === null) getData();
     }, [homeworkData, getData, commentData, newlyGradedUser, initialRequestDone])
-
     useBackgroundColor('#d6eefa')
 
     return (
@@ -141,7 +140,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                         </div>
                     </div>}
                     <div style={{ display: "flex", width: '50%', justifyContent: 'center', flexWrap: 'wrap', marginRight: '2vw' }}>
-                        <Segment style={{ width: '80%', marginTop: '120px', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
+                        <Segment style={{ width: '100%', marginTop: '120px', backgroundColor: 'white', borderRadius: "20px", marginBottom: "3%" }}>
                             <Grid>
                                 <GridRow >
                                     <GridColumn>
@@ -158,12 +157,12 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                 </GridRow>
                                 <GridRow style={{ paddingTop: 0 }}>
                                     <Grid.Column style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", }}>
-                                        <div style={{ width: "12rem", flexGrow: '0', textAlign: "center" }}>
-                                            <p style={{ textAlign: "center", display: 'inline' }}>已提交后可多次重复提交 </p>
-                                            <p style={{ textAlign: "center", display: 'inline' }}>当前已提交{commentData.length}/{maxSubmissionCountPerUserPerVisualHomework}次</p>
+                                        <div style={{ width: "9rem", flexGrow: '0', textAlign: "center" }}>
+                                            <p style={{ textAlign: "center", display: 'inline', fontSize: '0.9rem' }}>提交后可多次重复提交 </p>
+                                            <p style={{ textAlign: "center", display: 'block' }}>已提交{commentData.length}/{maxSubmissionCountPerUserPerVisualHomework}次</p>
                                             <button style={{ textAlign: "center" }} className="link-button" onClick={() => { setShowSubmissionModal(true) }}>点此跳转提交记录</button>
                                         </div>
-                                        <div style={{ marginRight: "10px", height: "100%" }}>
+                                        <div style={{ height: "100%" }}>
                                             <input
                                                 style={{ display: 'none' }}
                                                 disabled={uploading}
@@ -171,11 +170,11 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                                 type="file"
                                                 onChange={handleFileChange}
                                             />
-                                            <Button style={{ height: "90%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} disabled={commentData.length === 5 ? true : false} onClick={handleClick}>
+                                            <Button style={{ height: "90%", width: '8rem', borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.2rem', textAlign: 'center', color: 'white' }} disabled={commentData.length === 5 ? true : false} onClick={handleClick}>
                                                 {isAlreadySubmitted ? '已提交' : '本地提交'}
                                             </Button>
                                             <p style={{ position: 'absolute', fontSize: "1rem" }}>初次通过此题可得{homeworkData.earn_score}分</p>
-                                            <Button style={{ height: "90%", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.5em', lineHeight: '5px', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}` + (homeworkData.has_template_project ? "&with_template_project=1" : "")) }}>
+                                            <Button style={{ height: "90%", width: "9rem", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.2rem', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}` + (homeworkData.has_template_project ? "&with_template_project=1" : "")) }}>
                                                 在线编辑
                                             </Button>
                                         </div>
