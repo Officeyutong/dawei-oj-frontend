@@ -4,7 +4,7 @@ import GeneralDimmedLoader from "../utils/GeneralDimmedLoader";
 import Logo from "./assets/logo.png"
 import { Button, Dimmer, Header, Icon, Image, Loader, Menu, MenuItem, Modal, ModalActions, ModalContent, Popup } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
-import { useBackgroundColor, useViewport } from "../../common/Utils";
+import { useBackgroundColor, useViewportWidth } from "../../common/Utils";
 import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
 import userClient from "../user/client/UserClient";
@@ -22,7 +22,7 @@ const VisualProgrammingSMSLogin = lazy(() => import("./user/VisualProgrammingSMS
 const VisualProgrammingProfileEdit = lazy(() => import("./user/VisualProgrammingProfileEdit"));
 const VisualProgrammingResetPassword = lazy(() => import("./user/VisualProgrammingResetPassword"));
 const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
-    const viewportWidth = useViewport();
+    const viewportWidth = useViewportWidth();
     const { uid, username, realName } = useSelector((s: StateType) => s.userState.userData);
     const { login } = useSelector((s: StateType) => s.userState);
     const { initialRequestDone } = useSelector((s: StateType) => s.userState);
