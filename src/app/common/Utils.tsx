@@ -118,7 +118,7 @@ export function useIsPolyFillNeeded(): boolean {
     return false
 }
 
-export function useViewport(): number {
+export function useViewportWidth(): number {
     const [width, setWidth] = React.useState(window.innerWidth);
     React.useEffect(() => {
         const handleWindowResize = () => setWidth(window.innerWidth);
