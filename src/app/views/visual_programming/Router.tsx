@@ -45,12 +45,16 @@ const VisualProgrammingRouter: React.FC<React.PropsWithChildren<{}>> = () => {
         if (initialRequestDone && uid) {
             setProfileImage(String(uid))
         }
+    }, [initialRequestDone, realName, uid])
+
+    useEffect(() => {
         if (viewportWidth < 840) {
             setShowTipModel(true)
         } else {
             setShowTipModel(false)
         }
-    }, [initialRequestDone, realName, uid, viewportWidth])
+    }, [viewportWidth])
+
     const [, setBaseviewDisplay] = useBaseViewDisplay();
     useEffect(() => {
         setBaseviewDisplay("none");
