@@ -118,6 +118,16 @@ export function useIsPolyFillNeeded(): boolean {
     return false
 }
 
+export function useViewport(): number {
+    const [width, setWidth] = React.useState(window.innerWidth);
+    React.useEffect(() => {
+        const handleWindowResize = () => setWidth(window.innerWidth);
+        window.addEventListener("resize", handleWindowResize);
+        return () => window.removeEventListener("resize", handleWindowResize);
+    }, []);
+    return width;
+}
+
 export {
     useDocumentTitle,
     useInputValue,
