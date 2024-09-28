@@ -170,7 +170,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                                 type="file"
                                                 onChange={handleFileChange}
                                             />
-                                            <Button style={{ height: "90%", width: '8rem', borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.2rem', textAlign: 'center', color: 'white' }} disabled={commentData.length === 5 ? true : false} onClick={handleClick}>
+                                            <Button style={{ height: "90%", width: '9rem', borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.2rem', textAlign: 'center', color: 'white' }} disabled={commentData.length === 5 ? true : false} onClick={handleClick}>
                                                 {isAlreadySubmitted ? '已提交' : '本地提交'}
                                             </Button>
                                             <p style={{ position: 'absolute', fontSize: "1rem" }}>初次通过此题可得{homeworkData.earn_score}分</p>
