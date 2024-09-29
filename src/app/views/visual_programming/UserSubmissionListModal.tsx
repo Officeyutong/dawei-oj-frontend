@@ -30,12 +30,7 @@ const UserSubmissionListModal: React.FC<{ uid: number; homeworkId: number; close
         })();
     }, [data, homeworkId, uid]);
     const handleShareURL = (submissionId: Number) => {
-        let url;
-        if (window.location.port === ' ') {
-            url = `${window.location.protocol}//${window.location.host}/scratch?oj_submission_id=${submissionId}`;
-        } else {
-            url = `${window.location.protocol}//${window.location.host}:${window.location.port}/scratch?oj_submission_id=${submissionId}`;
-        }
+        const url = `${window.location.protocol}//${window.location.host}/scratch?oj_submission_id=${submissionId}`;
         console.log(url)
         clipboard.write(url);
         showSuccessPopup("样例内容已复制到剪贴板", 700);
