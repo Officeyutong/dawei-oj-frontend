@@ -31,7 +31,6 @@ const UserSubmissionListModal: React.FC<{ uid: number; homeworkId: number; close
     }, [data, homeworkId, uid]);
     const handleShareURL = (submissionId: Number) => {
         const url = `${window.location.protocol}//${window.location.host}/scratch?oj_submission_id=${submissionId}`;
-        console.log(url)
         clipboard.write(url);
         showSuccessPopup("样例内容已复制到剪贴板", 700);
     }
