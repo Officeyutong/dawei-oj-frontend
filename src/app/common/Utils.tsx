@@ -128,6 +128,15 @@ export function useViewportWidth(): number {
     return width;
 }
 
+export function useNowTime(): DateTime {
+    const [now, setNow] = useState(DateTime.now());
+    useEffect(() => {
+        const token = setInterval(() => setNow(DateTime.now()), 1000);
+        return () => clearInterval(token);
+    });
+    return now;
+}
+
 export {
     useDocumentTitle,
     useInputValue,

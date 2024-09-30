@@ -39,6 +39,7 @@ import VisualProgrammingRouter from "./views/visual_programming/Router"
 import VisualProgramminAdminRouter from "./views/visual_programming/AdminRouter";
 import { useBackgroundColor, useIsPolyFillNeeded } from "./common/Utils";
 import { legacyLogicalPropertiesTransformer, StyleProvider } from '@ant-design/cssinjs';
+import OnlineVMRouter from "./views/onlinevm/Router";
 const SubRoutes = () => {
     const [displayBaseView,] = useBaseViewDisplay();
     const match = useRouteMatch();
@@ -112,7 +113,8 @@ const SubRoutes = () => {
         <Route path={`${match.path}/success`}>
             <ErrorAndSuccess error={false}></ErrorAndSuccess>
         </Route>
-        <Route path={`${match.path}/scratch`}>
+        <Route path={`${match.path}/onlinevm`}>
+            <OnlineVMRouter></OnlineVMRouter>
         </Route>
     </>
     const { baseContainerMaxWidth, baseContainerWidth } = useSelector((s: StateType) => s);
