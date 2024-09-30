@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import { timeStampToString, useNowTime } from "../../../common/Utils";
 import OrderDetailsModal from "../OrderDetailsModal";
+import OrderRechargeModal from '../user/OrderRechargeModal'
+import { DateTime } from "luxon";
 
 const RechargeOrderList: React.FC<{}> = () => {
     const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
@@ -16,6 +18,7 @@ const RechargeOrderList: React.FC<{}> = () => {
     const [pageCount, setPageCount] = useState(0);
     const [data, setData] = useState<OrderListEntry[]>([]);
     const [showingOrder, setShowingOrder] = useState<OrderListEntry | null>(null);
+    const [showChargeModel, setShowChargeModel] = useState<OrderListEntry | null>(null);
     const loadPage = useCallback(async (page: number) => {
         try {
             setLoading(true);
@@ -37,6 +40,8 @@ const RechargeOrderList: React.FC<{}> = () => {
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
         当前时间：{nowTime.toJSDate().toLocaleString()}
         {showingOrder !== null && <OrderDetailsModal data={showingOrder} onClose={() => setShowingOrder(null)}></OrderDetailsModal>}
+        {showChargeModel !== null && <OrderRechargeModal wechatPayURL={showChargeModel.wechat_payment_url} amount={showChargeModel.amount} orderId={showChargeModel.order_id}
+            expireTime={DateTime.fromSeconds(showChargeModel.expire_at)} createOrderTime={DateTime.fromSeconds(showChargeModel.time)} onClose={() => setShowChargeModel(null)}></OrderRechargeModal>}
         {loaded && <><Table>
             <Table.Header>
                 <Table.Row>
@@ -57,7 +62,7 @@ const RechargeOrderList: React.FC<{}> = () => {
                     <Table.Cell>{(item.amount / 100).toFixed(2)}</Table.Cell>
                     <Table.Cell>
                         <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
-                        <Button size="small" disabled={nowTime.toSeconds() > item.expire_at || item.status === "error" || item.status === "paid"}>进行支付</Button>
+                        <Button size="small" disabled={nowTime.toSeconds() > item.expire_at || item.status === "error" || item.status === "paid"} onClick={() => setShowChargeModel(item)}>进行支付</Button>
                     </Table.Cell>
                 </Table.Row>)}
             </Table.Body>
