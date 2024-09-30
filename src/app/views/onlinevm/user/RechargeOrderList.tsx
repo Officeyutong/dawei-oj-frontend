@@ -5,8 +5,9 @@ import onlineVMClient, { translatePaymentStatus } from "../client/OnlineVMClient
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import { timeStampToString, useNowTime } from "../../../common/Utils";
+import OrderDetailsModal from "../OrderDetailsModal";
 
-const RechargeOrder: React.FC<{}> = () => {
+const RechargeOrderList: React.FC<{}> = () => {
     const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
     const initialReqDone = useSelector((s: StateType) => s.userState.initialRequestDone);
     const [loaded, setLoaded] = useState(false);
@@ -14,6 +15,7 @@ const RechargeOrder: React.FC<{}> = () => {
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [data, setData] = useState<OrderListEntry[]>([]);
+    const [showingOrder, setShowingOrder] = useState<OrderListEntry | null>(null);
     const loadPage = useCallback(async (page: number) => {
         try {
             setLoading(true);
@@ -34,13 +36,13 @@ const RechargeOrder: React.FC<{}> = () => {
         <Header as="h2">充值订单</Header>
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
         当前时间：{nowTime.toJSDate().toLocaleString()}
+        {showingOrder !== null && <OrderDetailsModal data={showingOrder} onClose={() => setShowingOrder(null)}></OrderDetailsModal>}
         {loaded && <><Table>
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell>订单编号</Table.HeaderCell>
                     <Table.HeaderCell>下单时间</Table.HeaderCell>
                     <Table.HeaderCell>到期时间</Table.HeaderCell>
-                    <Table.HeaderCell>状态最后更新时间</Table.HeaderCell>
                     <Table.HeaderCell>订单状态</Table.HeaderCell>
                     <Table.HeaderCell>充值金额</Table.HeaderCell>
                     <Table.HeaderCell>操作</Table.HeaderCell>
@@ -51,11 +53,10 @@ const RechargeOrder: React.FC<{}> = () => {
                     <Table.Cell>{item.order_id}</Table.Cell>
                     <Table.Cell>{timeStampToString(item.time)}</Table.Cell>
                     <Table.Cell negative={item.status === "unpaid"}>{timeStampToString(item.expire_at)}</Table.Cell>
-                    <Table.Cell>{timeStampToString(item.last_update_time)}</Table.Cell>
                     <Table.Cell positive={item.status === "paid"} negative={item.status !== "paid"}>{translatePaymentStatus(item.status)}</Table.Cell>
                     <Table.Cell>{(item.amount / 100).toFixed(2)}</Table.Cell>
                     <Table.Cell>
-                        <Button size="small">查看详情</Button>
+                        <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
                         <Button size="small" disabled={nowTime.toSeconds() > item.expire_at || item.status === "error" || item.status === "paid"}>进行支付</Button>
                     </Table.Cell>
                 </Table.Row>)}
@@ -74,4 +75,4 @@ const RechargeOrder: React.FC<{}> = () => {
     </>
 };
 
-export default RechargeOrder;
+export default RechargeOrderList;

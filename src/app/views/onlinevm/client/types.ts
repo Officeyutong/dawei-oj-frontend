@@ -1,12 +1,13 @@
 type OrderPaymentStatus = "unpaid" | "paid" | "error";
+interface UserEntry {
+    uid: number;
+    username: string;
+    real_name?: string;
+    email: string;
+};
 interface OrderListEntry {
     order_id: number;
-    user: {
-        uid: number;
-        username: string;
-        real_name?: string;
-        email: string;
-    };
+    user: UserEntry;
     time: number;
     amount: number;
     wechat_payment_url: string;
@@ -25,4 +26,15 @@ interface CreateOrderResponse {
     expireAfter: number;
     payUrl: string;
 }
-export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse };
+
+interface TransactionEntry {
+    user: UserEntry;
+    id: number;
+    time: number;
+    amount: number;
+    description: string;
+    related_order_id: number | null;
+    admin_description: string | null;
+}
+
+export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry };

@@ -2,7 +2,8 @@ import { Link, Route, useRouteMatch } from "react-router-dom";
 import UserMainPage from "./user/UserMainPage";
 import { Grid, Header, Menu, Segment } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
-import RechargeOrder from "./user/RechargeOrder";
+import RechargeOrderList from "./user/RechargeOrderList";
+import BalanceChangeList from "./user/BalanceChangeList";
 
 const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
@@ -18,6 +19,11 @@ const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                             name="基本信息"
                             as={Link}
                             to={`${PUBLIC_URL}/onlinevm/`}
+                        ></Menu.Item>
+                        <Menu.Item
+                            name="余额记录"
+                            as={Link}
+                            to={`${PUBLIC_URL}/onlinevm/balance_change_list`}
                         ></Menu.Item>
                         <Menu.Item
                             name="充值订单"
@@ -42,7 +48,10 @@ const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                             <UserMainPage></UserMainPage>
                         </Route>
                         <Route exact path={`${PUBLIC_URL}/onlinevm/recharge_order_list`}>
-                            <RechargeOrder></RechargeOrder>
+                            <RechargeOrderList></RechargeOrderList>
+                        </Route>
+                        <Route exact path={`${PUBLIC_URL}/onlinevm/balance_change_list`}>
+                            <BalanceChangeList></BalanceChangeList>
                         </Route>
                     </Segment>
                 </Grid.Column>

@@ -1,9 +1,9 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { CreateOrderResponse, OrderListEntry, OrderPaymentStatus, UserBasicInfo } from "./types";
+import { CreateOrderResponse, OrderListEntry, OrderPaymentStatus, TransactionEntry, UserBasicInfo } from "./types";
 
 class OnlineVMClient extends GeneralClient {
-    async getRechargeOrderList(page: number, filterUser?: number): Promise<{ pageCount: number; data: OrderListEntry[] }> {
-        return (await this.client!.post("/api/onlinevm/recharge_order_list", { page, filterUser })).data;
+    async getRechargeOrderList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: OrderListEntry[] }> {
+        return (await this.client!.post("/api/onlinevm/recharge_order_list", { page, filterUser, filterOrderId })).data;
     }
     async getUserBasicInfo(): Promise<UserBasicInfo> {
         return (await this.client!.post("/api/onlinevm/user/get_self_basic_info")).data;
@@ -14,8 +14,8 @@ class OnlineVMClient extends GeneralClient {
     async refreshOrderStatus(orderId: number): Promise<{ status: OrderPaymentStatus }> {
         return (await this.client!.post("/api/onlinevm/user/refresh_order_status", { order_id: orderId })).data;
     }
-    async getOrderDetail(orderId: number): Promise<OrderListEntry> {
-        return (await this.client!.post("/api/onlinevm/get_order_detail", { order_id: orderId })).data;
+    async getTransactionList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: TransactionEntry[] }> {
+        return (await this.client!.post("/api/onlinevm/balance_change_list", { page, filterUser, filterOrderId })).data;
     }
 }
 
