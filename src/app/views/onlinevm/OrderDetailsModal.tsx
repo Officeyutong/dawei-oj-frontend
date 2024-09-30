@@ -1,17 +1,39 @@
-import { Button, Form, Modal } from "semantic-ui-react"
+import { Button, Dimmer, Form, Loader, Modal } from "semantic-ui-react"
 import { OrderListEntry } from "./client/types";
 import UserLink from "../utils/UserLink";
-import { translatePaymentStatus } from "./client/OnlineVMClient";
+import onlineVMClient, { translatePaymentStatus } from "./client/OnlineVMClient";
 import { timeStampToString } from "../../common/Utils";
 import AceEditor from "react-ace";
 import { useAceTheme } from "../../states/StateUtils";
+import { useEffect, useState } from "react";
+import { showErrorModal } from "../../dialogs/Dialog";
 
-const OrderDetailsModal: React.FC<{ data: OrderListEntry; onClose: () => void; }> = ({ data, onClose }) => {
+const OrderDetailsModal: React.FC<{ uid?: number; orderId: number; onClose: () => void; }> = ({ uid, orderId, onClose }) => {
     const aceTheme = useAceTheme();
+    const [data, setData] = useState<OrderListEntry | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [loaded, setLoaded] = useState(false);
+    useEffect(() => {
+        if (!loaded) (async () => {
+            try {
+                setLoading(true);
+                const resp = (await onlineVMClient.getRechargeOrderList(1, uid, [orderId])).data;
+                if (resp.length === 0) {
+                    showErrorModal("非法订单ID");
+                    onClose();
+                }
+                setLoaded(true);
+                setData(resp[0]);
+            } catch { } finally {
+                setLoading(false);
+            }
+        })();
+    }, [loaded, onClose, orderId, uid]);
     return <Modal open size="small">
         <Modal.Header>查看充值订单详情</Modal.Header>
         <Modal.Content>
-            <Form>
+            {loading && <Dimmer active><Loader></Loader></Dimmer>}
+            {loaded && data !== null && <Form>
                 <Form.Group widths={4}>
                     <Form.Field>
                         <label>订单编号</label>
@@ -49,6 +71,10 @@ const OrderDetailsModal: React.FC<{ data: OrderListEntry; onClose: () => void; }
                     <label>订单内容描述</label>
                     <span>{data.description}</span>
                 </Form.Field>
+                <Form.Field>
+                    <label>微信支付URL</label>
+                    <span>{data.wechat_payment_url}</span>
+                </Form.Field>
                 {data.admin_description && <Form.Field>
                     <label>管理员备注</label>
                     <AceEditor
@@ -60,10 +86,10 @@ const OrderDetailsModal: React.FC<{ data: OrderListEntry; onClose: () => void; }
                         theme={aceTheme}
                     ></AceEditor>
                 </Form.Field>}
-            </Form>
+            </Form>}
         </Modal.Content>
         <Modal.Actions>
-            <Button color="green" onClick={onClose}>关闭</Button>
+            <Button color="green" disabled={loading} onClick={onClose}>关闭</Button>
         </Modal.Actions>
     </Modal>
 }
