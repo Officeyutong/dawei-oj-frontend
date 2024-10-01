@@ -5,7 +5,7 @@ import onlineVMClient, { translatePaymentStatus } from "../client/OnlineVMClient
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import { timeStampToString, useNowTime } from "../../../common/Utils";
-import OrderDetailsModal from "../OrderDetailsModal";
+import OrderDetailModal from '../OrderDetailModal';
 import OrderRechargeModal from '../user/OrderRechargeModal'
 import { DateTime } from "luxon";
 import DoFinishPayButton from "./DoFinishPayButton";
@@ -43,7 +43,7 @@ const RechargeOrderList: React.FC<{}> = () => {
         <div style={{ display: 'inline-block', cursor: 'pointer', userSelect: 'none' }} onClick={() => loadPage(page)}>
             <Icon name="sync" size="small" style={{ marginLeft: '1rem' }}></Icon>点此手动更新订单状态
         </div>
-        {showingOrder !== null && <OrderDetailsModal orderId={showingOrder.order_id} uid={selfUid} onClose={() => setShowingOrder(null)}></OrderDetailsModal>}
+        {showingOrder !== null && <OrderDetailModal orderId={showingOrder.order_id} uid={selfUid} onClose={() => setShowingOrder(null)}></OrderDetailModal>}
         {showChargeModel !== null && <Modal open size="small">
             <Modal.Header>支付</Modal.Header>
             <Modal.Content>
