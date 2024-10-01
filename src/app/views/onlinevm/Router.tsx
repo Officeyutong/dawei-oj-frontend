@@ -4,6 +4,7 @@ import { Grid, Header, Menu, Segment } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import RechargeOrderList from "./user/RechargeOrderList";
 import BalanceChangeList from "./user/BalanceChangeList";
+import RefundList from "./user/RefundList";
 
 const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
@@ -52,6 +53,9 @@ const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                         </Route>
                         <Route exact path={`${PUBLIC_URL}/onlinevm/balance_change_list`}>
                             <BalanceChangeList></BalanceChangeList>
+                        </Route>
+                        <Route exact path={`${PUBLIC_URL}/onlinevm/refund_list`}>
+                            <RefundList></RefundList>
                         </Route>
                     </Segment>
                 </Grid.Column>

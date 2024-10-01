@@ -5,7 +5,7 @@ import onlineVMClient, { translatePaymentStatus } from "../client/OnlineVMClient
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import { timeStampToString, useNowTime } from "../../../common/Utils";
-import OrderDetailsModal from "../OrderDetailsModal";
+import OrderDetailModal from "../OrderDetailModal";
 
 const RechargeOrderList: React.FC<{}> = () => {
     const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
@@ -36,7 +36,7 @@ const RechargeOrderList: React.FC<{}> = () => {
         <Header as="h2">充值订单</Header>
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
         当前时间：{nowTime.toJSDate().toLocaleString()}
-        {showingOrder !== null && <OrderDetailsModal orderId={showingOrder.order_id} uid={selfUid} onClose={() => setShowingOrder(null)}></OrderDetailsModal>}
+        {showingOrder !== null && <OrderDetailModal orderId={showingOrder.order_id} uid={selfUid} onClose={() => setShowingOrder(null)}></OrderDetailModal>}
         {loaded && <><Table>
             <Table.Header>
                 <Table.Row>
