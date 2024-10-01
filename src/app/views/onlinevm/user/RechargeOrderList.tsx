@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { OrderListEntry } from "../client/types";
-import { Button, Dimmer, Header, Loader, Pagination, Table } from "semantic-ui-react";
+import { Button, Dimmer, Header, Icon, Loader, Modal, Pagination, Table } from "semantic-ui-react";
 import onlineVMClient, { translatePaymentStatus } from "../client/OnlineVMClient";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
@@ -8,6 +8,7 @@ import { timeStampToString, useNowTime } from "../../../common/Utils";
 import OrderDetailsModal from "../OrderDetailsModal";
 import OrderRechargeModal from '../user/OrderRechargeModal'
 import { DateTime } from "luxon";
+import DoFinishPayButton from "./DoFinishPayButton";
 
 const RechargeOrderList: React.FC<{}> = () => {
     const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
@@ -39,9 +40,21 @@ const RechargeOrderList: React.FC<{}> = () => {
         <Header as="h2">充值订单</Header>
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
         当前时间：{nowTime.toJSDate().toLocaleString()}
+        <div style={{ display: 'inline-block', cursor: 'pointer', userSelect: 'none' }} onClick={() => loadPage(page)}>
+            <Icon name="sync" size="small" style={{ marginLeft: '1rem' }}></Icon>点此手动更新订单状态
+        </div>
         {showingOrder !== null && <OrderDetailsModal orderId={showingOrder.order_id} uid={selfUid} onClose={() => setShowingOrder(null)}></OrderDetailsModal>}
-        {showChargeModel !== null && <OrderRechargeModal wechatPayURL={showChargeModel.wechat_payment_url} amount={showChargeModel.amount} orderId={showChargeModel.order_id}
-            expireTime={DateTime.fromSeconds(showChargeModel.expire_at)} createOrderTime={DateTime.fromSeconds(showChargeModel.time)} onClose={() => setShowChargeModel(null)}></OrderRechargeModal>}
+        {showChargeModel !== null && <Modal open size="small">
+            <Modal.Header>支付</Modal.Header>
+            <Modal.Content>
+                <OrderRechargeModal wechatPayURL={showChargeModel.wechat_payment_url} amount={showChargeModel.amount} orderId={showChargeModel.order_id}
+                    expireTime={DateTime.fromSeconds(showChargeModel.expire_at)} createOrderTime={DateTime.fromSeconds(showChargeModel.time)} onClose={() => setShowChargeModel(null)}></OrderRechargeModal>
+            </Modal.Content>
+            <Modal.Actions>
+                <DoFinishPayButton loading={loading} orderId={showChargeModel.order_id} expireTime={showChargeModel.expire_at - showChargeModel.time} onClose={() => setShowChargeModel(null)}></DoFinishPayButton>
+                <Button disabled={loading} color="red" onClick={() => setShowChargeModel(null)}>取消支付</Button>
+            </Modal.Actions>
+        </Modal>}
         {loaded && <><Table>
             <Table.Header>
                 <Table.Row>

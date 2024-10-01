@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, Dimmer, Icon, Image, Loader, Modal } from "semantic-ui-react";
+import { Dimmer, Icon, Image, Loader } from "semantic-ui-react";
 import { OrderPaymentStatus } from "../client/types";
 import onlineVMClient from "../client/OnlineVMClient";
 import QRCode from "qrcode";
 import { showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
 import { DateTime } from "luxon";
 
-const OrderRechargeModal: React.FC<{ wechatPayURL: string; amount: number; orderId: number; expireTime: luxon.DateTime; createOrderTime: luxon.DateTime; onClose: () => void }> = ({ wechatPayURL, amount, orderId, expireTime, createOrderTime, onClose }) => {
+const OrderRechargeModal: React.FC<{ wechatPayURL: string; amount: number; orderId: number; expireTime: luxon.DateTime; createOrderTime: luxon.DateTime; onClose: (shouldJumpToOrderList?: boolean) => void }> = ({ wechatPayURL, amount, orderId, expireTime, createOrderTime, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [qrcode, setQRCode] = useState("");
   const [time, setTime] = useState<number | undefined>(undefined);
@@ -15,21 +15,12 @@ const OrderRechargeModal: React.FC<{ wechatPayURL: string; amount: number; order
   const [refreshCount, setRefreshCount] = useState<number>(0)
   const tickRef = useRef<Function | undefined>(undefined);
 
-  const doFinishPay = async () => {
-    try {
-      setLoading(true)
-      const { status } = (await onlineVMClient.refreshOrderStatus(orderId));
-      if (status !== 'paid') {
-        showErrorModal(`没有查询到支付结果，如在${(Math.floor(expireTime.toSeconds() - createOrderTime.toSeconds()) * 2) / 60}分钟后还未到账，请联系管理员解决`)
-      }
-      onClose();
-    } catch { } finally {
-      setLoading(false);
-    }
-  };
   const initModal = useCallback(async () => {
+    setLoading(true)
     setQRCode(await QRCode.toDataURL(wechatPayURL));
+
     setTime(Math.floor(expireTime.toSeconds() - DateTime.now().toSeconds()))
+    setLoading(false)
   }, [expireTime, wechatPayURL])
 
   useEffect(() => {
@@ -94,34 +85,25 @@ const OrderRechargeModal: React.FC<{ wechatPayURL: string; amount: number; order
     }
     if (paymentStatus === 'paid') {
       showSuccessModal('支付成功')
-      onClose()
+      onClose(true)
     }
   }, [IsQRcodeVaild, onClose, paymentStatus])
 
-  return <Modal open size="small">
-    <Modal.Header>支付</Modal.Header>
-    <Modal.Content>
-      {loading && <Dimmer active><Loader></Loader></Dimmer>}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <span style={{ fontSize: "large" }}>请使用微信扫描此二维码进行支付</span>
-        <span style={{ display: "block", fontSize: "large" }}>应付金额: <span style={{ color: "red", fontSize: "x-large", fontWeight: "bold" }}>
-          {amount / 100}元
-        </span></span>
-        <Image disabled={!IsQRcodeVaild} size="medium" src={qrcode}></Image>
-        {IsQRcodeVaild ? <span style={{ fontSize: "large", display: "block" }}>此二维码会在 <span style={{ color: "red", fontSize: "x-large", fontWeight: "bold" }}>{time}</span> 秒后过期，请及时使用</span>
-          : <span style={{ fontSize: "large", display: "block", color: "red" }}>此二维码已过期</span>}
-      </div>
-      {!IsQRcodeVaild && <div style={{ position: 'absolute', right: '40%', top: "40%" }}>
-        <Icon name="ban" size="massive" />
-      </div>}
-    </Modal.Content>
-    <Modal.Actions>
-      <>
-        <Button disabled={loading} color="green" onClick={doFinishPay}>我已完成支付</Button>
-        <Button disabled={loading} color="red" onClick={() => onClose()}>取消支付</Button>
-      </>
-    </Modal.Actions>
-  </Modal>
+  return <>
+    {loading && <Dimmer active><Loader></Loader></Dimmer>}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <span style={{ fontSize: "large" }}>请使用微信扫描此二维码进行支付</span>
+      <span style={{ display: "block", fontSize: "large" }}>应付金额: <span style={{ color: "red", fontSize: "x-large", fontWeight: "bold" }}>
+        {amount / 100}元
+      </span></span>
+      <Image disabled={!IsQRcodeVaild} size="medium" src={qrcode}></Image>
+      {IsQRcodeVaild ? <span style={{ fontSize: "large", display: "block" }}>此二维码会在 <span style={{ color: "red", fontSize: "x-large", fontWeight: "bold" }}>{time}</span> 秒后过期，请及时使用</span>
+        : <span style={{ fontSize: "large", display: "block", color: "red" }}>此二维码已过期</span>}
+    </div>
+    {!IsQRcodeVaild && <div style={{ position: 'absolute', right: '40%', top: "40%" }}>
+      <Icon name="ban" size="massive" />
+    </div>}
+  </>
 };
 
 export default OrderRechargeModal;
