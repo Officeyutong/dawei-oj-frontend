@@ -25,6 +25,7 @@ interface CreateOrderResponse {
     orderId: number;
     expireAfter: number;
     payUrl: string;
+    createTime: number;
 }
 
 interface TransactionEntry {
@@ -37,4 +38,7 @@ interface TransactionEntry {
     admin_description: string | null;
 }
 
-export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry };
+type RefundStatus = "done" | "error" | "processing";
+
+
+export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus };

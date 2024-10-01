@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { CreateOrderResponse, OrderListEntry, OrderPaymentStatus, TransactionEntry, UserBasicInfo } from "./types";
+import { CreateOrderResponse, OrderListEntry, OrderPaymentStatus, RefundStatus, TransactionEntry, UserBasicInfo } from "./types";
 
 class OnlineVMClient extends GeneralClient {
     async getRechargeOrderList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: OrderListEntry[] }> {
@@ -14,9 +14,13 @@ class OnlineVMClient extends GeneralClient {
     async refreshOrderStatus(orderId: number): Promise<{ status: OrderPaymentStatus }> {
         return (await this.client!.post("/api/onlinevm/user/refresh_order_status", { order_id: orderId })).data;
     }
+    async refreshRefundStatus(refundId: number): Promise<{ status: RefundStatus }> {
+        return (await this.client!.post("/api/onlinevm/user/refresh_refund_status", { refund_id: refundId })).data;
+    }
     async getTransactionList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: TransactionEntry[] }> {
         return (await this.client!.post("/api/onlinevm/balance_change_list", { page, filterUser, filterOrderId })).data;
     }
+
 }
 
 const onlineVMClient = new OnlineVMClient();
