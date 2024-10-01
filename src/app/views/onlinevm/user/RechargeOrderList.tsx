@@ -39,7 +39,7 @@ const RechargeOrderList: React.FC<{}> = () => {
         <Header as="h2">充值订单</Header>
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
         当前时间：{nowTime.toJSDate().toLocaleString()}
-        {showingOrder !== null && <OrderDetailsModal data={showingOrder} onClose={() => setShowingOrder(null)}></OrderDetailsModal>}
+        {showingOrder !== null && <OrderDetailsModal orderId={showingOrder.order_id} uid={selfUid} onClose={() => setShowingOrder(null)}></OrderDetailsModal>}
         {showChargeModel !== null && <OrderRechargeModal wechatPayURL={showChargeModel.wechat_payment_url} amount={showChargeModel.amount} orderId={showChargeModel.order_id}
             expireTime={DateTime.fromSeconds(showChargeModel.expire_at)} createOrderTime={DateTime.fromSeconds(showChargeModel.time)} onClose={() => setShowChargeModel(null)}></OrderRechargeModal>}
         {loaded && <><Table>
