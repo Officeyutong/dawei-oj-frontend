@@ -6,7 +6,7 @@ import QRCode from "qrcode";
 import { showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
 import { DateTime } from "luxon";
 
-const OrderRechargeModal: React.FC<{ wechatPayURL: string; amount: number; orderId: number; expireTime: luxon.DateTime; createOrderTime: luxon.DateTime; onClose: (shouldJumpToOrderList?: boolean) => void }> = ({ wechatPayURL, amount, orderId, expireTime, createOrderTime, onClose }) => {
+const QRcodePayment: React.FC<{ wechatPayURL: string; amount: number; orderId: number; expireTime: luxon.DateTime; createOrderTime: luxon.DateTime; onClose: (shouldJumpToOrderList?: boolean) => void }> = ({ wechatPayURL, amount, orderId, expireTime, createOrderTime, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [qrcode, setQRCode] = useState("");
   const [time, setTime] = useState<number | undefined>(undefined);
@@ -106,5 +106,5 @@ const OrderRechargeModal: React.FC<{ wechatPayURL: string; amount: number; order
   </>
 };
 
-export default OrderRechargeModal;
+export default QRcodePayment;
 

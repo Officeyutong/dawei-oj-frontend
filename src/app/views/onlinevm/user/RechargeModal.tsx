@@ -3,7 +3,7 @@ import { Button, Dimmer, Form, Loader, Message, Modal } from "semantic-ui-react"
 import { CreateOrderResponse } from "../client/types";
 import onlineVMClient from "../client/OnlineVMClient";
 import { showErrorModal } from "../../../dialogs/Dialog";
-import OrderRechargeModal from "./OrderRechargeModal";
+import QRcodePayment from "./QRcodePayment";
 import { DateTime } from "luxon";
 import { useHistory } from "react-router-dom";
 import { PUBLIC_URL } from "../../../App";
@@ -48,13 +48,13 @@ const RechargeModal: React.FC<{ allowAmount: number[]; onClose: (shouldJumpToOrd
                     </Message.Content>
                 </Message></>}
             {showChargeModel && order !== null && <>
-                <OrderRechargeModal wechatPayURL={order.payUrl} amount={allowAmount[selectedAmount]} orderId={order.orderId}
+                <QRcodePayment wechatPayURL={order.payUrl} amount={allowAmount[selectedAmount]} orderId={order.orderId}
                     expireTime={DateTime.fromSeconds((order.expireAfter + order.createTime))} createOrderTime={DateTime.fromSeconds(order.createTime)} onClose={(flag) => {
                         if (flag) {
                             history.push(`${PUBLIC_URL}/onlinevm/recharge_order_list`)
                         }
                         setShowChargeModel(false)
-                    }}></OrderRechargeModal>
+                    }}></QRcodePayment>
             </>}
         </Modal.Content>
         <Modal.Actions>

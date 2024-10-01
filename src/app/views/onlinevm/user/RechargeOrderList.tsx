@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import { timeStampToString, useNowTime } from "../../../common/Utils";
 import OrderDetailModal from '../OrderDetailModal';
-import OrderRechargeModal from '../user/OrderRechargeModal'
+import QRcodePayment from './QRcodePayment'
 import { DateTime } from "luxon";
 import DoFinishPayButton from "./DoFinishPayButton";
 
@@ -47,8 +47,8 @@ const RechargeOrderList: React.FC<{}> = () => {
         {showChargeModel !== null && <Modal open size="small">
             <Modal.Header>支付</Modal.Header>
             <Modal.Content>
-                <OrderRechargeModal wechatPayURL={showChargeModel.wechat_payment_url} amount={showChargeModel.amount} orderId={showChargeModel.order_id}
-                    expireTime={DateTime.fromSeconds(showChargeModel.expire_at)} createOrderTime={DateTime.fromSeconds(showChargeModel.time)} onClose={() => setShowChargeModel(null)}></OrderRechargeModal>
+                <QRcodePayment wechatPayURL={showChargeModel.wechat_payment_url} amount={showChargeModel.amount} orderId={showChargeModel.order_id}
+                    expireTime={DateTime.fromSeconds(showChargeModel.expire_at)} createOrderTime={DateTime.fromSeconds(showChargeModel.time)} onClose={() => setShowChargeModel(null)}></QRcodePayment>
             </Modal.Content>
             <Modal.Actions>
                 <DoFinishPayButton loading={loading} orderId={showChargeModel.order_id} expireTime={showChargeModel.expire_at - showChargeModel.time} onClose={() => setShowChargeModel(null)}></DoFinishPayButton>
