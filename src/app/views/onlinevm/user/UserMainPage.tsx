@@ -6,6 +6,8 @@ import RechargeModal from "./RechargeModal";
 import { useHistory } from "react-router-dom";
 import { PUBLIC_URL } from "../../../App";
 import { useDocumentTitle } from "../../../common/Utils";
+import { useSelector } from "react-redux";
+import { StateType } from "../../../states/Manager";
 
 const UserMainPage: React.FC<{}> = () => {
     const [basicInfo, setBasicInfo] = useState<UserBasicInfo | null>(null);
@@ -13,6 +15,7 @@ const UserMainPage: React.FC<{}> = () => {
     const [loaded, setLoaded] = useState(false);
     const [showRechargeModal, setShowRechargeModal] = useState(false);
     const history = useHistory();
+    const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
     useDocumentTitle("个人基本信息")
     useEffect(() => {
         if (!loaded) {
@@ -28,6 +31,14 @@ const UserMainPage: React.FC<{}> = () => {
             })();
         }
     }, [loaded]);
+    const doRefund = async () => {
+        try {
+            setLoading(true);
+            await onlineVMClient.requestRefund(selfUid);
+        } catch { } finally {
+            setLoading(false);
+        }
+    };
     return <>
         {showRechargeModal && <RechargeModal
             allowAmount={basicInfo!.allowRechargeAmount}
@@ -41,8 +52,10 @@ const UserMainPage: React.FC<{}> = () => {
         {loaded && basicInfo && <Grid columns={2} divided>
             <Grid.Row>
                 <Grid.Column>
-                    当前余额： {basicInfo.remainedAmount}
+                    当前余额： {basicInfo.remainedAmount / 100}
                     <Button color="green" onClick={() => setShowRechargeModal(true)}>充值 </Button>
+                    可退余额:{basicInfo.refundableAmount / 100}
+                    <Button color="red" onClick={() => doRefund()}>退款</Button>
                 </Grid.Column>
             </Grid.Row>
         </Grid>}

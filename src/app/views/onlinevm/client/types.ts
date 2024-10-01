@@ -20,6 +20,7 @@ interface OrderListEntry {
 interface UserBasicInfo {
     remainedAmount: number;
     allowRechargeAmount: number[];
+    refundableAmount: number;
 }
 interface CreateOrderResponse {
     orderId: number;
@@ -38,7 +39,19 @@ interface TransactionEntry {
     admin_description: string | null;
 }
 
+interface RefundEntry {
+    user: UserEntry;
+    refund_id: number;
+    create_time: number;
+    last_update_time: number;
+    amount: number;
+    description: string;
+    refund_status: RefundStatus;
+    admin_description: string | null;
+
+};
+
 type RefundStatus = "done" | "error" | "processing";
 
 
-export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus };
+export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus, RefundEntry };
