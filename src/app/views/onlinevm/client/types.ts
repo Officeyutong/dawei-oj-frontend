@@ -1,4 +1,4 @@
-type OrderPaymentStatus = "unpaid" | "paid" | "error";
+type OrderPaymentStatus = "unpaid" | "paid" | "error" | "expired" | "closed";
 interface UserEntry {
     uid: number;
     username: string;
@@ -53,5 +53,16 @@ interface RefundEntry {
 
 type RefundStatus = "done" | "error" | "processing";
 
+interface VMChargeSchemaEntry {
+    duration: [number, number | null];
+    charge: number;
+}
 
-export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus, RefundEntry };
+interface OnlineVMProduct {
+    product_id: number;
+    tencent_cloud_params: string | null;
+    charge_schema: VMChargeSchemaEntry[];
+    description: string;
+}
+
+export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus, RefundEntry, VMChargeSchemaEntry, OnlineVMProduct };

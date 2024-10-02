@@ -62,7 +62,7 @@ const RechargeModal: React.FC<{ allowAmount: number[]; onClose: (shouldJumpToOrd
                 <Button disabled={loading} onClick={() => onClose(false)} >取消</Button>
             </>}
             {order !== null && <>
-                <Button disabled={loading} color="green" onClick={doFinishPay}>我已完成支付</Button>
+                <Button color="green" disabled={loading} onClick={doFinishPay}>我已完成支付</Button>
                 <Button disabled={loading} color="red" onClick={() => onClose(true)}>取消支付</Button>
             </>}
         </Modal.Actions>
