@@ -20,7 +20,6 @@ const RechargeModal: React.FC<{ allowAmount: number[]; onClose: (shouldJumpToOrd
             setLoading(true);
             const resp = await onlineVMClient.createOrder(allowAmount[selectedAmount]);
             setOrder(resp);
-            console.log(resp)
             setShowChargeModel(true)
         } catch (e) { showErrorModal(String(e)); } finally {
             setLoading(false);
