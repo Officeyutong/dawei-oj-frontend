@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { CreateOrderResponse, OrderListEntry, OrderPaymentStatus, RefundEntry, RefundStatus, TransactionEntry, UserBasicInfo } from "./types";
+import { CreateOrderResponse, OnlineVMProduct, OrderListEntry, OrderPaymentStatus, RefundEntry, RefundStatus, TransactionEntry, UserBasicInfo } from "./types";
 
 class OnlineVMClient extends GeneralClient {
     async getRechargeOrderList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: OrderListEntry[] }> {
@@ -26,6 +26,15 @@ class OnlineVMClient extends GeneralClient {
     async requestRefund(uid: number) {
         await this.client!.post("/api/onlinevm/request_refund", { uid });
     }
+    async resolveAbnormalRefund(refundId: number, reason: string) {
+        await this.client!.post("/api/onlinevm/admin/resolve_refund", { refund_id: refundId, reason });
+    }
+    async getProducts(): Promise<OnlineVMProduct> {
+        return (await (this.client!.post("/api/onlinevm/get_products"))).data;
+    }
+    async createProduct(): Promise<{ productID: number }> {
+        return (await this.client!.post("/api/onlinevm/admin/create_product")).data;
+    }
 }
 
 const onlineVMClient = new OnlineVMClient();
@@ -35,6 +44,8 @@ export function translatePaymentStatus(status: OrderPaymentStatus): string {
         case "paid": return "已支付";
         case "unpaid": return "待支付"
         case "error": return "错误"
+        case "expired": return "已过期"
+        case "closed": return "已关闭"
     }
 }
 export function translateRefundStatus(status: RefundStatus): string {
