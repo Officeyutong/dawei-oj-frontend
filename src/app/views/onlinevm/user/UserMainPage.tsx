@@ -8,6 +8,7 @@ import { PUBLIC_URL } from "../../../App";
 import { useDocumentTitle } from "../../../common/Utils";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
+import { showSuccessModal } from "../../../dialogs/Dialog";
 
 const UserMainPage: React.FC<{}> = () => {
     const [basicInfo, setBasicInfo] = useState<UserBasicInfo | null>(null);
@@ -35,6 +36,7 @@ const UserMainPage: React.FC<{}> = () => {
         try {
             setLoading(true);
             await onlineVMClient.requestRefund(selfUid);
+            showSuccessModal('退款成功')
         } catch { } finally {
             setLoading(false);
         }
