@@ -44,7 +44,10 @@ const RechargeOrderList: React.FC<{}> = () => {
         </div>
         {showingOrder !== null && <OrderDetailModal orderId={showingOrder.order_id} uid={selfUid} onClose={() => setShowingOrder(null)}></OrderDetailModal>}
         {showChargeModel !== null && <QRcodePaymentModal wechatPayURL={showChargeModel.wechat_payment_url} amount={showChargeModel.amount} orderId={showChargeModel.order_id}
-            expireTime={DateTime.fromSeconds(showChargeModel.expire_at)} createOrderTime={DateTime.fromSeconds(showChargeModel.time)} onClose={() => setShowChargeModel(null)}></QRcodePaymentModal>}
+            expireTime={DateTime.fromSeconds(showChargeModel.expire_at)} createOrderTime={DateTime.fromSeconds(showChargeModel.time)} onClose={() => {
+                setShowChargeModel(null)
+                loadPage(page)
+            }}></QRcodePaymentModal>}
         {loaded && <>
             <Table>
                 <Table.Header>
