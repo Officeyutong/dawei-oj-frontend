@@ -14,7 +14,7 @@ const DoFinishPayButton: React.FC<{ loading: boolean, orderId: number, expireTim
       }
       if (status === 'paid') {
         showSuccessModal('支付成功')
-        onClose()
+        onClose(true)
       }
 
     } catch { } finally {

@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { OrderListEntry } from "../client/types";
-import { Button, Dimmer, Header, Icon, Loader, Modal, Pagination, Table } from "semantic-ui-react";
+import { Button, Dimmer, Header, Icon, Loader, Pagination, Table } from "semantic-ui-react";
 import onlineVMClient, { translatePaymentStatus } from "../client/OnlineVMClient";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import { timeStampToString, useNowTime } from "../../../common/Utils";
 import OrderDetailModal from '../OrderDetailModal';
-import QRcodePayment from './QRcodePayment'
+import QRcodePaymentModal from './QRcodePaymentModal'
 import { DateTime } from "luxon";
-import DoFinishPayButton from "./DoFinishPayButton";
 
 const RechargeOrderList: React.FC<{}> = () => {
     const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
@@ -44,42 +43,34 @@ const RechargeOrderList: React.FC<{}> = () => {
             <Icon name="sync" size="small" style={{ marginLeft: '1rem' }}></Icon>点此手动更新订单状态
         </div>
         {showingOrder !== null && <OrderDetailModal orderId={showingOrder.order_id} uid={selfUid} onClose={() => setShowingOrder(null)}></OrderDetailModal>}
-        {showChargeModel !== null && <Modal open size="small">
-            <Modal.Header>支付</Modal.Header>
-            <Modal.Content>
-                <QRcodePayment wechatPayURL={showChargeModel.wechat_payment_url} amount={showChargeModel.amount} orderId={showChargeModel.order_id}
-                    expireTime={DateTime.fromSeconds(showChargeModel.expire_at)} createOrderTime={DateTime.fromSeconds(showChargeModel.time)} onClose={() => setShowChargeModel(null)}></QRcodePayment>
-            </Modal.Content>
-            <Modal.Actions>
-                <DoFinishPayButton loading={loading} orderId={showChargeModel.order_id} expireTime={showChargeModel.expire_at - showChargeModel.time} onClose={() => setShowChargeModel(null)}></DoFinishPayButton>
-                <Button disabled={loading} color="red" onClick={() => setShowChargeModel(null)}>取消支付</Button>
-            </Modal.Actions>
-        </Modal>}
-        {loaded && <><Table>
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell>订单编号</Table.HeaderCell>
-                    <Table.HeaderCell>下单时间</Table.HeaderCell>
-                    <Table.HeaderCell>到期时间</Table.HeaderCell>
-                    <Table.HeaderCell>订单状态</Table.HeaderCell>
-                    <Table.HeaderCell>充值金额</Table.HeaderCell>
-                    <Table.HeaderCell>操作</Table.HeaderCell>
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                {data.map(item => <Table.Row key={item.order_id}>
-                    <Table.Cell>{item.order_id}</Table.Cell>
-                    <Table.Cell>{timeStampToString(item.time)}</Table.Cell>
-                    <Table.Cell negative={item.status === "unpaid"}>{timeStampToString(item.expire_at)}</Table.Cell>
-                    <Table.Cell positive={item.status === "paid"} negative={item.status !== "paid"}>{translatePaymentStatus(item.status)}</Table.Cell>
-                    <Table.Cell>{(item.amount / 100).toFixed(2)}</Table.Cell>
-                    <Table.Cell>
-                        <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
-                        <Button size="small" disabled={nowTime.toSeconds() > item.expire_at || item.status === "error" || item.status === "paid"} onClick={() => setShowChargeModel(item)}>进行支付</Button>
-                    </Table.Cell>
-                </Table.Row>)}
-            </Table.Body>
-        </Table>
+        {showChargeModel !== null && <QRcodePaymentModal wechatPayURL={showChargeModel.wechat_payment_url} amount={showChargeModel.amount} orderId={showChargeModel.order_id}
+            expireTime={DateTime.fromSeconds(showChargeModel.expire_at)} createOrderTime={DateTime.fromSeconds(showChargeModel.time)} onClose={() => setShowChargeModel(null)}></QRcodePaymentModal>}
+        {loaded && <>
+            <Table>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>订单编号</Table.HeaderCell>
+                        <Table.HeaderCell>下单时间</Table.HeaderCell>
+                        <Table.HeaderCell>到期时间</Table.HeaderCell>
+                        <Table.HeaderCell>订单状态</Table.HeaderCell>
+                        <Table.HeaderCell>充值金额</Table.HeaderCell>
+                        <Table.HeaderCell>操作</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {data.map(item => <Table.Row key={item.order_id}>
+                        <Table.Cell>{item.order_id}</Table.Cell>
+                        <Table.Cell>{timeStampToString(item.time)}</Table.Cell>
+                        <Table.Cell negative={item.status === "unpaid"}>{timeStampToString(item.expire_at)}</Table.Cell>
+                        <Table.Cell positive={item.status === "paid"} negative={item.status !== "paid"}>{translatePaymentStatus(item.status)}</Table.Cell>
+                        <Table.Cell>{(item.amount / 100).toFixed(2)}</Table.Cell>
+                        <Table.Cell>
+                            <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
+                            <Button size="small" disabled={nowTime.toSeconds() > item.expire_at || item.status === "error" || item.status === "paid"} onClick={() => setShowChargeModel(item)}>进行支付</Button>
+                        </Table.Cell>
+                    </Table.Row>)}
+                </Table.Body>
+            </Table>
             <div style={{ display: "flex", justifyContent: "center" }}>
                 <Pagination
                     totalPages={Math.max(1, pageCount)}
