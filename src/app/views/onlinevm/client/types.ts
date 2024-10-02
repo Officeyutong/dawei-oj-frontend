@@ -37,6 +37,8 @@ interface TransactionEntry {
     description: string;
     related_order_id: number | null;
     admin_description: string | null;
+    related_operator_id: number | null;
+    related_refund_id: number | null;
 }
 
 interface RefundEntry {

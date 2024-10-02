@@ -17,8 +17,8 @@ class OnlineVMClient extends GeneralClient {
     async refreshRefundStatus(refundId: number): Promise<{ status: RefundStatus }> {
         return (await this.client!.post("/api/onlinevm/user/refresh_refund_status", { refund_id: refundId })).data;
     }
-    async getTransactionList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: TransactionEntry[] }> {
-        return (await this.client!.post("/api/onlinevm/balance_change_list", { page, filterUser, filterOrderId })).data;
+    async getTransactionList(page: number, filterUser?: number, filterTransactionId?: number[]): Promise<{ pageCount: number; data: TransactionEntry[] }> {
+        return (await this.client!.post("/api/onlinevm/balance_change_list", { page, filterUser, filterTransactionId })).data;
     }
     async getRefundList(page: number, filterUser?: number, filterRefundId?: number[]): Promise<{ pageCount: number; data: RefundEntry[] }> {
         return (await this.client!.post("/api/onlinevm/refund_list", { page, filterUser, filterRefundId })).data;

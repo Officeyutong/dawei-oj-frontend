@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
-import { InputOnChangeData } from "semantic-ui-react";
+import { Button, Icon, InputOnChangeData, Label } from "semantic-ui-react";
 import md5 from "md5";
 import { useSelector } from "react-redux";
 import { StateType, store } from "../states/Manager";
@@ -8,6 +8,7 @@ import createPersistedState from "use-persisted-state";
 import { DateTime } from "luxon";
 import { MemoryUnit } from "../views/utils/MemoryCostLabel";
 import { ProgrammingLanguageEntry } from "./types";
+import { SelectedUser } from "../views/visual_programming/management/SelectUserModal";
 
 export const usePreferredMemoryUnit = createPersistedState<MemoryUnit>("hj2-preferred-memory-unit");
 
@@ -136,6 +137,15 @@ export function useNowTime(): DateTime {
     });
     return now;
 }
+
+export const UserSelectLabel: React.FC<{ user: SelectedUser | null; onOpenSelect: () => void; onRemove: () => void; labelTitle?: string }> = ({ onRemove, user, onOpenSelect, labelTitle }) => {
+    return user === null ? <Button size="small" onClick={onOpenSelect} color="green">{labelTitle || "选择用户"}</Button> : <Label onClick={onRemove} size="large" color="blue"><ComplexUserLabel user={user}></ComplexUserLabel><Icon name="delete"></Icon></Label>
+}
+
+export const ComplexUserLabel: React.FC<{ user: SelectedUser }> = ({ user }) => {
+
+    return <>{user.username} {user.real_name && `（${user.real_name}）`}</>;
+};
 
 export {
     useDocumentTitle,
