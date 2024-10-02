@@ -7,7 +7,6 @@ import QRcodePaymentModal from "./QRcodePaymentModal";
 import { DateTime } from "luxon";
 import { useHistory } from "react-router-dom";
 import { PUBLIC_URL } from "../../../App";
-import DoFinishPayButton from "./DoFinishPayButton";
 
 const RechargeModal: React.FC<{ allowAmount: number[]; onClose: (shouldJumpToOrderList: boolean) => void }> = ({ allowAmount, onClose }) => {
     const [order, setOrder] = useState<null | CreateOrderResponse>(null);
@@ -66,12 +65,6 @@ const RechargeModal: React.FC<{ allowAmount: number[]; onClose: (shouldJumpToOrd
                 <Button disabled={loading} onClick={createOrder} color="green">下单</Button>
                 <Button disabled={loading} onClick={() => onClose(false)} >取消</Button>
             </>}
-            {order !== null && <Modal.Actions>
-                <>
-                    <DoFinishPayButton loading={loading} orderId={order.orderId} expireTime={order.expireAfter} onClose={() => onClose(true)}></DoFinishPayButton>
-                    <Button disabled={loading} color="red" onClick={() => onClose(false)}>取消支付</Button>
-                </>
-            </Modal.Actions>}
         </Modal.Actions>
     </Modal>
 };

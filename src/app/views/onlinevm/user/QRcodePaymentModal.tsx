@@ -5,7 +5,6 @@ import onlineVMClient from "../client/OnlineVMClient";
 import QRCode from "qrcode";
 import { showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
 import { DateTime } from "luxon";
-import DoFinishPayButton from "./DoFinishPayButton";
 
 const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; orderId: number; expireTime: luxon.DateTime; createOrderTime: luxon.DateTime; onClose: (shouldJumpToOrderList?: boolean) => void }> = ({ wechatPayURL, amount, orderId, expireTime, createOrderTime, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -23,7 +22,22 @@ const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; order
     setTime(Math.floor(expireTime.toSeconds() - DateTime.now().toSeconds()))
     setLoading(false)
   }, [expireTime, wechatPayURL])
+  const doFinishPay = async () => {
+    try {
+      setLoading(true)
+      const { status } = (await onlineVMClient.refreshOrderStatus(orderId));
+      if (status !== 'paid') {
+        showErrorModal(`没有查询到支付结果，如在${(expireTime.toSeconds() - createOrderTime.toSeconds()) * 2 / 60}分钟后还未到账，请联系管理员解决`)
+      }
+      if (status === 'paid') {
+        showSuccessModal('支付成功')
+        onClose(true)
+      }
 
+    } catch { } finally {
+      setLoading(false)
+    }
+  }
   useEffect(() => {
     initModal();
   }, [initModal])
@@ -110,7 +124,7 @@ const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; order
 
       </Modal.Content>
       <Modal.Actions>
-        <DoFinishPayButton loading={loading} orderId={orderId} expireTime={expireTime.toSeconds() - createOrderTime.toSeconds()} onClose={onClose}></DoFinishPayButton>
+        <Button disabled={loading} color="green" onClick={doFinishPay}>我已完成支付</Button>
         <Button disabled={loading} color="red" onClick={() => onClose(false)}>取消支付</Button>
       </Modal.Actions>
     </Modal>
