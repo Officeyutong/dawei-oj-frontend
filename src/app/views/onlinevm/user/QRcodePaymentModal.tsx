@@ -10,7 +10,7 @@ const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; order
   const [loading, setLoading] = useState(false);
   const [qrcode, setQRCode] = useState("");
   const [time, setTime] = useState<number | undefined>(undefined);
-  const [IsQRcodeVaild, setisQRcodeVaild] = useState<boolean>(true);
+  const [isQRcodeValid, setIsQRcodeValid] = useState<boolean>(true);
   const [paymentStatus, setPaymentStatus] = useState<OrderPaymentStatus>("unpaid");
   const [refreshCount, setRefreshCount] = useState<number>(0)
   const tickRef = useRef<Function | undefined>(undefined);
@@ -65,7 +65,7 @@ const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; order
       (async function resetQRcode() {
         setQRCode(await QRCode.toDataURL('please do not scan expired QRcode'));
       })()
-      setisQRcodeVaild(false)
+      setIsQRcodeValid(false)
       showErrorModal('该二维码已经过期，请重新刷新页面')
     }
   }, [time])
@@ -91,18 +91,18 @@ const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; order
   }, [refreshCount, refreshPaymentStatus])
 
   useEffect(() => {
-    if (paymentStatus === 'paid' || IsQRcodeVaild === false) {
+    if (paymentStatus === 'paid' || isQRcodeValid === false) {
       setRefreshCount(-1);
     }
     if (paymentStatus === 'error') {
       showErrorModal('支付出现异常，请重试，如多次出现异常请联系管理员')
-      setisQRcodeVaild(false)
+      setIsQRcodeValid(false)
     }
     if (paymentStatus === 'paid') {
       showSuccessModal('支付成功')
       onClose(true)
     }
-  }, [IsQRcodeVaild, onClose, paymentStatus])
+  }, [isQRcodeValid, onClose, paymentStatus])
 
   return <>
     <Modal open size="small">
@@ -114,11 +114,11 @@ const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; order
           <span style={{ display: "block", fontSize: "large" }}>应付金额: <span style={{ color: "red", fontSize: "x-large", fontWeight: "bold" }}>
             {amount / 100}元
           </span></span>
-          <Image disabled={!IsQRcodeVaild} size="medium" src={qrcode}></Image>
-          {IsQRcodeVaild ? <span style={{ fontSize: "large", display: "block" }}>此二维码会在 <span style={{ color: "red", fontSize: "x-large", fontWeight: "bold" }}>{time}</span> 秒后过期，请及时使用</span>
+          <Image disabled={!isQRcodeValid} size="medium" src={qrcode}></Image>
+          {isQRcodeValid ? <span style={{ fontSize: "large", display: "block" }}>此二维码会在 <span style={{ color: "red", fontSize: "x-large", fontWeight: "bold" }}>{time}</span> 秒后过期，请及时使用</span>
             : <span style={{ fontSize: "large", display: "block", color: "red" }}>此二维码已过期</span>}
         </div>
-        {!IsQRcodeVaild && <div style={{ position: 'absolute', right: '40%', top: "40%" }}>
+        {!isQRcodeValid && <div style={{ position: 'absolute', right: '40%', top: "40%" }}>
           <Icon name="ban" size="massive" />
         </div>}
 
