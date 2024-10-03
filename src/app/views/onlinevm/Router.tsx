@@ -6,6 +6,7 @@ import RechargeOrderList from "./user/RechargeOrderList";
 import BalanceChangeList from "./user/BalanceChangeList";
 import RefundList from "./user/RefundList";
 import OnlineVMAdmin from "./admin/OnlineVMAdmin";
+import VMOrderList from "./user/VMOrderList";
 
 const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
@@ -62,6 +63,9 @@ const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                                 </Route>
                                 <Route exact path={`${PUBLIC_URL}/onlinevm/refund_list`}>
                                     <RefundList></RefundList>
+                                </Route>
+                                <Route exact path={`${PUBLIC_URL}/onlinevm/vm_order_list`}>
+                                    <VMOrderList></VMOrderList>
                                 </Route>
                             </Segment>
                         </Grid.Column>

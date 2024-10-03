@@ -51,6 +51,7 @@ export interface UserStateType {
         realName?: string;
         defaultLanguages: string[];
         maxSubmissionCountPerUserPerVisualHomework: number;
+        hasOnlineVMManagePermission: boolean;
     }
 }
 
@@ -112,7 +113,8 @@ const defaultState: StateType = {
             visualProgrammingGradeLevel: [],
             realName: undefined,
             defaultLanguages: [],
-            maxSubmissionCountPerUserPerVisualHomework: 1
+            maxSubmissionCountPerUserPerVisualHomework: 1,
+            hasOnlineVMManagePermission: false
         }
     },
     generalClient: null,

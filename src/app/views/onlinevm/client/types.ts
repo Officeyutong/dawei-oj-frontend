@@ -37,8 +37,9 @@ interface TransactionEntry {
     description: string;
     related_order_id: number | null;
     admin_description: string | null;
-    related_operator_id: number | null;
+    // related_operator_id: number | null;
     related_refund_id: number | null;
+    related_machine_order_id: number | null;
 }
 
 interface RefundEntry {
@@ -65,10 +66,12 @@ interface OnlineVMProduct {
     tencent_cloud_params: string | null;
     charge_schema: VMChargeSchemaEntry[];
     description: string;
+    name: string;
 }
 
-interface OnlineVMProductUpdateRequest extends Omit<OnlineVMProduct, "product_id"> {
+interface OnlineVMProductUpdateRequest extends Omit<OnlineVMProduct, "product_id" | "charge_schema"> {
     tencent_cloud_params: string;
+    charge_schema: string;
 }
 
 export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus, RefundEntry, VMChargeSchemaEntry, OnlineVMProduct, OnlineVMProductUpdateRequest };

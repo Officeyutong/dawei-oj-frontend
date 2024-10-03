@@ -8,7 +8,7 @@ import Logo from "../assets/logo.png";
 import userClient from "./user/client/UserClient";
 const TopMenuNew = () => {
     const alreadyLogin = useSelector((s: StateType) => s.userState.login);
-    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, canUseImageStore, backend_managable, username, uid, showPermissionPack, hasVisualProgrammingHomeworkUpdatePerm } = useSelector((s: StateType) => s.userState.userData);
+    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, canUseImageStore, backend_managable, username, uid, showPermissionPack, hasVisualProgrammingHomeworkUpdatePerm, hasOnlineVMManagePermission } = useSelector((s: StateType) => s.userState.userData);
     return <Row>
         <Col span={3} offset={2} style={{ backgroundColor: "white", alignContent: "center", textAlign: "center" }}>
             {/* <img src={logo} alt="logo"></img> */}
@@ -62,10 +62,11 @@ const TopMenuNew = () => {
                                         { label: <Link to={`${PUBLIC_URL}/onlinevm/`}>在线NOI Linux环境</Link>, key: "onlinevm", icon: <CodeOutlined></CodeOutlined> }
                                     ]
                                 },
-                                ((canUseImageStore || hasVisualProgrammingHomeworkUpdatePerm) ? {
+                                ((canUseImageStore || hasVisualProgrammingHomeworkUpdatePerm || hasOnlineVMManagePermission) ? {
                                     type: "group" as "group", label: "其他", children: [
                                         (canUseImageStore ? { label: <Link to={`${PUBLIC_URL}/imagestore/list`}>图片上传</Link>, key: "image-store", icon: <FileImageOutlined></FileImageOutlined> } : null),
-                                        (hasVisualProgrammingHomeworkUpdatePerm ? { label: <Link to={`${PUBLIC_URL}/visual_programming_admin/management`}>可视化编程管理</Link>, key: "visualprogramming-admin", icon: <CompassOutlined></CompassOutlined> } : null)
+                                        (hasVisualProgrammingHomeworkUpdatePerm ? { label: <Link to={`${PUBLIC_URL}/visual_programming_admin/management`}>可视化编程管理</Link>, key: "visualprogramming-admin", icon: <CompassOutlined></CompassOutlined> } : null),
+                                        (hasOnlineVMManagePermission ? { label: <Link to={`${PUBLIC_URL}/onlinevm/admin`}>在线NOI Linux环境管理</Link>, key: "onlinevm-admin", icon: <CodeOutlined></CodeOutlined> } : null)
                                     ]
                                 } : null)
                             ]

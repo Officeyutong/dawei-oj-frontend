@@ -29,7 +29,7 @@ class OnlineVMClient extends GeneralClient {
     async resolveAbnormalRefund(refundId: number, reason: string) {
         await this.client!.post("/api/onlinevm/admin/resolve_refund", { refund_id: refundId, reason });
     }
-    async getProducts(): Promise<OnlineVMProduct> {
+    async getProducts(): Promise<OnlineVMProduct[]> {
         return (await (this.client!.post("/api/onlinevm/get_products"))).data;
     }
     async createProduct(): Promise<{ productID: number }> {
@@ -40,6 +40,15 @@ class OnlineVMClient extends GeneralClient {
     }
     async removeProduct(productId: number) {
         await this.client!.post("/api/onlinevm/admin/remove_product", { product_id: productId });
+    }
+    async getUsedHourForProduct(productId: number): Promise<{ hours: number }> {
+        return (await (this.client!.post("/api/onlinevm/user/get_used_hours", { product_id: productId }))).data;
+    }
+    async createVM(product_id: number) {
+        await this.client!.post("/api/onlinevm/user/create_vm", { product_id });
+    }
+    async getVNCUrl(order_id: number): Promise<{ url: string }> {
+        return (await this.client!.post("/api/onlinevm/get_vnc_url", { order_id })).data;
     }
 }
 
