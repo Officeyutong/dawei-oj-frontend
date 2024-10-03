@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { CreateOrderResponse, OnlineVMOrderEntry, OnlineVMOrderStatus, OnlineVMProduct, OnlineVMProductUpdateRequest, OrderListEntry, OrderPaymentStatus, RefundEntry, RefundStatus, TransactionEntry, UserBasicInfo, VNCResponse } from "./types";
+import { CreateOrderResponse, OnlineVMOrderEntry, OnlineVMOrderStatus, OnlineVMProduct, OnlineVMProductUpdateRequest, OrderListEntry, OrderPaymentStatus, RefundEntry, RefundStatus, TransactionEntry, UserBasicInfo } from "./types";
 
 class OnlineVMClient extends GeneralClient {
     async getRechargeOrderList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: OrderListEntry[] }> {
@@ -47,7 +47,7 @@ class OnlineVMClient extends GeneralClient {
     async createVM(product_id: number) {
         await this.client!.post("/api/onlinevm/user/create_vm", { product_id });
     }
-    async getVNCUrl(order_id: number): Promise<VNCResponse> {
+    async getVNCUrl(order_id: number): Promise<{ url: string }> {
         return (await this.client!.post("/api/onlinevm/get_vnc_url", { order_id })).data;
 
     }
