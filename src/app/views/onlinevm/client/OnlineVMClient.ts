@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { CreateOrderResponse, OnlineVMProduct, OrderListEntry, OrderPaymentStatus, RefundEntry, RefundStatus, TransactionEntry, UserBasicInfo } from "./types";
+import { CreateOrderResponse, OnlineVMProduct, OnlineVMProductUpdateRequest, OrderListEntry, OrderPaymentStatus, RefundEntry, RefundStatus, TransactionEntry, UserBasicInfo } from "./types";
 
 class OnlineVMClient extends GeneralClient {
     async getRechargeOrderList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: OrderListEntry[] }> {
@@ -17,8 +17,8 @@ class OnlineVMClient extends GeneralClient {
     async refreshRefundStatus(refundId: number): Promise<{ status: RefundStatus }> {
         return (await this.client!.post("/api/onlinevm/user/refresh_refund_status", { refund_id: refundId })).data;
     }
-    async getTransactionList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: TransactionEntry[] }> {
-        return (await this.client!.post("/api/onlinevm/balance_change_list", { page, filterUser, filterOrderId })).data;
+    async getTransactionList(page: number, filterUser?: number, filterTransactionId?: number[]): Promise<{ pageCount: number; data: TransactionEntry[] }> {
+        return (await this.client!.post("/api/onlinevm/balance_change_list", { page, filterUser, filterTransactionId })).data;
     }
     async getRefundList(page: number, filterUser?: number, filterRefundId?: number[]): Promise<{ pageCount: number; data: RefundEntry[] }> {
         return (await this.client!.post("/api/onlinevm/refund_list", { page, filterUser, filterRefundId })).data;
@@ -34,6 +34,12 @@ class OnlineVMClient extends GeneralClient {
     }
     async createProduct(): Promise<{ productID: number }> {
         return (await this.client!.post("/api/onlinevm/admin/create_product")).data;
+    }
+    async updateProduct(productId: number, data: OnlineVMProductUpdateRequest) {
+        await this.client!.post("/api/onlinevm/admin/update_product", { product_id: productId, data });
+    }
+    async removeProduct(productId: number) {
+        await this.client!.post("/api/onlinevm/admin/remove_product", { product_id: productId });
     }
 }
 
