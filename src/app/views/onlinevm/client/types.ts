@@ -75,7 +75,7 @@ interface OnlineVMProductUpdateRequest extends Omit<OnlineVMProduct, "product_id
 }
 
 
-type OnlineVMOrderStatus = "running" | "error" | "destroyed";
+type OnlineVMOrderStatus = "available" | "error" | "destroyed";
 interface OnlineVMOrderEntry {
     user: UserEntry;
     order_id: number;
@@ -91,4 +91,15 @@ interface OnlineVMOrderEntry {
     }
 }
 
-export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus, RefundEntry, VMChargeSchemaEntry, OnlineVMProduct, OnlineVMProductUpdateRequest, OnlineVMOrderEntry, OnlineVMOrderStatus };
+interface VNCResponseOk {
+    status: "ok";
+    url: string;
+}
+interface VNCResponseFail {
+    status: "fail";
+    error_type: "instance_starting" | "instance_already_shut_down" | "instance_shutting_down";
+    error_message: string;
+}
+type VNCResponse = VNCResponseOk | VNCResponseFail;
+
+export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus, RefundEntry, VMChargeSchemaEntry, OnlineVMProduct, OnlineVMProductUpdateRequest, OnlineVMOrderEntry, OnlineVMOrderStatus, VNCResponseOk, VNCResponseFail, VNCResponse };
