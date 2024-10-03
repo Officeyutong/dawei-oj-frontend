@@ -74,4 +74,21 @@ interface OnlineVMProductUpdateRequest extends Omit<OnlineVMProduct, "product_id
     charge_schema: string;
 }
 
-export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus, RefundEntry, VMChargeSchemaEntry, OnlineVMProduct, OnlineVMProductUpdateRequest };
+
+type OnlineVMOrderStatus = "running" | "error" | "destroyed";
+interface OnlineVMOrderEntry {
+    user: UserEntry;
+    order_id: number;
+    create_time: number;
+    last_update_time: number;
+    status: OnlineVMOrderStatus;
+    tencent_cloud_id: string;
+    charge_schema: VMChargeSchemaEntry[];
+    admin_description: string | null;
+    product: {
+        product_id: number;
+        name: string;
+    }
+}
+
+export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus, RefundEntry, VMChargeSchemaEntry, OnlineVMProduct, OnlineVMProductUpdateRequest, OnlineVMOrderEntry, OnlineVMOrderStatus };

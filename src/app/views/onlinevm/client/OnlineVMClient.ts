@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { CreateOrderResponse, OnlineVMProduct, OnlineVMProductUpdateRequest, OrderListEntry, OrderPaymentStatus, RefundEntry, RefundStatus, TransactionEntry, UserBasicInfo } from "./types";
+import { CreateOrderResponse, OnlineVMOrderEntry, OnlineVMOrderStatus, OnlineVMProduct, OnlineVMProductUpdateRequest, OrderListEntry, OrderPaymentStatus, RefundEntry, RefundStatus, TransactionEntry, UserBasicInfo } from "./types";
 
 class OnlineVMClient extends GeneralClient {
     async getRechargeOrderList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: OrderListEntry[] }> {
@@ -50,6 +50,9 @@ class OnlineVMClient extends GeneralClient {
     async getVNCUrl(order_id: number): Promise<{ url: string }> {
         return (await this.client!.post("/api/onlinevm/get_vnc_url", { order_id })).data;
     }
+    async getVMOrderList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: OnlineVMOrderEntry[] }> {
+        return (await this.client!.post("/api/onlinevm/vm_order_list", { page, filterUser, filterOrderId })).data;
+    }
 }
 
 const onlineVMClient = new OnlineVMClient();
@@ -68,6 +71,14 @@ export function translateRefundStatus(status: RefundStatus): string {
         case "done": return "已完成";
         case "processing": return "进行中";
         case "error": return "错误";
+    }
+}
+
+export function translateVMOrderStatus(status: OnlineVMOrderStatus): string {
+    switch (status) {
+        case "destroyed": return "已退还";
+        case "error": return "错误";
+        case "running": return "正在运行";
     }
 }
 
