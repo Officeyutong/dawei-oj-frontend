@@ -6,6 +6,7 @@ import RechargeOrderList from "./user/RechargeOrderList";
 import BalanceChangeList from "./user/BalanceChangeList";
 import RefundList from "./user/RefundList";
 import OnlineVMAdmin from "./admin/OnlineVMAdmin";
+import OnlineVMPage from "./user/OnlineVMPage";
 
 const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
@@ -47,6 +48,11 @@ const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                                     as={Link}
                                     to={`${PUBLIC_URL}/onlinevm/refund_list`}
                                 ></Menu.Item>
+                                <Menu.Item
+                                    name="虚拟机"
+                                    as={Link}
+                                    to={`${PUBLIC_URL}/onlinevm/onlinevm`}
+                                ></Menu.Item>
                             </Menu>
                         </Grid.Column>
                         <Grid.Column width={13}>
@@ -63,13 +69,16 @@ const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                                 <Route exact path={`${PUBLIC_URL}/onlinevm/refund_list`}>
                                     <RefundList></RefundList>
                                 </Route>
+                                <Route exact path={`${PUBLIC_URL}/onlinevm/onlinevm`}>
+                                    <OnlineVMPage url="wss%3A%2F%2Fshvnc.qcloud.com%3A26789%2Fvnc%3Fs%3Da1FQdEFsWDZOeUNaOWhQK1ZIRGRES1haYzQ5bzN5bWNYMk1DTUV3NWgvQTNJVFBlT1AyRXMvRXNvdnd5disvQ05xb29IWUhJbnAvd0pDRzVYTWNjNGxYRXp4dkttNUZVRUYwMVFXY3RWZ1k9%26password%3D%26isWindows%3Dfalse%26isUbuntu%3Dtrue" ></OnlineVMPage>
+                                </Route>
                             </Segment>
                         </Grid.Column>
                     </Grid>
                 </div>
             </>
 
-        </Switch>
+        </Switch >
 
     </>
 };
