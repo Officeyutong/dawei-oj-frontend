@@ -56,8 +56,8 @@ const TransactionDetailModal: React.FC<{ transactionId: number; uid?: number; on
                         {data.related_order_id || "无"}
                     </Form.Field>
                     <Form.Field>
-                        <label>关联操作员ID</label>
-                        {data.related_operator_id || "无"}
+                        <label>关联机器订单ID</label>
+                        {data.related_machine_order_id || "无"}
                     </Form.Field>
                     <Form.Field>
                         <label>关联退款单</label>

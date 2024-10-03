@@ -7,6 +7,7 @@ import BalanceChangeList from "./user/BalanceChangeList";
 import RefundList from "./user/RefundList";
 import OnlineVMAdmin from "./admin/OnlineVMAdmin";
 import OnlineVMPage from "./user/OnlineVMPage";
+import VMOrderList from "./user/VMOrderList";
 
 const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
@@ -71,6 +72,9 @@ const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                                 </Route>
                                 <Route exact path={`${PUBLIC_URL}/onlinevm/onlinevm`}>
                                     <OnlineVMPage url="wss%3A%2F%2Fshvnc.qcloud.com%3A26789%2Fvnc%3Fs%3Da1FQdEFsWDZOeUNaOWhQK1ZIRGRES1haYzQ5bzN5bWNYMk1DTUV3NWgvQTNJVFBlT1AyRXMvRXNvdnd5disvQ05xb29IWUhJbnAvd0pDRzVYTWNjNGxYRXp4dkttNUZVRUYwMVFXY3RWZ1k9%26password%3D%26isWindows%3Dfalse%26isUbuntu%3Dtrue" ></OnlineVMPage>
+                                </Route>
+                                <Route exact path={`${PUBLIC_URL}/onlinevm/vm_order_list`}>
+                                    <VMOrderList></VMOrderList>
                                 </Route>
                             </Segment>
                         </Grid.Column>
