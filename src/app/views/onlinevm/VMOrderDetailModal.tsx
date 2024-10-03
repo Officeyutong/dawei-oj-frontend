@@ -58,15 +58,15 @@ const VMOrderDetailModal: React.FC<{ uid?: number; orderId: number; onClose: () 
                         {timeStampToString(data.last_update_time)}
                     </Form.Field>
                     <Form.Field>
-                    <label>腾讯云实例ID</label>
-                    {data.tencent_cloud_id}
-                </Form.Field>
+                        <label>腾讯云实例ID</label>
+                        {data.tencent_cloud_id}
+                    </Form.Field>
                 </Form.Group>
                 <Form.Field>
-                        <label>收费模式</label>
-                        <ChargeSchemaList data={data.charge_schema}></ChargeSchemaList>
-                    </Form.Field>
-        
+                    <label>收费模式</label>
+                    <ChargeSchemaList data={data.charge_schema}></ChargeSchemaList>
+                </Form.Field>
+
                 {data.admin_description && <Form.Field>
                     <label>管理员备注</label>
                     <AceEditor
@@ -77,6 +77,7 @@ const VMOrderDetailModal: React.FC<{ uid?: number; orderId: number; onClose: () 
                         height="300px"
                         wrapEnabled
                         theme={aceTheme}
+                        readOnly={true}
                     ></AceEditor>
                 </Form.Field>}
             </Form>}

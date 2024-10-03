@@ -8,6 +8,7 @@ import onlineVMClient, { translateVMOrderStatus } from "../client/OnlineVMClient
 import { timeStampToString, useNowTime } from "../../../common/Utils";
 import { DateTime } from "luxon";
 import VMOrderDetailModal from "../VMOrderDetailModal";
+import { showErrorModal } from "../../../dialogs/Dialog";
 
 const VMOrderList: React.FC<{}> = () => {
     const [showCreateVMModal, setShowCreateVMModal] = useState(false);
@@ -31,6 +32,17 @@ const VMOrderList: React.FC<{}> = () => {
             setLoading(false);
         }
     }, [selfUid])
+    const handleOpenVM = async (item: OnlineVMOrderEntry) => {
+        try {
+            setLoading(true);
+            window.location.href = `/onlinevm/vm_page/${item.order_id}/${item.create_time}`
+
+        } catch {
+            showErrorModal('连接失败')
+        } finally {
+            setLoading(false);
+        }
+    }
     useEffect(() => {
         if (!loaded && initialReqDone) loadPage(1);
     }, [initialReqDone, loadPage, loaded])
@@ -70,6 +82,7 @@ const VMOrderList: React.FC<{}> = () => {
                         <Table.Cell>{Math.ceil(nowTime.diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600)}小时</Table.Cell>
                         <Table.Cell>
                             <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
+                            <Button size='small' onClick={() => handleOpenVM(item)}>打开虚拟机</Button>
                         </Table.Cell>
                     </Table.Row>)}
                 </Table.Body>
