@@ -54,6 +54,9 @@ class OnlineVMClient extends GeneralClient {
     async getVMOrderList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: OnlineVMOrderEntry[] }> {
         return (await this.client!.post("/api/onlinevm/vm_order_list", { page, filterUser, filterOrderId })).data;
     }
+    async startVM(order_id: number) {
+        await this.client!.post("/api/onlinevm/start_vm", { order_id })
+    }
 }
 
 const onlineVMClient = new OnlineVMClient();
