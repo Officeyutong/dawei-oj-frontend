@@ -55,16 +55,16 @@ const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                                 <Route exact path={`${match.path}/`}>
                                     <UserMainPage></UserMainPage>
                                 </Route>
-                                <Route exact path={`${PUBLIC_URL}/onlinevm/recharge_order_list`}>
+                                <Route exact path={`${match.path}/recharge_order_list`}>
                                     <RechargeOrderList></RechargeOrderList>
                                 </Route>
-                                <Route exact path={`${PUBLIC_URL}/onlinevm/balance_change_list`}>
+                                <Route exact path={`${match.path}/balance_change_list`}>
                                     <BalanceChangeList></BalanceChangeList>
                                 </Route>
-                                <Route exact path={`${PUBLIC_URL}/onlinevm/refund_list`}>
+                                <Route exact path={`${match.path}/refund_list`}>
                                     <RefundList></RefundList>
                                 </Route>
-                                <Route exact path={`${PUBLIC_URL}/onlinevm/vm_order_list`}>
+                                <Route exact path={`${match.path}/vm_order_list`}>
                                     <VMOrderList></VMOrderList>
                                 </Route>
                             </Segment>
