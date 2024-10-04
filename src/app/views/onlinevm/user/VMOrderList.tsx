@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import { OnlineVMOrderEntry } from "../client/types";
 import onlineVMClient, { translateVMOrderStatus } from "../client/OnlineVMClient";
-import { timeStampToString, useNowTime } from "../../../common/Utils";
+import { timeStampToString, useDocumentTitle, useNowTime } from "../../../common/Utils";
 import { DateTime } from "luxon";
 import VMOrderDetailModal from "../VMOrderDetailModal";
 import { showConfirm } from "../../../dialogs/Dialog";
@@ -37,7 +37,7 @@ const VMOrderList: React.FC<{}> = () => {
         if (!loaded && initialReqDone) loadPage(1);
     }, [initialReqDone, loadPage, loaded])
     const nowTime = useNowTime();
-
+    useDocumentTitle("虚拟机订单列表");
     const doDestroy = (orderId: number) => showConfirm("您确定要退还此台虚拟机吗？一旦退还，这台虚拟机所有的数据都会被删除，并且无法找回。", async () => {
         try {
             setLoading(true);

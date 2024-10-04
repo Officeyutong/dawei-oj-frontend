@@ -4,10 +4,11 @@ import { StateType } from "../../../states/Manager";
 import { useSelector } from "react-redux";
 import onlineVMClient from "../client/OnlineVMClient";
 import { Button, Dimmer, Header, Loader, Pagination, Table } from "semantic-ui-react";
-import { timeStampToString } from "../../../common/Utils";
+import { timeStampToString, useDocumentTitle } from "../../../common/Utils";
 import TransactionDetailModal from "../TransactionDetailModal";
 
 const BalanceChangeList: React.FC<{}> = () => {
+    useDocumentTitle("余额变动记录")
     const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
     const initialReqDone = useSelector((s: StateType) => s.userState.initialRequestDone);
     const [loaded, setLoaded] = useState(false);

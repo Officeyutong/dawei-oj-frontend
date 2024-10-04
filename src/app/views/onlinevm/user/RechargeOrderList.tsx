@@ -4,12 +4,13 @@ import { Button, Dimmer, Header, Icon, Loader, Pagination, Table } from "semanti
 import onlineVMClient, { translatePaymentStatus } from "../client/OnlineVMClient";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
-import { timeStampToString, useNowTime } from "../../../common/Utils";
+import { timeStampToString, useDocumentTitle, useNowTime } from "../../../common/Utils";
 import OrderDetailModal from '../OrderDetailModal';
 import QRcodePaymentModal from './QRcodePaymentModal'
 import { DateTime } from "luxon";
 
 const RechargeOrderList: React.FC<{}> = () => {
+    useDocumentTitle("充值订单列表");
     const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
     const initialReqDone = useSelector((s: StateType) => s.userState.initialRequestDone);
     const [loaded, setLoaded] = useState(false);

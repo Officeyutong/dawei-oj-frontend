@@ -56,7 +56,6 @@ const UserMainPage: React.FC<{}> = () => {
                 <Grid.Column>
                     当前余额： {basicInfo.remainedAmount / 100}
                     <Button color="green" onClick={() => setShowRechargeModal(true)}>充值 </Button>
-                    可退余额:{basicInfo.refundableAmount / 100}
                     <Button color="red" onClick={() => doRefund()}>退款</Button>
                 </Grid.Column>
             </Grid.Row>
