@@ -8,7 +8,7 @@ import onlineVMClient, { translateVMOrderStatus } from "../client/OnlineVMClient
 import { timeStampToString, useDocumentTitle, useNowTime } from "../../../common/Utils";
 import { DateTime } from "luxon";
 import VMOrderDetailModal from "../VMOrderDetailModal";
-import { showConfirm, showErrorModal } from "../../../dialogs/Dialog";
+import { showConfirm, showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
 import { showSuccessPopup } from "../../../dialogs/Utils";
 
 const VMOrderList: React.FC<{}> = () => {
@@ -50,6 +50,7 @@ const VMOrderList: React.FC<{}> = () => {
     const nowTime = useNowTime();
     useDocumentTitle("虚拟机订单列表");
     const doDestroy = (orderId: number) => showConfirm("您确定要退还此台虚拟机吗？一旦退还，这台虚拟机所有的数据都会被删除，并且无法找回。", async () => {
+        showSuccessModal('正在退还虚拟机，请勿刷新网页')
         try {
             setLoading(true);
             await onlineVMClient.destroyVM(orderId);
@@ -67,7 +68,7 @@ const VMOrderList: React.FC<{}> = () => {
             orderId={showingOrder.order_id}
             uid={selfUid}
         ></VMOrderDetailModal>}
-        {loading && <Dimmer active><Loader></Loader></Dimmer>}
+        {loading && <Dimmer active page><Loader></Loader></Dimmer>}
         {showCreateVMModal && <CreateVMModal onClose={flag => {
             if (flag) loadPage(1);
             setShowCreateVMModal(false);

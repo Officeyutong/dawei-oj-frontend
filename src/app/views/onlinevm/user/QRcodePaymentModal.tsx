@@ -5,6 +5,8 @@ import onlineVMClient from "../client/OnlineVMClient";
 import QRCode from "qrcode";
 import { showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
 import { DateTime } from "luxon";
+import { useSelector } from "react-redux";
+import { StateType } from "../../../states/Manager";
 
 const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; orderId: number; expireTime: luxon.DateTime; createOrderTime: luxon.DateTime; onClose: (shouldJumpToOrderList?: boolean) => void }> = ({ wechatPayURL, amount, orderId, expireTime, createOrderTime, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -14,6 +16,7 @@ const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; order
   const [paymentStatus, setPaymentStatus] = useState<OrderPaymentStatus>("unpaid");
   const [refreshCount, setRefreshCount] = useState<number>(0)
   const tickRef = useRef<Function | undefined>(undefined);
+  const uid = useSelector((s: StateType) => s.userState.userData.uid)
 
   const initModal = useCallback(async () => {
     setLoading(true)
@@ -71,9 +74,9 @@ const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; order
   }, [time])
 
   const refreshPaymentStatus = useCallback(async () => {
-    const status = (await onlineVMClient.refreshOrderStatus(orderId)).status;
+    const status = (await onlineVMClient.getRechargeOrderList(1, uid, [orderId])).data[0].status
     setPaymentStatus(status)
-  }, [orderId]);
+  }, [orderId, uid]);
 
   useEffect(() => {
     if (refreshCount >= 10) {

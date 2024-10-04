@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Button, Dimmer, Loader, Message, Modal, Table } from "semantic-ui-react"
-import { showConfirm } from "../../../dialogs/Dialog";
+import { showConfirm, showSuccessModal } from "../../../dialogs/Dialog";
 import { OnlineVMProduct } from "../client/types";
 import onlineVMClient from "../client/OnlineVMClient";
 import _ from "lodash";
@@ -13,8 +13,10 @@ const CreateVMModal: React.FC<{ onClose: (shouldRefresh: boolean) => void }> = (
     const [usedHours, setUsedHours] = useState<{ hours: number }[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<number>(0);
     const doCreate = () => showConfirm(`你确定要创建虚拟机吗？一旦成功，就会收取第一个小时的费用。`, async () => {
+        showSuccessModal('正在创建虚拟机，请勿刷新网页')
         try {
             setLoading(true);
+
             await onlineVMClient.createVM(selectedProduct);
             onClose(true);
         } catch {
