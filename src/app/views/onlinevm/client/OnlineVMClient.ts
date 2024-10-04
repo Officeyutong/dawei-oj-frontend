@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { CreateOrderResponse, OnlineVMOrderEntry, OnlineVMOrderStatus, OnlineVMProduct, OnlineVMProductUpdateRequest, OrderListEntry, OrderPaymentStatus, RefundEntry, RefundStatus, TransactionEntry, UserBasicInfo } from "./types";
+import { CreateOrderResponse, OnlineVMOrderEntry, OnlineVMOrderStatus, OnlineVMProduct, OnlineVMProductUpdateRequest, OrderListEntry, OrderPaymentStatus, PrivilegeStudentRecord, RefundEntry, RefundStatus, TransactionEntry, UserBasicInfo } from "./types";
 
 class OnlineVMClient extends GeneralClient {
     async getRechargeOrderList(page: number, filterUser?: number, filterOrderId?: number[]): Promise<{ pageCount: number; data: OrderListEntry[] }> {
@@ -59,6 +59,15 @@ class OnlineVMClient extends GeneralClient {
     }
     async destroyVM(order_id: number) {
         await this.client!.post("/api/onlinevm/destroy_vm", { order_id });
+    }
+    async getStudentPrivilegeUsers(): Promise<PrivilegeStudentRecord[]> {
+        return (await this.client!.post("/api/onlinevm/admin/get_student_privilege_users")).data;
+    }
+    async addStudentPrivilegeUser(uid: number[]) {
+        await this.client!.post("/api/onlinevm/admin/add_student_privilege_user", { uid });
+    }
+    async removeStudentPrivilegeUser(uid: number[]) {
+        await this.client!.post("/api/onlinevm/admin/remove_student_privilege_user", { uid });
     }
 }
 
