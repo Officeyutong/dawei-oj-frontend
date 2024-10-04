@@ -5,6 +5,7 @@ import { OnlineVMProduct } from "../client/types";
 import onlineVMClient from "../client/OnlineVMClient";
 import _ from "lodash";
 import ChargeSchemaList from "../utils/ChargeSchemaList";
+import { Markdown } from "../../../common/Markdown";
 
 const CreateVMModal: React.FC<{ onClose: (shouldRefresh: boolean) => void }> = ({ onClose }) => {
     const [loading, setLoading] = useState(false);
@@ -51,7 +52,7 @@ const CreateVMModal: React.FC<{ onClose: (shouldRefresh: boolean) => void }> = (
                         <Table.HeaderCell>产品名</Table.HeaderCell>
                         <Table.HeaderCell>产品介绍</Table.HeaderCell>
                         <Table.HeaderCell>收费策略</Table.HeaderCell>
-                        <Table.HeaderCell>已使用小时数</Table.HeaderCell>
+                        <Table.HeaderCell>此产品已使用小时数</Table.HeaderCell>
                         <Table.HeaderCell>操作</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -62,7 +63,7 @@ const CreateVMModal: React.FC<{ onClose: (shouldRefresh: boolean) => void }> = (
                     >
                         <Table.Cell >{prod!.product_id}</Table.Cell>
                         <Table.Cell>{prod!.name}</Table.Cell>
-                        <Table.Cell>{prod!.description}</Table.Cell>
+                        <Table.Cell><Markdown markdown={prod!.description}></Markdown></Table.Cell>
                         <Table.Cell><ChargeSchemaList data={prod!.charge_schema}></ChargeSchemaList></Table.Cell>
                         <Table.Cell>{hour!.hours}</Table.Cell>
                         <Table.Cell><Button size="small" color="green" onClick={() => setSelectedProduct(prod!.product_id)}>选择</Button></Table.Cell>

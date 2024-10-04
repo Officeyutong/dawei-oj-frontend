@@ -4,6 +4,7 @@ import TransactionTab from "./TransactionTab";
 import RechargeOrderTab from "./RechargeOrderTab";
 import RefundListTab from "./RefundListTab";
 import ProductList from "./ProductList";
+import VMOrderListTab from "./VMOrderListTab";
 
 const OnlineVMAdmin: React.FC<{}> = () => {
     useDocumentTitle("在线虚拟机后台管理")
@@ -22,7 +23,11 @@ const OnlineVMAdmin: React.FC<{}> = () => {
                     <RechargeOrderTab></RechargeOrderTab>
                 </Tab.Pane>
             },
-            { menuItem: "机器订单", pane: <Tab.Pane key={3}></Tab.Pane> },
+            {
+                menuItem: "机器订单", pane: <Tab.Pane key={3}>
+                    <VMOrderListTab></VMOrderListTab>
+                </Tab.Pane>
+            },
             {
                 menuItem: "产品管理", pane: <Tab.Pane key={4}>
                     <ProductList></ProductList>

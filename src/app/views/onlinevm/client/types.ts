@@ -66,6 +66,7 @@ interface OnlineVMProduct {
     charge_schema: VMChargeSchemaEntry[];
     description: string;
     name: string;
+    require_student_privilege: boolean;
 }
 
 interface OnlineVMProductUpdateRequest extends Omit<OnlineVMProduct, "product_id" | "charge_schema"> {

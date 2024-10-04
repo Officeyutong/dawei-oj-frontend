@@ -36,7 +36,8 @@ const ProductEditModal: React.FC<{ product: OnlineVMProduct; onClose: (shouldRef
             charge_schema: JSON.stringify(product.charge_schema, undefined, 4),
             description: product.description,
             name: product.name,
-            tencent_cloud_params: product.tencent_cloud_params || "{}"
+            tencent_cloud_params: product.tencent_cloud_params || "{}",
+            require_student_privilege: product.require_student_privilege
         }
     );
     const doSave = async () => {
@@ -97,6 +98,7 @@ const ProductEditModal: React.FC<{ product: OnlineVMProduct; onClose: (shouldRef
                         theme={aceTheme}
                     ></AceEditor>
                 </Form.Field>
+                <Form.Checkbox toggle checked={data.require_student_privilege} label="仅学员可以购买" onChange={(_, d) => setData({ ...data, require_student_privilege: d.checked! })}></Form.Checkbox>
             </Form>
         </Modal.Content>
         <Modal.Actions>
