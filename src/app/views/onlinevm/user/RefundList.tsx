@@ -4,7 +4,7 @@ import { StateType } from "../../../states/Manager";
 import { useCallback, useEffect, useState } from "react";
 import { RefundEntry } from "../client/types";
 import onlineVMClient, { translateRefundStatus } from "../client/OnlineVMClient";
-import { timeStampToString } from "../../../common/Utils";
+import { timeStampToString, useDocumentTitle } from "../../../common/Utils";
 import RefundDetailModal from "../RefundDetailModal";
 
 const RefundList: React.FC<{}> = () => {
@@ -32,6 +32,7 @@ const RefundList: React.FC<{}> = () => {
     useEffect(() => {
         if (!loaded && initialReqDone) loadPage(1);
     }, [initialReqDone, loadPage, loaded])
+    useDocumentTitle("退款记录");
     return <>
         <Header as="h2">
             退款列表

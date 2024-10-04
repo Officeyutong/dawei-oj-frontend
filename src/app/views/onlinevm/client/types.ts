@@ -20,7 +20,6 @@ interface OrderListEntry {
 interface UserBasicInfo {
     remainedAmount: number;
     allowRechargeAmount: number[];
-    refundableAmount: number;
 }
 interface CreateOrderResponse {
     orderId: number;
