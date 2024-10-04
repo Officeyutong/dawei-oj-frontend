@@ -57,6 +57,9 @@ class OnlineVMClient extends GeneralClient {
     async startVM(order_id: number) {
         await this.client!.post("/api/onlinevm/start_vm", { order_id })
     }
+    async destroyVM(order_id: number) {
+        await this.client!.post("/api/onlinevm/destroy_vm", { order_id });
+    }
 }
 
 const onlineVMClient = new OnlineVMClient();

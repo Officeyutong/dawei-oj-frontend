@@ -8,6 +8,8 @@ import onlineVMClient, { translateVMOrderStatus } from "../client/OnlineVMClient
 import { timeStampToString, useNowTime } from "../../../common/Utils";
 import { DateTime } from "luxon";
 import VMOrderDetailModal from "../VMOrderDetailModal";
+import { showConfirm } from "../../../dialogs/Dialog";
+import { showSuccessPopup } from "../../../dialogs/Utils";
 
 const VMOrderList: React.FC<{}> = () => {
     const [showCreateVMModal, setShowCreateVMModal] = useState(false);
@@ -35,6 +37,18 @@ const VMOrderList: React.FC<{}> = () => {
         if (!loaded && initialReqDone) loadPage(1);
     }, [initialReqDone, loadPage, loaded])
     const nowTime = useNowTime();
+
+    const doDestroy = (orderId: number) => showConfirm("您确定要退还此台虚拟机吗？一旦退还，这台虚拟机所有的数据都会被删除，并且无法找回。", async () => {
+        try {
+            setLoading(true);
+            await onlineVMClient.destroyVM(orderId);
+            await loadPage(page);
+            showSuccessPopup("操作完成！");
+        } catch { } finally {
+            setLoading(false);
+        }
+    });
+
     return <>
         <Header as="h2">虚拟机订单列表</Header>
         {showingOrder !== null && <VMOrderDetailModal
@@ -70,6 +84,7 @@ const VMOrderList: React.FC<{}> = () => {
                         <Table.Cell>{Math.ceil(nowTime.diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600)}小时</Table.Cell>
                         <Table.Cell>
                             <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
+                            {item.status === "available" && <Button size="small" onClick={() => doDestroy(item.order_id)} color="red">退还</Button>}
                         </Table.Cell>
                     </Table.Row>)}
                 </Table.Body>
