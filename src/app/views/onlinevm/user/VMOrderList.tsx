@@ -8,7 +8,7 @@ import onlineVMClient, { translateVMOrderStatus } from "../client/OnlineVMClient
 import { timeStampToString, useDocumentTitle, useNowTime } from "../../../common/Utils";
 import { DateTime } from "luxon";
 import VMOrderDetailModal from "../VMOrderDetailModal";
-import { showConfirm, showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
+import { showConfirm, showErrorModal } from "../../../dialogs/Dialog";
 import { showSuccessPopup } from "../../../dialogs/Utils";
 
 const VMOrderList: React.FC<{}> = () => {
@@ -17,6 +17,7 @@ const VMOrderList: React.FC<{}> = () => {
     const initialReqDone = useSelector((s: StateType) => s.userState.initialRequestDone);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [loadingText, setLoadingText] = useState<string>('')
     const [data, setData] = useState<OnlineVMOrderEntry[]>([]);
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
@@ -50,14 +51,15 @@ const VMOrderList: React.FC<{}> = () => {
     const nowTime = useNowTime();
     useDocumentTitle("虚拟机订单列表");
     const doDestroy = (orderId: number) => showConfirm("您确定要退还此台虚拟机吗？一旦退还，这台虚拟机所有的数据都会被删除，并且无法找回。", async () => {
-        showSuccessModal('正在退还虚拟机，请勿刷新网页')
         try {
             setLoading(true);
+            setLoadingText('正在退还虚拟机，请勿刷新网页')
             await onlineVMClient.destroyVM(orderId);
             await loadPage(page);
             showSuccessPopup("操作完成！");
         } catch { } finally {
             setLoading(false);
+            setLoadingText('')
         }
     });
 
@@ -68,7 +70,9 @@ const VMOrderList: React.FC<{}> = () => {
             orderId={showingOrder.order_id}
             uid={selfUid}
         ></VMOrderDetailModal>}
-        {loading && <Dimmer active page><Loader></Loader></Dimmer>}
+        {loading && <Dimmer active page>
+            <Loader>{loadingText}</Loader>
+        </Dimmer>}
         {showCreateVMModal && <CreateVMModal onClose={flag => {
             if (flag) loadPage(1);
             setShowCreateVMModal(false);
@@ -96,7 +100,7 @@ const VMOrderList: React.FC<{}> = () => {
                         <Table.Cell>{Math.ceil(nowTime.diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600)}小时</Table.Cell>
                         <Table.Cell>
                             <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
-                            <Button size='small' onClick={() => handleOpenVM(item)}>打开虚拟机</Button>
+                            <Button small disabled={item.status === 'destroyed'} onClick={() => handleOpenVM(item)}>打开虚拟机</Button>
                             {item.status === "available" && <Button size="small" onClick={() => doDestroy(item.order_id)} color="red">退还</Button>}
                         </Table.Cell>
                     </Table.Row>)}

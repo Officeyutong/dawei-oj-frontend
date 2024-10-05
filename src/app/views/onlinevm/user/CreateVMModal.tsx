@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Button, Dimmer, Loader, Message, Modal, Table } from "semantic-ui-react"
-import { showConfirm, showSuccessModal } from "../../../dialogs/Dialog";
+import { showConfirm } from "../../../dialogs/Dialog";
 import { OnlineVMProduct } from "../client/types";
 import onlineVMClient from "../client/OnlineVMClient";
 import _ from "lodash";
@@ -10,20 +10,21 @@ import { Markdown } from "../../../common/Markdown";
 const CreateVMModal: React.FC<{ onClose: (shouldRefresh: boolean) => void }> = ({ onClose }) => {
     const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
+    const [loadingText, setLoadingText] = useState<string>('')
     const [products, setProducts] = useState<OnlineVMProduct[]>([]);
     const [usedHours, setUsedHours] = useState<{ hours: number }[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<number>(0);
     const doCreate = () => showConfirm(`你确定要创建虚拟机吗？一旦成功，就会收取第一个小时的费用。`, async () => {
-        showSuccessModal('正在创建虚拟机，请勿刷新网页')
         try {
             setLoading(true);
-
+            setLoadingText('正在创建虚拟机，请勿刷新网页')
             await onlineVMClient.createVM(selectedProduct);
             onClose(true);
         } catch {
 
         } finally {
             setLoading(false);
+            setLoadingText('')
         }
     });
     useEffect(() => {
@@ -46,7 +47,9 @@ const CreateVMModal: React.FC<{ onClose: (shouldRefresh: boolean) => void }> = (
     return <Modal size="large" open>
         <Modal.Header>创建新的虚拟机</Modal.Header>
         <Modal.Content>
-            {loading && <Dimmer active><Loader></Loader></Dimmer>}
+            {loading && <Dimmer active>
+                <Loader>{loadingText}</Loader>
+            </Dimmer>}
             {loaded && <Table>
                 <Table.Header>
                     <Table.Row>
