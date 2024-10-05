@@ -5,6 +5,7 @@ import RechargeOrderTab from "./RechargeOrderTab";
 import RefundListTab from "./RefundListTab";
 import ProductList from "./ProductList";
 import VMOrderListTab from "./VMOrderListTab";
+import StudentPrivilegeTab from "./StudentPrivilegeTab";
 
 const OnlineVMAdmin: React.FC<{}> = () => {
     useDocumentTitle("在线虚拟机后台管理")
@@ -38,6 +39,11 @@ const OnlineVMAdmin: React.FC<{}> = () => {
                     <RefundListTab></RefundListTab>
                 </Tab.Pane>
             },
+            {
+                menuItem: "学员管理", pane: <Tab.Pane key={6}>
+                    <StudentPrivilegeTab></StudentPrivilegeTab>
+                </Tab.Pane>
+            }
 
         ]}></Tab>
     </>
