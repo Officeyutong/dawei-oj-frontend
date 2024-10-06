@@ -18,7 +18,7 @@ const UserMainPage: React.FC<{}> = () => {
     const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [showRechargeModal, setShowRechargeModal] = useState(false);
-    const [pieChartData, setPieChartData] = useState<({})[] | null>(null);
+    const [pieChartData, setPieChartData] = useState<({ name: string, hours: number })[] | null>(null);
     const [sumHours, setSumHours] = useState<number>(0)
     const [products, setProducts] = useState<OnlineVMProduct[]>([]);
     const [usedHours, setUsedHours] = useState<{ hours: number }[]>([]);

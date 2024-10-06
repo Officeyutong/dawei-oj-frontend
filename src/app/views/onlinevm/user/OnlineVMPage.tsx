@@ -13,8 +13,10 @@ const OnlineVMPage = () => {
   const [loadingText, setLoadingText] = useState<string>('')
   const [url, setUrl] = useState<string>('')
   const [createTime, setCreateTime] = useState<number>(0);
+  const [ranTime, setRanTime] = useState<{ hours: number, minutes: number, seconds: number } | null>(null);
   const { orderid } = useParams<{ orderid: string, createtime: string }>();
   const tickRef = useRef<Function | undefined>(undefined);
+  const ranTickRef = useRef<Function | undefined>(undefined);
   const iframeURL = 'https://img.qcloud.com/qcloud/app/active_vnc/index.html?InstanceVncUrl='
   const { initialRequestDone } = useSelector((s: StateType) => s.userState)
   const { uid } = useSelector((s: StateType) => s.userState.userData)
@@ -61,8 +63,23 @@ const OnlineVMPage = () => {
   }, [createTime]);
 
   useEffect(() => {
+    ranTickRef.current = ranTick;
+  });
 
-  })
+  const ranTick = () => {
+    const ranTime = DateTime.now().diff(DateTime.fromSeconds(createTime), ['hours', "minutes", 'seconds'])
+    setRanTime(ranTime);
+  };
+
+  useEffect(() => {
+    const scanTimer = setInterval(() => {
+      if (ranTickRef.current)
+        ranTickRef.current()
+    }, 1000);
+
+    return () => clearInterval(scanTimer);
+  }, []);
+
   const handleFullScreen = () => {
     if (iframeRef.current) {
       setLoadingText('全屏加载中')
@@ -90,7 +107,10 @@ const OnlineVMPage = () => {
     </div>
     <Button style={{ postion: 'absolute' }} disable={loadingText !== ''} onClick={handleFullScreen}>全屏</Button>
     <Button style={{ postion: 'absolute' }} disabled={loadingText !== ''} onClick={handleOpenVM}>开机</Button>
-    <p>虚拟机创建时间：{timeStampToString(createTime)}   虚拟机当前已经运行{Math.ceil(DateTime.now().diff(DateTime.fromSeconds(createTime)).as("seconds") / 3600)}小时</p>
+    {ranTime && <p>虚拟机创建时间：{timeStampToString(createTime)}   虚拟机当前已经运行
+      {Math.ceil(ranTime.hours)}小时
+      {Math.ceil(ranTime.minutes)}分钟
+      {Math.ceil(ranTime.seconds)}秒</p>}
   </>)
 }
 
