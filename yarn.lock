@@ -1986,6 +1986,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@novnc/novnc@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.npmmirror.com/@novnc/novnc/-/novnc-1.5.0.tgz#7df3e4aca48eaa7c0d6f690e7dee89480232e2f1"
+  integrity sha512-4yGHOtUCnEJUCsgEt/L78eeJu00kthurLBWXFiaXfonNx0pzbs6R/3gJb1byZe6iAE8V9MF0syQb0xIL8MSOtQ==
+
 "@opd/g2plot-react@^2.13.2":
   version "2.13.4"
   resolved "https://registry.npmmirror.com/@opd/g2plot-react/-/g2plot-react-2.13.4.tgz#ff939a5f9f9323225447cdc5d8eac1b33f1c2de0"
@@ -2613,6 +2618,11 @@
   version "15.14.9"
   resolved "https://registry.npmmirror.com/@types/node/-/node-15.14.9.tgz#bc43c990c3c9be7281868bbc7b8fdd6e2b57adfa"
   integrity sha512-qjd88DrCxupx/kJD5yQgZdcYKZKSIGBVDIBE1/LTGcNm3d2Np/jxojkdePDdfnBHJc5W7vSMpbJ1aB7p/Py69A==
+
+"@types/novnc__novnc@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.npmmirror.com/@types/novnc__novnc/-/novnc__novnc-1.5.0.tgz#5f58687f0fa6591b75e91eb75237520da440dbb4"
+  integrity sha512-9DrDJK1hUT6Cbp4t03IsU/DsR6ndnIrDgZVrzITvspldHQ7n81F3wUDfq89zmPM3wg4GErH11IQa0QuTgLMf+w==
 
 "@types/parse-json@^4.0.0":
   version "4.0.2"
