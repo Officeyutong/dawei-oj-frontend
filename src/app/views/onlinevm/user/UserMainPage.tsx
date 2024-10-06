@@ -36,12 +36,12 @@ const UserMainPage: React.FC<{}> = () => {
                     setProducts(prods);
                     setUsedHours(hours);
 
-                    const chartData = _.zip([prods[0], prods[0], prods[0], prods[0]], [hours[0], hours[0], hours[0], hours[0]]).map(([prod, hour]) => {
+                    const chartData = _.zip(prods, hours).map(([prod, hour]) => {
                         return { name: prod!.name, hours: Number(hour!.hours) }
                     })
                     setPieChartData(chartData)
-                    const hoursSum = [hours[0], hours[0], hours[0], hours[0]].reduce((prev, item) => {
-                        return prev + item.hours
+                    const hoursSum = hours.reduce((prev, item) => {
+                        return prev + item.hours;
                     }, 0)
                     setSumHours(Number(hoursSum))
 
