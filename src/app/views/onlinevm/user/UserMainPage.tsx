@@ -116,10 +116,12 @@ const UserMainPage: React.FC<{}> = () => {
                 {
                     _.zip(products, usedHours).map(([prod, hour]) =>
                         <div style={{ display: 'inline-block', marginRight: '0.5rem', marginTop: '0.5rem' }}>
-                            <Segment key={prod!.product_id} style={{ width: "15rem", display: 'flex', justifyContent: 'center', alignItems: "center", flexDirection: "column" }}>
-                                <Header>{prod!.name}</Header>
-                                使用时长：
-                                <Statistic><StatisticValue>{hour!.hours}</StatisticValue>小时</Statistic>
+                            <Segment key={prod!.product_id} style={{ display: 'flex', justifyContent: 'center', alignItems: "center", flexDirection: "column" }}>
+                                <div style={{ height: "14rem", width: "14rem" }}>
+                                    <Header>{prod!.name}</Header>
+                                    使用时长：
+                                    <Statistic><StatisticValue>{hour!.hours}</StatisticValue>小时</Statistic>
+                                </div>
                             </Segment>
                         </div>
                     )
@@ -140,6 +142,7 @@ const UserMainPage: React.FC<{}> = () => {
                         style: {
                             fontSize: 14,
                             textAlign: 'center',
+                            fill: 'black'
                         },
                     }}
                     statistic={{
