@@ -8,26 +8,26 @@ import ChargeSchemaList from "../utils/ChargeSchemaList";
 import { Markdown } from "../../../common/Markdown";
 
 const CreateVMModal: React.FC<{ onClose: (shouldRefresh: boolean) => void }> = ({ onClose }) => {
-    const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
+    const [loadingText, setLoadingText] = useState<string>('')
     const [products, setProducts] = useState<OnlineVMProduct[]>([]);
     const [usedHours, setUsedHours] = useState<{ hours: number }[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<number>(0);
     const doCreate = () => showConfirm(`你确定要创建虚拟机吗？一旦成功，就会收取第一个小时的费用。`, async () => {
         try {
-            setLoading(true);
+            setLoadingText('正在创建虚拟机，请勿刷新网页')
             await onlineVMClient.createVM(selectedProduct);
             onClose(true);
         } catch {
 
         } finally {
-            setLoading(false);
+            setLoadingText('')
         }
     });
     useEffect(() => {
         if (!loaded) (async () => {
             try {
-                setLoading(true);
+                setLoadingText('加载中');
                 const prods = await onlineVMClient.getProducts();
                 const hours = await Promise.all(prods.map(item => onlineVMClient.getUsedHourForProduct(item.product_id)));
                 setProducts(prods);
@@ -37,14 +37,16 @@ const CreateVMModal: React.FC<{ onClose: (shouldRefresh: boolean) => void }> = (
             } catch {
 
             } finally {
-                setLoading(false);
+                setLoadingText('')
             }
         })();
     }, [loaded]);
     return <Modal size="large" open>
         <Modal.Header>创建新的虚拟机</Modal.Header>
         <Modal.Content>
-            {loading && <Dimmer active><Loader></Loader></Dimmer>}
+            {loadingText !== '' && <Dimmer active>
+                <Loader>{loadingText}</Loader>
+            </Dimmer>}
             {loaded && <Table>
                 <Table.Header>
                     <Table.Row>
@@ -79,8 +81,8 @@ const CreateVMModal: React.FC<{ onClose: (shouldRefresh: boolean) => void }> = (
             </Message>
         </Modal.Content>
         <Modal.Actions>
-            <Button color="red" onClick={() => onClose(false)} disabled={loading}>取消</Button>
-            <Button color="green" onClick={doCreate} disabled={loading}>确认</Button>
+            <Button color="red" onClick={() => onClose(false)} disabled={loadingText !== ''}>取消</Button>
+            <Button color="green" onClick={doCreate} disabled={loadingText !== ''}>确认</Button>
         </Modal.Actions>
     </Modal>
 };
