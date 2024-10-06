@@ -33,16 +33,21 @@ const UserMainPage: React.FC<{}> = () => {
                     const [a, prods] = await Promise.all([onlineVMClient.getUserBasicInfo(), onlineVMClient.getProducts()]);
                     const hours = await Promise.all(prods.map(item => onlineVMClient.getUsedHourForProduct(item.product_id)));
                     setBasicInfo(a);
+                    let prods1 = { ...prods[0] };
+                    prods1.name = '烤豚鼠机器'
+                    let prods2 = { ...prods1 };
+                    prods2.name = '烤猫机器'
+
                     setProducts(prods);
                     setUsedHours(hours);
 
-                    let chartData = _.zip(prods, hours).map((item) => {
-                        return { name: item[0]?.name, hours: Number(item[1]?.hours) }
+                    const chartData = _.zip(prods, hours).map(([prod, hour]) => {
+                        return { name: prod!.name, hours: Number(hour!.hours) }
                     })
                     setPieChartData(chartData)
                     const hoursSum = hours.reduce((prev, item) => {
-                        prev += item.hours
-                        return prev
+
+                        return prev += Number(item.hours)
                     }, 0)
                     setSumHours(Number(hoursSum))
                     setAmount(String(a.remainedAmount / 100))
@@ -94,10 +99,10 @@ const UserMainPage: React.FC<{}> = () => {
                             <Grid columns={2} divided>
                                 <GridRow>
                                     <GridColumn>
-                                        <Link to='/rs/onlinevm/balance_change_list' style={{ display: "block" }}>查看余额变动详情 </Link>
+                                        <Link to={`${PUBLIC_URL}/onlinevm/balance_change_list`} style={{ display: "block" }}>查看余额变动详情 </Link>
                                     </GridColumn>
                                     <GridColumn>
-                                        <Link to='/rs/onlinevm/refund_list' style={{ display: "block" }}>查看退款记录</Link>
+                                        <Link to={`${PUBLIC_URL}/onlinevm/refund_list`} style={{ display: "block" }}>查看退款记录</Link>
                                     </GridColumn>
                                 </GridRow>
                             </Grid>
@@ -105,20 +110,20 @@ const UserMainPage: React.FC<{}> = () => {
 
                     </Grid.Column>
                 </Grid.Row>
-            </Grid>}
-        </Segment>
+            </Grid >}
+        </Segment >
         {loaded && <Segment>
             <Header as="h3">用户虚拟机总览</Header>
             <div>
                 {
-                    _.zip(products, usedHours).map((item, idx) =>
+                    _.zip(products, usedHours).map(([prod, hour]) =>
                         <div style={{ display: 'inline-block', marginRight: '0.5rem', marginTop: '0.5rem' }}>
-                            <Segment key={item[0]?.product_id}>
-                                <Header>{item[0]?.name}
-                                    <Icon name="computer"></Icon>
+                            <Segment key={prod!.product_id} style={{ width: "15rem", display: 'flex', justifyContent: 'center', alignItems: "center", flexDirection: "column" }}>
+                                <Header>{prod!.name}
+                                    <Icon name="computer" style={{ marginLeft: "0.5rem" }}></Icon>
                                 </Header>
                                 使用时长：
-                                <Statistic><StatisticValue>{item[1]?.hours}</StatisticValue>小时</Statistic>
+                                <Statistic><StatisticValue>{hour!.hours}</StatisticValue>小时</Statistic>
                             </Segment>
                         </div>
                     )
@@ -155,7 +160,7 @@ const UserMainPage: React.FC<{}> = () => {
                     }}
                 ></PieChart>}
             </div>
-            <Button style={{ marginTop: "1rem" }} color='green' onClick={() => { window.location.href = '/rs/onlinevm/vm_order_list' }}>创建新虚拟机</Button>
+            <Button style={{ marginTop: "1rem" }} color='green' onClick={() => { window.location.href = `${PUBLIC_URL}/onlinevm/vm_order_list` }}>创建新虚拟机</Button>
         </Segment >}
 
 

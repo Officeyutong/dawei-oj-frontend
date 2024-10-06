@@ -16,7 +16,6 @@ const VMOrderList: React.FC<{}> = () => {
     const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
     const initialReqDone = useSelector((s: StateType) => s.userState.initialRequestDone);
     const [loaded, setLoaded] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [loadingText, setLoadingText] = useState<string>('')
     const [data, setData] = useState<OnlineVMOrderEntry[]>([]);
     const [page, setPage] = useState(1);
@@ -24,25 +23,25 @@ const VMOrderList: React.FC<{}> = () => {
     const [showingOrder, setShowingOrder] = useState<OnlineVMOrderEntry | null>(null);
     const loadPage = useCallback(async (page: number) => {
         try {
-            setLoading(true);
+            setLoadingText('加载中');
             const resp = await onlineVMClient.getVMOrderList(page, selfUid);
             setPageCount(resp.pageCount);
             setPage(page);
             setData(resp.data);
             setLoaded(true);
         } catch { } finally {
-            setLoading(false);
+            setLoadingText('');
         }
     }, [selfUid])
     const handleOpenVM = async (item: OnlineVMOrderEntry) => {
         try {
-            setLoading(true);
-            window.location.href = `/onlinevm/vm_page/${item.order_id}/${item.create_time}`
+            setLoadingText('连接虚拟机中');
+            window.location.href = `/onlinevm/vm_page/${item.order_id}`
 
         } catch {
             showErrorModal('连接失败')
         } finally {
-            setLoading(false);
+            setLoadingText('');
         }
     }
     useEffect(() => {
@@ -52,13 +51,11 @@ const VMOrderList: React.FC<{}> = () => {
     useDocumentTitle("虚拟机订单列表");
     const doDestroy = (orderId: number) => showConfirm("您确定要退还此台虚拟机吗？一旦退还，这台虚拟机所有的数据都会被删除，并且无法找回。", async () => {
         try {
-            setLoading(true);
             setLoadingText('正在退还虚拟机，请勿刷新网页')
             await onlineVMClient.destroyVM(orderId);
             await loadPage(page);
             showSuccessPopup("操作完成！");
         } catch { } finally {
-            setLoading(false);
             setLoadingText('')
         }
     });
@@ -70,7 +67,7 @@ const VMOrderList: React.FC<{}> = () => {
             orderId={showingOrder.order_id}
             uid={selfUid}
         ></VMOrderDetailModal>}
-        {loading && <Dimmer active page>
+        {loadingText !== '' && <Dimmer active page>
             <Loader>{loadingText}</Loader>
         </Dimmer>}
         {showCreateVMModal && <CreateVMModal onClose={flag => {
@@ -100,7 +97,7 @@ const VMOrderList: React.FC<{}> = () => {
                         <Table.Cell>{Math.ceil(nowTime.diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600)}小时</Table.Cell>
                         <Table.Cell>
                             <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
-                            <Button small disabled={item.status === 'destroyed'} onClick={() => handleOpenVM(item)}>打开虚拟机</Button>
+                            <Button small disabled={item.status === 'destroyed'} onClick={() => handleOpenVM(item)}>连接虚拟机</Button>
                             {item.status === "available" && <Button size="small" onClick={() => doDestroy(item.order_id)} color="red">退还</Button>}
                         </Table.Cell>
                     </Table.Row>)}
