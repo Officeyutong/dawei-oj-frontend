@@ -95,7 +95,7 @@ const OnlineVMPage = () => {
         getVNCUrl(Number(orderid))
         setLoadingText('')
       }, 10000)
-    } catch { } finally { }
+    } catch { } finally { setLoadingText('') }
   }
   return (<>
     {loadingText !== '' && <Dimmer active>
