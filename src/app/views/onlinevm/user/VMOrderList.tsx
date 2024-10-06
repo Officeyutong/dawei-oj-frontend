@@ -8,8 +8,10 @@ import onlineVMClient, { translateVMOrderStatus } from "../client/OnlineVMClient
 import { timeStampToString, useDocumentTitle, useNowTime } from "../../../common/Utils";
 import { DateTime } from "luxon";
 import VMOrderDetailModal from "../VMOrderDetailModal";
-import { showConfirm, showErrorModal } from "../../../dialogs/Dialog";
+import { showConfirm } from "../../../dialogs/Dialog";
 import { showSuccessPopup } from "../../../dialogs/Utils";
+import { Link } from "react-router-dom";
+import { PUBLIC_URL } from "../../../App";
 
 const VMOrderList: React.FC<{}> = () => {
     const [showCreateVMModal, setShowCreateVMModal] = useState(false);
@@ -33,17 +35,6 @@ const VMOrderList: React.FC<{}> = () => {
             setLoadingText('');
         }
     }, [selfUid])
-    const handleOpenVM = async (item: OnlineVMOrderEntry) => {
-        try {
-            setLoadingText('连接虚拟机中');
-            window.location.href = `/onlinevm/vm_page/${item.order_id}`
-
-        } catch {
-            showErrorModal('连接失败')
-        } finally {
-            setLoadingText('');
-        }
-    }
     useEffect(() => {
         if (!loaded && initialReqDone) loadPage(1);
     }, [initialReqDone, loadPage, loaded])
@@ -89,18 +80,23 @@ const VMOrderList: React.FC<{}> = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {data.map(item => <Table.Row key={item.order_id}>
-                        <Table.Cell>{item.order_id}</Table.Cell>
-                        <Table.Cell>{timeStampToString(item.create_time)}</Table.Cell>
-                        <Table.Cell>{item.product.name}</Table.Cell>
-                        <Table.Cell negative={item.status === "error"}>{translateVMOrderStatus(item.status)}</Table.Cell>
-                        <Table.Cell>{Math.ceil(nowTime.diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600)}小时</Table.Cell>
-                        <Table.Cell>
-                            <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
-                            <Button small disabled={item.status === 'destroyed'} onClick={() => handleOpenVM(item)}>连接虚拟机</Button>
-                            {item.status === "available" && <Button size="small" onClick={() => doDestroy(item.order_id)} color="red">退还</Button>}
-                        </Table.Cell>
-                    </Table.Row>)}
+                    {data.map(item => {
+                        const timeDiff = nowTime.diff(DateTime.fromSeconds(item.create_time));
+                        const creating = timeDiff.as("seconds") < 30; // 创建后三十秒才可以连接
+
+                        return <Table.Row key={item.order_id}>
+                            <Table.Cell>{item.order_id}</Table.Cell>
+                            <Table.Cell>{timeStampToString(item.create_time)}</Table.Cell>
+                            <Table.Cell>{item.product.name}</Table.Cell>
+                            <Table.Cell negative={item.status === "error"}>{creating ? "创建中" : translateVMOrderStatus(item.status)}</Table.Cell>
+                            <Table.Cell>{Math.ceil(nowTime.diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600)}小时</Table.Cell>
+                            <Table.Cell>
+                                <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
+                                <Button small disabled={item.status === 'destroyed' || creating} as={Link} to={`${PUBLIC_URL}/onlinevm/vm_page/${item.order_id}`}>连接虚拟机</Button>
+                                {item.status === "available" && <Button disabled={creating} size="small" onClick={() => doDestroy(item.order_id)} color="red">退还</Button>}
+                            </Table.Cell>
+                        </Table.Row>;
+                    })}
                 </Table.Body>
             </Table>
             <div style={{ display: "flex", justifyContent: "center" }}>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom";
-import { Button, Dimmer, Loader } from "semantic-ui-react"
+import { Button, Dimmer, Loader, Table } from "semantic-ui-react"
 import onlineVMClient from "../client/OnlineVMClient";
 import { DateTime } from "luxon";
 import { showErrorPopup } from "../../../dialogs/Utils";
@@ -15,8 +15,8 @@ const OnlineVMPage = () => {
   const [createTime, setCreateTime] = useState<number>(0);
   const [ranTime, setRanTime] = useState<{ hours: number, minutes: number, seconds: number } | null>(null);
   const { orderid } = useParams<{ orderid: string, createtime: string }>();
-  const tickRef = useRef<Function | undefined>(undefined);
-  const ranTickRef = useRef<Function | undefined>(undefined);
+  const tickRef = useRef<(() => void) | null>(null);
+  const aliveTickRef = useRef<(() => void) | null>(null);
   const iframeURL = 'https://img.qcloud.com/qcloud/app/active_vnc/index.html?InstanceVncUrl='
   const { initialRequestDone } = useSelector((s: StateType) => s.userState)
   const { uid } = useSelector((s: StateType) => s.userState.userData)
@@ -63,18 +63,18 @@ const OnlineVMPage = () => {
   }, [createTime]);
 
   useEffect(() => {
-    ranTickRef.current = ranTick;
+    aliveTickRef.current = aliveTick;
   });
 
-  const ranTick = () => {
+  const aliveTick = () => {
     const ranTime = DateTime.now().diff(DateTime.fromSeconds(createTime), ['hours', "minutes", 'seconds'])
     setRanTime(ranTime);
   };
 
   useEffect(() => {
     const scanTimer = setInterval(() => {
-      if (ranTickRef.current)
-        ranTickRef.current()
+      if (aliveTickRef.current)
+        aliveTickRef.current()
     }, 1000);
 
     return () => clearInterval(scanTimer);
@@ -103,14 +103,29 @@ const OnlineVMPage = () => {
     </Dimmer>}
     <div id='screen' style={{ width: "100%", height: "60rem", display: "flex" }}>
       <iframe ref={iframeRef} title='vmiframe' src={iframeURL + url} frameBorder="no" allowFullScreen={true} style={{ width: '100%' }}></iframe>
-
     </div>
-    <Button style={{ postion: 'absolute' }} disable={loadingText !== ''} onClick={handleFullScreen}>全屏</Button>
-    <Button style={{ postion: 'absolute' }} disabled={loadingText !== ''} onClick={handleOpenVM}>开机</Button>
-    {ranTime && <p>虚拟机创建时间：{timeStampToString(createTime)}   虚拟机当前已经运行
-      {Math.ceil(ranTime.hours)}小时
-      {Math.ceil(ranTime.minutes)}分钟
-      {Math.ceil(ranTime.seconds)}秒</p>}
+    <div style={{ marginTop: "19px" }}>
+      <Table celled>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>虚拟机创建时间</Table.HeaderCell>
+            <Table.HeaderCell>虚拟机已经运行了</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>{timeStampToString(createTime)}</Table.Cell>
+            <Table.Cell              >
+              {ranTime !== null && <>{Math.ceil(ranTime.hours)}小时
+                {Math.ceil(ranTime.minutes)}分钟
+                {Math.ceil(ranTime.seconds)}秒</>}
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>
+      <Button style={{ postion: 'absolute' }} disable={loadingText !== ''} onClick={handleFullScreen}>全屏</Button>
+      <Button style={{ postion: 'absolute' }} disabled={loadingText !== ''} onClick={handleOpenVM}>发送开机指令</Button>
+    </div>
   </>)
 }
 
