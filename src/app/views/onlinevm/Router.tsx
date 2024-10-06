@@ -64,7 +64,7 @@ const OnlineVMRouter: React.FC<React.PropsWithChildren<{}>> = () => {
                                 </Route>
                                 <Route exact path={`${match.path}/refund_list`}>
                                     <RefundList></RefundList>
-                                </Route>main
+                                </Route>
                                 <Route exact path={`${match.path}/vm_page/:orderid/:createtime`}>
                                     <OnlineVMPage></OnlineVMPage>
                                 </Route>
