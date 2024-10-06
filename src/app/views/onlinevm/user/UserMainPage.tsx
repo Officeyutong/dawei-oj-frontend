@@ -36,15 +36,15 @@ const UserMainPage: React.FC<{}> = () => {
                     setProducts(prods);
                     setUsedHours(hours);
 
-                    const chartData = _.zip(prods, hours).map(([prod, hour]) => {
+                    const chartData = _.zip([prods[0], prods[0], prods[0], prods[0]], [hours[0], hours[0], hours[0], hours[0]]).map(([prod, hour]) => {
                         return { name: prod!.name, hours: Number(hour!.hours) }
                     })
                     setPieChartData(chartData)
-                    const hoursSum = hours.reduce((prev, item) => {
-
-                        return prev += Number(item.hours)
+                    const hoursSum = [hours[0], hours[0], hours[0], hours[0]].reduce((prev, item) => {
+                        return prev + item.hours
                     }, 0)
                     setSumHours(Number(hoursSum))
+
                     setAmount(String(a.remainedAmount / 100).split('.'))
                     setLoaded(true);
                 } catch { } finally {
@@ -82,9 +82,9 @@ const UserMainPage: React.FC<{}> = () => {
                     <Grid.Column>
                         <p>当前余额：</p>
                         <div>
-                            {amount && <p style={{ fontSize: '1rem', fontWeight: 'bold', display: 'inline', marginRight: '5rem' }}>
+                            {amount && <p style={{ fontWeight: 'bold', display: 'inline', marginRight: '5rem' }}>
                                 <span style={{ fontSize: "2rem" }}>{amount[0]}</span>
-                                .{amount[1]}元
+                                {amount[1] && <span style={{ fontSize: '1rem' }}>.{amount[1]}</span>}元
                             </p>}
                             <ButtonGroup>
                                 <Button positive onClick={() => setShowRechargeModal(true)}>充值</Button>
