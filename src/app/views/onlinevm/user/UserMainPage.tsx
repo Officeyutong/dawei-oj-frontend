@@ -41,8 +41,7 @@ const UserMainPage: React.FC<{}> = () => {
                     })
                     setPieChartData(chartData)
                     const hoursSum = hours.reduce((prev, item) => {
-
-                        return prev += Number(item.hours)
+                        return prev + item.hours;
                     }, 0)
                     setSumHours(Number(hoursSum))
                     setAmount(String(a.remainedAmount / 100).split('.'))
