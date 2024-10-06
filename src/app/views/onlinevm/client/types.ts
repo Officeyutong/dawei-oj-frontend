@@ -66,6 +66,7 @@ interface OnlineVMProduct {
     charge_schema: VMChargeSchemaEntry[];
     description: string;
     name: string;
+    require_student_privilege: boolean;
 }
 
 interface OnlineVMProductUpdateRequest extends Omit<OnlineVMProduct, "product_id" | "charge_schema"> {
@@ -90,5 +91,9 @@ interface OnlineVMOrderEntry {
     }
 }
 
+interface PrivilegeStudentRecord {
+    user: UserEntry;
+    create_time: number;
+}
 
-export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus, RefundEntry, VMChargeSchemaEntry, OnlineVMProduct, OnlineVMProductUpdateRequest, OnlineVMOrderEntry, OnlineVMOrderStatus };
+export type { OrderListEntry, OrderPaymentStatus, UserBasicInfo, CreateOrderResponse, TransactionEntry, RefundStatus, RefundEntry, VMChargeSchemaEntry, OnlineVMProduct, OnlineVMProductUpdateRequest, OnlineVMOrderEntry, OnlineVMOrderStatus, PrivilegeStudentRecord };
