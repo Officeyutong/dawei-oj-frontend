@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { OnlineVMProduct, UserBasicInfo } from "../client/types";
 import onlineVMClient from "../client/OnlineVMClient";
-import { Button, ButtonGroup, ButtonOr, Dimmer, Grid, GridColumn, GridRow, Header, Icon, Loader, Segment, Statistic, StatisticValue } from "semantic-ui-react";
+import { Button, ButtonGroup, ButtonOr, Dimmer, Grid, GridColumn, GridRow, Header, Loader, Segment, Statistic, StatisticValue } from "semantic-ui-react";
 import RechargeModal from "./RechargeModal";
 import { Link, useHistory } from "react-router-dom";
 import { PUBLIC_URL } from "../../../App";
@@ -14,7 +14,7 @@ import { PieChart } from "@opd/g2plot-react";
 
 const UserMainPage: React.FC<{}> = () => {
     const [basicInfo, setBasicInfo] = useState<UserBasicInfo | null>(null);
-    const [amount, setAmount] = useState<string>('')
+    const [amount, setAmount] = useState<string[] | null>(null)
     const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [showRechargeModal, setShowRechargeModal] = useState(false);
@@ -45,7 +45,7 @@ const UserMainPage: React.FC<{}> = () => {
                         return prev += Number(item.hours)
                     }, 0)
                     setSumHours(Number(hoursSum))
-                    setAmount(String(a.remainedAmount / 100))
+                    setAmount(String(a.remainedAmount / 100).split('.'))
                     setLoaded(true);
                 } catch { } finally {
                     setLoading(false);
@@ -82,7 +82,10 @@ const UserMainPage: React.FC<{}> = () => {
                     <Grid.Column>
                         <p>当前余额：</p>
                         <div>
-                            <p style={{ fontSize: '1rem', fontWeight: 'bold', display: 'inline', marginRight: '5rem' }}><span style={{ fontSize: "2rem" }}>{amount[0]}</span>{amount.slice(1, amount.length)}元</p>
+                            {amount && <p style={{ fontSize: '1rem', fontWeight: 'bold', display: 'inline', marginRight: '5rem' }}>
+                                <span style={{ fontSize: "2rem" }}>{amount[0]}</span>
+                                .{amount[1]}元
+                            </p>}
                             <ButtonGroup>
                                 <Button positive onClick={() => setShowRechargeModal(true)}>充值</Button>
                                 <ButtonOr />
@@ -114,9 +117,7 @@ const UserMainPage: React.FC<{}> = () => {
                     _.zip(products, usedHours).map(([prod, hour]) =>
                         <div style={{ display: 'inline-block', marginRight: '0.5rem', marginTop: '0.5rem' }}>
                             <Segment key={prod!.product_id} style={{ width: "15rem", display: 'flex', justifyContent: 'center', alignItems: "center", flexDirection: "column" }}>
-                                <Header>{prod!.name}
-                                    <Icon name="computer" style={{ marginLeft: "0.5rem" }}></Icon>
-                                </Header>
+                                <Header>{prod!.name}</Header>
                                 使用时长：
                                 <Statistic><StatisticValue>{hour!.hours}</StatisticValue>小时</Statistic>
                             </Segment>
