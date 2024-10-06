@@ -33,11 +33,6 @@ const UserMainPage: React.FC<{}> = () => {
                     const [a, prods] = await Promise.all([onlineVMClient.getUserBasicInfo(), onlineVMClient.getProducts()]);
                     const hours = await Promise.all(prods.map(item => onlineVMClient.getUsedHourForProduct(item.product_id)));
                     setBasicInfo(a);
-                    let prods1 = { ...prods[0] };
-                    prods1.name = '烤豚鼠机器'
-                    let prods2 = { ...prods1 };
-                    prods2.name = '烤猫机器'
-
                     setProducts(prods);
                     setUsedHours(hours);
 
@@ -78,7 +73,7 @@ const UserMainPage: React.FC<{}> = () => {
             }}
         ></RechargeModal>}
         <Header as="h2">基本信息</Header>
-        {loading && <Dimmer active><Loader></Loader></Dimmer>}
+        {loading && <Dimmer page active><Loader></Loader></Dimmer>}
         <Segment>
             <Header as="h3">用户费用信息</Header>
             {loaded && basicInfo && <Grid columns={2} divided>
