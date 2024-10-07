@@ -66,7 +66,19 @@ const VMOrderDetailModal: React.FC<{ uid?: number; orderId: number; onClose: () 
                     <label>收费模式</label>
                     <ChargeSchemaList data={data.charge_schema}></ChargeSchemaList>
                 </Form.Field>
-
+                <Form.Field>
+                    <label>备注</label>
+                    <AceEditor
+                        value={data.description}
+                        name="user_desc"
+                        mode="plain_text"
+                        width="100%"
+                        height="100px"
+                        wrapEnabled
+                        theme={aceTheme}
+                        readOnly={true}
+                    ></AceEditor>
+                </Form.Field>
                 {data.admin_description && <Form.Field>
                     <label>管理员备注</label>
                     <AceEditor
