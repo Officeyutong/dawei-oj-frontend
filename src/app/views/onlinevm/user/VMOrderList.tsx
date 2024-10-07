@@ -30,6 +30,7 @@ const VMOrderList: React.FC<{}> = () => {
             setPageCount(resp.pageCount);
             setPage(page);
             setData(resp.data);
+            console.log(resp.data)
             setLoaded(true);
         } catch { } finally {
             setLoadingText('');
@@ -89,7 +90,7 @@ const VMOrderList: React.FC<{}> = () => {
                             <Table.Cell>{timeStampToString(item.create_time)}</Table.Cell>
                             <Table.Cell>{item.product.name}</Table.Cell>
                             <Table.Cell negative={item.status === "error"}>{creating ? "创建中" : translateVMOrderStatus(item.status)}</Table.Cell>
-                            <Table.Cell>{Math.ceil(nowTime.diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600)}小时</Table.Cell>
+                            <Table.Cell>{item.destroy_time ? Math.ceil(DateTime.fromSeconds(item.destroy_time).diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600) : Math.ceil(nowTime.diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600)}小时</Table.Cell>
                             <Table.Cell>
                                 <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
                                 <Button small disabled={item.status === 'destroyed' || creating} as={Link} to={`${PUBLIC_URL}/onlinevm/vm_page/${item.order_id}`}>连接虚拟机</Button>
