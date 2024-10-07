@@ -88,7 +88,9 @@ interface OnlineVMOrderEntry {
     product: {
         product_id: number;
         name: string;
-    }
+    };
+    destroy_time: null | number;
+    description: string;
 }
 
 interface PrivilegeStudentRecord {
