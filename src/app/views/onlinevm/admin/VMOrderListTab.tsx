@@ -7,6 +7,8 @@ import { Button, Dimmer, Divider, Form, Loader, Pagination, Table } from "semant
 import { ComplexUserLabel, timeStampToString, UserSelectLabel } from "../../../common/Utils";
 import { showConfirm } from "../../../dialogs/Dialog";
 import { showSuccessPopup } from "../../../dialogs/Utils";
+import { Link } from "react-router-dom";
+import { PUBLIC_URL } from "../../../App";
 
 const VMOrderListTab: React.FC<{}> = () => {
     const [selectedUser, setSelectedUser] = useState<SelectedUser | null>(null);
@@ -82,7 +84,9 @@ const VMOrderListTab: React.FC<{}> = () => {
                         <Table.Cell><ComplexUserLabel user={item.user}></ComplexUserLabel></Table.Cell>
                         <Table.Cell>{translateVMOrderStatus(item.status)}</Table.Cell>
                         <Table.Cell>{item.product.name}</Table.Cell>
-                        <Table.Cell><Button size="small" onClick={() => setShowingOrderId(item.order_id)}>查看详情</Button>
+                        <Table.Cell>
+                            <Button size="small" onClick={() => setShowingOrderId(item.order_id)}>查看详情</Button>
+                            <Button small disabled={item.status === 'destroyed'} as={Link} to={`${PUBLIC_URL}/onlinevm/vm_page/${item.order_id}`}>连接虚拟机</Button>
                             {item.status === "available" && <Button size="small" onClick={() => doDestroy(item.order_id)} color="red">退还</Button>}
                         </Table.Cell>
                     </Table.Row>)}
