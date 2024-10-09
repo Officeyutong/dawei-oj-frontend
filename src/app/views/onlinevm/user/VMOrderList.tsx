@@ -30,7 +30,6 @@ const VMOrderList: React.FC<{}> = () => {
             setPageCount(resp.pageCount);
             setPage(page);
             setData(resp.data);
-            console.log(resp.data)
             setLoaded(true);
         } catch { } finally {
             setLoadingText('');

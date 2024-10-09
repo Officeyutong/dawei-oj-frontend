@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom";
-import { Button, Dimmer, Header, Loader, Table } from "semantic-ui-react"
+import { Button, Dimmer, DimmerDimmable, Header, Icon, Loader, Segment, Table } from "semantic-ui-react"
 import onlineVMClient from "../client/OnlineVMClient";
 import { DateTime } from "luxon";
 import { showErrorPopup } from "../../../dialogs/Utils";
@@ -13,6 +13,7 @@ const OnlineVMPage = () => {
   const [loadingText, setLoadingText] = useState<string>('')
   const [url, setUrl] = useState<string>('')
   const [createTime, setCreateTime] = useState<number>(0);
+  const [isIframeBlured, setIsIframeBlured] = useState<boolean>(false);
   const [ranTime, setRanTime] = useState<{ hours: number, minutes: number, seconds: number } | null>(null);
   const { orderid } = useParams<{ orderid: string, createtime: string }>();
   const tickRef = useRef<(() => void) | null>(null);
@@ -64,7 +65,7 @@ const OnlineVMPage = () => {
     }, 60000);
 
     return () => clearInterval(scanTimer);
-  }, [createTime]);
+  }, []);
 
   useEffect(() => {
     aliveTickRef.current = aliveTick;
@@ -88,6 +89,9 @@ const OnlineVMPage = () => {
     if (iframeRef.current) {
       setLoadingText('全屏加载中')
       iframeRef.current.requestFullscreen()
+      if (iframeRef.current) {
+        iframeRef.current.focus()
+      }
       setLoadingText('')
     }
   }
@@ -101,6 +105,22 @@ const OnlineVMPage = () => {
       }, 10000)
     } catch { } finally { setLoadingText('') }
   }
+
+  useEffect(() => {
+    let isKeyDown = false;
+    document.addEventListener('keydown', (event) => {
+      if (!isKeyDown && event.key === 'Escape') {
+        showErrorPopup('全屏模式下无法使用Esc键，请在非全屏模式下使用')
+      }
+    });
+
+    document.addEventListener('keyup', (event) => {
+      if (event.key === 'Escape') {
+        isKeyDown = false;
+      }
+    });
+
+  }, [])
   return (<>
     <Header as="h2">
       连接虚拟机
@@ -109,7 +129,19 @@ const OnlineVMPage = () => {
       <Loader>{loadingText}</Loader>
     </Dimmer>}
     <div id='screen' style={{ width: "100%", height: "60rem", display: "flex" }}>
-      <iframe ref={iframeRef} title='vmiframe' src={iframeURL + url} frameBorder="no" allowFullScreen={true} style={{ width: '100%' }}></iframe>
+      <DimmerDimmable style={{ display: "flex", width: "100%", fontSize: '10rem' }}>
+        {isIframeBlured && <Dimmer blurring active as={Segment} onClickOutside={() => {
+          setIsIframeBlured(false)
+          if (iframeRef.current) {
+            iframeRef.current.focus()
+          }
+        }}>
+          <Icon name='exclamation' size='massive'></Icon>
+          <Header as='h2' style={{ color: "white" }}>点击此处继续操作虚拟机</Header>
+        </Dimmer>}
+        <iframe ref={iframeRef} title='vmiframe' src={iframeURL + url} frameBorder="no" allowFullScreen={true} style={{ width: '100%' }} onBlur={() => setIsIframeBlured(true)}
+        ></iframe>
+      </DimmerDimmable>
     </div>
     <div style={{ marginTop: "19px" }}>
       <Table celled>
