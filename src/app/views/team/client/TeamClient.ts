@@ -66,6 +66,9 @@ class TeamClient extends GeneralClient {
     async searchUsersByPermissionGroup(groupId: string): Promise<{ username: string; uid: number; real_name?: string; }[]> {
         return (await this.client!.post("/api/team/search_user_by_permission_group", { group_id: groupId })).data;
     }
+    async migrateTeamSubmissions(uid: number, fromTeam: number, toTeam: number) {
+        await this.client!.post("/api/team/migrate_team_submissions", { uid, from_team: fromTeam, to_team: toTeam });
+    }
 };
 
 const teamClient = new TeamClient();
