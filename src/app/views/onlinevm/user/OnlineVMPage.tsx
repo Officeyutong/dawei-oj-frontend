@@ -7,7 +7,7 @@ import { showErrorPopup, showSuccessPopup } from "../../../dialogs/Utils";
 import { timeStampToString, useDocumentTitle } from "../../../common/Utils";
 import { StateType } from "../../../states/Manager";
 import { useSelector } from "react-redux";
-import { showConfirm, showSuccessModal } from "../../../dialogs/Dialog";
+import { showConfirm } from "../../../dialogs/Dialog";
 import { PUBLIC_URL } from "../../../App";
 
 const OnlineVMPage = () => {
