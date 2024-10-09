@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { Button, Icon, InputOnChangeData, Label } from "semantic-ui-react";
 import md5 from "md5";
 import { useSelector } from "react-redux";
@@ -138,6 +138,22 @@ export function useNowTime(): DateTime {
     return now;
 }
 
+export function useTimer(callback: () => void, timeout: number): void {
+    const tickRef = useRef<(() => void) | null>(null);
+    useEffect(() => {
+        tickRef.current = callback
+    });
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            if (tickRef.current) {
+                tickRef.current();
+            }
+        }, timeout);
+
+        return () => clearInterval(timer);
+    }, [timeout]);
+}
 export const UserSelectLabel: React.FC<{ user: SelectedUser | null; onOpenSelect: () => void; onRemove: () => void; labelTitle?: string }> = ({ onRemove, user, onOpenSelect, labelTitle }) => {
     return user === null ? <Button size="small" onClick={onOpenSelect} color="green">{labelTitle || "选择用户"}</Button> : <Label onClick={onRemove} size="large" color="blue"><ComplexUserLabel user={user}></ComplexUserLabel><Icon name="delete"></Icon></Label>
 }

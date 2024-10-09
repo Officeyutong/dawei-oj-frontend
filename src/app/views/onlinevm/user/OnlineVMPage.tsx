@@ -4,10 +4,10 @@ import { Button, Dimmer, DimmerDimmable, Header, Icon, Loader, Message, Segment,
 import onlineVMClient from "../client/OnlineVMClient";
 import { DateTime } from "luxon";
 import { showErrorPopup, showSuccessPopup } from "../../../dialogs/Utils";
-import { timeStampToString, useDocumentTitle } from "../../../common/Utils";
+import { timeStampToString, useDocumentTitle, useTimer } from "../../../common/Utils";
 import { StateType } from "../../../states/Manager";
 import { useSelector } from "react-redux";
-import { showConfirm, showSuccessModal } from "../../../dialogs/Dialog";
+import { showConfirm } from "../../../dialogs/Dialog";
 import { PUBLIC_URL } from "../../../App";
 
 const OnlineVMPage = () => {
@@ -19,8 +19,6 @@ const OnlineVMPage = () => {
     const [ranTime, setRanTime] = useState<{ hours: number, minutes: number, seconds: number } | null>(null);
     const { orderid } = useParams<{ orderid: string, createtime: string }>();
     const orderIdNum = useMemo(() => parseInt(orderid), [orderid]);
-    const tickRef = useRef<(() => void) | null>(null);
-    const aliveTickRef = useRef<(() => void) | null>(null);
     const iframeURL = 'https://img.qcloud.com/qcloud/app/active_vnc/index.html?InstanceVncUrl='
     const { initialRequestDone } = useSelector((s: StateType) => s.userState)
     const { uid } = useSelector((s: StateType) => s.userState.userData);
@@ -63,42 +61,20 @@ const OnlineVMPage = () => {
             }
         })()
     }, [initialRequestDone, orderid, uid])
-    useEffect(() => {
-        tickRef.current = tick;
-    });
 
     const tick = () => {
         if ((((DateTime.now().toSeconds() - createTime) % 3600) / 60) > 55) {
             showErrorPopup('已经快到达一个计费周期，如继续使用虚拟机将会进行扣费，如无需使用请销毁虚拟机')
         }
     };
-
-    useEffect(() => {
-        const scanTimer = setInterval(() => {
-            if (tickRef.current)
-                tickRef.current()
-        }, 60000);
-
-        return () => clearInterval(scanTimer);
-    }, []);
-
-    useEffect(() => {
-        aliveTickRef.current = aliveTick;
-    });
+    useTimer(tick, 60000);
 
     const aliveTick = () => {
         const ranTime = DateTime.now().diff(DateTime.fromSeconds(createTime), ['hours', "minutes", 'seconds'])
         setRanTime(ranTime);
     };
 
-    useEffect(() => {
-        const scanTimer = setInterval(() => {
-            if (aliveTickRef.current)
-                aliveTickRef.current()
-        }, 1000);
-
-        return () => clearInterval(scanTimer);
-    }, []);
+    useTimer(aliveTick, 1000)
 
     const handleFullScreen = () => {
         if (iframeRef.current) {

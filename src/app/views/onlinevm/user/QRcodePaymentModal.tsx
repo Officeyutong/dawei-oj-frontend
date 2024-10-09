@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, Dimmer, Icon, Image, Loader, Modal } from "semantic-ui-react";
 import { OrderPaymentStatus } from "../client/types";
 import onlineVMClient from "../client/OnlineVMClient";
@@ -7,6 +7,7 @@ import { showErrorModal, showSuccessModal } from "../../../dialogs/Dialog";
 import { DateTime } from "luxon";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
+import { useTimer } from "../../../common/Utils";
 
 const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; orderId: number; expireTime: luxon.DateTime; createOrderTime: luxon.DateTime; onClose: (shouldJumpToOrderList?: boolean) => void }> = ({ wechatPayURL, amount, orderId, expireTime, createOrderTime, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,6 @@ const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; order
   const [isQRcodeValid, setIsQRcodeValid] = useState<boolean>(true);
   const [paymentStatus, setPaymentStatus] = useState<OrderPaymentStatus>("unpaid");
   const [refreshCount, setRefreshCount] = useState<number>(0)
-  const tickRef = useRef<Function | undefined>(undefined);
   const uid = useSelector((s: StateType) => s.userState.userData.uid)
 
   const initModal = useCallback(async () => {
@@ -50,18 +50,8 @@ const QRcodePaymentModal: React.FC<{ wechatPayURL: string; amount: number; order
       setTime(time - 1);
     }
   };
-  useEffect(() => {
-    tickRef.current = tick;
-  });
 
-  useEffect(() => {
-    const scanTimer = setInterval(() => {
-      if (tickRef.current)
-        tickRef.current()
-    }, 1000);
-
-    return () => clearInterval(scanTimer);
-  }, []);
+  useTimer(tick, 1000)
 
   useEffect(() => {
     if (time !== undefined && time === 0) {
