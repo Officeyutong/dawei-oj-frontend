@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import CreateVMModal from "./CreateVMModal";
-import { Button, Dimmer, Divider, Header, Loader, Pagination, Table } from "semantic-ui-react";
+import { Button, Dimmer, Divider, Header, Icon, Loader, Pagination, Table } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
 import { OnlineVMOrderEntry } from "../client/types";
@@ -40,7 +40,7 @@ const VMOrderList: React.FC<{}> = () => {
     }, [initialReqDone, loadPage, loaded])
     const nowTime = useNowTime();
     useDocumentTitle("虚拟机订单列表");
-    const doDestroy = (orderId: number) => showConfirm("您确定要退还此台虚拟机吗？一旦退还，这台虚拟机所有的数据都会被删除，并且无法找回。", async () => {
+    const doDestroy = (orderId: number) => showConfirm("您确定要退还此台虚拟机吗？一旦退还，这台虚拟机所有的数据都会被删除，并且无法找回。退还后，虚拟机不会再计费。", async () => {
         try {
             setLoadingText('正在退还虚拟机，请勿刷新网页')
             await onlineVMClient.destroyVM(orderId);
@@ -88,11 +88,11 @@ const VMOrderList: React.FC<{}> = () => {
                             <Table.Cell>{item.order_id}</Table.Cell>
                             <Table.Cell>{timeStampToString(item.create_time)}</Table.Cell>
                             <Table.Cell>{item.product.name}</Table.Cell>
-                            <Table.Cell negative={item.status === "error"}>{creating ? "创建中" : translateVMOrderStatus(item.status)}</Table.Cell>
+                            <Table.Cell negative={item.status === "error"}>{creating ? <><Icon name="spinner" loading></Icon>创建中</> : translateVMOrderStatus(item.status)}</Table.Cell>
                             <Table.Cell>{item.destroy_time !== null ? Math.ceil(DateTime.fromSeconds(item.destroy_time).diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600) : Math.ceil(nowTime.diff(DateTime.fromSeconds(item.create_time)).as("seconds") / 3600)}小时</Table.Cell>
                             <Table.Cell>
                                 <Button size="small" onClick={() => setShowingOrder(item)}>查看详情</Button>
-                                <Button small disabled={item.status === 'destroyed' || creating} as={Link} to={`${PUBLIC_URL}/onlinevm/vm_page/${item.order_id}`}>连接虚拟机</Button>
+                                <Button size="small" disabled={item.status === 'destroyed' || creating} as={Link} to={`${PUBLIC_URL}/onlinevm/vm_page/${item.order_id}`}>连接虚拟机</Button>
                                 {item.status === "available" && <Button disabled={creating} size="small" onClick={() => doDestroy(item.order_id)} color="red">退还</Button>}
                             </Table.Cell>
                         </Table.Row>;

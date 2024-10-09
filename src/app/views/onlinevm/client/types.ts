@@ -20,6 +20,7 @@ interface OrderListEntry {
 interface UserBasicInfo {
     remainedAmount: number;
     allowRechargeAmount: number[];
+    hasStudentPrivilege: boolean;
 }
 interface CreateOrderResponse {
     orderId: number;
