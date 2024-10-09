@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom";
-import { Button, Dimmer, DimmerDimmable, Header, Icon, Loader, Segment, Table } from "semantic-ui-react"
+import { Button, Dimmer, DimmerDimmable, Header, Icon, Loader, Message, Segment, Table } from "semantic-ui-react"
 import onlineVMClient from "../client/OnlineVMClient";
 import { DateTime } from "luxon";
 import { showErrorPopup } from "../../../dialogs/Utils";
@@ -106,21 +106,6 @@ const OnlineVMPage = () => {
     } catch { } finally { setLoadingText('') }
   }
 
-  useEffect(() => {
-    let isKeyDown = false;
-    document.addEventListener('keydown', (event) => {
-      if (!isKeyDown && event.key === 'Escape') {
-        showErrorPopup('全屏模式下无法使用Esc键，请在非全屏模式下使用')
-      }
-    });
-
-    document.addEventListener('keyup', (event) => {
-      if (event.key === 'Escape') {
-        isKeyDown = false;
-      }
-    });
-
-  }, [])
   return (<>
     <Header as="h2">
       连接虚拟机
@@ -162,6 +147,12 @@ const OnlineVMPage = () => {
           </Table.Row>
         </Table.Body>
       </Table>
+      <Message warning>
+        <Message.Header>注意</Message.Header>
+        <Message.Content>
+          全屏模式下无法使用Esc键，请在非全屏模式下使用
+        </Message.Content>
+      </Message>
       <Button style={{ postion: 'absolute' }} disable={loadingText !== ''} onClick={handleFullScreen}>全屏</Button>
       <Button style={{ postion: 'absolute' }} disabled={loadingText !== ''} onClick={handleOpenVM}>发送开机指令</Button>
     </div>
