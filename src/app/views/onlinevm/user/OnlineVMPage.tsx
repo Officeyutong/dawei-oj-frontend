@@ -21,7 +21,7 @@ const OnlineVMPage = () => {
     const orderIdNum = useMemo(() => parseInt(orderid), [orderid]);
     const iframeURL = 'https://img.qcloud.com/qcloud/app/active_vnc/index.html?InstanceVncUrl='
     const { initialRequestDone } = useSelector((s: StateType) => s.userState)
-    const { uid } = useSelector((s: StateType) => s.userState.userData);
+    const { uid, hasOnlineVMManagePermission } = useSelector((s: StateType) => s.userState.userData);
     const history = useHistory();
     useDocumentTitle("连接虚拟机");
     const doDestroy = () => showConfirm("您确定要退还此台虚拟机吗？一旦退还，这台虚拟机所有的数据都会被删除，并且无法找回。退还后，虚拟机将不会再计费。", async () => {
@@ -55,12 +55,16 @@ const OnlineVMPage = () => {
 
     useEffect(() => {
         (async () => {
-            if (initialRequestDone) {
+            if (initialRequestDone && hasOnlineVMManagePermission) {
+                const cTime = (await onlineVMClient.getVMOrderList(1, undefined, [Number(orderid)])).data[0].create_time
+                setCreateTime(Number(cTime))
+            }
+            if (initialRequestDone && !hasOnlineVMManagePermission) {
                 const cTime = (await onlineVMClient.getVMOrderList(1, uid, [Number(orderid)])).data[0].create_time
                 setCreateTime(Number(cTime))
             }
         })()
-    }, [initialRequestDone, orderid, uid])
+    }, [hasOnlineVMManagePermission, initialRequestDone, orderid, uid])
 
     const tick = () => {
         if ((((DateTime.now().toSeconds() - createTime) % 3600) / 60) > 55) {
