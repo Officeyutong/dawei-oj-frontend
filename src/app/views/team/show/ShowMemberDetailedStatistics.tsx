@@ -12,7 +12,7 @@ const ShowMemberDetailedStatistics: React.FC<{ team: number; uid: number }> = ({
     const [data, setData] = useState<TeamMemberDetailedProblemsetStatisticsEntry[]>([]);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [activeIndex, setActiveIndex] = useState<null | number>(null);
+    const [activeIndex, setActiveIndex] = useState<number[]>([]);
     useEffect(() => {
         if (!loaded) (async () => {
             try {
@@ -26,15 +26,18 @@ const ShowMemberDetailedStatistics: React.FC<{ team: number; uid: number }> = ({
         {
             menuItem: "作业记录", pane: <Tab.Pane key={0}>
                 {loading && <div style={{ height: "400px" }}><Dimmer active><Loader></Loader></Dimmer></div>}
-                {loaded && <Accordion fluid>
+                {loaded && <Accordion fluid exclusive={false}>
                     {data.filter(t => t.problems.length > 0).map(item => <Fragment key={item.id}>
-                        <Accordion.Title index={item.id} active={item.id === activeIndex} onClick={() => {
-                            if (activeIndex === item.id) setActiveIndex(null);
-                            else setActiveIndex(item.id);
+                        <Accordion.Title index={item.id} active={activeIndex.includes(item.id)} onClick={() => {
+                            if (activeIndex.includes(item.id)) {
+                                setActiveIndex(activeIndex.filter(a => a !== item.id));
+                            } else {
+                                setActiveIndex([...activeIndex, item.id]);
+                            }
                         }}>
                             <Icon name="dropdown"></Icon> {item.name} {_.every(item.problems, item => item.best_submission?.status === "accepted") && <Icon name="checkmark" color="green"></Icon>}
                         </Accordion.Title>
-                        <Accordion.Content active={item.id === activeIndex}>
+                        <Accordion.Content active={activeIndex.includes(item.id)}>
                             <Table>
                                 <Table.Header>
                                     <Table.Row>
