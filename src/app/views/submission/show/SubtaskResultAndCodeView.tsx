@@ -11,13 +11,13 @@ import * as clipboard from "clipboardy";
 import hljs from 'highlight.js';
 interface SubtaskResultAndCodeViewProps {
     data: SubmissionInfo;
-    defaultExpandedTasks: string[];
+    defaultFoldedTasks: string[];
     showFileName: boolean;
 }
-const SubtaskResultAndCodeView: React.FC<SubtaskResultAndCodeViewProps> = ({ data, defaultExpandedTasks, showFileName }) => {
+const SubtaskResultAndCodeView: React.FC<SubtaskResultAndCodeViewProps> = ({ data, defaultFoldedTasks: defaultExpandedTasks, showFileName }) => {
     const problemSubtasks = useMemo(() => data === null ? new Map<string, SubtaskEntry>() : new Map(data.problem.subtasks.map(x => [x.name, x])), [data]);
-    const [expandedTasks, setExpandedTasks] = useState<string[]>(defaultExpandedTasks);
-    const expandedTasksSet = useMemo(() => new Set(expandedTasks), [expandedTasks]);
+    const [foldedTasks, setFoldedTasks] = useState<string[]>(defaultExpandedTasks);
+    const foldedTasksSet = useMemo(() => new Set(foldedTasks), [foldedTasks]);
     const renderedCode = useMemo(() => {
         if (data === null) return "";
         if (data.code.length <= 25 * 1024) {
@@ -52,7 +52,7 @@ const SubtaskResultAndCodeView: React.FC<SubtaskResultAndCodeViewProps> = ({ dat
                             <JudgeStatusLabel status={item.status}></JudgeStatusLabel>
                         </Table.Cell>
                         <Table.Cell>
-                            {expandedTasksSet.has(name) ? <Button size="small" color="red" onClick={() => setExpandedTasks(c => c.filter(t => t !== name))} >折叠</Button> : <Button size="small" color="green" onClick={() => setExpandedTasks([...expandedTasks, name])}>展开</Button>}
+                            {foldedTasksSet.has(name) ? <Button size="small" color="green" onClick={() => setFoldedTasks([...foldedTasks, name])}>展开</Button> : <Button size="small" color="red" onClick={() => setFoldedTasks(c => c.filter(t => t !== name))} >折叠</Button>}
                         </Table.Cell>
                     </Table.Row>
                 </Table.Body>
@@ -69,7 +69,7 @@ const SubtaskResultAndCodeView: React.FC<SubtaskResultAndCodeViewProps> = ({ dat
                         <Table.HeaderCell>附加信息</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-                {(expandedTasksSet.has(name)) && <Table.Body>
+                {(!foldedTasksSet.has(name)) && <Table.Body>
                     {item.testcases.map((testcase, i) => <Table.Row key={i}>
                         {showFileName && <>     <Table.Cell><a href={`/api/download_file/${data.problem.rawID}/${testcase.input}`}>{testcase.input}</a></Table.Cell>
                             <Table.Cell><a href={`/api/download_file/${data.problem.rawID}/${testcase.output}`}>{testcase.output}</a></Table.Cell></>}

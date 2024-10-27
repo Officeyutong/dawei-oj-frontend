@@ -44,7 +44,7 @@ const ShowSubmission = () => {
     const socketRef = useRef<Socket | null>(null);
     const trackerTokenRef = useRef<NodeJS.Timeout | null>(null);
     const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
-    const [defaultExpandedTasks, setDefaultExpandedTasks] = useState<string[]>([]);
+    const [defaultFoldedTasks, setDefaultFoldedTasks] = useState<string[]>([]);
     useEffect(() => {
         if (unit !== "byte" && unit !== "kilobyte" && unit !== "gigabyte" && unit !== "millionbyte") {
             setUnit("kilobyte");
@@ -57,7 +57,7 @@ const ShowSubmission = () => {
                 setStage(Stage.LOADING);
                 try {
                     const resp = await submissionClient.getSubmissionInfo(submissionID);
-                    setDefaultExpandedTasks(Object.entries(resp.judge_result).filter(([s, v]) => v.testcases.length <= 25).map(([s, v]) => s));
+                    setDefaultFoldedTasks(Object.entries(resp.judge_result).filter(([s, v]) => v.testcases.length > 25).map(([s, v]) => s));
                     setData(resp);
                     setStage(Stage.LOADED);
                 } catch {
@@ -325,7 +325,7 @@ const ShowSubmission = () => {
                     problemSubtasks={data.problem.subtasks}
                 ></WrittenProblemResultView> : <SubtaskResultAndCodeView
                     data={data}
-                    defaultExpandedTasks={defaultExpandedTasks}
+                    defaultFoldedTasks={defaultFoldedTasks}
                     showFileName={data.problem.problemType !== "remote_judge"}
                 ></SubtaskResultAndCodeView>}
             </Segment>
