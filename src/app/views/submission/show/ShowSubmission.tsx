@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import AnsiUp from "ansi_up";
 import submissionClient from "../client/SubmissionClient";
 import { SubmissionInfo } from "../client/types";
-import { Button, Dimmer, Divider, Grid, Header, Loader, Message, Segment, Table } from "semantic-ui-react";
+import { Button, Dimmer, Divider, Grid, Header, Loader, Message, Modal, ModalContent, Segment, Table } from "semantic-ui-react";
 import { timeStampToString, useDocumentTitle, usePreferredMemoryUnit } from "../../../common/Utils";
 import "./Submission.css"
 import { PUBLIC_URL } from "../../../App";
@@ -19,6 +19,8 @@ import WrittenProblemResultView from "./WrittenProblemResultView";
 import { WrittenTestAnswer } from "../../problem/client/types";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../states/Manager";
+import CircleCheckMark from "./CircleCheckMark";
+import { DateTime } from "luxon";
 const ansiUp = new AnsiUp();
 
 enum Stage {
@@ -45,6 +47,9 @@ const ShowSubmission = () => {
     const trackerTokenRef = useRef<NodeJS.Timeout | null>(null);
     const selfUid = useSelector((s: StateType) => s.userState.userData.uid);
     const [defaultFoldedTasks, setDefaultFoldedTasks] = useState<string[]>([]);
+
+    const [showAccpetedModel, setShowAccpetedModel] = useState<boolean>(false)
+
     useEffect(() => {
         if (unit !== "byte" && unit !== "kilobyte" && unit !== "gigabyte" && unit !== "millionbyte") {
             setUnit("kilobyte");
@@ -88,7 +93,15 @@ const ShowSubmission = () => {
                         return;
                     }
                     submissionClient.getSubmissionInfo(data.id).then(resp => {
-                        setData(resp);
+                        if ((data.status !== 'accepted' || ((DateTime.now().toSeconds() - data.submit_time) < 120)) && resp.status === 'accepted') {
+                            setShowAccpetedModel(true)
+                        }
+                        setTimeout(() => {
+                            setData(resp);
+                            setShowAccpetedModel(false)
+
+                        }, 2500);
+
                         if (resp.status !== "judging" && resp.status !== "waiting") {
                             clearInterval(token);
                             return;
@@ -153,12 +166,28 @@ const ShowSubmission = () => {
             }
         });
     };
+
     return <>
         {stage === Stage.LOADING && <>
             <div style={{ height: "400px" }}>
                 <Dimmer active><Loader></Loader></Dimmer>
             </div>
         </>}
+        {
+            (showAccpetedModel) &&
+            <Modal
+                dimmer={true}
+                open={true}
+                size='tiny'
+            >
+                <ModalContent>
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: '400px' }}>
+                        <CircleCheckMark></CircleCheckMark>
+                        <span style={{ fontSize: "large", fontWeight: 'bolder' }}> 提交通过</span>
+                    </div>
+                </ModalContent>
+            </Modal>
+        }
         {stage === Stage.LOADED && data !== null && <>
             <Header as="h1">查看提交记录</Header>
             <Segment stacked>
@@ -202,7 +231,7 @@ const ShowSubmission = () => {
                                 </Table.Row>
                                 <Table.Row>
                                     <Table.Cell>提交时间</Table.Cell>
-                                    <Table.Cell>{data.submit_time}</Table.Cell>
+                                    <Table.Cell>{DateTime.fromSeconds(data.submit_time).toFormat("yyyy-MM-dd HH:mm:ss")}</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
                                     <Table.Cell>

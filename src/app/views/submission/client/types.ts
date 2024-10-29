@@ -25,7 +25,7 @@ interface SubmissionInfo {
     id: number;
     language: string;
     language_name: string;
-    submit_time: string;
+    submit_time: number;
     public: boolean;
     contest: {
         id: number;
