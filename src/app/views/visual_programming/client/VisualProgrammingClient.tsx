@@ -1,6 +1,6 @@
 import _ from "lodash";
 import GeneralClient from "../../../common/GeneralClient"
-import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, NewlyGradedUser, PerTeamStatisticsResponse, RanklistEntry, RecentSubmittedUserEntry, SubmittedHomeworkCountStatisticsEntry, UserSubmittedHomeworkEntry, VisualProgrammingConfig } from "./types";
+import { CommentStatusFilterType, CreateHomeworkResponse, HomeworkDetail, HomeworkDisplayListEntry, HomeworkEditListEntry, HomeworkSubmissionListEntry, HomeworkUpdateRequest, NewlyGradedUser, PerTeamStatisticsResponse, RanklistEntry, RecentSubmittedUserEntry, SubmittedHomeworkCountStatisticsEntry, UnviewedCommentedHomeworkEntry, UserSubmittedHomeworkEntry, VisualProgrammingConfig } from "./types";
 
 class VisualProgrammingClient extends GeneralClient {
     async createHomework(): Promise<CreateHomeworkResponse> {
@@ -74,6 +74,12 @@ class VisualProgrammingClient extends GeneralClient {
     }
     getTemplateProjectUrl(homeworkId: number): string {
         return `/api/visualprogramming/download_template_project/${homeworkId}`;
+    }
+    async markSubmissionViewed(submissionId: number) {
+        await this.client!.post("/api/visualprogramming/mark_submission_viewed", { submission_id: submissionId });
+    }
+    async getUnviewedCommentedHomework(uid: number): Promise<UnviewedCommentedHomeworkEntry[]> {
+        return (await this.client!.post("/api/visualprogramming/get_unviewed_commented_homework", { uid })).data;
     }
 };
 
