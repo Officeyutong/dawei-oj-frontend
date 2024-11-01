@@ -114,7 +114,11 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
         if (initialRequestDone && homeworkData === null && newlyGradedUser === null && commentData === null) getData();
     }, [homeworkData, getData, commentData, newlyGradedUser, initialRequestDone])
     useBackgroundColor('#d6eefa')
-
+    useEffect(() => {
+        if (commentData !== null) {
+            visualProgrammingClient.markSubmissionViewed(commentData[0].submission_id)
+        }
+    }, [commentData])
     return (
         <>
             {showSubmissionModal && <UserSubmissionListModal uid={uid} homeworkId={parseInt(id)} closeCallback={() => setShowSubmissionModal(false)}
@@ -174,7 +178,7 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                                 {isAlreadySubmitted ? '已提交' : '本地提交'}
                                             </Button>
                                             <p style={{ position: 'absolute', fontSize: "1rem" }}>初次通过此题可得{homeworkData.earn_score}分</p>
-                                            <Button style={{ height: "90%", width: "9rem", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.2rem', textAlign: 'center', color: 'white' }} onClick={() => { window.open(`/scratch?oj_homework_id=${homeworkData.id}` + (homeworkData.has_template_project ? "&with_template_project=1" : "")) }}>
+                                            <Button style={{ height: "90%", width: "9rem", borderRadius: '2rem', border: 'none', background: '#de5f50', fontSize: '1.2rem', textAlign: 'center', color: 'white' }} onClick={() => { !isAlreadySubmitted ? (window.open(`/scratch?oj_homework_id=${homeworkData.id}` + (homeworkData.has_template_project ? "&with_template_project=1" : ""))) : (window.open(`/scratch?oj_homework_id=${homeworkData.id}&oj_submission_id=${commentData[0].submission_id}`)) }}>
                                                 在线编辑
                                             </Button>
                                         </div>
