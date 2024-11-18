@@ -29,7 +29,12 @@ const ContestShow: React.FC<React.PropsWithChildren<{}>> = () => {
     const { id } = useParams<{ id: string }>();
     const location = useLocation();
     const history = useHistory();
-    const virtualID = parseInt(QueryString.parse(location.search.substr(1)).virtual_contest as (string | undefined) || "-1");
+
+    const parsed = QueryString.parse(location.search.substring(1)) as {
+        virtual_contest?: string;
+        source_team?: string;
+    }
+    const virtualID = parseInt(parsed.virtual_contest || "-1");
     const numberID = parseInt(id);
 
     const [stage, setStage] = useState<ContestLoadStage>(ContestLoadStage.INIT);
@@ -199,7 +204,7 @@ const ContestShow: React.FC<React.PropsWithChildren<{}>> = () => {
                         {/*用户区按钮*/}
                         {shouldShowRanklist && <Button
                             as={Link}
-                            to={`${PUBLIC_URL}/contest/ranklist/${data.id}?virtual_contest=${virtualID}`}
+                            to={`${PUBLIC_URL}/contest/ranklist/${data.id}?virtual_contest=${virtualID}&source_team=${parsed.source_team}`}
                             color="yellow"
                             size="tiny"
                             icon
