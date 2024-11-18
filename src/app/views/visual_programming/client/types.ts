@@ -92,6 +92,11 @@ interface NewlyGradedUser {
     uid: number;
 }
 
+interface UnviewedCommentedHomeworkEntry {
+    id:number;
+    name:string;
+}
+
 export type {
     CreateHomeworkResponse,
     HomeworkDetail,
@@ -106,5 +111,6 @@ export type {
     SubmittedHomeworkCountStatisticsEntry,
     PerTeamStatisticsResponse,
     RecentSubmittedUserEntry,
-    NewlyGradedUser
+    NewlyGradedUser,
+    UnviewedCommentedHomeworkEntry
 }
