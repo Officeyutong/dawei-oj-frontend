@@ -16,18 +16,20 @@ const ROWS_PER_PAGE = 100;
 
 const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
     const { contestID } = useParams<{ contestID: string }>();
-    const { search } = useLocation();
-    const queryArgs = QueryString.parse(search.substr(1));
-    const virtualID = parseInt(queryArgs.virtual_contest as (string | undefined) || "-1");
+    const location = useLocation();
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<ContestRanklistType | null>(null);
     const [page, setPage] = useState(1);
-    const [queryByGroupName, setQueryByGroupName] = useState<boolean>(false)
     const [curTeam, setCurTeam] = useState<number | null>(null);
     const [teamDetail, setTeamDetail] = useState<DropdownItemProps[] | undefined>(undefined)
     const currentUser = useCurrentUid();
-    const parsed: { source_team?: string } = QueryString.parse(window.location.search.slice(1));
+    const parsed = QueryString.parse(location.search.substring(1)) as {
+        virtual_contest?: string;
+        source_team?: string;
+    }
+    const virtualID = Number(parsed.virtual_contest);
+    const sourceTeam = Number(parsed.source_team)
     /// The current user's rank
 
     const selfIndex = useMemo(() => {
@@ -143,35 +145,43 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
     };
     useEffect(() => {
         (async () => {
-            const team = await teamClient.getTeamList(false)
-            const dropdownProps = team.list.map((item) => {
-                const obj: DropdownItemProps = {
+            try {
+                setLoading(true)
+                const team = await teamClient.getTeamList(false)
+                team.list.map(item => ({
                     key: item.id,
                     text: item.name,
                     value: item.id
-                }
-                return obj
-            })
-            setTeamDetail(dropdownProps)
+                }) as DropdownItemProps)
+                setTeamDetail(team.list)
+            }
+            catch (e) {
+                console.error(e);
+            } finally {
+                setLoading(false)
+            }
+
         })()
 
     }, [])
     useEffect(() => {
-        if (parsed.source_team !== undefined) {
-            setQueryByGroupName(true)
-            setCurTeam(Number(parsed.source_team))
-
+        if (sourceTeam !== -1) {
+            setCurTeam(sourceTeam)
         }
 
-    }, [parsed.source_team])
+    }, [sourceTeam])
     const handleTeamQuery = useCallback(async (id: number) => {
-        setLoading(true)
-        const resp = await contestClient.getContestRanklist(parseInt(contestID), virtualID);
-        const teamMem = (await teamClient.getTeamDetail(id)).members;
-        const res = _.intersectionBy(resp.ranklist, teamMem, 'uid')
-        const obj: ContestRanklistType = { ...resp, ranklist: res }
-        setData(obj)
-        setLoading(false)
+        try {
+            setLoading(true)
+            const [resp, teamMem] = await Promise.all([contestClient.getContestRanklist(parseInt(contestID), virtualID), teamClient.getTeamDetail(id)])
+            const res = _.intersectionBy(resp.ranklist, teamMem.members, 'uid')
+            const obj: ContestRanklistType = { ...resp, ranklist: res }
+            setData(obj)
+        } catch {
+
+        } finally {
+            setLoading(false)
+        }
     }, [contestID, virtualID])
     useEffect(() => {
         if (curTeam !== null) {
@@ -198,8 +208,8 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
 
             <Segment stacked style={{ overflowX: "scroll" }}>
                 <Segment style={{ display: 'flex', justifyContent: 'center', flexDirection: "column" }}>
-                    <Checkbox toggle label='按团队名筛选' checked={queryByGroupName} onChange={() => setQueryByGroupName(!queryByGroupName)} />
-                    {queryByGroupName && <Dropdown style={{ marginTop: "0.5rem" }} options={teamDetail} placeholder='请选择团队' noResultsMessage='无对应团队'
+                    <Checkbox toggle label='按团队名筛选' checked={curTeam === null ? false : true} onChange={() => setCurTeam(null)} />
+                    {curTeam && <Dropdown style={{ marginTop: "0.5rem" }} options={teamDetail} placeholder='请选择团队' noResultsMessage='无对应团队'
                         defaultValue={curTeam !== null ? curTeam : undefined} search selection onChange={(event, data) => { setCurTeam(Number(data.value)) }} />}
                 </Segment>
 
