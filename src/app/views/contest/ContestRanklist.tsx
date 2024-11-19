@@ -50,7 +50,7 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
     }, [data, page, selfIndex]);
     const totalPages = data !== null ? Math.ceil(data.ranklist.length / ROWS_PER_PAGE) : 0;
     useEffect(() => {
-        if (!loaded) {
+        if (!loaded || curTeam === null) {
             (async () => {
                 try {
                     const resp = await contestClient.getContestRanklist(parseInt(contestID), virtualID);
@@ -61,7 +61,7 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
                 }
             })();
         }
-    }, [contestID, loaded, virtualID]);
+    }, [contestID, loaded, virtualID, curTeam]);
     useDocumentTitle(`${data?.name} - ${contestID} - 排行榜`);
     const refreshRanklist = async (evt: ButtonClickEvent) => {
         const target = evt.currentTarget;
@@ -193,6 +193,8 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
     useEffect(() => {
         if (curTeam !== null) {
             handleTeamQuery(curTeam)
+        } else {
+
         }
     }, [curTeam, handleTeamQuery])
     return <>
