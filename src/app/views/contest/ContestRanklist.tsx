@@ -157,7 +157,7 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
                 const team = await teamClient.getTeamList(false)
                 const res = team.list.map(item => ({
                     key: item.id,
-                    text: item.name,
+                    text: `#${item.id}. ${item.name}`,
                     value: item.id
                 }) as DropdownItemProps)
                 setTeamDetail(res)
@@ -217,7 +217,7 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Checkbox toggle label='按团队名筛选' checked={curTeam === null ? false : true} onChange={() => {
                         (curTeam === null && teamDetail !== undefined) ? setCurTeam(Number(teamDetail[0].value)) : setCurTeam(null)
                     }} />
-                    {curTeam && <Dropdown style={{ marginTop: "0.5rem" }} options={teamDetail} placeholder='请选择团队' noResultsMessage='无对应团队'
+                    {(curTeam && teamDetail) && <Dropdown style={{ marginTop: "0.5rem" }} options={teamDetail} placeholder='请选择团队' noResultsMessage='无对应团队'
                         defaultValue={curTeam !== null ? curTeam : undefined} search selection onChange={(event, data) => { setCurTeam(Number(data.value)) }} />}
                 </Segment>
 
