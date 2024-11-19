@@ -148,12 +148,12 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
             try {
                 setLoading(true)
                 const team = await teamClient.getTeamList(false)
-                team.list.map(item => ({
+                const res = team.list.map(item => ({
                     key: item.id,
                     text: item.name,
                     value: item.id
                 }) as DropdownItemProps)
-                setTeamDetail(team.list)
+                setTeamDetail(res)
             }
             catch (e) {
                 console.error(e);
@@ -187,7 +187,6 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
         if (curTeam !== null) {
             handleTeamQuery(curTeam)
         }
-
     }, [curTeam, handleTeamQuery])
     return <>
         {!loaded && <Segment>
@@ -208,7 +207,9 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
 
             <Segment stacked style={{ overflowX: "scroll" }}>
                 <Segment style={{ display: 'flex', justifyContent: 'center', flexDirection: "column" }}>
-                    <Checkbox toggle label='按团队名筛选' checked={curTeam === null ? false : true} onChange={() => setCurTeam(null)} />
+                    <Checkbox toggle label='按团队名筛选' checked={curTeam === null ? false : true} onChange={() => {
+                        (curTeam === null && teamDetail !== undefined) ? setCurTeam(Number(teamDetail[0].value)) : setCurTeam(null)
+                    }} />
                     {curTeam && <Dropdown style={{ marginTop: "0.5rem" }} options={teamDetail} placeholder='请选择团队' noResultsMessage='无对应团队'
                         defaultValue={curTeam !== null ? curTeam : undefined} search selection onChange={(event, data) => { setCurTeam(Number(data.value)) }} />}
                 </Segment>
