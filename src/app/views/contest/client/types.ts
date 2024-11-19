@@ -25,6 +25,7 @@ interface ContestRanklist {
             status: SubmissionStatus;
             first_blood: boolean;
             submit_time: number;
+            submit_timestamp: null | number;
 
         }[];
         total: {

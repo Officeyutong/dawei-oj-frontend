@@ -2,7 +2,7 @@ import QueryString from "qs";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Button, Checkbox, Container, Dimmer, Dropdown, DropdownItemProps, Header, Label, Loader, Message, Pagination, Segment, Table } from "semantic-ui-react";
-import { useCurrentUid, useDocumentTitle } from "../../common/Utils";
+import { timeStampToString, useCurrentUid, useDocumentTitle } from "../../common/Utils";
 import contestClient from "./client/ContestClient";
 import { ContestRanklist as ContestRanklistType } from "./client/types";
 import XLSX from "xlsx-js-style";
@@ -82,6 +82,7 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
             const sheetData: string[][] = [];
             sheetData.push([
                 "排名", "用户名", "总分(分数/总时间 或 通过数/罚时)", ...data.problems.map((x, i) => `#${i}. ${x.name}`)
+                , "最新提交时间"
             ]);
             sheetData.push([
                 "合计", "通过提交数", "---", ...data.problems.map((x, i) => `${x.accepted_submit}`)
@@ -94,9 +95,14 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
             let currRow = 3;
             for (const line of data.ranklist) {
                 const row = currRow;
+                const lastSubmit = _(line.scores).filter(s => s.submit_timestamp !== null).map(s => s.submit_timestamp).max();
+                let lastSubmitTimeString = "";
+                if (lastSubmit) {
+                    lastSubmitTimeString = timeStampToString(lastSubmit);
+                }
                 sheetData.push([
                     `${line.rank}`,
-                    `${line.username}${line.virtual ? "[虚拟提交]" : ""}`,
+                    `${line.username}${line.real_name && "（" + line.real_name + "）"}${line.virtual ? "[虚拟提交]" : ""}`,
                     data.using_penalty ? `${line.total.ac_count}/${line.total.penalty}` : `${line.total.score}/${line.total.submit_time_sum}`,
                     ...line.scores.map((x, i) => {
                         if (x.status === "accepted") greenCells.push(XLSX.utils.encode_cell({ r: row, c: i + 3 }));
@@ -105,7 +111,8 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
                         if (x.submit_id === -1) return "未提交";
                         if (!data.using_penalty) return `${x.score}/${x.submit_time}`;
                         return x.status === "accepted" ? `-${x.submit_count}(${x.penalty})` : `-${x.submit_count}`;
-                    })
+                    }),
+                    lastSubmitTimeString
                 ]);
                 currRow++;
             }
