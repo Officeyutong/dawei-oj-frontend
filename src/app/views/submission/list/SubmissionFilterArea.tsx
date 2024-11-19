@@ -82,7 +82,7 @@ const SubmissionFilterArea: React.FC<React.PropsWithChildren<SubmissionFilterPro
             ></Form.Checkbox>
             {filter.contest.used && <Form.Input fluid={false} label="比赛" type="number" value={filter.contest.value} onChange={(e, d) => setFilter({ ...filter, contest: { used: true, value: parseInt(d.value) } })}></Form.Input>}
             <Button size="tiny" color="green" onClick={() => onUpdate(Object.fromEntries(Object.entries(filter).filter(x => x[1].used).map(x => ([x[0], x[1].used ? x[1].value : undefined]))))}>
-                应用更改
+                筛选
             </Button>
         </Form>
     </>;

@@ -93,8 +93,8 @@ interface NewlyGradedUser {
 }
 
 interface UnviewedCommentedHomeworkEntry {
-    id:number;
-    name:string;
+    id: number;
+    name: string;
 }
 
 export type {
