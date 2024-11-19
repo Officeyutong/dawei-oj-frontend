@@ -28,8 +28,8 @@ const ContestRanklist: React.FC<React.PropsWithChildren<{}>> = () => {
         virtual_contest?: string;
         source_team?: string;
     }
-    const virtualID = Number(parsed.virtual_contest);
-    const sourceTeam = Number(parsed.source_team)
+    const virtualID = parsed.virtual_contest === undefined ? -1 : Number(parsed.virtual_contest);
+    const sourceTeam = parsed.source_team === undefined ? -1 : Number(parsed.source_team)
     /// The current user's rank
 
     const selfIndex = useMemo(() => {
