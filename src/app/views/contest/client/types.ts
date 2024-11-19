@@ -157,6 +157,12 @@ const ContestSortingOrderMapping: { [K in ContestSortingOrder]: string } = {
     id: "比赛ID",
     start_time: "开始时间"
 }
+
+interface ProblemtitleEntry {
+    title: string;
+    id: number;
+}
+
 export type {
     ContestRanklist,
     ClarificationDetailResponse,
@@ -170,7 +176,8 @@ export type {
     ContestEditProblem,
     ContestDetailUpdateRequest,
     ContestProblemShow,
-    ContestSortingOrder
+    ContestSortingOrder,
+    ProblemtitleEntry
 };
 
 export {

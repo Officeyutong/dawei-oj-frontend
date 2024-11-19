@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Button, Icon, Input, Message, Table } from "semantic-ui-react";
+import { Button, Dimmer, Icon, Input, Loader, Message, Table } from "semantic-ui-react";
 import { ContestEditRawDataResponse } from "../client/types";
 
 
@@ -7,17 +7,29 @@ type Problems = ContestEditRawDataResponse["problems"];
 interface ProblemEditAreaProps {
     data: Problems;
     update: (data: Problems) => void;
+    refreshTitlesCallback: () => void;
+    loading: boolean;
+    titles: Map<number, string>;
 };
 
 
-const ProblemEditArea: React.FC<React.PropsWithChildren<ProblemEditAreaProps>> = ({ data, update }) => {
+const ProblemEditArea: React.FC<React.PropsWithChildren<ProblemEditAreaProps>> = ({
+    data,
+    update,
+    loading,
+    refreshTitlesCallback,
+    titles }) => {
 
     return <>
+        {loading && <Dimmer active>
+            <Loader active></Loader>
+        </Dimmer>}
         <Table celled>
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell>题目ID</Table.HeaderCell>
                     <Table.HeaderCell>分数权值</Table.HeaderCell>
+                    <Table.HeaderCell>题目名</Table.HeaderCell>
                     <Table.HeaderCell>操作</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
@@ -28,6 +40,9 @@ const ProblemEditArea: React.FC<React.PropsWithChildren<ProblemEditAreaProps>> =
                     </Table.Cell>
                     <Table.Cell>
                         <Input value={x.weight} type="number" onChange={(e, d) => update(_.set([...data], i, { ...x, weight: parseInt(d.value) }))}></Input>
+                    </Table.Cell>
+                    <Table.Cell>
+                        {titles.get(x.id) || "<未找到>"}
                     </Table.Cell>
                     <Table.Cell>
                         <Button.Group>
@@ -54,7 +69,7 @@ const ProblemEditArea: React.FC<React.PropsWithChildren<ProblemEditAreaProps>> =
                     </Table.Cell>
                 </Table.Row>)}
                 <Table.Row>
-                    <Table.Cell colSpan="2">
+                    <Table.Cell colSpan="3">
                         <Message info>
                             <Message.Header>提示</Message.Header>
                             <Message.Content>
@@ -66,6 +81,7 @@ const ProblemEditArea: React.FC<React.PropsWithChildren<ProblemEditAreaProps>> =
                         <Button color="green" onClick={() => update([...data, { id: (_(data).map(x => x.id).max() || 0) + 1, weight: 1 }])}>
                             添加题目
                         </Button>
+                        <Button color="blue" onClick={refreshTitlesCallback}>同步题目名称</Button>
                     </Table.Cell>
                 </Table.Row>
             </Table.Body>

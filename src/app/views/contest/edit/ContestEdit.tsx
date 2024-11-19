@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import { Button, Checkbox, Dimmer, Divider, Form, Header, Input, Loader, Segment } from "semantic-ui-react";
 import { useDocumentTitle } from "../../../common/Utils";
 import contestClient from "../client/ContestClient";
-import { ContestEditRawDataResponse } from "../client/types";
+import { ContestEditRawDataResponse, ProblemtitleEntry } from "../client/types";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-markdown";
 import { useAceTheme } from "../../../states/StateUtils";
@@ -23,6 +23,24 @@ const ContestEdit: React.FC<React.PropsWithChildren<{}>> = () => {
     const [data, setData] = useState<ContestEditRawDataResponse | null>(null);
     const [loaded, setLoaded] = useState(false);
     const theme = useAceTheme();
+    const [problemTitles, setProblemTitles] = useState<ProblemtitleEntry[]>([]);
+    const [titlesLoading, setTitlesLoading] = useState(false);
+    const problemTitleMap = useMemo(() => {
+        const map = new Map<number, string>();
+        for (const entry of problemTitles) map.set(entry.id, entry.title);
+        return map;
+    }, [problemTitles]);
+    const refreshProblemTitles = async () => {
+        try {
+            setTitlesLoading(true);
+            setProblemTitles(await contestClient.fetchProblemTitlesByIds(
+                data!.problems.map(s => s.id)
+            ));
+
+        } catch { } finally {
+            setTitlesLoading(false);
+        }
+    };
     useDocumentTitle(`${data?.name || "加载中..."} - 编辑比赛`);
     useEffect(() => {
         if (!loaded) {
@@ -115,6 +133,9 @@ const ContestEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                         <ProblemEditArea
                             data={data.problems}
                             update={d => setData(data => ({ ...data!, problems: d }))}
+                            loading={titlesLoading}
+                            refreshTitlesCallback={refreshProblemTitles}
+                            titles={problemTitleMap}
                         ></ProblemEditArea>
                     </Form.Field>
                     <Divider></Divider>
