@@ -1,6 +1,6 @@
 import GeneralClient from "../../../common/GeneralClient";
 import { APIError } from "../../../Exception";
-import { ClarificationDetailResponse, ClarificationListResponse, ContestDetailUpdateRequest, ContestEditRawDataResponse, ContestListResponse, ContestProblemShow, ContestRanklist, ContestShowDetailResponse, ContestSortingOrder } from "./types";
+import { ClarificationDetailResponse, ClarificationListResponse, ContestDetailUpdateRequest, ContestEditRawDataResponse, ContestListResponse, ContestProblemShow, ContestRanklist, ContestShowDetailResponse, ContestSortingOrder, ProblemtitleEntry } from "./types";
 
 class ContestClient extends GeneralClient {
     async getContestRanklist(contestID: number, virtualID: number): Promise<ContestRanklist> {
@@ -64,6 +64,10 @@ class ContestClient extends GeneralClient {
     }
     async refreshRanklist(contestID: number, virtualID: number) {
         await this.client!.post("/api/contest/refresh_ranklist", { contestID, virtualID });
+    }
+    async fetchProblemTitlesByIds(ids: number[]): Promise<ProblemtitleEntry[]> {
+        return (await this.client!.post("/api/contest/fetch_problem_names_by_id", { ids })).data;
+
     }
 };
 
