@@ -115,9 +115,10 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
     }, [homeworkData, getData, commentData, newlyGradedUser, initialRequestDone])
     useBackgroundColor('#d6eefa')
     useEffect(() => {
-        if (commentData !== null) {
+        if (commentData !== null && commentData.length !== 0) {
             visualProgrammingClient.markSubmissionViewed(commentData[0].submission_id)
         }
+
     }, [commentData])
     return (
         <>
