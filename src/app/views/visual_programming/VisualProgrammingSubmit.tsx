@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useBackgroundColor, useDocumentTitle } from "../../common/Utils";
-import { Button, Dimmer, Divider, Grid, GridColumn, GridRow, Header, Image, Loader, Modal, Progress, Segment } from "semantic-ui-react";
+import { Button, Dimmer, Divider, Grid, GridColumn, GridRow, Header, Icon, Image, Label, Loader, Modal, Progress, Segment } from "semantic-ui-react";
 import { useEffect, useState, useCallback, useRef, ChangeEvent, CSSProperties, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { StateType } from "../../states/Manager";
@@ -195,6 +195,9 @@ const VisualProgrammingSubmit: React.FC<{}> = () => {
                                 {commentData !== undefined && commentData && commentData.length !== 0 && isAlreadySubmitted === true &&
                                     <div style={{ overflowY: "scroll", maxHeight: "105%", margin: "2%", maxWidth: '95%', wordWrap: 'break-word' }}>
                                         <Markdown style={{ fontWeight: 'bold' }} markdown={commentData[0].comment ? commentData[0].comment.comment : '等待老师批改完成后可查看评语'}></Markdown>
+                                        {commentData[0].comment && <Label Label >
+                                            <Icon name={commentData[0].comment.comment_grade === 1 ? 'check' : 'times'} color={commentData[0].comment.comment_grade === 1 ? 'green' : 'red'} /> {commentData[0].comment.comment_grade === 1 ? '已通过' : '未通过'}
+                                        </Label>}
                                     </div>}
                             </div>
                         </div>
