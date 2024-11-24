@@ -4,7 +4,7 @@ import { useHistory, useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { Button, Container, Dimmer, Divider, Header, Loader, Pagination, Segment, Table } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../../App";
-import { useDocumentTitle } from "../../../common/Utils";
+import { timeStampToString, useDocumentTitle } from "../../../common/Utils";
 import JudgeStatusLabel from "../../utils/JudgeStatusLabel";
 import MemoryCostLabel from "../../utils/MemoryCostLabel";
 import ScoreLabel from "../../utils/ScoreLabel";
@@ -110,10 +110,10 @@ const SubmissionList: React.FC<React.PropsWithChildren<{}>> = () => {
                             <Link to={`${PUBLIC_URL}/show_problem/${x.problem_id}`}>#{x.problem_id}. {x.problem_title}</Link>
                         </Table.Cell>
                         <Table.Cell>
-                            <UserLink data={x}></UserLink>
+                            <UserLink data={x}></UserLink> {x.real_name && `（${x.real_name}）`}
                         </Table.Cell>
                         <Table.Cell>
-                            {x.submit_time}
+                            {timeStampToString(x.submit_time)}
                         </Table.Cell>
                         <Table.Cell>
                             {x.time_cost !== -1 && <div>{x.time_cost} ms</div>}

@@ -108,7 +108,8 @@ interface SubmissionListEntry {
     contest: number | -1;
     uid: number;
     username: string;
-    submit_time: string;
+    submit_time: number;
+    real_name: null | string;
     memory_cost: number;
     time_cost: number;
     problem_id: number;
