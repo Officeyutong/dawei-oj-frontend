@@ -8,7 +8,18 @@ import Logo from "../assets/logo.png";
 import userClient from "./user/client/UserClient";
 const TopMenuNew = () => {
     const alreadyLogin = useSelector((s: StateType) => s.userState.login);
-    const { enableEmailAuth, enablePhoneAuth, requireAuthWhenRegistering, canUseImageStore, backend_managable, username, uid, showPermissionPack, hasVisualProgrammingHomeworkUpdatePerm, hasOnlineVMManagePermission } = useSelector((s: StateType) => s.userState.userData);
+    const {
+        enableEmailAuth,
+        enablePhoneAuth,
+        requireAuthWhenRegistering,
+        canUseImageStore,
+        backend_managable,
+        username,
+        uid,
+        showPermissionPack,
+        hasVisualProgrammingHomeworkUpdatePerm,
+        hasOnlineVMManagePermission
+    } = useSelector((s: StateType) => s.userState.userData);
     return <Row>
         <Col span={3} offset={2} style={{ backgroundColor: "white", alignContent: "center", textAlign: "center" }}>
             {/* <img src={logo} alt="logo"></img> */}
@@ -25,7 +36,7 @@ const TopMenuNew = () => {
                         , key: "home", icon: <HomeOutlined></HomeOutlined>
                     },
                     { label: <Link to={`${PUBLIC_URL}/problems/1`}>题库</Link>, key: "problems", icon: <BarsOutlined></BarsOutlined> },
-                    { label: <Link to={`${PUBLIC_URL}/submissions/1`}>提交</Link>, key: "submissions", icon: <DatabaseOutlined></DatabaseOutlined> },
+                    { label: <Link to={uid === -1 ? `${PUBLIC_URL}/submissions/1` : `${PUBLIC_URL}/submissions/1?filter=uid%3D${uid}`}>提交</Link>, key: "submissions", icon: <DatabaseOutlined></DatabaseOutlined> },
                     { label: <Link to={`${PUBLIC_URL}/team`}>团队</Link>, key: "teams", icon: <TeamOutlined></TeamOutlined> },
                     { label: <Link to={`${PUBLIC_URL}/problemset/list/1`}>习题集</Link>, key: "problemset", icon: <BookOutlined></BookOutlined> },
                     { label: <Link to={`${PUBLIC_URL}/contests/1`}>比赛</Link>, key: "contest", icon: <CalculatorOutlined></CalculatorOutlined> },
