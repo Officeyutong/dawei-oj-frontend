@@ -90,7 +90,7 @@ const BatchAddMembers: React.FC<React.PropsWithChildren<BatchAddMembersProps>> =
                         <Grid.Column>
                             <Form>
                                 <Form.Group widths={2}>
-                                    <Form.Radio checked={currentFilterMethod === "username"} label="按用户名过滤" onClick={() => setCurrentFilterMethod("username")}></Form.Radio>
+                                    <Form.Radio checked={currentFilterMethod === "username"} label="按用户名/姓名过滤" onClick={() => setCurrentFilterMethod("username")}></Form.Radio>
                                     <Form.Radio checked={currentFilterMethod === "permission_group"} label="按权限组过滤" onClick={() => setCurrentFilterMethod("permission_group")}></Form.Radio>
                                 </Form.Group>
                                 <Form.Field>
