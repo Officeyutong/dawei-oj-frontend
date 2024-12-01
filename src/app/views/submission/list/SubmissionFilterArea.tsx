@@ -35,7 +35,7 @@ const SubmissionFilterArea: React.FC<React.PropsWithChildren<SubmissionFilterPro
 
 
             <Form.Checkbox toggle checked={filter.username.used} onClick={(e, d) => {
-                if (filter.uid.used) setFilter({ ...filter, username: { used: false, value: filter.username.value } });
+                if (filter.username.used) setFilter({ ...filter, username: { used: false, value: filter.username.value } });
                 else setFilter({ ...filter, username: { used: true, value: filter.username.value } })
             }}
                 label="筛选用户名"
