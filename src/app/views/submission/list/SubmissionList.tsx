@@ -12,14 +12,15 @@ import UserLink from "../../utils/UserLink";
 import submissionClient from "../client/SubmissionClient";
 import { SubmissionFilter, SubmissionListEntry } from "../client/types";
 import SubmissionFilterArea from "./SubmissionFilterArea";
-const validKeys = new Set(["uid", "status", "min_score", "max_score", "problem", "contest"]);
+const validKeys = new Set(["uid", "status", "min_score", "max_score", "problem", "contest", "username"]);
 const keyTransformer: { [K in keyof Required<SubmissionFilter>]: (x: string) => NonNullable<SubmissionFilter[K]> } = {
-    uid: (x: string) => x,
+    uid: (x: string) => parseInt(x),
     status: (x: string) => x as NonNullable<SubmissionFilter["status"]>,
     contest: x => parseInt(x),
     max_score: x => parseInt(x),
     min_score: x => parseInt(x),
-    problem: x => parseInt(x)
+    problem: x => parseInt(x),
+    username: x => x
 }
 function parseFilter(text: string): SubmissionFilter {
     const filterStr = QueryString.parse(text).filter as (string | undefined) || "";

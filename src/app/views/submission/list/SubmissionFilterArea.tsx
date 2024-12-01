@@ -20,7 +20,8 @@ const SubmissionFilterArea: React.FC<React.PropsWithChildren<SubmissionFilterPro
         min_score: { used: defaultFilter.min_score !== undefined, value: defaultFilter.min_score || 0 },
         problem: { used: defaultFilter.problem !== undefined, value: defaultFilter.problem || 1 },
         status: { used: defaultFilter.status !== undefined, value: defaultFilter.status || "accepted" },
-        uid: { used: defaultFilter.uid !== undefined, value: defaultFilter.uid }
+        uid: { used: defaultFilter.uid !== undefined, value: defaultFilter.uid },
+        username: { used: defaultFilter.username !== undefined, value: defaultFilter.username }
     });
     return <>
         <Form>
@@ -28,9 +29,19 @@ const SubmissionFilterArea: React.FC<React.PropsWithChildren<SubmissionFilterPro
                 if (filter.uid.used) setFilter({ ...filter, uid: { used: false, value: filter.uid.value } });
                 else setFilter({ ...filter, uid: { used: true, value: filter.uid.value } })
             }}
-                label="筛选用户名/UID"
+                label="筛选UID"
             ></Form.Checkbox>
-            {filter.uid.used && <Form.Input fluid={false} label="用户名" type="text" value={filter.uid.value || ""} onChange={(e, d) => setFilter({ ...filter, uid: { used: true, value: d.value } })}></Form.Input>}
+            {filter.uid.used && <Form.Input fluid={false} label="UID" type="text" value={filter.uid.value || ""} onChange={(e, d) => setFilter({ ...filter, uid: { used: true, value: parseInt(d.value) } })}></Form.Input>}
+
+
+            <Form.Checkbox toggle checked={filter.username.used} onClick={(e, d) => {
+                if (filter.uid.used) setFilter({ ...filter, username: { used: false, value: filter.username.value } });
+                else setFilter({ ...filter, username: { used: true, value: filter.username.value } })
+            }}
+                label="筛选用户名"
+            ></Form.Checkbox>
+            {filter.username.used && <Form.Input fluid={false} label="用户名" type="text" value={filter.username.value || ""} onChange={(e, d) => setFilter({ ...filter, username: { used: true, value: d.value } })}></Form.Input>}
+
 
             <Form.Checkbox toggle checked={filter.problem.used} onClick={(e, d) => {
                 if (filter.problem.used) setFilter({ ...filter, problem: { used: false, value: filter.problem.value } });

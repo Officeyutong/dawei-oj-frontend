@@ -66,12 +66,13 @@ interface SubmissionInfo {
 };
 
 interface SubmissionFilter {
-    uid?: string;
+    uid?: number;
     status?: "accepted" | "unaccepted" | "judging" | "waiting" | "compile_error";
     min_score?: number;
     max_score?: number;
     problem?: number;
     contest?: number;
+    username?: string;
 };
 
 const SubmissionFilterSchema: Schema = {
