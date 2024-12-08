@@ -80,7 +80,7 @@ const HomePageNew = () => {
         <Col span={6}>
             <ProblemSearchBoxNew></ProblemSearchBoxNew>
             {homePageData && <>
-                <RecentCountdowns countdowns={homePageData.dayCountdowns}></RecentCountdowns>
+                {homePageData.dayCountdowns.length > 0 && <RecentCountdowns countdowns={homePageData.dayCountdowns}></RecentCountdowns>}
                 <ToolBoxNew toolbox={homePageData.toolbox}></ToolBoxNew>
             </>}
             <BroadcastBoxNew></BroadcastBoxNew>
