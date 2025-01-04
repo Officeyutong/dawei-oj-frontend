@@ -52,6 +52,7 @@ export interface UserStateType {
         defaultLanguages: string[];
         maxSubmissionCountPerUserPerVisualHomework: number;
         hasOnlineVMManagePermission: boolean;
+        hasVideoCourseManagePermission: boolean;
     }
 }
 
@@ -114,7 +115,8 @@ const defaultState: StateType = {
             realName: undefined,
             defaultLanguages: [],
             maxSubmissionCountPerUserPerVisualHomework: 1,
-            hasOnlineVMManagePermission: false
+            hasOnlineVMManagePermission: false,
+            hasVideoCourseManagePermission: false
         }
     },
     generalClient: null,
@@ -125,7 +127,8 @@ const defaultState: StateType = {
     },
     displayBaseView: "new",
     baseContainerMaxWidth: "75%",
-    baseContainerWidth: undefined
+    baseContainerWidth: undefined,
+
 };
 
 export interface SimpleAction extends Action<string> {

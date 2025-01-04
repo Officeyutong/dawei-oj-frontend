@@ -1,7 +1,7 @@
 import { Col, Menu, Row } from "antd";
 import { Link } from "react-router-dom";
 import { PUBLIC_URL } from "../App";
-import { BarChartOutlined, BarsOutlined, BookOutlined, CalculatorOutlined, CloudOutlined, CodeOutlined, CompassOutlined, ContainerOutlined, DashboardOutlined, DatabaseOutlined, DesktopOutlined, FileImageOutlined, GroupOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MergeOutlined, PlusOutlined, ProjectOutlined, TeamOutlined } from "@ant-design/icons";
+import { BarChartOutlined, BarsOutlined, BookOutlined, CalculatorOutlined, CloudOutlined, CodeOutlined, CompassOutlined, ContainerOutlined, DashboardOutlined, DatabaseOutlined, DesktopOutlined, FileImageOutlined, ForwardOutlined, GroupOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MergeOutlined, PlusOutlined, ProjectOutlined, TeamOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { StateType } from "../states/Manager";
 import Logo from "../assets/logo.png";
@@ -18,7 +18,8 @@ const TopMenuNew = () => {
         uid,
         showPermissionPack,
         hasVisualProgrammingHomeworkUpdatePerm,
-        hasOnlineVMManagePermission
+        hasOnlineVMManagePermission,
+        hasVideoCourseManagePermission
     } = useSelector((s: StateType) => s.userState.userData);
     return <Row>
         <Col span={3} offset={2} style={{ backgroundColor: "white", alignContent: "center", textAlign: "center" }}>
@@ -77,7 +78,8 @@ const TopMenuNew = () => {
                                     type: "group" as "group", label: "其他", children: [
                                         (canUseImageStore ? { label: <Link to={`${PUBLIC_URL}/imagestore/list`}>图片上传</Link>, key: "image-store", icon: <FileImageOutlined></FileImageOutlined> } : null),
                                         (hasVisualProgrammingHomeworkUpdatePerm ? { label: <Link to={`${PUBLIC_URL}/visual_programming_admin/management`}>可视化编程管理</Link>, key: "visualprogramming-admin", icon: <CompassOutlined></CompassOutlined> } : null),
-                                        (hasOnlineVMManagePermission ? { label: <Link to={`${PUBLIC_URL}/onlinevm/admin`}>在线NOI Linux环境管理</Link>, key: "onlinevm-admin", icon: <CodeOutlined></CodeOutlined> } : null)
+                                        (hasOnlineVMManagePermission ? { label: <Link to={`${PUBLIC_URL}/onlinevm/admin`}>在线NOI Linux环境管理</Link>, key: "onlinevm-admin", icon: <CodeOutlined></CodeOutlined> } : null),
+                                        (hasVideoCourseManagePermission ? { label: <Link to={`${PUBLIC_URL}/video_course/admin`}>视频课管理</Link>, key: "video-course-admin", icon: <ForwardOutlined></ForwardOutlined> } : null)
                                     ]
                                 } : null)
                             ]
