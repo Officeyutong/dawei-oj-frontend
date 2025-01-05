@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { VideoClipEntry, VideoCourseDirectoryEntry, VideoCourseDirectoryEntryWithoutSchema, VideoCourseDirectorySchema, VideoCourseEntry, VideoCourseEntryWithoutSchema, VideoCourseSchema } from "./types";
+import { CourseNameQueryResponse, VideoClipEntry, VideoCourseDirectoryEntry, VideoCourseDirectoryEntryWithoutSchema, VideoCourseDirectoryEntryWithoutSchemaWithPermission, VideoCourseDirectorySchema, VideoCourseEntry, VideoCourseEntryWithoutSchema, VideoCourseSchema } from "./types";
 
 class VideoRecordPlayClient extends GeneralClient {
     async addVideoClip(ossPath: string, description: string): Promise<{ id: number }> {
@@ -17,8 +17,6 @@ class VideoRecordPlayClient extends GeneralClient {
     async getAllClips(page: number = 1): Promise<{ pageCount: number; data: VideoClipEntry[] }> {
         return (await this.client!.post("/api/video_record_play/get_all_video_clips", { page })).data;
     }
-
-
     async addVideoCourse(title: string, schema: VideoCourseSchema): Promise<{ id: number }> {
         return (await this.client!.post("/api/video_record_play/add_video_course", { title, schema })).data;
     }
@@ -44,13 +42,17 @@ class VideoRecordPlayClient extends GeneralClient {
     async deleteVideoCourseDirectory(id: number) {
         await this.client!.post("/api/video_record_play/delete_video_course_directory", { id });
     }
-    async getAllVideoCourseDirectories(): Promise<VideoCourseDirectoryEntryWithoutSchema[]> {
-        return (await this.client!.post("/api/video_record_play/get_all_video_course_directories")).data;
+    async getAllVideoCourseDirectories(withPermissionFlag: false): Promise<VideoCourseDirectoryEntryWithoutSchema[]>;
+    async getAllVideoCourseDirectories(withPermissionFlag: true): Promise<VideoCourseDirectoryEntryWithoutSchemaWithPermission[]>;
+    async getAllVideoCourseDirectories(withPermissionFlag: boolean): Promise<any> {
+        return (await this.client!.post("/api/video_record_play/get_all_video_course_directories", { with_permission_flag: withPermissionFlag })).data;
     }
     async getVideoCourseDirectory(id: number): Promise<VideoCourseDirectoryEntry> {
         return (await this.client!.post("/api/video_record_play/get_video_course_directory", { id })).data;
     }
-
+    async batchQueryCourseNames(ids: number[]): Promise<CourseNameQueryResponse[]> {
+        return (await this.client!.post("/api/video_record_play/batch_get_course_names", { ids })).data;
+    }
 };
 
 

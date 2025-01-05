@@ -42,6 +42,12 @@ interface VideoCourseDirectoryEntry {
     schema: VideoCourseDirectoryEntry;
 }
 type VideoCourseDirectoryEntryWithoutSchema = Omit<VideoCourseDirectoryEntry, "schema">;
+type VideoCourseDirectoryEntryWithoutSchemaWithPermission = VideoCourseDirectoryEntryWithoutSchema & { has_permission: boolean };
+interface CourseNameQueryResponse {
+    id: number;
+    title: string;
+}
+
 export type {
     VideoClipEntry,
     VideoCourseEntry,
@@ -53,5 +59,7 @@ export type {
     VideoCourseDirectorySchemaEntry,
     VideoCourseDirectorySchema,
     VideoCourseDirectoryEntry,
-    VideoCourseDirectoryEntryWithoutSchema
+    VideoCourseDirectoryEntryWithoutSchema,
+    CourseNameQueryResponse,
+    VideoCourseDirectoryEntryWithoutSchemaWithPermission
 }

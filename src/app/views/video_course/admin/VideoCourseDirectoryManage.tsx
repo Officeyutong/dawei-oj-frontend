@@ -14,7 +14,7 @@ const VideoCourseDirectoryManage: React.FC<{}> = () => {
     const loadData = async () => {
         try {
             setLoading(true);
-            const resp = await videoRecordPlayClient.getAllVideoCourseDirectories();
+            const resp = await videoRecordPlayClient.getAllVideoCourseDirectories(false);
             setData(resp);
             setLoaded(true);
         } catch { } finally {
