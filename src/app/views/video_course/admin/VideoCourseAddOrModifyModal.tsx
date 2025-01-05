@@ -66,8 +66,7 @@ const SCHEMA: Schema = {
             }
         ]
     }
-}
-    ;
+};
 function verifySchema(text: string): undefined | string {
     try {
         const parsed = JSON.parse(text);

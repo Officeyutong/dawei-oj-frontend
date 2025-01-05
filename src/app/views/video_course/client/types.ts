@@ -29,6 +29,19 @@ interface VideoCourseEntry {
 
 type VideoCourseEntryWithoutSchema = Omit<VideoCourseEntry, "schema">;
 
+interface VideoCourseDirectorySchemaEntry {
+    title: string;
+    courses: number[];
+}
+type VideoCourseDirectorySchema = VideoCourseDirectorySchemaEntry[];
+
+interface VideoCourseDirectoryEntry {
+    id: number;
+    title: string;
+    order: number;
+    schema: VideoCourseDirectoryEntry;
+}
+type VideoCourseDirectoryEntryWithoutSchema = Omit<VideoCourseDirectoryEntry, "schema">;
 export type {
     VideoClipEntry,
     VideoCourseEntry,
@@ -36,5 +49,9 @@ export type {
     VideoCourseSchemaVideo,
     VideoCourseSchemaQuestion,
     VideoCourseSchema,
-    VideoCourseEntryWithoutSchema
+    VideoCourseEntryWithoutSchema,
+    VideoCourseDirectorySchemaEntry,
+    VideoCourseDirectorySchema,
+    VideoCourseDirectoryEntry,
+    VideoCourseDirectoryEntryWithoutSchema
 }
