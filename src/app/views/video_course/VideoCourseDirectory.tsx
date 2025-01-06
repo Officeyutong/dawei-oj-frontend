@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import { Dimmer, Grid, Header, Loader, Segment } from "semantic-ui-react";
+import { Button, Dimmer, Grid, Header, Icon, Loader, Segment } from "semantic-ui-react";
 import { VideoCourseDirectoryEntryWithoutSchemaWithPermission } from "./client/types";
 import { videoRecordPlayClient } from "./client/VideoCourseClient";
+import { useDocumentTitle } from "../../common/Utils";
 
 const VideoCourseDirectory: React.FC<{}> = () => {
     const [data, setData] = useState<VideoCourseDirectoryEntryWithoutSchemaWithPermission[]>([]);
     const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
+    const [isHover, setIsHover] = useState<number | null>(null)
+    useDocumentTitle('录播课程')
     useEffect(() => {
         if (!loaded) (async () => {
             try {
@@ -21,13 +24,24 @@ const VideoCourseDirectory: React.FC<{}> = () => {
     return <>
         <Header as="h1">录播</Header>
         <Segment stacked>
+            <Button primary style={{ margin: '1rem' }}>返回上次播放</Button>
             {loading && <Dimmer page active><Loader></Loader></Dimmer>}
             <Grid columns={3}>
                 {data.map(item => <Grid.Column key={item.id}>
-                    <Segment style={{ cursor: "pointer" }}>{item.title}</Segment>
+                    <Segment style={{ fontSize: "1.5em", backgroundColor: (isHover === item.id) && item.has_permission !== false ? '#E0E0E0' : 'white', cursor: item.has_permission ? 'pointer' : 'default' }}
+                        disabled={!item.has_permission}
+                        onClick={() => {
+                            if (item.has_permission) { window.location.href = `/video_course/video_course_directory_detail/${item.id}` }
+                        }}
+                        onMouseEnter={() => setIsHover(item.id)}
+                        onMouseLeave={() => setIsHover(null)}>
+                        {item.title}
+                        <Icon style={{ marginLeft: '1rem' }} color={item.has_permission === true ? 'green' : 'red'} name={item.has_permission === true ? 'lock open' : 'lock'}>
+                        </Icon>
+                    </Segment>
                 </Grid.Column>)}
             </Grid>
-        </Segment>
+        </Segment >
     </>
 };
 

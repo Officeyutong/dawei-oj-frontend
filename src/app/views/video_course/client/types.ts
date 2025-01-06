@@ -39,7 +39,7 @@ interface VideoCourseDirectoryEntry {
     id: number;
     title: string;
     order: number;
-    schema: VideoCourseDirectoryEntry;
+    schema: VideoCourseDirectorySchema;
 }
 type VideoCourseDirectoryEntryWithoutSchema = Omit<VideoCourseDirectoryEntry, "schema">;
 type VideoCourseDirectoryEntryWithoutSchemaWithPermission = VideoCourseDirectoryEntryWithoutSchema & { has_permission: boolean };

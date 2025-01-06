@@ -3,6 +3,7 @@ import { Route, useRouteMatch } from "react-router-dom";
 import GeneralDimmedLoader from "../utils/GeneralDimmedLoader";
 const VideoCourseAdmin = lazy(() => import("./admin/VideoCoruseAdmin"));
 const VideoCourseDirectory = lazy(() => import("./VideoCourseDirectory"));
+const VideoCourseDirectoryDetail = lazy(() => import("./VideoCourseDirectoryDetail"));
 const VideoCourseRouter: React.FC<React.PropsWithChildren<{}>> = () => {
     const match = useRouteMatch();
     return <>
@@ -14,6 +15,11 @@ const VideoCourseRouter: React.FC<React.PropsWithChildren<{}>> = () => {
         <Route exact path={`${match.path}/video_course_directory`}>
             <Suspense fallback={<GeneralDimmedLoader />}>
                 <VideoCourseDirectory></VideoCourseDirectory>
+            </Suspense>
+        </Route>
+        <Route exact path={`${match.path}/video_course_directory_detail/:courseid`}>
+            <Suspense fallback={<GeneralDimmedLoader />}>
+                <VideoCourseDirectoryDetail></VideoCourseDirectoryDetail>
             </Suspense>
         </Route>
     </>
