@@ -9,7 +9,7 @@ const VideoCourseDirectoryDetail: React.FC<{}> = () => {
   const [data, setData] = useState<VideoCourseDirectoryEntry | null>(null);
   const [courseTitles, setCourseTitles] = useState<Map<number, CourseNameQueryResponse[]>>(new Map());
   const [loading, setLoading] = useState(false);
-  const [activeIndex, setActiveIndex] = useState<Set<number>>(new Set());
+  const [activeIndex, setActiveIndex] = useState<number[]>([]);
   const [loaded, setLoaded] = useState(false);
   useDocumentTitle(`录播课程目录`)
   useEffect(() => {
@@ -27,14 +27,11 @@ const VideoCourseDirectoryDetail: React.FC<{}> = () => {
     }
   }, [courseid, loaded])
   const handleAccordionClick = async (ids: number[], index: number) => {
-    if (!activeIndex.has(index)) {
-      const set = new Set(activeIndex);
-      set.add(index);
-      setActiveIndex(set)
+    if (!activeIndex.includes(index)) {
+      setActiveIndex([...activeIndex, index])
     } else {
-      const set = new Set(activeIndex);
-      set.delete(index);
-      setActiveIndex(set)
+      const temp = activeIndex;
+      setActiveIndex(temp.filter((item) => item !== index))
     }
     if (!courseTitles.get(index)) {
       try {
@@ -55,18 +52,18 @@ const VideoCourseDirectoryDetail: React.FC<{}> = () => {
       {data !== null && <Segment stacked>
         <Header as="h2">{data.title}</Header>
         {loading && <Dimmer page active><Loader></Loader></Dimmer>}
-        <Grid columns={1} style={{ display: 'flex', justifyContent: "center", alignItem: "center" }}>
+        <Grid columns={1} >
           {data.schema.map((item, index) => <Grid.Column key={item.title}>
             <Accordion styled style={{ width: "100%" }}>
               <AccordionTitle
-                active={activeIndex.has(index)}
+                active={activeIndex.includes(index)}
                 index={index}
                 onClick={() => handleAccordionClick(item.courses, index)}
               >
                 <Icon name='dropdown' />
                 {item.title}
               </AccordionTitle>
-              {courseTitles && courseTitles.get(index) && <AccordionContent active={activeIndex.has(index)}>
+              {courseTitles && courseTitles.get(index) && <AccordionContent active={activeIndex.includes(index)}>
                 {courseTitles.get(index)?.map((item) => <Segment>
                   <p style={{ marginLeft: "2rem", fontSize: '1.5rem', fontWeight: 'bold' }}>第{item.id}课. <span style={{ fontSize: "1rem" }}>{item.title}</span></p>
                 </Segment>)}
