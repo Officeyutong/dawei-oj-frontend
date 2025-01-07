@@ -1,5 +1,5 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { CourseNameQueryResponse, VideoClipEntry, VideoCourseDirectoryEntry, VideoCourseDirectoryEntryWithoutSchema, VideoCourseDirectoryEntryWithoutSchemaWithPermission, VideoCourseDirectorySchema, VideoCourseEntry, VideoCourseEntryWithoutSchema, VideoCourseSchema } from "./types";
+import { CourseNameQueryResponse, VideoClipEntry, VideoCourseDirectoryEntry, VideoCourseDirectoryEntryWithoutSchema, VideoCourseDirectoryEntryWithoutSchemaWithPermission, VideoCourseDirectorySchema, VideoCourseEntry, VideoCourseEntryWithoutSchema, VideoCourseSchema, VideoPlayRecordEntry } from "./types";
 
 class VideoRecordPlayClient extends GeneralClient {
     async addVideoClip(ossPath: string, description: string): Promise<{ id: number }> {
@@ -52,6 +52,9 @@ class VideoRecordPlayClient extends GeneralClient {
     }
     async batchQueryCourseNames(ids: number[]): Promise<CourseNameQueryResponse[]> {
         return (await this.client!.post("/api/video_record_play/batch_get_course_names", { ids })).data;
+    }
+    async getPlayRecord(uid: number, limit?: number, filter_by_course_id?: number, filter_by_course_directory_id?: number): Promise<VideoPlayRecordEntry[]> {
+        return (await this.client!.post("/api/video_record_play/get_play_record", { uid, limit, filter_by_course_id, filter_by_course_directory_id })).data;
     }
 };
 

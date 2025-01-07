@@ -48,6 +48,20 @@ interface CourseNameQueryResponse {
     title: string;
 }
 
+interface VideoPlayRecordEntry {
+    video_course: {
+        id: number;
+        title: string;
+    }
+    video_course_directory: {
+        id: number;
+        title: string;
+    }
+    node_id: number;
+    watched_time: number;
+    update_time: number;
+}
+
 export type {
     VideoClipEntry,
     VideoCourseEntry,
@@ -61,5 +75,6 @@ export type {
     VideoCourseDirectoryEntry,
     VideoCourseDirectoryEntryWithoutSchema,
     CourseNameQueryResponse,
-    VideoCourseDirectoryEntryWithoutSchemaWithPermission
+    VideoCourseDirectoryEntryWithoutSchemaWithPermission,
+    VideoPlayRecordEntry
 }
