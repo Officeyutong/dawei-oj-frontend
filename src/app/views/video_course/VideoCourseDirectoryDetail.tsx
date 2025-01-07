@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { videoRecordPlayClient } from "./client/VideoCourseClient";
 import { Accordion, AccordionContent, AccordionTitle, Button, Dimmer, Grid, Header, Icon, Loader, Segment } from "semantic-ui-react";
 import { CourseNameQueryResponse, VideoCourseDirectoryEntry } from "./client/types";
 import { useDocumentTitle } from "../../common/Utils";
+import { PUBLIC_URL } from "../../App";
 const VideoCourseDirectoryDetail: React.FC<{}> = () => {
   const { courseid } = useParams<{ courseid: string }>();
   const [data, setData] = useState<VideoCourseDirectoryEntry | null>(null);
@@ -30,8 +31,7 @@ const VideoCourseDirectoryDetail: React.FC<{}> = () => {
     if (!activeIndex.includes(index)) {
       setActiveIndex([...activeIndex, index])
     } else {
-      const temp = activeIndex;
-      setActiveIndex(temp.filter((item) => item !== index))
+      setActiveIndex(activeIndex.filter((item) => item !== index))
     }
     if (!courseTitles.get(index)) {
       try {
@@ -48,7 +48,7 @@ const VideoCourseDirectoryDetail: React.FC<{}> = () => {
   return (
     <>
       <Header as="h1">课程目录</Header>
-      <Button onClick={() => window.location.href = '/video_course/video_course_directory'} primary>返回课程选择</Button>
+      <Button as={Link} to={`${PUBLIC_URL}/video_course/video_course_directory`} primary>返回课程选择</Button>
       {data !== null && <Segment stacked>
         <Header as="h2">{data.title}</Header>
         {loading && <Dimmer page active><Loader></Loader></Dimmer>}
