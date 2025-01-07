@@ -51,7 +51,7 @@ const VideoCourseDirectoryDetail: React.FC<{}> = () => {
       <Button as={Link} to={`${PUBLIC_URL}/video_course/video_course_directory`} primary>返回课程选择</Button>
       {data !== null && <Segment stacked>
         <Header as="h2">{data.title}</Header>
-        {loading && <Dimmer page active><Loader></Loader></Dimmer>}
+        {loading && <Dimmer active><Loader></Loader></Dimmer>}
         <Grid columns={1} >
           {data.schema.map((item, index) => <Grid.Column key={item.title}>
             <Accordion styled style={{ width: "100%" }}>
@@ -63,8 +63,8 @@ const VideoCourseDirectoryDetail: React.FC<{}> = () => {
                 <Icon name='dropdown' />
                 {item.title}
               </AccordionTitle>
-              {courseTitles && courseTitles.get(index) && <AccordionContent active={activeIndex.includes(index)}>
-                {courseTitles.get(index)?.map((item) => <Segment>
+              {courseTitles && courseTitles.get(index) && <AccordionContent active={activeIndex.includes(index)} style={activeIndex.includes(index) ? { display: "flex", justifyContent: "center", alignItems: 'center', flexDirection: "column" } : {}}>
+                {courseTitles.get(index)?.map((item) => <Segment style={{ width: "90%" }}>
                   <p style={{ marginLeft: "2rem", fontSize: '1.5rem', fontWeight: 'bold' }}>第{item.id}课. <span style={{ fontSize: "1rem" }}>{item.title}</span></p>
                 </Segment>)}
               </AccordionContent>}
