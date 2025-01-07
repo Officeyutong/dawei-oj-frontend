@@ -3,6 +3,8 @@ import { Button, Dimmer, Grid, Header, Icon, Loader, Segment } from "semantic-ui
 import { VideoCourseDirectoryEntryWithoutSchemaWithPermission } from "./client/types";
 import { videoRecordPlayClient } from "./client/VideoCourseClient";
 import { useDocumentTitle } from "../../common/Utils";
+import { Link } from "react-router-dom";
+import { PUBLIC_URL } from "../../App";
 
 const VideoCourseDirectory: React.FC<{}> = () => {
     const [data, setData] = useState<VideoCourseDirectoryEntryWithoutSchemaWithPermission[]>([]);
@@ -30,9 +32,8 @@ const VideoCourseDirectory: React.FC<{}> = () => {
                 {data.map(item => <Grid.Column key={item.id}>
                     <Segment style={{ fontSize: "1.5em", backgroundColor: (isHover === item.id) && item.has_permission !== false ? '#E0E0E0' : 'white', cursor: item.has_permission ? 'pointer' : 'default' }}
                         disabled={!item.has_permission}
-                        onClick={() => {
-                            if (item.has_permission) { window.location.href = `/video_course/video_course_directory_detail/${item.id}` }
-                        }}
+                        as={Link}
+                        to={item.has_permission ? `${PUBLIC_URL}/video_course/video_course_directory_detail/${item.id}` : null}
                         onMouseEnter={() => setIsHover(item.id)}
                         onMouseLeave={() => setIsHover(null)}>
                         {item.title}
