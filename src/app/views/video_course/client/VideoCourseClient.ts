@@ -1,5 +1,6 @@
 import GeneralClient from "../../../common/GeneralClient";
-import { CourseNameQueryResponse, VideoClipEntry, VideoCourseDirectoryEntry, VideoCourseDirectoryEntryWithoutSchema, VideoCourseDirectoryEntryWithoutSchemaWithPermission, VideoCourseDirectorySchema, VideoCourseEntry, VideoCourseEntryWithoutSchema, VideoCourseSchema, VideoPlayRecordEntry } from "./types";
+import { AllUserListEntry } from "../../admin/client/types";
+import { CourseNameQueryResponse, UserGrantEntry, VideoClipEntry, VideoCourseDirectoryEntry, VideoCourseDirectoryEntryWithoutSchema, VideoCourseDirectoryEntryWithoutSchemaWithPermission, VideoCourseDirectorySchema, VideoCourseEntry, VideoCourseEntryWithoutSchema, VideoCourseSchema, VideoPlayRecordEntry } from "./types";
 
 class VideoRecordPlayClient extends GeneralClient {
     async addVideoClip(ossPath: string, description: string): Promise<{ id: number }> {
@@ -61,6 +62,18 @@ class VideoRecordPlayClient extends GeneralClient {
     }
     async getVideoURL(video_clip_id: number): Promise<string> {
         return (await this.client!.post("/api/video_record_play/get_video_url", { video_clip_id })).data;
+    }
+    async getUserGrants(uid: number): Promise<UserGrantEntry[]> {
+        return (await this.client!.post("/api/video_record_play/get_user_grants", { uid })).data;
+    }
+    async setUserGrants(uid: number, videoDirectoryIds: number[]) {
+        await this.client!.post("/api/video_record_play/set_user_grants", { uid, ids: videoDirectoryIds });
+    }
+    async getUsableUsersForVideoDirectory(videoCourseDirectoryId: number): Promise<AllUserListEntry[]> {
+        return (await this.client!.post("/api/video_record_play/get_usable_users", { video_course_directory_id: videoCourseDirectoryId })).data;
+    }
+    async setUsableUsersForVideoDirectory(videoCourseDirectoryId: number, users: number[]) {
+        await this.client!.post("/api/video_record_play/set_usable_users", { uid: users, video_course_directory_id: videoCourseDirectoryId })
     }
 };
 

@@ -62,6 +62,11 @@ interface VideoPlayRecordEntry {
     update_time: number;
 }
 
+interface UserGrantEntry {
+    id: number;
+    title: string;
+}
+
 export type {
     VideoClipEntry,
     VideoCourseEntry,
@@ -76,5 +81,6 @@ export type {
     VideoCourseDirectoryEntryWithoutSchema,
     CourseNameQueryResponse,
     VideoCourseDirectoryEntryWithoutSchemaWithPermission,
-    VideoPlayRecordEntry
+    VideoPlayRecordEntry,
+    UserGrantEntry
 }

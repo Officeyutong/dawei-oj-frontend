@@ -4,6 +4,7 @@ import { videoRecordPlayClient } from "../client/VideoCourseClient";
 import { Button, Dimmer, Divider, Loader, Table } from "semantic-ui-react";
 import { showConfirm } from "../../../dialogs/Dialog";
 import VideoCourseDirectoryAddOrModifyModal from "./VideoCourseDirectoryAddOrModifyModal";
+import VideoCourseDirectoryUserGrantModal from "./UserGrantModal";
 
 const VideoCourseDirectoryManage: React.FC<{}> = () => {
     const [loaded, setLoaded] = useState(false);
@@ -11,6 +12,8 @@ const VideoCourseDirectoryManage: React.FC<{}> = () => {
     const [data, setData] = useState<VideoCourseDirectoryEntryWithoutSchema[]>([]);
     const [updatingEntry, setUpdatingEntry] = useState<VideoCourseDirectoryEntryWithoutSchema | null>(null);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
+    const [showingUserGrantModalId, setShowingUserGrantModalId] = useState<number | null>(null);
+
     const loadData = async () => {
         try {
             setLoading(true);
@@ -35,6 +38,10 @@ const VideoCourseDirectoryManage: React.FC<{}> = () => {
         }
     })
     return <div>
+        {showingUserGrantModalId && <VideoCourseDirectoryUserGrantModal
+            onClose={() => setShowingUserGrantModalId(null)}
+            videoCourseDirectoryId={showingUserGrantModalId}
+        ></VideoCourseDirectoryUserGrantModal>}
         {showUpdateModal && <VideoCourseDirectoryAddOrModifyModal
             onClose={(flag) => {
                 if (flag) loadData()
@@ -66,6 +73,7 @@ const VideoCourseDirectoryManage: React.FC<{}> = () => {
                             setShowUpdateModal(true);
                         }} color="green">修改</Button>
                         <Button size="small" onClick={() => doDelete(item.id)} color="red">删除</Button>
+                        <Button size="small" color="blue" onClick={() => setShowingUserGrantModalId(item.id)}>授权管理</Button>
                     </Table.Cell>
                 </Table.Row>)}
             </Table.Body>

@@ -23,8 +23,8 @@ const VideoCourseAdmin: React.FC<{}> = () => {
                 </Tab.Pane>
             },
             {
-                menuItem:"视频课目录管理",
-                pane:<Tab.Pane key={3}>
+                menuItem: "视频课目录管理",
+                pane: <Tab.Pane key={3}>
                     <VideoCourseDirectoryManage></VideoCourseDirectoryManage>
                 </Tab.Pane>
             }
