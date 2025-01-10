@@ -110,6 +110,9 @@ class ProblemClient extends GeneralClient {
     async getProblemUsage(problemId: number): Promise<ProblemUsageEntry[]> {
         return (await this.client!.post("/api/problem/query_problem_usage", { problem_id: problemId })).data;
     }
+    async switchToLocalProblem(problemId: number) {
+        await this.client!.post("/api/problem/switch_to_local_problem", { problem_id: problemId });
+    }
 };
 
 const problemClient = new ProblemClient();

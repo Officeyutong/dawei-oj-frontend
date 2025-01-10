@@ -68,6 +68,17 @@ const ProblemJudgeTab: React.FC<React.PropsWithChildren<ProblemDataProps>> = (da
     };
     const updateExtraParameter = useCallback((d: any) => update({ extra_parameter: d }), [update]);
     const updateSubtasks = useCallback((d: any) => update({ subtasks: d }), [update]);
+
+    const convertToLocalProblem = () => showConfirm("确认要将这个题目转换为本地评测题目吗？转换完成后，需要重新上传题目文件并配置子任务。此操作不可逆。", async () => {
+        try {
+            setLoading(true);
+            await problemClient.switchToLocalProblem(data.id);
+            window.location.reload();
+        } catch { } finally {
+            setLoading(false);
+        }
+    });
+
     return <div>
         {loading && <Dimmer active>
             <Loader></Loader>
@@ -132,6 +143,9 @@ const ProblemJudgeTab: React.FC<React.PropsWithChildren<ProblemDataProps>> = (da
                         <p>SPJ将会被以和普通题目相同的方式运行，目录下的user_out文件会被替换为用户所提交的答案</p>
                     </Message.Content>
                 </Message>}
+                {data.problem_type === "remote_judge" && <Form.Field>
+                    <Button onClick={convertToLocalProblem} color="green">转换为本地评测题目</Button>
+                </Form.Field>}
             </Form>
         </Segment>
         <ExtraParameterConfig
