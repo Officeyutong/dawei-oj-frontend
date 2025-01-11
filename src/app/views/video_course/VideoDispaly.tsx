@@ -3,8 +3,7 @@ import { videoRecordPlayClient } from "./client/VideoCourseClient"
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useDocumentTitle, useTimer } from "../../common/Utils";
 import { VideoCourseEntry, VideoCourseSchemaQuestion, VideoCourseSchemaVideo, VideoPlayRecordEntry } from "./client/types";
-// import Logo from "../../assets/logo.png";
-import { Button, Dimmer, Form, Grid, GridColumn, Header, Loader, Radio, Segment } from "semantic-ui-react";
+import { Button, Dimmer, Grid, GridColumn, Header, Loader, Radio, Segment } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { BigPlayButton, LoadingSpinner, Player, PlayerReference } from 'video-react';
 import 'video-react/dist/video-react.css';
@@ -12,9 +11,7 @@ import { StateType } from "../../states/Manager";
 import { useSelector } from "react-redux";
 import { Watermark } from 'watermark-js-plus'
 import { Markdown } from "../../common/Markdown";
-
-import "highlight.js/styles/default.css"
-import hljs from 'highlight.js';
+import VideoDisplayAdminView from "./VideoDisplayAdminView";
 
 const VideoDisplay: React.FC<{}> = () => {
     const { courseid, coursedirectoryid, node } = useParams<{ courseid: string, coursedirectoryid: string, node: string }>();
@@ -172,27 +169,12 @@ const VideoDisplay: React.FC<{}> = () => {
 
         }
     }
-    const renderedSchema = useMemo(() => {
-        if (!hasVideoCourseManagePermission) return null;
-        if (!courseDetail) return null;
-        return hljs.highlight(JSON.stringify(courseDetail.schema, undefined, 4), { language: "json", ignoreIllegals: true }).value
-    }, [courseDetail, hasVideoCourseManagePermission]);
-    const adminDebugView = hasVideoCourseManagePermission && <>
-        <Header>视频详情 （管理员调试用，普通用户不会看到）</Header>
-        <Segment>
-            <Form>
-                <Form.Field>
-                    <label>当前点ID</label>
-                    {node}
-                </Form.Field>
-                <Form.Field>
-                    <label>视频Schema</label>
-                    {renderedSchema !== null && <pre style={{ marginTop: 0 }} className="code-block" dangerouslySetInnerHTML={{ __html: renderedSchema }}>
-                    </pre>}
-                </Form.Field>
-            </Form>
-        </Segment>
-    </>;
+
+    const adminDebugView = hasVideoCourseManagePermission && courseDetail !== null && <VideoDisplayAdminView
+        courseDetail={courseDetail}
+        nodeId={parseInt(node)}
+    ></VideoDisplayAdminView>
+
     const handleNextVideo = () => {
         if (playRecord && playRecord.length !== 0 && courseDetail && nodeId) {
             if (((((courseDetail.schema[nodeId - 1]) as VideoCourseSchemaVideo).next === null) || (playRecord.length !== 0 && (Number(node) >= playRecord[0].node_id))) && !playEnded) {
@@ -203,8 +185,8 @@ const VideoDisplay: React.FC<{}> = () => {
         } else {
             return true
         }
-
     }
+
     return (
         <>
             {courseDetail && playRecord && <div>
