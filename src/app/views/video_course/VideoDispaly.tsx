@@ -161,7 +161,7 @@ const VideoDisplay: React.FC<{}> = () => {
                 }
             })
         }
-    }, [node, playRecord])
+    }, [node, playRecord, userDetails.realName, userDetails.username])
 
     const handleQuestionVideo = () => {
         if (courseDetail && videoRef.current && videoURL) {
@@ -248,6 +248,7 @@ const VideoDisplay: React.FC<{}> = () => {
                                     preload="auto"
                                     autoPlay={true}
                                     onPlay={handleQuestionVideo}
+
                                 >
                                     <LoadingSpinner />
                                     <BigPlayButton position="center" />
