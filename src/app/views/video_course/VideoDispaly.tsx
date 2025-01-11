@@ -6,7 +6,7 @@ import { VideoCourseEntry, VideoCourseSchemaQuestion, VideoCourseSchemaVideo, Vi
 // import Logo from "../../assets/logo.png";
 import { Button, Dimmer, Form, Grid, GridColumn, Header, Loader, Radio, Segment } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
-import { BigPlayButton, LoadingSpinner, Player, PlayerReference } from 'video-react';
+import { BigPlayButton, ControlBar, CurrentTimeDisplay, DurationDisplay, LoadingSpinner, Player, PlayerReference, PlayToggle, ProgressControl, TimeDivider, VolumeMenuButton } from 'video-react';
 import 'video-react/dist/video-react.css';
 import { StateType } from "../../states/Manager";
 import { useSelector } from "react-redux";
@@ -29,7 +29,7 @@ const VideoDisplay: React.FC<{}> = () => {
     const [playEnded, setPlayEnded] = useState<boolean>(false)
     const userDetails = useSelector((s: StateType) => s.userState.userData)
     const [selectedAnswer, setSelectedAnswer] = useState<{ idx: number, next: number } | null>(null)
-
+    const curTimeRef = useRef<number>(0);
     const courseId = useMemo(() => (courseid ? Number(courseid) : null), [courseid]);
     const courseDirectoryId = useMemo(() => (coursedirectoryid ? Number(coursedirectoryid) : null), [coursedirectoryid]);
     const nodeId = useMemo(() => (node ? Number(node) : null), [node]);
@@ -59,7 +59,6 @@ const VideoDisplay: React.FC<{}> = () => {
         (async () => {
             const record = await videoRecordPlayClient.getPlayRecord(userDetails.uid, 1, Number(courseid), Number(coursedirectoryid))
             setPlayRecord(record)
-            console.log(playRecord)
         })()
     }
     useTimer(handleRefreshRecord, 5000);
@@ -89,7 +88,9 @@ const VideoDisplay: React.FC<{}> = () => {
         return (() => {
             watermark.destroy()
         })
-    }, [userDetails.realName, userDetails.username])
+
+
+    }, [userDetails.realName, userDetails.username,])
 
     useEffect(() => {
         (async () => {
@@ -153,11 +154,17 @@ const VideoDisplay: React.FC<{}> = () => {
 
     useEffect(() => {
         if (videoRef && videoRef.current && playRecord && playRecord.length !== 0) {
-            videoRef.current.subscribeToStateChange(async (state) => {
-                if (state.seeking === true && Number(node) === playRecord[0].node_id && videoRef.current) {
-                    if (playRecord[0].watched_time < state.currentTime) {
-                        videoRef.current.seek(playRecord[0].watched_time)
+
+            videoRef.current.subscribeToStateChange((state) => {
+                if (Number(node) === playRecord[0].node_id && videoRef.current) {
+                    if (state.seeking) {
+                        if ((curTimeRef.current < state.currentTime)) {
+                            videoRef.current.seek(curTimeRef.current)
+                        }
+                    } else {
+                        curTimeRef.current = Math.max(state.currentTime, curTimeRef.current)
                     }
+
                 }
             })
         }
@@ -219,9 +226,17 @@ const VideoDisplay: React.FC<{}> = () => {
                         onEnded={() => setPlayEnded(true)}
 
                     >
-                        <LoadingSpinner />
                         <BigPlayButton position="center" />
                         <source src={videoURL}></source>
+                        <LoadingSpinner />
+                        <ControlBar autoHide={false} className="my-class" disableDefaultControls={true} >
+                            <PlayToggle />
+                            <VolumeMenuButton />
+                            <CurrentTimeDisplay />
+                            <TimeDivider />
+                            <DurationDisplay />
+                            <ProgressControl />
+                        </ControlBar>
                     </Player>}
                     <Segment style={{ height: "5rem" }}>
                         <Button
