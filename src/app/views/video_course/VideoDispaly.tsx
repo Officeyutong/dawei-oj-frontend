@@ -25,7 +25,7 @@ const VideoDisplay: React.FC<{}> = () => {
   const [playRecord, setPlayRecord] = useState<VideoPlayRecordEntry[] | null>(null)
   const [playEnded, setPlayEnded] = useState<boolean>(false)
   const userDetails = useSelector((s: StateType) => s.userState.userData)
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+  const [selectedAnswer, setSelectedAnswer] = useState<{ idx: number, next: number } | null>(null)
 
   const courseId = useMemo(() => (courseid ? Number(courseid) : null), [courseid]);
   const courseDirectoryId = useMemo(() => (coursedirectoryid ? Number(coursedirectoryid) : null), [coursedirectoryid]);
@@ -236,16 +236,17 @@ const VideoDisplay: React.FC<{}> = () => {
                       label={String.fromCharCode(index + 1 + 64) + '.'}
                       style={{ display: "inline-block", fontWeight: "bold" }}
                       value={index}
-                      checked={selectedAnswer === item.next}
-                      onChange={() => setSelectedAnswer(item.next)}>
+                      checked={(selectedAnswer && (selectedAnswer.next === item.next) && (selectedAnswer.idx === index)) ? true : false}
+                      onChange={() => setSelectedAnswer({ idx: index, next: item.next })}>
                     </Radio>
                     <label><Markdown style={{ marginLeft: "2rem", display: "inline-block" }} markdown={item.content}></Markdown></label>
                   </Grid.Column>
                   )}
                   <Button
                     style={{ height: "3rem" }}
+                    disabled={selectedAnswer === null}
                     primary
-                    onClick={() => { history.push(`${PUBLIC_URL}/video_course/video_display/${coursedirectoryid}/${courseid}/${selectedAnswer}`) }}>
+                    onClick={() => { history.push(`${PUBLIC_URL}/video_course/video_display/${coursedirectoryid}/${courseid}/${selectedAnswer?.next}`) }}>
                     提交答案
                   </Button>
                 </Grid>
