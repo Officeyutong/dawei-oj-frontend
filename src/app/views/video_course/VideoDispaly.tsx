@@ -185,8 +185,9 @@ const VideoDisplay: React.FC<{}> = () => {
         {loading && <Dimmer active><Loader></Loader></Dimmer>}
         <Button as={Link} to={`${PUBLIC_URL}/video_course/video_course_directory_detail/${coursedirectoryid}`} primary>返回课程目录</Button>
         <Header as='h1'>{courseDetail.title}</Header>
-        {courseDetail.schema[Number(node) - 1].type === 'video' && <div>
+        {courseDetail.schema[Number(node) - 1].type === 'video' && <div onContextMenu={(e) => e.preventDefault()}>
           {videoURL !== '' && <Player ref={videoRef}
+
             preload="auto"
             autoPlay={true}
             startTime={(playRecord.length !== 0 && Number(node) === playRecord[0].node_id) ? playRecord[0].watched_time : 0}
@@ -216,16 +217,18 @@ const VideoDisplay: React.FC<{}> = () => {
         {courseDetail.schema[Number(node) - 1].type === 'choice_question' && <div>
           <Header as='h2'>{(courseDetail.schema[Number(node) - 1] as VideoCourseSchemaQuestion).title}</Header>
           <Grid columns={2}>
-            <GridColumn>
-              {videoURL !== '' && <Player ref={videoRef}
-                preload="auto"
-                autoPlay={true}
-                onPlay={handleQuestionVideo}
-              >
-                <LoadingSpinner />
-                <BigPlayButton position="center" />
-                <source src={videoURL}></source>
-              </Player>}
+            <GridColumn >
+              <div onContextMenu={(e) => e.preventDefault()}>
+                {videoURL !== '' && <Player ref={videoRef}
+                  preload="auto"
+                  autoPlay={true}
+                  onPlay={handleQuestionVideo}
+                >
+                  <LoadingSpinner />
+                  <BigPlayButton position="center" />
+                  <source src={videoURL}></source>
+                </Player>}
+              </div>
             </GridColumn>
             <GridColumn>
               <Segment >
