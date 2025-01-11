@@ -21,6 +21,7 @@ const VideoCourseDirectory: React.FC<{}> = () => {
             try {
                 setLoading(true);
                 setPlayRecord(await videoRecordPlayClient.getPlayRecord(uid, 1))
+                console.log(await videoRecordPlayClient.getPlayRecord(uid, 1))
                 setData(await videoRecordPlayClient.getAllVideoCourseDirectories(true));
                 setLoaded(true);
             } catch { } finally {

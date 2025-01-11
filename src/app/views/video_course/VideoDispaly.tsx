@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { Watermark } from 'watermark-js-plus'
 import { Markdown } from "../../common/Markdown";
 import VideoDisplayAdminView from "./VideoDisplayAdminView";
+import { showErrorModal } from "../../dialogs/Dialog";
 
 const VideoDisplay: React.FC<{}> = () => {
     const { courseid, coursedirectoryid, node } = useParams<{ courseid: string, coursedirectoryid: string, node: string }>();
@@ -22,7 +23,7 @@ const VideoDisplay: React.FC<{}> = () => {
     const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [coursePreNode, setCoursePreNode] = useState<Map<number, number>>(new Map())
-    const [playRecord, setPlayRecord] = useState<VideoPlayRecordEntry[] | null>(null)
+    const [playRecord, setPlayRecord] = useState<VideoPlayRecordEntry[]>([])
     const [playEnded, setPlayEnded] = useState<boolean>(false)
     const userDetails = useSelector((s: StateType) => s.userState.userData)
     const [selectedAnswer, setSelectedAnswer] = useState<{ idx: number, next: number } | null>(null)
@@ -30,7 +31,6 @@ const VideoDisplay: React.FC<{}> = () => {
     const courseId = useMemo(() => (courseid ? Number(courseid) : null), [courseid]);
     const courseDirectoryId = useMemo(() => (coursedirectoryid ? Number(coursedirectoryid) : null), [coursedirectoryid]);
     const nodeId = useMemo(() => (node ? Number(node) : null), [node]);
-    useDocumentTitle('课程播放')
 
     const { hasVideoCourseManagePermission } = userDetails;
     useDocumentTitle('课程播放')
@@ -52,13 +52,6 @@ const VideoDisplay: React.FC<{}> = () => {
     }
 
     useTimer(handleUpdateRecord, 5000);
-    const handleRefreshRecord = () => {
-        (async () => {
-            const record = await videoRecordPlayClient.getPlayRecord(userDetails.uid, 1, Number(courseid), Number(coursedirectoryid))
-            setPlayRecord(record)
-        })()
-    }
-    useTimer(handleRefreshRecord, 5000);
     useEffect(() => {
         (async () => {
             if (videoRef.current && courseDetail) {
@@ -95,7 +88,20 @@ const VideoDisplay: React.FC<{}> = () => {
                 setLoading(true)
                 if (!loaded) {
                     const courseDetail = await videoRecordPlayClient.getVideoCourse(Number(courseid))
-                    const record = await videoRecordPlayClient.getPlayRecord(userDetails.uid, 1, Number(courseid), Number(coursedirectoryid))
+                    const record = await videoRecordPlayClient.getPlayRecord(userDetails.uid, 1, Number(courseid), Number(coursedirectoryid));
+
+                    if (record.length > 0) {
+                        curTimeRef.current = record[0].watched_time
+                        if (nodeId && nodeId > record[0].node_id) {
+                            showErrorModal(`暂无权限观看该节点(${nodeId})`)
+                            history.push(`${PUBLIC_URL}/video_course/video_display/${coursedirectoryid}/${courseid}/${record[0].node_id}`)
+                        }
+                    } else {
+                        if (nodeId !== 1) {
+                            showErrorModal('暂无权限观看该节点')
+                            history.push(`${PUBLIC_URL}/video_course/video_display/${coursedirectoryid}/${courseid}/1`)
+                        }
+                    }
                     setPlayRecord(record)
                     setCourseDetail(courseDetail)
                     setLoaded(true)
@@ -107,7 +113,7 @@ const VideoDisplay: React.FC<{}> = () => {
 
         })()
 
-    }, [coursedirectoryid, courseid, loaded, userDetails.uid])
+    }, [coursedirectoryid, courseid, history, loaded, nodeId, userDetails.uid])
     useEffect(() => {
         (async () => {
             try {
@@ -149,11 +155,10 @@ const VideoDisplay: React.FC<{}> = () => {
 
     }, [courseDetail])
 
-    useEffect(() => {
-        if (videoRef && videoRef.current && playRecord && playRecord.length !== 0) {
-
+    const handleLoadStart = () => {
+        if (videoRef.current) {
             videoRef.current.subscribeToStateChange((state) => {
-                if (Number(node) === playRecord[0].node_id && videoRef.current) {
+                if ((playRecord.length === 0 || Number(node) === playRecord[0].node_id) && videoRef.current) {
                     if (state.seeking) {
                         if ((curTimeRef.current < state.currentTime)) {
                             videoRef.current.seek(curTimeRef.current)
@@ -161,11 +166,10 @@ const VideoDisplay: React.FC<{}> = () => {
                     } else {
                         curTimeRef.current = Math.max(state.currentTime, curTimeRef.current)
                     }
-
                 }
             })
         }
-    }, [node, playRecord, userDetails.realName, userDetails.username])
+    }
 
     const handleQuestionVideo = () => {
         if (courseDetail && videoRef.current && videoURL) {
@@ -184,11 +188,17 @@ const VideoDisplay: React.FC<{}> = () => {
 
     const handleNextVideo = () => {
         if (playRecord && playRecord.length !== 0 && courseDetail && nodeId) {
-            if (((((courseDetail.schema[nodeId - 1]) as VideoCourseSchemaVideo).next === null) || (playRecord.length !== 0 && (Number(node) >= playRecord[0].node_id))) && !playEnded) {
+
+            if ((((courseDetail.schema[nodeId - 1]) as VideoCourseSchemaVideo).next === null)) {
                 return true
-            } else {
+            }
+            if (playEnded) {
                 return false
             }
+            if ((playRecord.length !== 0 && (Number(node) >= playRecord[0].node_id))) {
+                return true
+            }
+
         } else {
             return true
         }
@@ -196,7 +206,7 @@ const VideoDisplay: React.FC<{}> = () => {
 
     return (
         <>
-            {courseDetail && playRecord && <div>
+            {courseDetail && loaded && <div>
                 {loading && <Dimmer active><Loader></Loader></Dimmer>}
                 <Button as={Link} to={`${PUBLIC_URL}/video_course/video_course_directory_detail/${coursedirectoryid}`} primary>返回课程目录</Button>
                 <Header as='h1'>{courseDetail.title}</Header>
@@ -206,7 +216,7 @@ const VideoDisplay: React.FC<{}> = () => {
                         autoPlay={true}
                         startTime={(playRecord.length !== 0 && Number(node) === playRecord[0].node_id) ? playRecord[0].watched_time : 0}
                         onEnded={() => setPlayEnded(true)}
-
+                        onLoadStart={handleLoadStart}
                     >
                         <BigPlayButton position="center" />
                         <source src={videoURL}></source>
