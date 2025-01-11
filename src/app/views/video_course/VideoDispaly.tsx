@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { videoRecordPlayClient } from "./client/VideoCourseClient"
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useDocumentTitle, useTimer } from "../../common/Utils";
@@ -26,6 +26,10 @@ const VideoDisplay: React.FC<{}> = () => {
   const [playEnded, setPlayEnded] = useState<boolean>(false)
   const userDetails = useSelector((s: StateType) => s.userState.userData)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+
+  const courseId = useMemo(() => (courseid ? Number(courseid) : null), [courseid]);
+  const courseDirectoryId = useMemo(() => (coursedirectoryid ? Number(coursedirectoryid) : null), [coursedirectoryid]);
+  const nodeId = useMemo(() => (node ? Number(node) : null), [node]);
   useDocumentTitle('课程播放')
 
   const handleUpdateRecord = () => {
@@ -163,6 +167,18 @@ const VideoDisplay: React.FC<{}> = () => {
     }
   }
 
+  const handleNextVideo = () => {
+    if (playRecord && playRecord.length !== 0 && courseDetail && nodeId) {
+      if ((((courseDetail.schema[nodeId - 1]) as VideoCourseSchemaVideo).next === null) || (playRecord.length !== 0 && (Number(node) >= playRecord[0].node_id)) && !playEnded) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return true
+    }
+
+  }
   return (
     <>
       {courseDetail && playRecord && <div>
@@ -191,7 +207,7 @@ const VideoDisplay: React.FC<{}> = () => {
             >上一段视频</Button>
             <Button
               onClick={() => { history.push(`${PUBLIC_URL}/video_course/video_display/${coursedirectoryid}/${courseid}/${(courseDetail.schema[Number(node) - 1] as VideoCourseSchemaVideo).next}`) }}
-              disabled={((((courseDetail.schema[Number(node) - 1]) as VideoCourseSchemaVideo).next === null) || (playRecord.length !== 0 && (Number(node) >= playRecord[0].node_id))) && !playEnded}
+              disabled={handleNextVideo()}
             >下一段视频</Button>
           </Segment>
 
