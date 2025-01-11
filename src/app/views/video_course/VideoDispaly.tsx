@@ -4,13 +4,14 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { useDocumentTitle, useTimer } from "../../common/Utils";
 import { VideoCourseEntry, VideoCourseSchemaQuestion, VideoCourseSchemaVideo, VideoPlayRecordEntry } from "./client/types";
 // import Logo from "../../assets/logo.png";
-import { Button, Dimmer, Grid, GridColumn, Header, Loader, Segment } from "semantic-ui-react";
+import { Button, Dimmer, Grid, GridColumn, Header, Loader, Radio, Segment } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { BigPlayButton, LoadingSpinner, Player, PlayerReference } from 'video-react';
 import 'video-react/dist/video-react.css';
 import { StateType } from "../../states/Manager";
 import { useSelector } from "react-redux";
 import { Watermark } from 'watermark-js-plus'
+import { Markdown } from "../../common/Markdown";
 
 const VideoDisplay: React.FC<{}> = () => {
   const { courseid, coursedirectoryid, node } = useParams<{ courseid: string, coursedirectoryid: string, node: string }>();
@@ -24,6 +25,7 @@ const VideoDisplay: React.FC<{}> = () => {
   const [playRecord, setPlayRecord] = useState<VideoPlayRecordEntry[] | null>(null)
   const [playEnded, setPlayEnded] = useState<boolean>(false)
   const userDetails = useSelector((s: StateType) => s.userState.userData)
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   useDocumentTitle('课程播放')
 
   const handleUpdateRecord = () => {
@@ -211,17 +213,25 @@ const VideoDisplay: React.FC<{}> = () => {
             </GridColumn>
             <GridColumn>
               <Segment >
-                <Grid columns={1} style={{ marginTop: '2rem' }}>
+                <Grid columns={1} style={{ margin: '2rem' }}>
                   <Header as='h2'>请选择正确答案</Header>
-                  {(courseDetail.schema[Number(node) - 1] as VideoCourseSchemaQuestion).content.map((item, index) => <Grid.Column key={index}>
-                    <Button
-                      style={{ height: "5rem" }}
-                      primary
-                      onClick={() => { history.push(`${PUBLIC_URL}/video_course/video_display/${coursedirectoryid}/${courseid}/${item.next}`) }}>
-                      {String.fromCharCode(index + 1 + 64) + '.' + item.content}
-                    </Button>
+                  {(courseDetail.schema[Number(node) - 1] as VideoCourseSchemaQuestion).content.map((item, index) => <Grid.Column key={index} style={{ display: "flex", flexDirection: "row" }}>
+                    <Radio
+                      label={String.fromCharCode(index + 1 + 64) + '.'}
+                      style={{ display: "inline-block", fontWeight: "bold" }}
+                      value={index}
+                      checked={selectedAnswer === item.next}
+                      onChange={() => setSelectedAnswer(item.next)}>
+                    </Radio>
+                    <label><Markdown style={{ marginLeft: "2rem", display: "inline-block" }} markdown={item.content}></Markdown></label>
                   </Grid.Column>
                   )}
+                  <Button
+                    style={{ height: "3rem" }}
+                    primary
+                    onClick={() => { history.push(`${PUBLIC_URL}/video_course/video_display/${coursedirectoryid}/${courseid}/${selectedAnswer}`) }}>
+                    提交答案
+                  </Button>
                 </Grid>
               </Segment>
             </GridColumn>

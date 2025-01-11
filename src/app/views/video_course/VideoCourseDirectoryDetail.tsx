@@ -64,9 +64,9 @@ const VideoCourseDirectoryDetail: React.FC<{}> = () => {
                 {item.title}
               </AccordionTitle>
               {courseTitles && courseTitles.get(index) && <AccordionContent active={activeIndex.includes(index)} style={activeIndex.includes(index) ? { display: "flex", justifyContent: "center", alignItems: 'center', flexDirection: "column" } : {}}>
-                {courseTitles.get(index)?.map((course) => <Container as={Link} to={`${PUBLIC_URL}/video_course/video_display/${data.id}/${course.id}/1`}>
+                {courseTitles.get(index)?.map((course, idx) => <Container as={Link} to={`${PUBLIC_URL}/video_course/video_display/${data.id}/${course.id}/1`}>
                   <Segment style={{ width: "90%" }}>
-                    <p style={{ marginLeft: "2rem", fontSize: '1.5rem', fontWeight: 'bold' }}>第{course.id}课. <span style={{ fontSize: "1rem" }}>{item.title}</span></p>
+                    <p style={{ marginLeft: "2rem", fontSize: '1.5rem', fontWeight: 'bold' }}>第{idx + 1}课. <span style={{ fontSize: "1rem" }}>{course.title}</span></p>
                   </Segment>
                 </Container>)}
               </AccordionContent>}
