@@ -201,7 +201,6 @@ const VideoDisplay: React.FC<{}> = () => {
                 return true
             }
             if (playEnded) {
-                showSuccessModal('当前视频播放已完成')
                 return false
             }
             if ((playRecord && (nodeId >= playRecord.node_id))) {
@@ -212,6 +211,15 @@ const VideoDisplay: React.FC<{}> = () => {
             return true
         }
     }
+
+    useEffect(() => {
+        if (videoRef.current) {
+            if (videoRef.current.getState().player.currentTime === videoRef.current.getState().player.duration && playEnded) {
+
+                showSuccessModal('当前视频播放已完成')
+            }
+        }
+    }, [playEnded])
 
     useEffect(() => {
         document.onfullscreenchange = (async (e) => {
@@ -235,7 +243,10 @@ const VideoDisplay: React.FC<{}> = () => {
                         startTime={(playRecord && nodeId === playRecord.node_id) ? playRecord.watched_time : 0}
                         onEnded={() => setPlayEnded(true)}
                         onLoadStart={handleLoadStart}
-                        onPlay={handleUpdateRecord}
+                        onPlay={() => {
+                            handleUpdateRecord();
+                            setPlayEnded(false)
+                        }}
                     >
                         <BigPlayButton position="center" />
                         <source src={videoURL}></source>
@@ -279,6 +290,7 @@ const VideoDisplay: React.FC<{}> = () => {
                                     onPlay={() => {
                                         handleQuestionVideo();
                                         handleUpdateRecord();
+                                        setPlayEnded(false)
                                     }}
 
                                 >
