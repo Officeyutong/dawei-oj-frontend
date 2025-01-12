@@ -272,6 +272,14 @@ const VideoDisplay: React.FC<{}> = () => {
                                     <LoadingSpinner />
                                     <BigPlayButton position="center" />
                                     <source src={videoURL}></source>
+                                    <ControlBar autoHide={false} className="my-class" disableDefaultControls={true} >
+                                        <PlayToggle />
+                                        <VolumeMenuButton />
+                                        <CurrentTimeDisplay />
+                                        <TimeDivider />
+                                        <DurationDisplay />
+                                        <ProgressControl />
+                                    </ControlBar>
                                 </Player>}
                             </div>
                         </GridColumn>
