@@ -13,6 +13,7 @@ import { Watermark } from 'watermark-js-plus'
 import { Markdown } from "../../common/Markdown";
 import VideoDisplayAdminView from "./VideoDisplayAdminView";
 import { showErrorModal, showSuccessModal } from "../../dialogs/Dialog";
+import { use } from "cytoscape";
 
 const VideoDisplay: React.FC<{}> = () => {
     const { courseid, coursedirectoryid, node } = useParams<{ courseid: string, coursedirectoryid: string, node: string }>();
@@ -215,11 +216,20 @@ const VideoDisplay: React.FC<{}> = () => {
     useEffect(() => {
         if (videoRef.current) {
             if (videoRef.current.getState().player.currentTime === videoRef.current.getState().player.duration && playEnded) {
-
-                showSuccessModal('当前视频播放已完成')
+                showSuccessModal('当前视频已经播放完成')
             }
         }
-    }, [playEnded])
+    }, [courseSchema.size, playEnded])
+
+    useEffect(() => {
+        if (videoRef.current) {
+            if (videoRef.current.getState().player.currentTime === videoRef.current.getState().player.duration && playEnded) {
+                if (nodeId && courseSchema.size) {
+                    showSuccessModal('当前整个课程已播放完成')
+                }
+            }
+        }
+    }, [courseSchema.size, nodeId, playEnded])
 
     useEffect(() => {
         document.onfullscreenchange = (async (e) => {
