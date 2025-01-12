@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { videoRecordPlayClient } from "./client/VideoCourseClient";
-import { Accordion, AccordionContent, AccordionTitle, Button, Dimmer, Grid, Header, Icon, Loader, Segment } from "semantic-ui-react";
+import { Accordion, AccordionContent, AccordionTitle, Button, Container, Dimmer, Grid, Header, Icon, Loader, Segment } from "semantic-ui-react";
 import { CourseNameQueryResponse, VideoCourseDirectoryEntry } from "./client/types";
 import { useDocumentTitle } from "../../common/Utils";
 import { PUBLIC_URL } from "../../App";
@@ -64,9 +64,11 @@ const VideoCourseDirectoryDetail: React.FC<{}> = () => {
                 {item.title}
               </AccordionTitle>
               {courseTitles && courseTitles.get(index) && <AccordionContent active={activeIndex.includes(index)} style={activeIndex.includes(index) ? { display: "flex", justifyContent: "center", alignItems: 'center', flexDirection: "column" } : {}}>
-                {courseTitles.get(index)?.map((item) => <Segment style={{ width: "90%" }}>
-                  <p style={{ marginLeft: "2rem", fontSize: '1.5rem', fontWeight: 'bold' }}>第{item.id}课. <span style={{ fontSize: "1rem" }}>{item.title}</span></p>
-                </Segment>)}
+                {courseTitles.get(index)?.map((course, idx) => <Container key={course.id} as={Link} to={`${PUBLIC_URL}/video_course/video_display/${data.id}/${course.id}/1`}>
+                  <Segment style={{ width: "90%" }}>
+                    <p style={{ marginLeft: "2rem", fontSize: '1.5rem', fontWeight: 'bold' }}>第{idx + 1}课. <span style={{ fontSize: "1rem" }}>{course.title}</span></p>
+                  </Segment>
+                </Container>)}
               </AccordionContent>}
             </Accordion>
           </Grid.Column>)}
