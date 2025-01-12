@@ -3,7 +3,7 @@ import { videoRecordPlayClient } from "./client/VideoCourseClient"
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useDocumentTitle, useTimer } from "../../common/Utils";
 import { VideoCourseEntry, VideoCourseSchemaQuestion, VideoCourseSchemaVideo, VideoPlayRecordEntry } from "./client/types";
-import { Button, Dimmer, Grid, GridColumn, Header, Loader, Radio, Segment } from "semantic-ui-react";
+import { Button, Dimmer, Grid, GridColumn, Header, Loader, Message, Radio, Segment } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { BigPlayButton, ControlBar, CurrentTimeDisplay, DurationDisplay, LoadingSpinner, Player, PlayerReference, PlayToggle, ProgressControl, TimeDivider, VolumeMenuButton } from 'video-react';
 import 'video-react/dist/video-react.css';
@@ -212,6 +212,15 @@ const VideoDisplay: React.FC<{}> = () => {
         }
     }
 
+    useEffect(() => {
+        document.onfullscreenchange = (async (e) => {
+            setTimeout(() => {
+                window.location.href = `${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${nodeId}`
+            }, 2000);
+
+        })
+    }, [courseDirectoryId, courseId, nodeId])
+
     return (
         <>
             {courseDetail && loaded && <div>
@@ -239,7 +248,7 @@ const VideoDisplay: React.FC<{}> = () => {
                             <ProgressControl />
                         </ControlBar>
                     </Player>}
-                    <Segment style={{ height: "5rem" }}>
+                    <Segment>
                         <Button
                             onClick={() => {
                                 const preNode = coursePreNode.get(nodeId)
@@ -251,6 +260,7 @@ const VideoDisplay: React.FC<{}> = () => {
                             onClick={() => { history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${(courseSchema.get(nodeId) as VideoCourseSchemaVideo).next}`) }}
                             disabled={handleNextVideo()}
                         >下一段视频</Button>
+                        <Message negative>请勿全屏观看视频，谢谢</Message>
                     </Segment>
                     {adminDebugView}
                 </div>
@@ -312,7 +322,7 @@ const VideoDisplay: React.FC<{}> = () => {
                     {adminDebugView}
                 </div>
                 }
-            </div>}
+            </div >}
 
         </>
     )
