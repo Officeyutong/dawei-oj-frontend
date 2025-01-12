@@ -3,7 +3,7 @@ import { videoRecordPlayClient } from "./client/VideoCourseClient"
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useDocumentTitle, useTimer } from "../../common/Utils";
 import { VideoCourseEntry, VideoCourseSchemaQuestion, VideoCourseSchemaVideo, VideoPlayRecordEntry } from "./client/types";
-import { Button, Dimmer, Grid, GridColumn, Header, Loader, Message, Radio, Segment } from "semantic-ui-react";
+import { Button, Dimmer, Grid, GridColumn, Header, Loader, Message, MessageHeader, Radio, Segment } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { BigPlayButton, ControlBar, CurrentTimeDisplay, DurationDisplay, LoadingSpinner, Player, PlayerReference, PlayToggle, ProgressControl, TimeDivider, VolumeMenuButton } from 'video-react';
 import 'video-react/dist/video-react.css';
@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { Watermark } from 'watermark-js-plus'
 import { Markdown } from "../../common/Markdown";
 import VideoDisplayAdminView from "./VideoDisplayAdminView";
-import { showErrorModal } from "../../dialogs/Dialog";
+import { showErrorModal, showSuccessModal } from "../../dialogs/Dialog";
 
 const VideoDisplay: React.FC<{}> = () => {
     const { courseid, coursedirectoryid, node } = useParams<{ courseid: string, coursedirectoryid: string, node: string }>();
@@ -201,6 +201,7 @@ const VideoDisplay: React.FC<{}> = () => {
                 return true
             }
             if (playEnded) {
+                showSuccessModal('当前视频播放已完成')
                 return false
             }
             if ((playRecord && (nodeId >= playRecord.node_id))) {
@@ -260,7 +261,9 @@ const VideoDisplay: React.FC<{}> = () => {
                             onClick={() => { history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${(courseSchema.get(nodeId) as VideoCourseSchemaVideo).next}`) }}
                             disabled={handleNextVideo()}
                         >下一段视频</Button>
-                        <Message negative>请勿全屏观看视频，谢谢</Message>
+                        <Message warning>
+                            <MessageHeader>注意</MessageHeader>
+                            请勿全屏观看视频，谢谢</Message>
                     </Segment>
                     {adminDebugView}
                 </div>
