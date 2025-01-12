@@ -13,7 +13,6 @@ import { Watermark } from 'watermark-js-plus'
 import { Markdown } from "../../common/Markdown";
 import VideoDisplayAdminView from "./VideoDisplayAdminView";
 import { showErrorModal, showSuccessModal } from "../../dialogs/Dialog";
-import { use } from "cytoscape";
 
 const VideoDisplay: React.FC<{}> = () => {
     const { courseid, coursedirectoryid, node } = useParams<{ courseid: string, coursedirectoryid: string, node: string }>();
