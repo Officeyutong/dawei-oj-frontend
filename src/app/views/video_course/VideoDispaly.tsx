@@ -89,6 +89,7 @@ const VideoDisplay: React.FC<{}> = () => {
                 if (courseSchema.get(nodeId).type === 'choice_question') {
                     watchTime = videoRef.current.getState().player.duration
                 }
+                if (isNaN(watchTime)) watchTime = 0;
                 await videoRecordPlayClient.updatePlayRecord(courseId, courseDirectoryId, nodeId, Math.floor(watchTime))
             }
 
@@ -223,7 +224,8 @@ const VideoDisplay: React.FC<{}> = () => {
     useEffect(() => {
         if (videoRef.current) {
             if (videoRef.current.getState().player.currentTime === videoRef.current.getState().player.duration && playEnded) {
-                showSuccessPopup('当前视频切片已经播放完成，正在自动切换到下一节')
+                if (nodeId !== courseSchema.size)
+                    showSuccessPopup('当前视频切片已经播放完成，正在自动切换到下一节');
                 setPlayEnded(false)
                 setTimeout(() => {
                     if (courseSchema.get(nodeId).type === 'video') {
