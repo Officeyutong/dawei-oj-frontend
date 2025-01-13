@@ -72,6 +72,10 @@ interface AllUserListEntry {
     email: string;
     phoneNumber: string | null;
     realName: string | null;
+    permission_group: {
+        id: string;
+        name: string;
+    }
 };
 
 interface BatchQueryGrantedTeamsResponse {
