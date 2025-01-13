@@ -13,6 +13,7 @@ import { Watermark } from 'watermark-js-plus'
 import { Markdown } from "../../common/Markdown";
 import VideoDisplayAdminView from "./VideoDisplayAdminView";
 import { showErrorModal, showSuccessModal } from "../../dialogs/Dialog";
+import { showSuccessPopup } from "../../dialogs/Utils";
 
 const VideoDisplay: React.FC<{}> = () => {
     const { courseid, coursedirectoryid, node } = useParams<{ courseid: string, coursedirectoryid: string, node: string }>();
@@ -26,10 +27,15 @@ const VideoDisplay: React.FC<{}> = () => {
     const [playEnded, setPlayEnded] = useState<boolean>(false)
     const [selectedAnswer, setSelectedAnswer] = useState<{ idx: number, next: number } | null>(null)
 
-    const history = useHistory()
+    const [position, setPosition] = useState<{ x: number, y: number }>({ x: 100, y: 100 });
+    const [direction, setDirection] = useState<{ x: number, y: number }>({ x: 1, y: 1 });
 
     const videoRef = useRef<PlayerReference | null>(null)
     const curTimeRef = useRef<number>(0);
+    const waterMarkContainerRef = useRef(null);
+    const waterMarkRef = useRef<HTMLDivElement | null>(null)
+
+    const history = useHistory()
 
     const userDetails = useSelector((s: StateType) => s.userState.userData)
 
@@ -69,6 +75,7 @@ const VideoDisplay: React.FC<{}> = () => {
     }, [courseDetail])
 
     const { hasVideoCourseManagePermission } = userDetails;
+    const speed = 2;
 
     useDocumentTitle('课程播放')
 
@@ -96,7 +103,8 @@ const VideoDisplay: React.FC<{}> = () => {
             content: `${userDetails.realName} ${userDetails.username}`,
             width: 200,
             height: 200,
-            fontColor: '#dddfe4'
+            fontColor: '#dddfe4',
+            zIndex: -1
         })
         watermark.create()
         return (() => {
@@ -215,16 +223,27 @@ const VideoDisplay: React.FC<{}> = () => {
     useEffect(() => {
         if (videoRef.current) {
             if (videoRef.current.getState().player.currentTime === videoRef.current.getState().player.duration && playEnded) {
-                showSuccessModal('当前视频已经播放完成')
+                showSuccessPopup('当前视频切片已经播放完成，正在自动切换到下一节')
+                setPlayEnded(false)
+                setTimeout(() => {
+                    if (courseSchema.get(nodeId).type === 'video') {
+                        if (courseSchema.get(nodeId).next !== null) {
+                            history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${(courseSchema.get(nodeId) as VideoCourseSchemaVideo).next}`)
+                        }
+                    }
+                }, 2000);
+
             }
         }
-    }, [courseSchema.size, playEnded])
+    }, [courseDirectoryId, courseId, courseSchema, courseSchema.size, history, nodeId, playEnded])
 
     useEffect(() => {
         if (videoRef.current) {
             if (videoRef.current.getState().player.currentTime === videoRef.current.getState().player.duration && playEnded) {
-                if (nodeId && courseSchema.size) {
+                if (nodeId === courseSchema.size) {
+                    setPlayEnded(false)
                     showSuccessModal('当前整个课程已播放完成')
+
                 }
             }
         }
@@ -233,12 +252,58 @@ const VideoDisplay: React.FC<{}> = () => {
     useEffect(() => {
         document.onfullscreenchange = (async (e) => {
             setTimeout(() => {
-                window.location.href = `${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${nodeId}`
+                window.location.reload()
             }, 2000);
 
         })
     }, [courseDirectoryId, courseId, nodeId])
 
+    useEffect(() => {
+        const moveWatermark = () => {
+            setPosition((prev) => {
+                const container = waterMarkContainerRef.current;
+                if (!container) return prev;
+
+                const { offsetWidth: containerWidth, offsetHeight: containerHeight } =
+                    container;
+                const watermarkSize = 50;
+
+                let newX = prev.x + direction.x * speed;
+                let newY = prev.y + direction.y * speed;
+
+                if (newX <= 0 || newX + watermarkSize >= containerWidth) {
+                    setDirection((dir) => ({ ...dir, x: -dir.x }));
+                    newX = Math.max(0, Math.min(newX, containerWidth - watermarkSize));
+                }
+
+                if (newY <= 0 || newY + watermarkSize >= containerHeight) {
+                    setDirection((dir) => ({ ...dir, y: -dir.y }));
+                    newY = Math.max(0, Math.min(newY, containerHeight - watermarkSize));
+                }
+
+                return { x: newX, y: newY };
+            });
+        };
+
+        const interval = setInterval(moveWatermark, 16);
+        return () => clearInterval(interval);
+    }, [direction]);
+    const handleWaterRemove = () => {
+        const watermarkEle = document.querySelector('.watermark')
+        const text = `${userDetails.realName} ${userDetails.username}`
+        if (waterMarkRef.current) {
+            if (!watermarkEle) {
+                window.location.reload()
+            }
+            if ((waterMarkRef.current.offsetTop === position.y) && (waterMarkRef.current.offsetLeft === position.x)) {
+                setPosition({ x: 100, y: 100 })
+            }
+            if (!((watermarkEle as HTMLDivElement).innerText === text)) {
+                (watermarkEle as HTMLDivElement).innerText = text
+            }
+        }
+    }
+    useTimer(handleWaterRemove, 1000)
     return (
         <>
             {courseDetail && loaded && <div>
@@ -246,30 +311,58 @@ const VideoDisplay: React.FC<{}> = () => {
                 <Button as={Link} to={`${PUBLIC_URL}/video_course/video_course_directory_detail/${courseDirectoryId}`} primary>返回课程目录</Button>
                 {courseTitle && <Header as='h1'>{courseTitle}</Header>}
                 {courseSchema.get(nodeId).type === 'video' && <div onContextMenu={(e) => e.preventDefault()}>
-                    {videoURL && <Player ref={videoRef}
-                        preload="auto"
-                        autoPlay={true}
-                        startTime={(playRecord && nodeId === playRecord.node_id) ? playRecord.watched_time : 0}
-                        onEnded={() => setPlayEnded(true)}
-                        onLoadStart={handleLoadStart}
-                        onPlay={() => {
-                            handleUpdateRecord();
-                            setPlayEnded(false)
-                        }}
-                    >
-                        <BigPlayButton position="center" />
-                        <source src={videoURL}></source>
-                        <LoadingSpinner />
-                        <ControlBar autoHide={false} className="my-class" disableDefaultControls={true} >
-                            <PlayToggle />
-                            <VolumeMenuButton />
-                            <CurrentTimeDisplay />
-                            <TimeDivider />
-                            <DurationDisplay />
-                            <ProgressControl />
-                            <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
-                        </ControlBar>
-                    </Player>}
+                    {videoURL &&
+                        <div
+                            ref={waterMarkContainerRef}
+                            style={{
+                                position: "relative",
+                                width: "100%",
+                                height: "100%",
+                                border: "1px solid #ccc",
+                                overflow: "hidden",
+                            }}
+                        >
+                            <div
+                                ref={waterMarkRef}
+                                className="watermark"
+                                style={{
+                                    position: "absolute",
+                                    top: position.y,
+                                    left: position.x,
+                                    width: "50px",
+                                    height: "50px",
+                                    pointerEvents: "none",
+                                    color: 'grey',
+                                    zIndex: '999999'
+                                }}
+                            >
+                                {userDetails.realName} {userDetails.username}
+                            </div>
+                            <Player ref={videoRef}
+                                preload="auto"
+                                autoPlay={true}
+                                startTime={(playRecord && nodeId === playRecord.node_id) ? playRecord.watched_time : 0}
+                                onEnded={() => setPlayEnded(true)}
+                                onLoadStart={handleLoadStart}
+                                onPlay={() => {
+                                    handleUpdateRecord();
+                                    setPlayEnded(false)
+                                }}
+                            >
+                                <BigPlayButton position="center" />
+                                <source src={videoURL}></source>
+                                <LoadingSpinner />
+                                <ControlBar autoHide={false} className="my-class" disableDefaultControls={true} >
+                                    <PlayToggle />
+                                    <VolumeMenuButton />
+                                    <CurrentTimeDisplay />
+                                    <TimeDivider />
+                                    <DurationDisplay />
+                                    <ProgressControl />
+                                    <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
+                                </ControlBar>
+                            </Player>
+                        </div>}
                     <Segment>
                         <Button
                             onClick={() => {
@@ -294,29 +387,58 @@ const VideoDisplay: React.FC<{}> = () => {
                     <Grid columns={2}>
                         <GridColumn>
                             <div onContextMenu={(e) => e.preventDefault()}>
-                                {videoURL && <Player ref={videoRef}
-                                    preload="auto"
-                                    autoPlay={true}
-                                    onPlay={() => {
-                                        handleQuestionVideo();
-                                        handleUpdateRecord();
-                                        setPlayEnded(false)
-                                    }}
+                                {videoURL &&
+                                    <div
+                                        ref={waterMarkContainerRef}
+                                        style={{
+                                            position: "relative",
+                                            width: "100%",
+                                            height: "100%",
+                                            border: "1px solid #ccc",
+                                            overflow: "hidden",
+                                        }}
+                                    >
+                                        <div
+                                            ref={waterMarkRef}
+                                            className="watermark"
+                                            style={{
+                                                position: "absolute",
+                                                top: position.y,
+                                                left: position.x,
+                                                width: "50px",
+                                                height: "50px",
+                                                pointerEvents: "none",
+                                                color: '#dddfe4',
+                                                zIndex: '999999'
+                                            }}
+                                        >
+                                            {userDetails.realName} {userDetails.username}
+                                        </div>
+                                        <Player ref={videoRef}
+                                            preload="auto"
+                                            autoPlay={true}
+                                            onPlay={() => {
+                                                handleQuestionVideo();
+                                                handleUpdateRecord();
+                                                setPlayEnded(false)
+                                            }}
 
-                                >
-                                    <LoadingSpinner />
-                                    <BigPlayButton position="center" />
-                                    <source src={videoURL}></source>
-                                    <ControlBar autoHide={false} className="my-class" disableDefaultControls={true} >
-                                        <PlayToggle />
-                                        <VolumeMenuButton />
-                                        <CurrentTimeDisplay />
-                                        <TimeDivider />
-                                        <DurationDisplay />
-                                        <ProgressControl />
-                                        <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
-                                    </ControlBar>
-                                </Player>}
+                                        >
+                                            <LoadingSpinner />
+                                            <BigPlayButton position="center" />
+                                            <source src={videoURL}></source>
+                                            <ControlBar autoHide={false} className="my-class" disableDefaultControls={true} >
+                                                <PlayToggle />
+                                                <VolumeMenuButton />
+                                                <CurrentTimeDisplay />
+                                                <TimeDivider />
+                                                <DurationDisplay />
+                                                <ProgressControl />
+                                                <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
+                                            </ControlBar>
+                                        </Player>
+                                    </div>
+                                }
                             </div>
                         </GridColumn>
                         <GridColumn>
