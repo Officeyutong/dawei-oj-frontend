@@ -5,7 +5,7 @@ import { useDocumentTitle, useTimer } from "../../common/Utils";
 import { VideoCourseEntry, VideoCourseSchemaQuestion, VideoCourseSchemaVideo, VideoPlayRecordEntry } from "./client/types";
 import { Button, Dimmer, Grid, GridColumn, Header, Loader, Message, MessageHeader, Radio, Segment } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
-import { BigPlayButton, ControlBar, CurrentTimeDisplay, DurationDisplay, LoadingSpinner, Player, PlayerReference, PlayToggle, ProgressControl, TimeDivider, VolumeMenuButton } from 'video-react';
+import { BigPlayButton, ControlBar, CurrentTimeDisplay, DurationDisplay, LoadingSpinner, PlaybackRateMenuButton, Player, PlayerReference, PlayToggle, ProgressControl, TimeDivider, VolumeMenuButton } from 'video-react';
 import 'video-react/dist/video-react.css';
 import { StateType } from "../../states/Manager";
 import { useSelector } from "react-redux";
@@ -267,6 +267,7 @@ const VideoDisplay: React.FC<{}> = () => {
                             <TimeDivider />
                             <DurationDisplay />
                             <ProgressControl />
+                            <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
                         </ControlBar>
                     </Player>}
                     <Segment>
@@ -313,6 +314,7 @@ const VideoDisplay: React.FC<{}> = () => {
                                         <TimeDivider />
                                         <DurationDisplay />
                                         <ProgressControl />
+                                        <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
                                     </ControlBar>
                                 </Player>}
                             </div>
