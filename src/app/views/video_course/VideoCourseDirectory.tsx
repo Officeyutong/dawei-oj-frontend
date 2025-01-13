@@ -35,7 +35,7 @@ const VideoCourseDirectory: React.FC<{}> = () => {
             {loading && <Dimmer page active><Loader></Loader></Dimmer>}
             <Grid columns={3}>
                 {data.map(item => <Grid.Column key={item.id}>
-                    <Container as={Link} to={`${PUBLIC_URL}/video_course/video_course_directory_detail/${item.id}`} disabled={!item.has_permission}>
+                    <Container as={Link} to={item.has_permission ? `${PUBLIC_URL}/video_course/video_course_directory_detail/${item.id}` : null} disabled={!item.has_permission}>
                         <Segment style={{ fontSize: "1.5em", backgroundColor: (isHover === item.id) && item.has_permission !== false ? '#E0E0E0' : 'white', cursor: item.has_permission ? 'pointer' : 'default', width: '100%', height: "100%" }}
                             disabled={!item.has_permission}
                             onMouseEnter={() => setIsHover(item.id)}
