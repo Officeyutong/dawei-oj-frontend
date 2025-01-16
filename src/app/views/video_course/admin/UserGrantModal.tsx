@@ -41,11 +41,11 @@ const VideoCourseDirectoryUserGrantModal: React.FC<{
 
     const filteredList = useMemo(() => allUsers.filter(t => {
         const keywordMatched = (t.email.search(searchKeyword.value) !== -1 || t.username.search(searchKeyword.value) !== -1 || (t.phoneNumber && t.phoneNumber.search(searchKeyword.value) !== -1) || (t.realName && t.realName.search(searchKeyword.value) !== -1));
-        if (selectedPermissionGroup === null) return keywordMatched;
+        if (filterByPermissionGroup === false || selectedPermissionGroup === null) return keywordMatched;
         else {
             return keywordMatched && t.permission_group.id === selectedPermissionGroup;
         }
-    }), [allUsers, searchKeyword.value, selectedPermissionGroup]);
+    }), [allUsers, filterByPermissionGroup, searchKeyword.value, selectedPermissionGroup]);
     const pageCount = Math.ceil(filteredList.length / ITEMS_PER_PAGE);
     const currToRender = useMemo(() => filteredList.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE), [filteredList, page]);
 
