@@ -14,6 +14,7 @@ import { Markdown } from "../../common/Markdown";
 import VideoDisplayAdminView from "./VideoDisplayAdminView";
 import { showErrorModal, showSuccessModal } from "../../dialogs/Dialog";
 import { showSuccessPopup } from "../../dialogs/Utils";
+import QueryString from "qs";
 
 const VideoDisplay: React.FC<{}> = () => {
     const { courseid, coursedirectoryid, node } = useParams<{ courseid: string, coursedirectoryid: string, node: string }>();
@@ -26,7 +27,6 @@ const VideoDisplay: React.FC<{}> = () => {
     const [playRecord, setPlayRecord] = useState<VideoPlayRecordEntry | null>(null)
     const [playEnded, setPlayEnded] = useState<boolean>(false)
     const [selectedAnswer, setSelectedAnswer] = useState<{ idx: number, next: number } | null>(null)
-
     const [position, setPosition] = useState<{ x: number, y: number }>({ x: 100, y: 100 });
     const [direction, setDirection] = useState<{ x: number, y: number }>({ x: 1, y: 1 });
 
@@ -38,6 +38,10 @@ const VideoDisplay: React.FC<{}> = () => {
     const history = useHistory()
 
     const userDetails = useSelector((s: StateType) => s.userState.userData)
+
+    const parsed = QueryString.parse(window.location.search.substring(1)) as {
+        isNeedJumpToLastFrame?: string;
+    }
 
     const courseId = useMemo(() => (Number(courseid)), [courseid]);
     const courseDirectoryId = useMemo(() => (Number(coursedirectoryid)), [coursedirectoryid]);
@@ -198,6 +202,15 @@ const VideoDisplay: React.FC<{}> = () => {
         }
     }
 
+    const handleNextIdSmallThanCurrentId = () => {
+        if (courseDetail && videoRef.current && videoURL) {
+            const video = videoRef.current.getState().player
+            if (parsed.isNeedJumpToLastFrame === '1' && video.readyState) {
+                videoRef.current.seek(Math.floor(video.duration))
+            }
+        }
+    }
+
     const adminDebugView = hasVideoCourseManagePermission && courseDetail !== null && <VideoDisplayAdminView
         courseDetail={courseDetail}
         nodeId={parseInt(node)}
@@ -224,20 +237,25 @@ const VideoDisplay: React.FC<{}> = () => {
     useEffect(() => {
         if (videoRef.current) {
             if (videoRef.current.getState().player.currentTime === videoRef.current.getState().player.duration && playEnded) {
-                if (nodeId !== courseSchema.size)
+                if (nodeId !== courseSchema.size && userDetails.group === 'admin')
                     showSuccessPopup('当前视频切片已经播放完成，正在自动切换到下一节');
                 setPlayEnded(false)
                 setTimeout(() => {
                     if (courseSchema.get(nodeId).type === 'video') {
                         if (courseSchema.get(nodeId).next !== null) {
-                            history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${(courseSchema.get(nodeId) as VideoCourseSchemaVideo).next}`)
+                            if (courseSchema.get(nodeId).next < nodeId) {
+                                history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${(courseSchema.get(nodeId) as VideoCourseSchemaVideo).next}?isNeedJumpToLastFrame=1`)
+                            } else {
+                                history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${(courseSchema.get(nodeId) as VideoCourseSchemaVideo).next}?isNeedJumpToLastFrame=0`)
+                            }
+
                         }
                     }
                 }, 2000);
 
             }
         }
-    }, [courseDirectoryId, courseId, courseSchema, courseSchema.size, history, nodeId, playEnded])
+    }, [courseDirectoryId, courseId, courseSchema, courseSchema.size, history, nodeId, playEnded, userDetails.group])
 
     useEffect(() => {
         if (videoRef.current) {
@@ -348,20 +366,21 @@ const VideoDisplay: React.FC<{}> = () => {
                                 onLoadStart={handleLoadStart}
                                 onPlay={() => {
                                     handleUpdateRecord();
+                                    handleNextIdSmallThanCurrentId()
                                     setPlayEnded(false)
                                 }}
                             >
                                 <BigPlayButton position="center" />
                                 <source src={videoURL}></source>
                                 <LoadingSpinner />
-                                <ControlBar autoHide={false} className="my-class" disableDefaultControls={true} >
+                                <ControlBar autoHide={true} className="my-class" disableDefaultControls={true} >
                                     <PlayToggle />
                                     <VolumeMenuButton />
                                     <CurrentTimeDisplay />
                                     <TimeDivider />
                                     <DurationDisplay />
                                     <ProgressControl />
-                                    <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
+                                    <PlaybackRateMenuButton rates={[3, 2.5, 2, 1.75, 1.5, 1.25, 1, 0.75, 0.5]} />
                                 </ControlBar>
                             </Player>
                         </div>}
@@ -374,7 +393,12 @@ const VideoDisplay: React.FC<{}> = () => {
                             disabled={nodeId <= 1}
                         >上一段视频</Button>
                         <Button
-                            onClick={() => { history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${(courseSchema.get(nodeId) as VideoCourseSchemaVideo).next}`) }}
+                            onClick={() => {
+                                (courseSchema.get(nodeId).next < nodeId) ?
+                                    history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${(courseSchema.get(nodeId) as VideoCourseSchemaVideo).next}?isNeedJumpToLastFrame=1`)
+                                    :
+                                    history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${(courseSchema.get(nodeId) as VideoCourseSchemaVideo).next}?isNeedJumpToLastFrame=0`)
+                            }}
                             disabled={handleNextVideo()}
                         >下一段视频</Button>
                         <Message warning>
@@ -424,19 +448,18 @@ const VideoDisplay: React.FC<{}> = () => {
                                                 handleUpdateRecord();
                                                 setPlayEnded(false)
                                             }}
-
                                         >
                                             <LoadingSpinner />
                                             <BigPlayButton position="center" />
                                             <source src={videoURL}></source>
-                                            <ControlBar autoHide={false} className="my-class" disableDefaultControls={true} >
+                                            <ControlBar autoHide={true} className="my-class" disableDefaultControls={true} >
                                                 <PlayToggle />
                                                 <VolumeMenuButton />
                                                 <CurrentTimeDisplay />
                                                 <TimeDivider />
                                                 <DurationDisplay />
                                                 <ProgressControl />
-                                                <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
+                                                <PlaybackRateMenuButton rates={[3, 2.5, 2, 1.75, 1.5, 1.25, 1, 0.75, 0.5]} />
                                             </ControlBar>
                                         </Player>
                                     </div>
@@ -462,7 +485,12 @@ const VideoDisplay: React.FC<{}> = () => {
                                         style={{ height: "3rem" }}
                                         disabled={selectedAnswer === null}
                                         primary
-                                        onClick={() => { history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${selectedAnswer?.next}`) }}>
+                                        onClick={() => {
+                                            (courseSchema.get(nodeId).next < nodeId) ?
+                                                history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${selectedAnswer?.next}?isNeedJumpToLastFrame=1`)
+                                                :
+                                                history.push(`${PUBLIC_URL}/video_course/video_display/${courseDirectoryId}/${courseId}/${selectedAnswer?.next}?isNeedJumpToLastFrame=0`)
+                                        }}>
                                         提交答案
                                     </Button>
                                 </Grid>

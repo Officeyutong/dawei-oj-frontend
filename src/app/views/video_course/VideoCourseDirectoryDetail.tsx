@@ -76,11 +76,15 @@ const VideoCourseDirectoryDetail: React.FC<{}> = () => {
               </AccordionTitle>
               {courseTitles && courseTitles.get(index) && <AccordionContent active={activeIndex.includes(index)} style={activeIndex.includes(index) ? { display: "flex", justifyContent: "center", alignItems: 'center', flexDirection: "column" } : {}}>
                 {courseTitles.get(index)?.map((course, idx) => <Container key={course.id}>
-                  <Segment style={{ width: "90%" }}>
-                    <Link style={{ marginLeft: "2rem", fontSize: '1.5rem', fontWeight: 'bold', display: 'inline' }} to={`${PUBLIC_URL}/video_course/video_display/${data.id}/${course.id}/1`}>第{idx + 1}课. <span style={{ fontSize: "1rem" }}>{course.title}</span></Link>
-                    <Icon name="circle" color={playRecord.get(course.id) ? "teal" : "orange"} style={{ marginLeft: "50%" }}></Icon>
-                    <span style={{ color: playRecord.get(course.id) ? "teal" : "orange" }}>{playRecord.get(course.id) ? "已观看" : "未观看"}</span>
-                    <Button primary disabled={playRecord.get(course.id) ? false : true} style={{ marginLeft: '1rem' }} as={Link} to={playRecord.get(course.id) ? `${PUBLIC_URL}/video_course/video_display/${data.id}/${course.id}/${playRecord.get(course.id)?.node_id}` : ''}>返回上次观看</Button>
+                  <Segment style={{ width: "90%", display: "flex", justifyContent: "space-between" }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: "center" }}>
+                      <Link style={{ marginLeft: "2rem", fontSize: '1.5rem', fontWeight: 'bold', display: 'inline' }} to={`${PUBLIC_URL}/video_course/video_display/${data.id}/${course.id}/1`}>第{idx + 1}课. <span style={{ fontSize: "1rem" }}>{course.title}</span></Link>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: "center" }}>
+                      <Icon name="circle" color={playRecord.get(course.id) ? "teal" : "orange"} ></Icon>
+                      <span style={{ color: playRecord.get(course.id) ? "teal" : "orange" }}>{playRecord.get(course.id) ? "已观看" : "未观看"}</span>
+                      <Button primary disabled={playRecord.get(course.id) ? false : true} style={{ marginLeft: '1rem' }} as={Link} to={playRecord.get(course.id) ? `${PUBLIC_URL}/video_course/video_display/${data.id}/${course.id}/${playRecord.get(course.id)?.node_id}` : ''}>返回上次观看</Button>
+                    </div>
                   </Segment>
                 </Container>)}
               </AccordionContent>}
