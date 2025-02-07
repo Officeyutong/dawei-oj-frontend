@@ -237,7 +237,7 @@ const VideoDisplay: React.FC<{}> = () => {
     useEffect(() => {
         if (videoRef.current) {
             if (videoRef.current.getState().player.currentTime === videoRef.current.getState().player.duration && playEnded) {
-                if (nodeId !== courseSchema.size && userDetails.group === 'admin')
+                if (nodeId !== courseSchema.size && userDetails.hasVideoCourseManagePermission)
                     showSuccessPopup('当前视频切片已经播放完成，正在自动切换到下一节');
                 setPlayEnded(false)
                 setTimeout(() => {
@@ -255,7 +255,7 @@ const VideoDisplay: React.FC<{}> = () => {
 
             }
         }
-    }, [courseDirectoryId, courseId, courseSchema, courseSchema.size, history, nodeId, playEnded, userDetails.group])
+    }, [courseDirectoryId, courseId, courseSchema, courseSchema.size, history, nodeId, playEnded, userDetails.hasVideoCourseManagePermission])
 
     useEffect(() => {
         if (videoRef.current) {
