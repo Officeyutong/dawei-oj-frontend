@@ -53,7 +53,7 @@ const TeamMembers: React.FC<React.PropsWithChildren<TeamMembersProps>> = (props)
         setFilteredMembers(props.members);
     }, [props.members]);
     const doFilter = useCallback(() => {
-        setFilteredMembers(props.members.filter(t => t.username.includes(filterKeyword.value)));
+        setFilteredMembers(props.members.filter(t => t.username.includes(filterKeyword.value) || (t.real_name !== null && t.real_name.includes(filterKeyword.value))));
         setPage(1);
     }, [filterKeyword.value, props.members]);
     const admins = useMemo(() => new Set(props.admins), [props.admins]);
