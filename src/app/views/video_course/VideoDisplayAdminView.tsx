@@ -52,7 +52,7 @@ const VideoDisplayAdminView: React.FC<{
         return result;
     }, [courseDetail]);
     const styles = useMemo(() => {
-        const result: cytoscape.Stylesheet[] = [
+        const result: cytoscape.StylesheetStyle[] = [
 
             {
                 selector: 'edge',
