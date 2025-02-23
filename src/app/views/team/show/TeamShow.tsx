@@ -261,6 +261,10 @@ const TeamShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                                     <Table.Cell>权限类型</Table.Cell>
                                                     <Table.Cell>{data.private ? "私有" : "公开"}</Table.Cell>
                                                 </Table.Row>
+                                                <Table.Row>
+                                                    <Table.Cell>团队分组</Table.Cell>
+                                                    <Table.Cell>{data.group_name}</Table.Cell>
+                                                </Table.Row>
                                                 {hasPermission && <Table.Row>
                                                     <Table.Cell>创建时间</Table.Cell>
                                                     <Table.Cell>{data.create_time}</Table.Cell>

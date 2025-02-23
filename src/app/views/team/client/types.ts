@@ -8,6 +8,8 @@ interface TeamListEntry {
     member_count: number;
     private: boolean;
     accessible: boolean;
+    group_name: string;
+
 };
 interface TeamDetail {
     // 是否有team.manage权限
@@ -25,12 +27,14 @@ interface TeamDetail {
     private: boolean;
     team_problems: { id: number; title: string }[];
     team_contests: { id: number; name: string; start_time: number }[];
-    team_problemsets: { id: number; name: string;courseURL:string; }[];
+    team_problemsets: { id: number; name: string; courseURL: string; }[];
+    group_name: string;
+
 };
 interface TeamThingsAddedResponse {
     team_problems: { id: number; title: string }[];
     team_contests: { id: number; name: string }[];
-    team_problemsets: { id: number; name: string;courseURL:string; }[];
+    team_problemsets: { id: number; name: string; courseURL: string; }[];
 };
 interface TeamRawData {
     id: number;
@@ -42,6 +46,8 @@ interface TeamRawData {
     team_problems: number[];
     team_contests: number[];
     team_problemsets: number[];
+    group_name: string;
+
 };
 interface TeamUpdateInfo {
     name: string;
@@ -52,6 +58,8 @@ interface TeamUpdateInfo {
     team_problems: number[];
     team_contests: number[];
     team_problemsets: number[];
+    group_name: string;
+
 };
 
 interface TeamFileEntry {

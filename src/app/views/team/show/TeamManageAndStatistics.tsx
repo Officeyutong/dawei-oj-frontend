@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Button, Dimmer, Header, Input, Loader, Modal, Tab, Table } from "semantic-ui-react";
+import { useCallback, useEffect, useState } from "react";
+import { Button, Dimmer, Form, Header, Input, Loader, Message, Modal, Tab, Table } from "semantic-ui-react";
 import { TeamDetail, TeamMemberProblemsetStatistics } from "../client/types";
 import BatchAddMembersDialog from "./BatchAddMembersDialog";
 import teamClient from "../client/TeamClient";
@@ -9,13 +9,19 @@ import { PUBLIC_URL } from "../../../App";
 import { Link } from "react-router-dom";
 import TeamStatisticsView from "./TeamStatisticsView";
 import ShowMemberDetailedStatistics from "./ShowMemberDetailedStatistics";
-import { useInputValue } from "../../../common/Utils";
-
+import { DateTime } from "luxon"
+import DatetimePickler from 'react-datetime';
+import "react-datetime/css/react-datetime.css";
+import 'moment/locale/zh-cn';
 interface TeamManageProps {
     team: number;
     reloadCallback: () => void;
     teamMembers: TeamDetail["members"];
 };
+
+function timeToZero(input: DateTime): DateTime {
+    return input.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+}
 
 const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) => {
     const [showBatchAddModal, setShowBatchAddModal] = useState(false);
@@ -23,22 +29,28 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
     const [loaded, setLoaded] = useState(false);
     const [extraStatistics, setExtraStatistics] = useState<TeamMemberProblemsetStatistics | null>(null);
     const [viewingProblemsetDetailUidAndName, setViewingProblemsetDetailUidAndName] = useState<{ uid: number; realName?: string; username: string; } | null>(null);
-    const statisticsFilteringKeyword = useInputValue("");
+    const [statisticsFilteringKeyword, setStatisticsFilteringKeyword] = useState("");
     const [filteredUserStatistics, setFilteredUserStatistics] = useState<TeamMemberProblemsetStatistics["user_data"]>([]);
+
+    const [startTime, setStartTime] = useState<DateTime>(DateTime.now().minus({ year: 10 }));
+    const [endTime, setEndTime] = useState<DateTime>(DateTime.now());
+    const loadData = useCallback(async () => {
+        try {
+            setLoading(true);
+            const data = await teamClient.getTeamMemberProblemsetStatistics(props.team, [timeToZero(startTime).toSeconds(), timeToZero(endTime).plus({ day: 1 }).toSeconds()]);
+            setExtraStatistics(data);
+            setFilteredUserStatistics(data.user_data);
+            setLoaded(true);
+            setStatisticsFilteringKeyword("");
+        } catch { } finally { setLoading(false); }
+    }, [endTime, props.team, startTime]);
+
     useEffect(() => {
-        if (!loaded) (async () => {
-            try {
-                setLoading(true);
-                const data = await teamClient.getTeamMemberProblemsetStatistics(props.team);
-                setExtraStatistics(data);
-                setFilteredUserStatistics(data.user_data);
-                setLoaded(true);
-            } catch { } finally { setLoading(false); }
-        })();
-    }, [loaded, props.team]);
+        if (!loaded) loadData();
+    }, [loadData, loaded]);
     const doFilter = () => {
         setFilteredUserStatistics((extraStatistics?.user_data || []).filter(t => (
-            t.user.real_name?.includes(statisticsFilteringKeyword.value) || t.user.username.includes(statisticsFilteringKeyword.value) || t.user.uid.toString().includes(statisticsFilteringKeyword.value)
+            t.user.real_name?.includes(statisticsFilteringKeyword) || t.user.username.includes(statisticsFilteringKeyword) || t.user.uid.toString().includes(statisticsFilteringKeyword)
         )));
     };
     return <div>
@@ -60,10 +72,55 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
                 menuItem: "作业情况统计", pane: <Tab.Pane key={1}>
                     {loading && <Dimmer active><Loader></Loader></Dimmer>}
                     <div style={{ overflowX: "scroll" }}>{extraStatistics !== null && <>
-                        <Input {...statisticsFilteringKeyword} placeholder="过滤用户" action={{
-                            content: "搜索",
-                            onClick: doFilter
-                        }}></Input>
+                        <Form>
+                            <Form.Group widths={4}>
+                                <Form.Field>
+                                    <label>搜索用户</label>
+                                    <Input onChange={(_, d) => setStatisticsFilteringKeyword(d.value)} placeholder="过滤用户" action={{
+                                        content: "搜索",
+                                        onClick: doFilter
+                                    }}></Input>
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>过滤提交开始时间</label>
+                                    <DatetimePickler
+                                        value={startTime.toJSDate()}
+                                        timeFormat={false}
+                                        onChange={d => {
+                                            if (typeof d != "string") {
+                                                setStartTime(DateTime.fromJSDate(d.toDate()))
+                                            }
+                                        }}
+                                        locale="zh-cn"
+                                    ></DatetimePickler>
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>过滤提交结束时间</label>
+                                    <DatetimePickler
+                                        value={endTime.toJSDate()}
+                                        timeFormat={false}
+                                        onChange={d => {
+                                            if (typeof d != "string") {
+                                                setEndTime(DateTime.fromJSDate(d.toDate()))
+                                            }
+                                        }}
+                                        locale="zh-cn"
+                                    ></DatetimePickler>
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>操作</label>
+                                    <Button color="green" onClick={loadData}>过滤时间</Button>
+                                </Form.Field>
+                            </Form.Group>
+                        </Form>
+                        <Message info>
+                            <Message.Header>
+                                注意
+                            </Message.Header>
+                            <Message.Content>
+                                如果过滤了提交时间，那么这个表格的内容只会统计所选择的时间范围内的提交。
+                            </Message.Content>
+                        </Message>
                         <Table>
                             <Table.Header>
                                 <Table.Row>

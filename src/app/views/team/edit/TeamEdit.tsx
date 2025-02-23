@@ -83,6 +83,7 @@ const TeamEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 team_contests: JSON.parse(teamStuff.contests),
                 team_problems: JSON.parse(teamStuff.problems),
                 team_problemsets: JSON.parse(teamStuff.problemsets),
+                group_name: data.group_name
             });
             showSuccessModal("更新完成!");
         } catch { } finally {
@@ -112,6 +113,10 @@ const TeamEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                     <Form.Field>
                         <label>团队名</label>
                         <Input value={data.name} onChange={(_, d) => setData({ ...data, name: d.value })}></Input>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>团队分组名</label>
+                        <Input value={data.group_name} onChange={(_, d) => setData({ ...data, group_name: d.value })}></Input>
                     </Form.Field>
                     <Form.Field>
                         <label>团队简介</label>

@@ -57,8 +57,8 @@ class TeamClient extends GeneralClient {
     async getInTeamProblemsetRanklist(teamID: number, problemsetID: number): Promise<TeamProblemsetRanklistResponse> {
         return (await this.client!.post("/api/team/get_in_team_problemset_ranklist", { team_id: teamID, problemset_id: problemsetID })).data;
     }
-    async getTeamMemberProblemsetStatistics(teamID: number): Promise<TeamMemberProblemsetStatistics> {
-        return (await this.client!.post("/api/team/get_team_member_statistics", { team_id: teamID })).data;
+    async getTeamMemberProblemsetStatistics(teamID: number, timeFilter?: [number, number]): Promise<TeamMemberProblemsetStatistics> {
+        return (await this.client!.post("/api/team/get_team_member_statistics", { team_id: teamID, time_range: timeFilter })).data;
     }
     async getTeamMemberDetailedProblemsetStatistics(teamID: number, uid: number): Promise<TeamMemberDetailedProblemsetStatisticsEntry[]> {
         return (await this.client!.post("/api/team/get_team_member_detailed_problemset_statistics", { team_id: teamID, uid })).data;

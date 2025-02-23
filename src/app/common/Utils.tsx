@@ -22,12 +22,12 @@ const useDocumentTitle: (title: string) => void = (title: string) => {
 };
 type onChangeType = ((event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => void);
 
-const useInputValue: (text?: string) => { value: string; onChange: onChangeType } = (text: string = "") => {
+const useInputValue: (text?: string) => { value: string; onChange: onChangeType; set: (s: string) => void; } = (text: string = "") => {
     const [value, setValue] = useState(text);
     let onChange: onChangeType = useCallback((_, d) => {
         setValue(d.value);
     }, []);
-    return { value, onChange };
+    return { value, onChange, set: s => setValue(s) };
 };
 
 

@@ -72,6 +72,7 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
                             <Table.HeaderCell>创建者</Table.HeaderCell>
                             <Table.HeaderCell textAlign="center">访问权限</Table.HeaderCell>
                             <Table.HeaderCell textAlign="center">人数</Table.HeaderCell>
+                            <Table.HeaderCell>所属分组</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -89,6 +90,9 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
                             </Table.Cell>
                             <Table.Cell textAlign="center">
                                 {x.member_count}
+                            </Table.Cell>
+                            <Table.Cell>
+                                {x.group_name}
                             </Table.Cell>
                         </Table.Row>)}
                     </Table.Body>
