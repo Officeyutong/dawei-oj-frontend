@@ -50,6 +50,20 @@ const ShowSubmission = () => {
 
     const [showAccpetedModel, setShowAccpetedModel] = useState<boolean>(false)
 
+    const showDownloadTestcaseButton = useMemo(() => {
+        if (data === null) return false;
+        if (data.status !== "unaccepted") return false;
+        if (data.contest.isContest) {
+            if (data.virtualContestID !== -1 && data.contest.virtualContestRunning === true) {
+                return false;
+            }
+            if (data.contest.closed === false) return false;
+        }
+        if (data.user.uid !== selfUid) return false;
+        if (data.isRemoteSubmission) return false;
+        return true;
+    }, [data, selfUid]);
+
     useEffect(() => {
         if (unit !== "byte" && unit !== "kilobyte" && unit !== "gigabyte" && unit !== "millionbyte") {
             setUnit("kilobyte");
@@ -133,7 +147,6 @@ const ShowSubmission = () => {
             if (socketRef.current !== null) socketRef.current.close();
         };
     }, []);
-    const isContestSubmit = data?.contest.isContest || false;
     const isManualGrading = data?.lastManualGradingTime !== null;
     const isWrittenTest = data?.problem.problemType === "written_test";
     const parsedUserWrittenSubmission = useMemo(() => {
@@ -209,13 +222,13 @@ const ShowSubmission = () => {
                                 <Table.Row>
                                     <Table.Cell>题目</Table.Cell>
                                     <Table.Cell>
-                                        <Link to={isContestSubmit ? `${PUBLIC_URL}/contest/${data.contest.id}/problem/${data.problem.id}?virtual_contest=${userSeenVirtualContestId}` : `${PUBLIC_URL}/show_problem/${data.problem.id}`}>
+                                        <Link to={data.contest.isContest ? `${PUBLIC_URL}/contest/${data.contest.id}/problem/${data.problem.id}?virtual_contest=${userSeenVirtualContestId}` : `${PUBLIC_URL}/show_problem/${data.problem.id}`}>
                                             #{data.problem.id}. {data.problem.title}
                                         </Link>
 
                                     </Table.Cell>
                                 </Table.Row>
-                                {isContestSubmit && <Table.Row>
+                                {data.contest.isContest && <Table.Row>
                                     <Table.Cell>比赛</Table.Cell>
                                     <Table.Cell>
                                         <Link to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${userSeenVirtualContestId}`}>#{data.contest.id}. {data.contest.name}</Link>
@@ -326,7 +339,7 @@ const ShowSubmission = () => {
                         </Table>
                     </Grid.Column>
                     <Grid.Column width={4}>
-                        {isContestSubmit && <Button size="huge" color="blue" as={Link} to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${userSeenVirtualContestId}`}>返回比赛</Button>}
+                        {data.contest.isContest && <Button size="huge" color="blue" as={Link} to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${userSeenVirtualContestId}`}>返回比赛</Button>}
                     </Grid.Column>
                 </Grid>
                 {data.managable && !isWrittenTest && <>
@@ -346,6 +359,13 @@ const ShowSubmission = () => {
                     <Segment>
                         <span className="raw-span" dangerouslySetInnerHTML={{ __html: ansiTranslated }}></span>
                     </Segment>
+                </>}
+                {(showDownloadTestcaseButton) && <>
+                    <Header as="h3">下载第一组未通过测试点</Header>
+                    <Button as="a" href={`/api/submission/download_first_failed_testcase/${data.id}/input`}>下载输入文件</Button>
+                    <Button as="a" href={`/api/submission/download_first_failed_testcase/${data.id}/output`}>下载输出文件</Button>
+
+                    <Divider></Divider>
                 </>}
                 {isWrittenTest ? <WrittenProblemResultView
                     problemStmt={data.problem.writtenTestData}

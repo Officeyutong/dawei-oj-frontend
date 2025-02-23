@@ -30,7 +30,12 @@ interface SubmissionInfo {
     contest: {
         id: number;
         name: string;
-        isContest: boolean;
+        isContest: true;
+        closed: boolean;
+        virtualContestRunning?: boolean;
+
+    } | {
+        isContest: false;
     };
     code: string;
     judge_result: { [x: string]: SubtaskJudgeResult };
