@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Checkbox, Dimmer, Divider, Form, Header, Icon, Loader, Segment, Table } from "semantic-ui-react";
+import { Button, Checkbox, Dimmer, Divider, Form, Header, Icon, Label, Loader, Modal, ModalActions, ModalContent, ModalHeader, Segment, Table } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { ButtonClickEvent } from "../../common/types";
 import { useDocumentTitle } from "../../common/Utils";
@@ -15,12 +15,16 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
     const [loading, setLoading] = useState(false);
     const [hasCreatePermission, setHasCreatePermission] = useState(false);
     const [showJoinableOnly, setShowJoinableOnly] = useState(false);
-    const loadData = async (showJoinableOnly: boolean) => {
+    const [showSetGroupFilterModal, setShowSetGroupFilterModal] = useState(false);
+    const [groupName, setGroupName] = useState<string[]>([])
+    const [selectedGroupName, setSelectedGroupName] = useState<string | undefined>(undefined)
+    const loadData = async (showJoinableOnly: boolean, filterGroupName: string | undefined) => {
         try {
             setLoading(true);
-            const resp = await teamClient.getTeamList(showJoinableOnly);
+            const resp = await teamClient.getTeamList(showJoinableOnly, filterGroupName);
             setLoading(false);
             setData(resp.list);
+            setGroupName(resp.allGroups)
             setShowJoinableOnly(showJoinableOnly);
             setHasCreatePermission(resp.hasTeamCreatePermission);
             setLoaded(true);
@@ -29,7 +33,7 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
 
     useEffect(() => {
         if (!loaded) {
-            loadData(true);
+            loadData(true, undefined);
         }
     }, [loaded]);
     const addTeam = async (evt: ButtonClickEvent) => {
@@ -39,7 +43,7 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
             const { team_id } = await teamClient.createTeam();
             window.open(`/team/${team_id}`);
             // setData((await teamClient.getTeamList(showJoinableOnly)).list);
-            await loadData(false);
+            window.location.reload()
         } catch { } finally {
             target.classList.remove("loading");
         }
@@ -48,7 +52,39 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
         <Header as="h1">
             团队列表
         </Header>
-
+        {showSetGroupFilterModal && <Modal
+            open={showSetGroupFilterModal}
+            onClose={() => { setShowSetGroupFilterModal(false) }}
+        >
+            <ModalHeader>选择团队分组</ModalHeader>
+            <ModalContent>
+                {groupName && <div style={{ overflowY: "scroll", maxHeight: "500px" }}>
+                    <Table>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>团队分组</Table.HeaderCell>
+                                <Table.HeaderCell>操作</Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {groupName.map((item, idx) => <Table.Row key={idx}>
+                                <Table.Cell>#{idx + 1}. {item}</Table.Cell>
+                                <Table.Cell><Button size="small" color="green" onClick={() => {
+                                    setSelectedGroupName(item);
+                                    loadData(showJoinableOnly, item)
+                                    setShowSetGroupFilterModal(false)
+                                }}>选中</Button></Table.Cell>
+                            </Table.Row>)}
+                        </Table.Body>
+                    </Table>
+                </div>}
+            </ModalContent>
+            <ModalActions>
+                <Button negative onClick={() => setShowSetGroupFilterModal(false)}>
+                    取消
+                </Button>
+            </ModalActions>
+        </Modal>}
         {<Segment stacked>
             {loading && <>
                 <Dimmer active><Loader></Loader></Dimmer>
@@ -56,7 +92,24 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
             {loaded && <>
                 <Form >
                     <Form.Field>
-                        <Checkbox toggle checked={showJoinableOnly} onChange={(_, d) => loadData(d.checked!)} label="只显示自己可以访问的团队"></Checkbox>
+                        <Checkbox toggle checked={showJoinableOnly} onChange={(_, d) => loadData(d.checked!, selectedGroupName)} label="只显示自己可以访问的团队"></Checkbox>
+                    </Form.Field>
+                    <Form.Field>
+                        {selectedGroupName === undefined ?
+                            <Button color="green" labelPosition="left" icon onClick={() => setShowSetGroupFilterModal(true)}>
+                                <Icon name="plus"></Icon>
+                                筛选团队分组
+                            </Button> :
+                            <><label>正在筛选：</label>
+                                <Label size="large" color="blue">
+                                    {selectedGroupName}<Icon name="delete" onClick={() => {
+                                        setSelectedGroupName(undefined)
+                                        loadData(showJoinableOnly, undefined)
+                                    }}></Icon>
+                                </Label>
+                            </>
+                        }
+
                     </Form.Field>
                     {hasCreatePermission && <Form.Button color="green" labelPosition="left" icon onClick={addTeam}>
                         <Icon name="plus"></Icon>
