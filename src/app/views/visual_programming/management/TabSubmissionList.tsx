@@ -114,16 +114,16 @@ const TabSubmissionList: React.FC<{}> = () => {
             <Form.Group widths={4}>
                 <Form.Field>
                     <label>过滤用户</label>
-                    {userFilter.map(item => <Label key={item.uid} onClick={() => setUserFilter(c => c.filter(t => t.uid !== item.uid))} size="large" color="blue">{item.username} {item.real_name && `（${item.real_name}）`}<Icon name="delete"></Icon></Label>)}
+                    {userFilter.map(item => <Label key={item.uid} size="large" color="blue">{item.username} {item.real_name && `（${item.real_name}）`}<Icon name="delete"></Icon></Label>)}
                     <Button size="small" onClick={() => setShowSelectUserModal(true)} color="green">添加用户</Button>
                 </Form.Field>
                 <Form.Field>
                     <label>过滤作业题</label>
-                    {homeworkFilter === null ? <Button size="small" onClick={() => setShowSelectHomeworkModal(true)} color="green">选择作业</Button> : <Label onClick={() => setHomeworkFilter(null)} size="large" color="blue">#{homeworkFilter.id}. {homeworkFilter.name}<Icon name="delete"></Icon></Label>}
+                    {homeworkFilter === null ? <Button size="small" onClick={() => setShowSelectHomeworkModal(true)} color="green">选择作业</Button> : <Label size="large" color="blue">#{homeworkFilter.id}. {homeworkFilter.name}<Icon name="delete" onClick={() => setHomeworkFilter(null)}></Icon></Label>}
                 </Form.Field>
                 <Form.Field>
                     <label>过滤团队</label>
-                    {teamFilter === null ? <Button size="small" onClick={() => setShowSelectTeamModal(true)} color="green">选择团队</Button> : <Label onClick={() => setTeamFilter(null)} size="large" color="blue">#{teamFilter.id}. {teamFilter.name}<Icon name="delete"></Icon></Label>}
+                    {teamFilter === null ? <Button size="small" onClick={() => setShowSelectTeamModal(true)} color="green">选择团队</Button> : <Label size="large" color="blue">#{teamFilter.id}. {teamFilter.name}<Icon name="delete" onClick={() => setTeamFilter(null)}></Icon></Label>}
                 </Form.Field>
                 <Form.Field>
                     <label>过滤点评状态</label>
