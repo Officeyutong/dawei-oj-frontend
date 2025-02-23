@@ -105,9 +105,15 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
                                 <Icon name="plus"></Icon>
                                 筛选团队分组
                             </Button> :
-                            <Label size="large" color="blue">
-                                # {selectedGroupName}<Icon name="delete" onClick={() => setSelectedGroupName(undefined)}></Icon>
-                            </Label>}
+                            <><label>正在筛选：</label>
+                                <Label size="large" color="blue">
+                                    {selectedGroupName}<Icon name="delete" onClick={() => {
+                                        setSelectedGroupName(undefined)
+                                        loadData(showJoinableOnly)
+                                    }}></Icon>
+                                </Label>
+                            </>
+                        }
 
                     </Form.Field>
                     {hasCreatePermission && <Form.Button color="green" labelPosition="left" icon onClick={addTeam}>
