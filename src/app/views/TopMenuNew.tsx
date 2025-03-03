@@ -57,7 +57,7 @@ const TopMenuNew = () => {
                             }
                         ]
                     },
-                    { label: <Link to={`${PUBLIC_URL}/ranklist/1`}>排名</Link>, key: "ranklist", icon: <ProjectOutlined></ProjectOutlined> },
+                    ...(alreadyLogin ? [{ label: <Link to={`${PUBLIC_URL}/video_course/video_course_directory`}>视频课</Link>, key: "video-course", icon: <ForwardOutlined></ForwardOutlined> }] : []),
                     ...(alreadyLogin ? [
                         {
                             label: "工具箱", key: "toolbox", icon: <DashboardOutlined></DashboardOutlined>,
@@ -72,7 +72,7 @@ const TopMenuNew = () => {
                                         { label: <Link to={`${PUBLIC_URL}/monitoreduser/list`}>绑定用户</Link>, key: "monitored-user", icon: <DashboardOutlined></DashboardOutlined> },
                                         { label: <Link to={`${PUBLIC_URL}/visual_programming/main`}>图形化课程</Link>, key: "visual_programming", icon: <DesktopOutlined></DesktopOutlined> },
                                         { label: <Link to={`${PUBLIC_URL}/onlinevm/`}>在线NOI Linux环境</Link>, key: "onlinevm", icon: <CodeOutlined></CodeOutlined> },
-                                        { label: <Link to={`${PUBLIC_URL}/video_course/video_course_directory`}>视频课</Link>, key: "video-course", icon: <ForwardOutlined></ForwardOutlined> }
+                                        { label: <Link to={`${PUBLIC_URL}/ranklist/1`}>排名</Link>, key: "ranklist", icon: <ProjectOutlined></ProjectOutlined> },
                                     ]
                                 },
                                 ((canUseImageStore || hasVisualProgrammingHomeworkUpdatePerm || hasOnlineVMManagePermission) ? {
