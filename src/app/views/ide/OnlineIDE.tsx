@@ -51,10 +51,15 @@ const OnlineIDE: React.FC<React.PropsWithChildren<{}>> = () => {
 
     const langMap = useMemo(() => new Map(languages.map(x => [x.id, x])), [languages]);
     const currLangObj = useMemo(() => langMap.get(lang)!, [lang, langMap]);
+    const aceMode = useMemo(() => {
+        if (languages.length === 0 || !currLangObj || lang === "") return "plain_text";
+        return currLangObj.ace_mode;
+    }, [currLangObj, lang, languages.length])
     const [useFileInput, setUseFileInput] = useState(false);
     const [output, setOutput] = useState("");
     const ansiTranslated = useMemo(() => ansiUp.ansi_to_html(output), [output]);
     const [submitting, setSubmitting] = useState(false);
+    console.log("ace mode=", aceMode);
     // const trackerTokenRef = useRef<NodeJS.Timeout | null>(null);
     useDocumentTitle("在线IDE");
 
@@ -164,7 +169,7 @@ const OnlineIDE: React.FC<React.PropsWithChildren<{}>> = () => {
                                 onChange={v => setCode(v)}
                                 value={code}
                                 theme={theme}
-                                mode={currLangObj.ace_mode}
+                                mode={aceMode}
                                 fontSize="large"
                                 width="100%"
                                 wrapEnabled={true}
