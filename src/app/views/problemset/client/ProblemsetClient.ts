@@ -2,11 +2,12 @@ import GeneralClient from "../../../common/GeneralClient";
 import { ProblemsetEditInfo, ProblemsetListItem, ProblemsetPublicInfo, ProblemsetUpdateInfo, SimplifiedProblemsetListEntry } from "./types";
 
 class ProblemsetClient extends GeneralClient {
-    async getProblemSetList(page: number, showFavoritedOnly: boolean): Promise<{ data: ProblemsetListItem[]; pageCount: number }> {
-        const resp = (await this.client!.post("/api/problemset/list", { page: page, favorited_only: showFavoritedOnly })).data as { items: ProblemsetListItem[]; pageCount: number };
+    async getProblemSetList(page: number, showFavoritedOnly: boolean): Promise<{ data: ProblemsetListItem[]; pageCount: number; groups: string[]; }> {
+        const resp = (await this.client!.post("/api/problemset/list", { page: page, favorited_only: showFavoritedOnly })).data as { items: ProblemsetListItem[]; pageCount: number; groups: string[] };
         return {
             data: resp.items,
-            pageCount: resp.pageCount
+            pageCount: resp.pageCount,
+            groups: resp.groups
         };
     }
     async createProblemset(): Promise<number> {

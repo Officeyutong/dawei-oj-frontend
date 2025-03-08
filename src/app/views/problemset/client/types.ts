@@ -25,6 +25,7 @@ interface ProblemsetUpdateInfo {
     foreignProblems: ForeignProblemEntry[];
     timeLimit: number;
     courseURL: string;
+    group: string;
 };
 interface ProblemsetEditInfo extends ProblemsetUpdateInfo {
     owner: ProblemsetUser;
