@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import TeamStatisticsView from "./TeamStatisticsView";
 import ShowMemberDetailedStatistics from "./ShowMemberDetailedStatistics";
 import { DateTime } from "luxon"
+import XLSX from "xlsx-js-style";
 import DatetimePickler from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import 'moment/locale/zh-cn';
@@ -44,6 +45,34 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
             setStatisticsFilteringKeyword("");
         } catch { } finally { setLoading(false); }
     }, [endTime, props.team, startTime]);
+
+    const exportToExcel = useCallback(() => {
+        if (filteredUserStatistics === null || extraStatistics === null) return;
+
+        try {
+            setLoading(true)
+            const workbook = XLSX.utils.book_new();
+            const sheetData: string[][] = [];
+            sheetData.push([
+                "用户", ...extraStatistics.problemsets.map((item) => `${item.id}. ${item.name} 共 ${item.problems.length} 题`)
+            ]);
+
+            for (const item of filteredUserStatistics) {
+                sheetData.push([
+                    `${item.user.username}(${item.user.real_name})`, ...item.statistics.map((ele) => `通过${ele.accepted_problems}题；累计提交${ele.submission_count}次`)
+                ])
+            }
+            const sheet = XLSX.utils.aoa_to_sheet(sheetData);
+            sheet["!cols"] = new Array(sheetData[0].length).fill({ width: 50, height: 25 });
+
+            XLSX.utils.book_append_sheet(workbook, sheet, "ranklist");
+            XLSX.writeFile(workbook, `团队作业情况统计.xlsx`)
+        } catch {
+
+        } finally {
+            setLoading(false)
+        }
+    }, [extraStatistics, filteredUserStatistics])
 
     useEffect(() => {
         if (!loaded) loadData();
@@ -109,7 +138,8 @@ const TeamManage: React.FC<React.PropsWithChildren<TeamManageProps>> = (props) =
                                 </Form.Field>
                                 <Form.Field>
                                     <label>操作</label>
-                                    <Button color="green" onClick={loadData}>过滤时间</Button>
+                                    <Button color="green" onClick={loadData} style={{ marginTop: "0.1rem" }}>过滤时间</Button>
+                                    <Button color="green" onClick={exportToExcel} style={{ marginTop: "0.1rem" }}>导出EXCEL</Button>
                                 </Form.Field>
                             </Form.Group>
                         </Form>

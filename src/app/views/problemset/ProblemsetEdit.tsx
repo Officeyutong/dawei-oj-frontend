@@ -43,7 +43,8 @@ const ProblemsetEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 problems: data.problems,
                 showRanklist: data.showRanklist,
                 timeLimit: data.timeLimit,
-                courseURL: data.courseURL
+                courseURL: data.courseURL,
+                group: data.group
             });
             showSuccessModal("保存完成");
         } catch { } finally {
@@ -95,6 +96,10 @@ const ProblemsetEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                             on="focus"
                             content="如果填写，那么在团队习题集页面和习题集展示页面，会显示一个可以跳转到该链接的按钮"
                         ></Popup>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>所属分组</label>
+                        <Input value={data.group} onChange={(_, d) => setData({ ...data, group: d.value })}></Input>
                     </Form.Field>
                     <Divider></Divider>
                     <Form.Field>

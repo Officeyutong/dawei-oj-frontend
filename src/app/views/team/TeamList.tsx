@@ -18,15 +18,10 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
     const [showSetGroupFilterModal, setShowSetGroupFilterModal] = useState(false);
     const [groupName, setGroupName] = useState<string[]>([])
     const [selectedGroupName, setSelectedGroupName] = useState<string | undefined>(undefined)
-    const loadData = async (showJoinableOnly: boolean, filterGroupName?: string) => {
+    const loadData = async (showJoinableOnly: boolean, filterGroupName: string | undefined) => {
         try {
             setLoading(true);
-            let resp: { list: TeamListEntry[]; hasTeamCreatePermission: boolean; allGroups: string[]; };
-            if (filterGroupName) {
-                resp = await teamClient.getTeamList(showJoinableOnly, filterGroupName);
-            } else {
-                resp = await teamClient.getTeamList(showJoinableOnly);
-            }
+            const resp = await teamClient.getTeamList(showJoinableOnly, filterGroupName);
             setLoading(false);
             setData(resp.list);
             setGroupName(resp.allGroups)
@@ -38,7 +33,7 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
 
     useEffect(() => {
         if (!loaded) {
-            loadData(true);
+            loadData(true, undefined);
         }
     }, [loaded]);
     const addTeam = async (evt: ButtonClickEvent) => {
@@ -48,7 +43,7 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
             const { team_id } = await teamClient.createTeam();
             window.open(`/team/${team_id}`);
             // setData((await teamClient.getTeamList(showJoinableOnly)).list);
-            await loadData(false);
+            window.location.reload()
         } catch { } finally {
             target.classList.remove("loading");
         }
@@ -105,9 +100,15 @@ const TeamList: React.FC<React.PropsWithChildren<{}>> = () => {
                                 <Icon name="plus"></Icon>
                                 筛选团队分组
                             </Button> :
-                            <Label size="large" color="blue">
-                                # {selectedGroupName}<Icon name="delete" onClick={() => setSelectedGroupName(undefined)}></Icon>
-                            </Label>}
+                            <><label>正在筛选：</label>
+                                <Label size="large" color="blue">
+                                    {selectedGroupName}<Icon name="delete" onClick={() => {
+                                        setSelectedGroupName(undefined)
+                                        loadData(showJoinableOnly, undefined)
+                                    }}></Icon>
+                                </Label>
+                            </>
+                        }
 
                     </Form.Field>
                     {hasCreatePermission && <Form.Button color="green" labelPosition="left" icon onClick={addTeam}>

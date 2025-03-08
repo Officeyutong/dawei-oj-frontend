@@ -30,6 +30,7 @@
       if (target instanceof HTMLScriptElement) {
         // alert(target.src || target.rel || target.href);
         var src = target.src;
+        if (target.src.includes("mode-mode.js")) return;
         var div = document.createElement("div");
         div.classList.add("ui", "error", "message");
         var header = document.createElement("div");
