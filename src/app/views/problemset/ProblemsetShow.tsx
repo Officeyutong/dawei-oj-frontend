@@ -174,7 +174,10 @@ const ProblemsetShow: React.FC<React.PropsWithChildren<{}>> = () => {
                                 <Table.Cell>权限</Table.Cell>
                                 <Table.Cell>{data.private ? "私有" : "公开"}</Table.Cell>
                             </Table.Row>
-
+                            <Table.Row>
+                                <Table.Cell>所属分组</Table.Cell>
+                                <Table.Cell>{data.group}</Table.Cell>
+                            </Table.Row>
                         </Table.Body>
                     </Table>
                     {data.couldRetriveProblemPermissions && <Message positive>

@@ -55,6 +55,8 @@ interface ProblemsetPublicInfo {
     favorited: boolean;
     courseURL: string;
     selfHasProblemsetRemovePermission: boolean;
+    group: string;
+
 };
 interface SimplifiedProblemsetListEntry {
     id: number;

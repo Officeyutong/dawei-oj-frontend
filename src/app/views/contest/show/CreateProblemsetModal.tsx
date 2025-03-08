@@ -33,7 +33,8 @@ const CreateProblemsetModal: React.FC<React.PropsWithChildren<CreateProblemsetMo
                 problems: problems.map(x => x.id),
                 showRanklist: 0,
                 timeLimit: 0,
-                courseURL: ""
+                courseURL: "",
+                group: "补题"
             });
             clipboard.write(`${id}`);
             showSuccessModal("操作完成!习题集ID已经复制到剪贴板！");
