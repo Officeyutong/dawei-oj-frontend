@@ -29,6 +29,7 @@ const VideoDisplay: React.FC<{}> = () => {
     const [selectedAnswer, setSelectedAnswer] = useState<{ idx: number, next: number } | null>(null)
     const [position, setPosition] = useState<{ x: number, y: number }>({ x: 100, y: 100 });
     const [direction, setDirection] = useState<{ x: number, y: number }>({ x: 1, y: 1 });
+    const [watermarkCount, setWatermarkCount] = useState<number>(0)
 
     const videoRef = useRef<PlayerReference | null>(null)
     const curTimeRef = useRef<number>(0);
@@ -305,7 +306,7 @@ const VideoDisplay: React.FC<{}> = () => {
             });
         };
 
-        const interval = setInterval(moveWatermark, 16);
+        const interval = setInterval(moveWatermark, 24);
         return () => clearInterval(interval);
     }, [direction]);
     const handleWaterRemove = () => {
@@ -315,15 +316,50 @@ const VideoDisplay: React.FC<{}> = () => {
             if (!watermarkEle) {
                 window.location.reload()
             }
+
             if ((waterMarkRef.current.offsetTop === position.y) && (waterMarkRef.current.offsetLeft === position.x)) {
-                setPosition({ x: 100, y: 100 })
+                if (watermarkCount < 35) {
+                    setWatermarkCount(watermarkCount + 1)
+                } else {
+                    setWatermarkCount(0)
+                    setPosition({ x: 100, y: 100 })
+                }
             }
             if (!((watermarkEle as HTMLDivElement).innerText === text)) {
                 (watermarkEle as HTMLDivElement).innerText = text
             }
         }
     }
-    useTimer(handleWaterRemove, 1000)
+    useTimer(handleWaterRemove, 1024)
+
+    const handleMutationPlayRate = () => {
+        const rate = localStorage.getItem("playRate")
+        if (videoRef.current) {
+            const { player } = videoRef.current.getState();
+            player.playbackRate = Number(rate)
+        }
+        if (loaded) {
+
+            const playRateEle = document.querySelector('.video-react-playback-rate.video-react-menu-button-popup.video-react-control.video-react-button.video-react-menu-button')
+            const observerOptions = {
+                childList: true,
+                attributes: true,
+                subtree: true,
+            };
+            if (playRateEle) {
+                var observer = new MutationObserver(() => {
+                    if (videoRef.current) {
+                        setTimeout(() => {
+                            const playRate = videoRef.current?.getState().player.playbackRate
+                            localStorage.setItem('playRate', String(playRate))
+                        }, 500);
+                    }
+
+                });
+                observer.observe(playRateEle, observerOptions);
+            }
+        }
+    }
     return (
         <>
             {courseDetail && loaded && <div>
@@ -352,8 +388,10 @@ const VideoDisplay: React.FC<{}> = () => {
                                     width: "50px",
                                     height: "50px",
                                     pointerEvents: "none",
-                                    color: 'grey',
-                                    zIndex: '999999'
+                                    color: '#f5f8ff',
+                                    zIndex: '999999',
+                                    opacity: "0.5"
+
                                 }}
                             >
                                 {userDetails.realName} {userDetails.username}
@@ -368,6 +406,7 @@ const VideoDisplay: React.FC<{}> = () => {
                                     handleUpdateRecord();
                                     handleNextIdSmallThanCurrentId()
                                     setPlayEnded(false)
+                                    handleMutationPlayRate()
                                 }}
                             >
                                 <BigPlayButton position="center" />
@@ -434,11 +473,15 @@ const VideoDisplay: React.FC<{}> = () => {
                                                 width: "50px",
                                                 height: "50px",
                                                 pointerEvents: "none",
-                                                color: '#dddfe4',
-                                                zIndex: '999999'
+                                                color: '#f5f8ff',
+                                                zIndex: '999999',
+                                                opacity: "0.5"
+
                                             }}
                                         >
+
                                             {userDetails.realName} {userDetails.username}
+
                                         </div>
                                         <Player ref={videoRef}
                                             preload="auto"
@@ -446,7 +489,8 @@ const VideoDisplay: React.FC<{}> = () => {
                                             onPlay={() => {
                                                 handleQuestionVideo();
                                                 handleUpdateRecord();
-                                                setPlayEnded(false)
+                                                setPlayEnded(false);
+                                                handleMutationPlayRate()
                                             }}
                                         >
                                             <LoadingSpinner />
