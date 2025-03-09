@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Checkbox, Dimmer, Divider, Grid, Header, Icon, Input, Label, Loader, Modal, Pagination, Segment, Table } from "semantic-ui-react";
+import { Button, Checkbox, Dimmer, Divider, Grid, Header, Icon, Input, Label, Loader, Modal, ModalActions, ModalContent, ModalHeader, Pagination, Segment, Table } from "semantic-ui-react";
 import { ButtonClickEvent } from "../../common/types";
 import { useDocumentTitle } from "../../common/Utils";
 import problemsetClient from "./client/ProblemsetClient";
@@ -25,7 +25,10 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(-1);
     const [pageCount, setPageCount] = useState(0);
-    const [showFavOnly, setShowFavOnly] = useState<boolean | undefined>(undefined);
+    const [showFavOnly, setShowFavOnly] = useState<boolean>(false);
+    const [showSetGroupFilterModal, setShowSetGroupFilterModal] = useState(false);
+    const [groupName, setGroupName] = useState<string[]>([])
+    const [selectedGroupName, setSelectedGroupName] = useState<string | undefined>(undefined)
     const privileged = useSelector((s: StateType) => s.userState.userData.shouldDisplayFullProblemsetListByDefault);
     const ifLogin = useSelector((s: StateType) => s.userState.login);
     const { initialRequestDone } = useSelector((s: StateType) => s.userState);
@@ -46,11 +49,13 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
 
         }
     };
-    const loadPage = async (page: number, showFavOnly: boolean) => {
+    const loadPage = async (page: number, showFavOnly: boolean, filterGroupName: string | undefined) => {
         try {
             setLoading(true);
-            const data = await problemsetClient.getProblemSetList(page, showFavOnly);
-            setData(data.data);
+            const data = await problemsetClient.getProblemSetList(page, showFavOnly, filterGroupName);
+            console.log(data)
+            setData(data.items);
+            setGroupName(data.groups)
             setPage(page);
             setPageCount(data.pageCount);
             setLoaded(true);
@@ -67,16 +72,16 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
     }, [initialRequestDone, privileged, ifLogin])
     useEffect(() => {
         if (initialRequestDone && !loaded && showFavOnly !== undefined) {
-            loadPage(parseInt(params.page || "1"), showFavOnly);
+            loadPage(parseInt(params.page || "1"), showFavOnly, selectedGroupName);
         }
-    }, [initialRequestDone, loaded, params.page, showFavOnly]);
+    }, [initialRequestDone, loaded, params.page, selectedGroupName, showFavOnly]);
 
     const toggleFav = useCallback(() => {
         if (loaded) {
             setShowFavOnly(!showFavOnly);
-            loadPage(page, !showFavOnly);
+            loadPage(1, !showFavOnly, selectedGroupName);
         }
-    }, [loaded, showFavOnly, page])
+    }, [loaded, showFavOnly, selectedGroupName])
 
     return <div>
         <Header as="h1">
@@ -91,13 +96,68 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
         </Segment>}
         {loaded && <Segment stacked>
             {loading && <Dimmer active><Loader></Loader></Dimmer>}
+            {showSetGroupFilterModal && <Modal
+                open={showSetGroupFilterModal}
+                onClose={() => { setShowSetGroupFilterModal(false) }}
+            >
+                <ModalHeader>选择习题集分组</ModalHeader>
+                <ModalContent>
+                    {groupName && <div style={{ overflowY: "scroll", maxHeight: "500px" }}>
+                        <Table>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell>习题集分组</Table.HeaderCell>
+                                    <Table.HeaderCell>操作</Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                {groupName.map((item, idx) => <Table.Row key={idx}>
+                                    <Table.Cell>#{idx + 1}. {item}</Table.Cell>
+                                    <Table.Cell><Button size="small" color="green" onClick={() => {
+                                        setSelectedGroupName(item);
+                                        loadPage(1, showFavOnly, item);
+                                        setShowSetGroupFilterModal(false)
+                                    }}>选中</Button></Table.Cell>
+                                </Table.Row>)}
+                            </Table.Body>
+                        </Table>
+                    </div>}
+                </ModalContent>
+                <ModalActions>
+                    <Button negative onClick={() => setShowSetGroupFilterModal(false)}>
+                        取消
+                    </Button>
+                </ModalActions>
+            </Modal>}
             <Grid columns="1">
-                {ifLogin && <><Grid.Column>
-                    <Checkbox checked={showFavOnly} onChange={toggleFav} toggle label="仅显示收藏习题集" defaultChecked={false}></Checkbox>
-                </Grid.Column>
-                    {!showFavOnly && <Grid.Column> <Button as="div" color="green" onClick={createProblemset}>
-                        创建习题集
-                    </Button></Grid.Column>}
+                {ifLogin && <>
+                    <Grid.Column>
+                        <Checkbox checked={showFavOnly} onChange={toggleFav} toggle label="仅显示收藏习题集" defaultChecked={false}></Checkbox>
+                    </Grid.Column>
+                    <Grid.Column>
+                        {selectedGroupName === undefined ?
+                            <Button color="green" labelPosition="left" icon onClick={() => setShowSetGroupFilterModal(true)}>
+                                <Icon name="plus"></Icon>
+                                筛选习题集分组
+                            </Button> :
+                            <>
+                                <label>正在筛选：</label>
+                                <Label size="large" color="blue">
+                                    {selectedGroupName}<Icon name="delete" onClick={() => {
+                                        setSelectedGroupName(undefined)
+                                        loadPage(1, showFavOnly, undefined)
+                                    }}></Icon>
+                                </Label>
+                            </>
+                        }
+
+                    </Grid.Column>
+                    {!showFavOnly &&
+                        <Grid.Column>
+                            <Button as="div" color="green" onClick={createProblemset}>
+                                创建习题集
+                            </Button>
+                        </Grid.Column>}
                 </>}
             </Grid>
 
@@ -110,7 +170,7 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
                         <Table.HeaderCell textAlign="center">题目数量</Table.HeaderCell>
                         <Table.HeaderCell textAlign="center">创建者</Table.HeaderCell>
                         <Table.HeaderCell textAlign="center">创建时间/截止时间</Table.HeaderCell>
-
+                        <Table.HeaderCell textAlign="center">习题集分组</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -147,6 +207,9 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
                                 </Grid.Column>
                             </Grid>}
                         </Table.Cell>
+                        <Table.Cell textAlign="center">
+                            {x.group}
+                        </Table.Cell>
                     </Table.Row>)}
                 </Table.Body>
             </Table>
@@ -157,7 +220,7 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
                         activePage={page}
                         onPageChange={(e, d) => {
                             if (showFavOnly !== undefined) {
-                                loadPage(d.activePage as number, showFavOnly)
+                                loadPage(d.activePage as number, showFavOnly, selectedGroupName)
                             }
 
                         }}

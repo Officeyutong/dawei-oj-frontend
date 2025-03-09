@@ -9,6 +9,7 @@ interface ProblemsetListItem {
     accessible: boolean;
     createTime: number;
     timeLimit: number;
+    group: string;
 };
 interface ForeignProblemEntry {
     name: string;
