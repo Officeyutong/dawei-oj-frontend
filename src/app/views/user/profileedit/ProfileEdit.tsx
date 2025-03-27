@@ -61,7 +61,8 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                 permissions: data!.permissions,
                 username: data!.username,
                 real_name: data!.real_name,
-                newAdminComment: data!.adminComment === undefined ? undefined : newAdminComment
+                newAdminComment: data!.adminComment === undefined ? undefined : newAdminComment,
+                belongingClassTeacher: data!.belongingClassTeacher
             });
             if (code === 0) showSuccessModal(message);
             else showErrorModal(message);
@@ -144,6 +145,10 @@ const ProfileEdit: React.FC<React.PropsWithChildren<{}>> = () => {
                         <label>管理侧备注</label>
                         <Input autoComplete="username" value={newAdminComment} onChange={(_, d) => setNewAdminComment(d.value)}></Input>
                     </Form.Field>}
+                    <Form.Field>
+                        <label>所属班主任</label>
+                        {data.selfHasUserManagerPerm ? <Input value={data.belongingClassTeacher } onChange={(d, e) => setData({ ...data, belongingClassTeacher: d.target.value })}></Input> : data.belongingClassTeacher}
+                    </Form.Field>
                     <Form.Field>
                         <label>积分</label>
                         {data.credit}，
