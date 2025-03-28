@@ -44,8 +44,8 @@ class ContestClient extends GeneralClient {
         }
         return resp;
     }
-    async getContestList(page: number = 1, order_by: ContestSortingOrder = "start_time"): Promise<ContestListResponse> {
-        return (await (this.client!.post("/api/contest/list", { page, order_by }))).data;
+    async getContestList(page: number = 1, order_by: ContestSortingOrder = "start_time", filterByName?: string): Promise<ContestListResponse> {
+        return (await (this.client!.post("/api/contest/list", { page, order_by, filterByName }))).data;
     }
     async getContestDetail(contestID: number, virtualID: number): Promise<ContestShowDetailResponse> {
         return (await (this.client!.post("/api/contest/show", { contestID, virtualID }))).data;
