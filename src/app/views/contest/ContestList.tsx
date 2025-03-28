@@ -4,10 +4,10 @@ import QueryString from "qs";
 import React, { useEffect, useMemo, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { Button, Container, Dimmer, Divider, Dropdown, Form, Grid, Header, Icon, Loader, Pagination, Segment, Table } from "semantic-ui-react";
+import { Button, Container, Dimmer, Divider, Dropdown, Form, Grid, Header, Icon, Input, Loader, Pagination, Segment, Table } from "semantic-ui-react";
 import { PUBLIC_URL } from "../../App";
 import { ButtonClickEvent } from "../../common/types";
-import { useDocumentTitle } from "../../common/Utils";
+import { useDocumentTitle, useInputValue } from "../../common/Utils";
 import { showErrorModal } from "../../dialogs/Dialog";
 import UserLink from "../utils/UserLink";
 import contestClient from "./client/ContestClient";
@@ -15,6 +15,7 @@ import { ContestListResponse, ContestSortingOrder, ContestSortingOrderMapping } 
 
 interface ContestListOption {
     order_by: ContestSortingOrder;
+    contest_name?: string
 };
 const OptionSchema: Schema = {
     id: "ContestListOptionSchema",
@@ -23,10 +24,14 @@ const OptionSchema: Schema = {
         order_by: {
             type: "string",
             enum: ["id", "start_time"]
+        },
+        contest_name: {
+            type: "string"
         }
     },
     required: ["order_by"]
 };
+
 function decodeContestListOption(str: string): ContestListOption {
     const parsed = QueryString.parse(str).option as string;
     let jsonObj;
@@ -40,7 +45,6 @@ function decodeContestListOption(str: string): ContestListOption {
     return jsonObj as ContestListOption;
 }
 function encodeContestListOption(option: ContestListOption) {
-    if (option.order_by === "start_time") return "";
     return QueryString.stringify({ option: JSON.stringify(option) });
 }
 function runningCheck(start: number, end: number): boolean {
@@ -60,11 +64,12 @@ const ContestList: React.FC<React.PropsWithChildren<{}>> = () => {
     const [data, setData] = useState<ContestListResponse | null>(null);
     const history = useHistory();
     useDocumentTitle("比赛列表");
+    const contestName = useInputValue(option.contest_name || '');
     useEffect(() => {
         (async () => {
             try {
                 setLoading(true);
-                const resp = await contestClient.getContestList(numberPage, option.order_by);
+                const resp = await contestClient.getContestList(numberPage, option.order_by, option.contest_name);
                 setData(resp);
             } catch (e: any) {
                 showErrorModal(e.message);
@@ -95,11 +100,21 @@ const ContestList: React.FC<React.PropsWithChildren<{}>> = () => {
             <Grid columns="2">
                 <Grid.Column>
                     <Form >
-                        <Form.Field width="3">
+                        <Form.Field width="7">
                             <label>排序方式</label>
                             <Dropdown selection options={[{ text: ContestSortingOrderMapping["start_time"], value: "start_time" }, { text: ContestSortingOrderMapping["id"], value: "id" }]} text={ContestSortingOrderMapping[option.order_by]} onChange={(e, d) => {
-                                history.push(`${PUBLIC_URL}/contests/1?${encodeContestListOption({ order_by: d.value as ContestSortingOrder })}`);
+                                history.push(`${PUBLIC_URL}/contests/1?${encodeContestListOption({ order_by: d.value as ContestSortingOrder, contest_name: option.contest_name })}`);
                             }}></Dropdown>
+                        </Form.Field>
+                        <Form.Field width="7">
+                            <label>筛选比赛名</label>
+                            <Input action={{
+                                content: "搜索",
+                                onClick: () => {
+                                    history.push(`${PUBLIC_URL}/contests/1?${encodeContestListOption({ order_by: option.order_by as ContestSortingOrder, contest_name: contestName.value })}`)
+                                },
+
+                            }} placeholder='请输入' {...contestName}></Input>
                         </Form.Field>
                     </Form>
                 </Grid.Column>

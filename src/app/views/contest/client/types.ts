@@ -155,7 +155,7 @@ interface ContestProblemShow extends ProblemStatement {
 type ContestSortingOrder = "id" | "start_time";
 const ContestSortingOrderMapping: { [K in ContestSortingOrder]: string } = {
     id: "比赛ID",
-    start_time: "开始时间"
+    start_time: "开始时间",
 }
 
 interface ProblemtitleEntry {
