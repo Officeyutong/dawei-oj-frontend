@@ -54,7 +54,7 @@ const ShowSubmission = () => {
         if (data === null) return false;
         if (data.status !== "unaccepted") return false;
         if (data.contest.isContest) {
-            if (data.virtualContestID !== -1 && data.contest.virtualContestRunning === true) {
+            if (data.virtualContestID !== -1 && data.contest.virtualContest?.running === true) {
                 return false;
             }
             if (data.contest.closed === false) return false;
@@ -228,12 +228,24 @@ const ShowSubmission = () => {
 
                                     </Table.Cell>
                                 </Table.Row>
-                                {data.contest.isContest && <Table.Row>
-                                    <Table.Cell>比赛</Table.Cell>
-                                    <Table.Cell>
-                                        <Link to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${userSeenVirtualContestId}`}>#{data.contest.id}. {data.contest.name}</Link>
-                                    </Table.Cell>
-                                </Table.Row>}
+                                {data.contest.isContest && <>
+                                    <Table.Row>
+                                        <Table.Cell>比赛</Table.Cell>
+                                        <Table.Cell>
+                                            <Link to={`${PUBLIC_URL}/contest/${data.contest.id}?virtual_contest=${userSeenVirtualContestId}`}>#{data.contest.id}. {data.contest.name}</Link>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    {data.contest.virtualContest && <>
+                                        <Table.Row>
+                                            <Table.Cell>虚拟比赛开始时间</Table.Cell>
+                                            <Table.Cell>{timeStampToString(data.contest.virtualContest.startTime)}</Table.Cell>
+                                        </Table.Row>
+                                        <Table.Row>
+                                            <Table.Cell>虚拟比赛结束时间</Table.Cell>
+                                            <Table.Cell>{timeStampToString(data.contest.virtualContest.endTime)}</Table.Cell>
+                                        </Table.Row>
+                                    </>}
+                                </>}
                                 <Table.Row>
                                     <Table.Cell>
                                         提交用户

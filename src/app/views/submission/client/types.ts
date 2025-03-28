@@ -32,8 +32,11 @@ interface SubmissionInfo {
         name: string;
         isContest: true;
         closed: boolean;
-        virtualContestRunning?: boolean;
-
+        virtualContest?: {
+            running: boolean;
+            startTime: number;
+            endTime: number;
+        }
     } | {
         isContest: false;
     };

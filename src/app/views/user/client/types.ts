@@ -22,6 +22,8 @@ interface UserProfileResponse {
     selfHasPermissionManagePerm: boolean;
     selfHasPermissionViewExtraStatistics: boolean;
     adminComment?: string;
+    belongingClassTeacher: string;
+
 };
 interface UserProfileResponseEditing extends UserProfileResponse {
     phone_number: string | undefined;
@@ -47,6 +49,8 @@ interface UserProfileUpdateRequest {
     permissions: string[];
     real_name: string | undefined;
     newAdminComment?: string;
+    belongingClassTeacher: string;
+
 };
 interface FollowerItem extends GeneralUserEntry {
     time: string;

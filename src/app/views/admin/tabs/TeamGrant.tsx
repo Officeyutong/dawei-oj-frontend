@@ -23,7 +23,7 @@ const UserBatchManagement = () => {
     const [teamList, setTeamList] = useState<TeamListEntry[] | null>(null);
     const keywordFilter = useInputValue("");
 
-    const filteredList = useMemo(() => fullData.filter(t => (t.email.search(keywordFilter.value) !== -1 || t.username.search(keywordFilter.value) !== -1 || (t.phoneNumber && t.phoneNumber.search(keywordFilter.value) !== -1) || (t.realName && t.realName.search(keywordFilter.value) !== -1))), [fullData, keywordFilter.value]);
+    const filteredList = useMemo(() => fullData.filter(t => (t.email.search(keywordFilter.value) !== -1 || t.username.search(keywordFilter.value) !== -1 || (t.phoneNumber && t.phoneNumber.search(keywordFilter.value) !== -1) || (t.realName && t.realName.search(keywordFilter.value) !== -1) || t.belongingClassTeacher.includes(keywordFilter.value))), [fullData, keywordFilter.value]);
     const pageCount = Math.ceil(filteredList.length / ITEMS_PER_PAGE);
     const currToRender = useMemo(() => filteredList.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE), [filteredList, page]);
     const refreshUserList = async (filteringTeamID: number | undefined, shouldRefreshTeamList: boolean = false) => {
@@ -81,7 +81,7 @@ const UserBatchManagement = () => {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>用户名</Table.HeaderCell>
-                            <Table.HeaderCell>电子邮箱</Table.HeaderCell>
+                            <Table.HeaderCell>所属班主任</Table.HeaderCell>
                             <Table.HeaderCell>手机号</Table.HeaderCell>
                             <Table.HeaderCell>姓名</Table.HeaderCell>
                             <Table.HeaderCell>操作</Table.HeaderCell>
@@ -90,7 +90,7 @@ const UserBatchManagement = () => {
                     <Table.Body>
                         {currToRender.map(line => <Table.Row key={line.uid}>
                             <Table.Cell><UserLink data={line}></UserLink></Table.Cell>
-                            <Table.Cell>{line.email}</Table.Cell>
+                            <Table.Cell>{line.belongingClassTeacher}</Table.Cell>
                             <Table.Cell>{line.phoneNumber || "-"}</Table.Cell>
                             <Table.Cell>{line.realName || "-"}</Table.Cell>
                             <Table.Cell>{selectedList.find(t => t.uid === line.uid) ? <Button color="red" size="tiny" onClick={() => setSelectedList(c => c.filter(t => t.uid !== line.uid))}>删除</Button> : <Button color="green" size="tiny" onClick={() => setSelectedList(c => [...c, line])}>加入</Button>}</Table.Cell>

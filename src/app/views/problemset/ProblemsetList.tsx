@@ -100,13 +100,13 @@ const ProblemsetList: React.FC<React.PropsWithChildren<{}>> = () => {
                 open={showSetGroupFilterModal}
                 onClose={() => { setShowSetGroupFilterModal(false) }}
             >
-                <ModalHeader>选择团队分组</ModalHeader>
+                <ModalHeader>选择习题集分组</ModalHeader>
                 <ModalContent>
                     {groupName && <div style={{ overflowY: "scroll", maxHeight: "500px" }}>
                         <Table>
                             <Table.Header>
                                 <Table.Row>
-                                    <Table.HeaderCell>团队分组</Table.HeaderCell>
+                                    <Table.HeaderCell>习题集分组</Table.HeaderCell>
                                     <Table.HeaderCell>操作</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>

@@ -69,6 +69,7 @@ const VisualProgrammingProfileEdit: React.FC<{}> = () => {
                 permissions: data!.permissions,
                 username: data!.username,
                 real_name: data!.real_name,
+                belongingClassTeacher: data!.belongingClassTeacher
             });
             if (code === 0) showSuccessModal(message);
             else showErrorModal(message);
