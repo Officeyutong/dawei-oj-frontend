@@ -76,6 +76,7 @@ interface AllUserListEntry {
         id: string;
         name: string;
     }
+    belongingClassTeacher: string;
 };
 
 interface BatchQueryGrantedTeamsResponse {
