@@ -1,3 +1,4 @@
+import axios from "axios";
 import GeneralClient from "../../../common/GeneralClient";
 import { AllUserListEntry } from "../../admin/client/types";
 import { CourseNameQueryResponse, UserGrantEntry, VideoClipEntry, VideoCourseDirectoryEntry, VideoCourseDirectoryEntryWithoutSchema, VideoCourseDirectoryEntryWithoutSchemaWithPermission, VideoCourseDirectorySchema, VideoCourseEntry, VideoCourseEntryWithoutSchema, VideoCourseSchema, VideoPlayRecordEntry } from "./types";
@@ -57,8 +58,13 @@ class VideoRecordPlayClient extends GeneralClient {
     async getPlayRecord(uid: number, limit?: number, filter_by_course_id?: number, filter_by_course_directory_id?: number): Promise<VideoPlayRecordEntry[]> {
         return (await this.client!.post("/api/video_record_play/get_play_record", { uid, limit, filter_by_course_id, filter_by_course_directory_id })).data;
     }
-    async updatePlayRecord(video_course_id: number, video_course_directory_id: number, node_id: number, watched_time: number) {
-        await this.client!.post("/api/video_record_play/update_play_record", { video_course_id, video_course_directory_id, node_id, watched_time });
+    async updatePlayRecord(video_course_id: number, video_course_directory_id: number, node_id: number, watched_time: number, handleErrors: boolean = true) {
+        let client;
+        if (handleErrors)
+            client = this.client!;
+        else
+            client = axios;
+        await client.post("/api/video_record_play/update_play_record", { video_course_id, video_course_directory_id, node_id, watched_time });
     }
     async getVideoURL(video_clip_id: number): Promise<string> {
         return (await this.client!.post("/api/video_record_play/get_video_url", { video_clip_id })).data;

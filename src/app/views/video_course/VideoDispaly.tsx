@@ -83,7 +83,6 @@ const VideoDisplay: React.FC<{}> = () => {
     const speed = 2;
 
     useDocumentTitle('课程播放')
-
     const handleUpdateRecord = () => {
         (async () => {
             if (videoRef.current && courseDetail) {
@@ -95,7 +94,13 @@ const VideoDisplay: React.FC<{}> = () => {
                     watchTime = videoRef.current.getState().player.duration
                 }
                 if (isNaN(watchTime)) watchTime = 0;
-                await videoRecordPlayClient.updatePlayRecord(courseId, courseDirectoryId, nodeId, Math.floor(watchTime))
+                const watchedTime = Math.floor(watchTime)
+                try {
+                    await videoRecordPlayClient.updatePlayRecord(courseId, courseDirectoryId, nodeId, watchedTime)
+                } catch (e) {
+                    console.error(e)
+                }
+
             }
 
         })()
