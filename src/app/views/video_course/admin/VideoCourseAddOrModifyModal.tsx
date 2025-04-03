@@ -1,4 +1,4 @@
-import { Button, Dimmer, Form, Input, Loader, Modal } from "semantic-ui-react";
+import { Button, Dimmer, Form, Input, Loader, Message, Modal } from "semantic-ui-react";
 import { VideoCourseEntryWithoutSchema, VideoCourseSchema } from "../client/types";
 import { useEffect, useState } from "react";
 import { videoRecordPlayClient } from "../client/VideoCourseClient";
@@ -105,6 +105,7 @@ const VideoCourseAddOrModifyModal: React.FC<{
 }> = ({ onClose, currentData }) => {
     const [title, setTitle] = useState("");
     const [schema, setSchema] = useState("");
+    const [previewImageURL, setPreviewImageURL] = useState("");
 
     const creating = currentData === null;
 
@@ -119,6 +120,7 @@ const VideoCourseAddOrModifyModal: React.FC<{
                     const resp = await videoRecordPlayClient.getVideoCourse(currentData.id);
                     setTitle(resp.title);
                     setSchema(JSON.stringify(resp.schema, undefined, 4));
+                    setPreviewImageURL(resp.preview_image_url);
 
                 }
                 setLoaded(true);
@@ -134,9 +136,9 @@ const VideoCourseAddOrModifyModal: React.FC<{
                 return;
             }
             if (currentData) {
-                await videoRecordPlayClient.updateVideoCourse(currentData.id, title, JSON.parse(schema) as VideoCourseSchema);
+                await videoRecordPlayClient.updateVideoCourse(currentData.id, title, JSON.parse(schema) as VideoCourseSchema, previewImageURL);
             } else {
-                await videoRecordPlayClient.addVideoCourse(title, JSON.parse(schema) as VideoCourseSchema);
+                await videoRecordPlayClient.addVideoCourse(title, JSON.parse(schema) as VideoCourseSchema, previewImageURL);
             }
             onClose(true);
         } catch { } finally {
@@ -158,6 +160,16 @@ const VideoCourseAddOrModifyModal: React.FC<{
                 <Form.Field>
                     <label>标题</label>
                     <Input value={title} onChange={(e, _) => setTitle(e.target.value)}></Input>
+                </Form.Field>
+                <Form.Field>
+                    <label>预览图片URL</label>
+                    <Input value={previewImageURL} onChange={(e, _) => setPreviewImageURL(e.target.value)}></Input>
+                    <Message info>
+                        <Message.Header>提示</Message.Header>
+                        <Message.Content>
+                            这里设置用于在课程列表页面展示的图片的网址。留空时会显示默认的空白图片。
+                        </Message.Content>
+                    </Message>
                 </Form.Field>
                 <Form.Field>
                     <label>课程结构</label>

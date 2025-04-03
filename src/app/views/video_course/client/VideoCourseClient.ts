@@ -19,11 +19,11 @@ class VideoRecordPlayClient extends GeneralClient {
     async getAllClips(page: number = 1): Promise<{ pageCount: number; data: VideoClipEntry[] }> {
         return (await this.client!.post("/api/video_record_play/get_all_video_clips", { page })).data;
     }
-    async addVideoCourse(title: string, schema: VideoCourseSchema): Promise<{ id: number }> {
-        return (await this.client!.post("/api/video_record_play/add_video_course", { title, schema })).data;
+    async addVideoCourse(title: string, schema: VideoCourseSchema, preview_image_url: string): Promise<{ id: number }> {
+        return (await this.client!.post("/api/video_record_play/add_video_course", { title, schema, preview_image_url })).data;
     }
-    async updateVideoCourse(id: number, title: string, schema: VideoCourseSchema) {
-        await this.client!.post("/api/video_record_play/update_video_course", { title, schema, id });
+    async updateVideoCourse(id: number, title: string, schema: VideoCourseSchema, preview_image_url: string) {
+        await this.client!.post("/api/video_record_play/update_video_course", { title, schema, id, preview_image_url });
     }
     async deleteVideoCourse(id: number) {
         await this.client!.post("/api/video_record_play/delete_video_course", { id });

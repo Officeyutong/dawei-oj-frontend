@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { Route, useRouteMatch } from "react-router-dom";
 import GeneralDimmedLoader from "../utils/GeneralDimmedLoader";
-const VideoCourseAdmin = lazy(() => import("./admin/VideoCoruseAdmin"));
+const VideoCourseAdmin = lazy(() => import("./admin/VideoCourseAdmin"));
 const VideoCourseDirectory = lazy(() => import("./VideoCourseDirectory"));
 const VideoCourseDirectoryDetail = lazy(() => import("./VideoCourseDirectoryDetail"));
 const VideoDisplay = lazy(() => import("./VideoDispaly"));

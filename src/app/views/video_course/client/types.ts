@@ -25,6 +25,7 @@ interface VideoCourseEntry {
     id: number;
     title: string;
     schema: VideoCourseSchema;
+    preview_image_url: string;
 }
 
 type VideoCourseEntryWithoutSchema = Omit<VideoCourseEntry, "schema">;
