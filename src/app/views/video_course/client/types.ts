@@ -41,6 +41,7 @@ interface VideoCourseDirectoryEntry {
     title: string;
     order: number;
     schema: VideoCourseDirectorySchema;
+    preview_image_url: string;
 }
 type VideoCourseDirectoryEntryWithoutSchema = Omit<VideoCourseDirectoryEntry, "schema">;
 type VideoCourseDirectoryEntryWithoutSchemaWithPermission = VideoCourseDirectoryEntryWithoutSchema & { has_permission: boolean };
