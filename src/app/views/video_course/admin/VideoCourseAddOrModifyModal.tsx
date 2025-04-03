@@ -1,4 +1,4 @@
-import { Button, Dimmer, Form, Input, Loader, Message, Modal } from "semantic-ui-react";
+import { Button, Dimmer, Form, Input, Loader, Modal } from "semantic-ui-react";
 import { VideoCourseEntryWithoutSchema, VideoCourseSchema } from "../client/types";
 import { useEffect, useState } from "react";
 import { videoRecordPlayClient } from "../client/VideoCourseClient";
@@ -161,7 +161,7 @@ const VideoCourseAddOrModifyModal: React.FC<{
                     <label>标题</label>
                     <Input value={title} onChange={(e, _) => setTitle(e.target.value)}></Input>
                 </Form.Field>
-                <Form.Field>
+                {/* <Form.Field>
                     <label>预览图片URL</label>
                     <Input value={previewImageURL} onChange={(e, _) => setPreviewImageURL(e.target.value)}></Input>
                     <Message info>
@@ -170,7 +170,7 @@ const VideoCourseAddOrModifyModal: React.FC<{
                             这里设置用于在课程列表页面展示的图片的网址。留空时会显示默认的空白图片。
                         </Message.Content>
                     </Message>
-                </Form.Field>
+                </Form.Field> */}
                 <Form.Field>
                     <label>课程结构</label>
                     <AceEditor
